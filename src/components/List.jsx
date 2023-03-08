@@ -25,20 +25,16 @@ function Main(props) {
           Github repository link 혹은 Project 파일을 업로드 해주세요</p>
         </header>
 
-        <div>
-          <form id="generate-form-git" method="post" action="#">
-            <input type="email" name="email" id="email" placeholder="Github Repository Link" />
-            <input type="submit" value="Generate" />
-          </form>
 
-          <form id="generate-form-files" method="post" action="#">
-            <input type="file" name="file" id="project-files" multiple style={{"display": "none"}}/>
-            <label htmlFor="project-files" style={{"display":"inline", "marginRight": "20px"}}>
-              <div id="file-selector">파일 업로드하기</div>
-            </label>
-            <input type="submit" value="Generate" />
-          </form>
-        </div>
+        <form id="generate-form-git" method="post" action="#">
+          <input type="email" name="email" id="email" placeholder="Github Repository Link" />
+          <input type="submit" value="Generate" />
+        </form>
+
+        <form id="generate-form-files" method="post" action="#">
+          <input type="file" name="files" id="project-files" multiple/>
+          <input type="submit" value="Generate" />
+        </form>
       </Wrapper>
   );
 }

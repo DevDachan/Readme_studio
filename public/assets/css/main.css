@@ -799,33 +799,33 @@ button,
     margin: 0 0 1em 0; } }
 
 /* Signup Form */
-#signup-form {
+#generate-form-git {
   display: -moz-flex;
   display: -webkit-flex;
   display: -ms-flex;
   display: flex;
   position: relative; }
-  #signup-form input[type="text"],
-  #signup-form input[type="password"],
-  #signup-form input[type="email"] {
+  #generate-form-git input[type="text"],
+  #generate-form-git input[type="password"],
+  #generate-form-git input[type="email"] {
     width: 18em; }
-  #signup-form > * {
+  #generate-form-git > * {
     margin: 0 0 0 1em; }
-  #signup-form > :first-child {
+  #generate-form-git > :first-child {
     margin: 0 0 0 0; }
   @media screen and (max-width: 480px) {
-    #signup-form {
+    #generate-form-git {
       -moz-flex-direction: column;
       -webkit-flex-direction: column;
       -ms-flex-direction: column;
       flex-direction: column; }
-      #signup-form input[type="type"],
-      #signup-form input[type="password"],
-      #signup-form input[type="email"] {
+      #generate-form-git input[type="type"],
+      #generate-form-git input[type="password"],
+      #generate-form-git input[type="email"] {
         width: 100%; }
-      #signup-form > * {
+      #generate-form-git > * {
         margin: 1.25em 0 0 0; }
-      #signup-form .message {
+      #generate-form-git .message {
         bottom: -1.5em;
         font-size: 0.9em;
         height: 1em;

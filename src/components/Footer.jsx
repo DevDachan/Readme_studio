@@ -10,20 +10,19 @@ function Footer(props) {
       width: calc(100% - 32px);
       display: flex;
       flex-direction: column;
-      align-items: center;
       justify-content: center;
   `;
 
   return (
       <Wrapper>
         <ul className="icons">
-          <li><a href="#" class="icon brands fa-twitter"><span class="label">Twitter</span></a></li>
-          <li><a href="#" class="icon brands fa-instagram"><span class="label">Instagram</span></a></li>
-          <li><a href="#" class="icon brands fa-github"><span class="label">GitHub</span></a></li>
-          <li><a href="#" class="icon fa-envelope"><span class="label">Email</span></a></li>
+          <li><a href="#" className="icon brands fa-twitter"><span className="label">Twitter</span></a></li>
+          <li><a href="#" className="icon brands fa-instagram"><span className="label">Instagram</span></a></li>
+          <li><a href="#" className="icon brands fa-github"><span className="label">GitHub</span></a></li>
+          <li><a href="#" className="icon fa-envelope"><span className="label">Email</span></a></li>
         </ul>
         <ul className="copyright">
-          <li>&copy; Untitled.</li><li>Credits: <a href="http://html5up.net">HTML5 UP</a></li>
+          <li>&copy; ReadmeGenerate.</li><li>Copyright: <a href="http://html5up.net">HTML5 UP</a></li>
         </ul>
       </Wrapper>
   );
