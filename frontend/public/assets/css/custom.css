@@ -51,4 +51,20 @@
   width: auto;
   border-radius: 20px;
   font-weight: bold;
+  margin:0px;
+}
+.contentDiv{
+  background-color: #c7c7c7;
+  color: #4f3e3e;
+  height: 100%;
+  padding: 2em;
+  width: auto;
+  border-radius: 20px;
+  font-weight: bold;
+}
+
+.resultSection{
+  display: grid;
+  grid-template-columns: 1fr 3fr;
+  margin-bottom: 2em;
 }

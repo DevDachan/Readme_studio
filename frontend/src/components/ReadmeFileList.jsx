@@ -4,13 +4,11 @@ import styled from "styled-components";
 
 import ReadmeFile from "./ReadmeFile";
 
-function ReadmeFileList(props) {
+function ReadmeFileContent(props) {
   const navigate = useNavigate();
 
-  const readmeFileList = useState();
-
   const Wrapper = styled.div`
-      padding: 0 2.5em;
+      padding: 0;
       margin: 0 auto;
       width: calc(100% - 32px);
       display: flex;
@@ -30,4 +28,4 @@ function ReadmeFileList(props) {
   );
 }
 
-export default ReadmeFileList;
+export default ReadmeFileContent;
