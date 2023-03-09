@@ -1,4 +1,24 @@
-#file-selector{
+.fileNotSelected{
+  background-color: #77bd47;
+    border-radius: 6px;
+    border: 0;
+    color: #ffffff !important;
+    cursor: pointer;
+    display: inline-block;
+    font-weight: 700;
+    height: 2.75em;
+    line-height: 2.75em;
+    padding: 0 1.125em;
+    text-align: center;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.fileNotSelected:hover{
+  background-color: #a7ff6b;
+}
+
+.fileSelected{
   background-color: #757293;
     border-radius: 6px;
     border: 0;
@@ -14,9 +34,10 @@
     white-space: nowrap;
 }
 
-#file-selector:hover{
+.fileSelected:hover{
   background-color: #b3aeeb;
 }
+
 
 #root{
   margin-bottom: 80px;
