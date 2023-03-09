@@ -41,6 +41,7 @@ function Main(props) {
       .then(function (response){
         //handle success
         console.log("response success");
+        navigate('./result', {result: response});
       })
       .catch(function(error){
         //handle error
