@@ -24,8 +24,8 @@ function Result(props) {
           <h1>Readme Generate</h1>
         </header>
 
-        <ReademeFile />
-
+        <ReadmeFileList />
+        <input type="button" value="Back" onClick={navigate("./")}/>
       </Wrapper>
   );
 }

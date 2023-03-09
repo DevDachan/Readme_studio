@@ -842,9 +842,8 @@ button,
   transition: opacity 0.5s ease-in-out;
   bottom: 4em;
   color: rgba(255, 255, 255, 0.5);
-  left: 4em;
   opacity: 0.5;
-  position: absolute; }
+}
   #footer .icons {
     margin: 0 0 0.5em 0; }
   #footer .copyright {
@@ -869,8 +868,7 @@ button,
     margin-bottom: 0; }
   @media screen and (max-width: 1680px) {
     #footer {
-      bottom: 3.5em;
-      left: 3.5em; } }
+      bottom: 3.5em; } }
   @media screen and (max-width: 736px) {
     #footer {
       bottom: 2em;

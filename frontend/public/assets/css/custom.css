@@ -42,3 +42,13 @@
 #root{
   margin-bottom: 80px;
 }
+
+
+.readme{
+  background-color: #c7c7c7;
+  color: #4f3e3e;
+  padding: 2em;
+  width: auto;
+  border-radius: 20px;
+  font-weight: bold;
+}

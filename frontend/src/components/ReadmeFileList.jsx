@@ -20,10 +20,12 @@ function ReadmeFileList(props) {
 
   return (
       <Wrapper>
-        <ul class="readme">
+        <ul className="readme">
+          <ReadmeFile />
+          <ReadmeFile />
+          <ReadmeFile />
           <ReadmeFile />
         </ul>
-
       </Wrapper>
   );
 }
