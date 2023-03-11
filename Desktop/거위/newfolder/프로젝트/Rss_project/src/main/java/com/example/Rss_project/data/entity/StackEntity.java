@@ -17,8 +17,8 @@ public class StackEntity {
     @Id
     String productId;
     String productName;
-    String productPrice;
-    String productStocks;
+    int productPrice;
+    int productStocks;
 
     public ProductDTO toDto(){
         return ProductDTO.builder()
