@@ -14,22 +14,13 @@ public class TemplateDTO {
     @NotNull
     private String templateId;
     @NotNull
-    private String templateName;
-    @NotNull
-    @Min(value = 500)
-    @Max(value = 30000)
-    private int templatePrice;
-    @NotNull
-    @Min(value = 0)
-    @Max(value = 9999)
-    private int templateStock;
+    private String templateContributor;
+
 
     public TemplateEntity toEntity(){
         return TemplateEntity.builder()
                 .templateId(templateId)
-                .templateName(templateName)
-                .templatePrice(templatePrice)
-                .templateStocks(templateStock)
+                .templateContributor(templateContributor)
                 .build();
 
     }

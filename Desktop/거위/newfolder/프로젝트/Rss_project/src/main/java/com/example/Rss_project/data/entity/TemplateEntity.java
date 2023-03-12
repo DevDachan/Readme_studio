@@ -17,16 +17,13 @@ import lombok.*;
 public class TemplateEntity {
     @Id
     String templateId;
-    String templateName;
-    Integer templatePrice;
-    Integer templateStocks;
+    String templateContributor;
+
 
     public TemplateDTO toDto(){
         return TemplateDTO.builder()
                 .templateId(templateId)
-                .templateName(templateName)
-                .templatePrice(templatePrice)
-                .templateStock(templateStocks)
+                .templateContributor(templateContributor)
                 .build();
     }
 }

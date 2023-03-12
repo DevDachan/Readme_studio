@@ -20,11 +20,10 @@ public class TemplateServiceImpl implements TemplateService {
     // Service(Client) <-> Controller : DTO
     // Service <-> DAO(DB) : Entity
     @Override
-    public TemplateDTO saveTemplate(String templateId, String templateName, int templatePrice, int templateStock){
-        TemplateEntity templateEntity = templateHandeler.saveTemplateEntity(templateId, templateName, templatePrice, templateStock);
+    public TemplateDTO saveTemplate(String templateId, String templateContributor){
+        TemplateEntity templateEntity = templateHandeler.saveTemplateEntity(templateId, templateContributor);
 
-        TemplateDTO templateDTO = new TemplateDTO(templateEntity.getTemplateId(), templateEntity.getTemplateName(),
-                templateEntity.getTemplatePrice(), templateEntity.getTemplateStocks());
+        TemplateDTO templateDTO = new TemplateDTO(templateEntity.getTemplateId(), templateEntity.getTemplateContributor());
         return templateDTO;
     }
 
@@ -32,8 +31,7 @@ public class TemplateServiceImpl implements TemplateService {
     public TemplateDTO getTemplate(String templateId){
         TemplateEntity templateEntity = templateHandeler.getTemplateEntity(templateId);
 
-        TemplateDTO templateDTO = new TemplateDTO(templateEntity.getTemplateId(), templateEntity.getTemplateName(),
-                templateEntity.getTemplatePrice(), templateEntity.getTemplateStocks());
+        TemplateDTO templateDTO = new TemplateDTO(templateEntity.getTemplateId(), templateEntity.getTemplateContributor());
         return templateDTO;
     }
 

@@ -18,8 +18,8 @@ public class TemplateHandlerImpl implements TemplateHandler {
     }
 
     @Override
-    public TemplateEntity saveTemplateEntity(String templateId, String templateName, int templatePrice, int templateStock){
-        TemplateEntity templateEntity = new TemplateEntity(templateId, templateName, templatePrice, templateStock);
+    public TemplateEntity saveTemplateEntity(String templateId, String templateContributor){
+        TemplateEntity templateEntity = new TemplateEntity(templateId, templateContributor);
         return templateDAO.saveTemplate(templateEntity);
     }
 

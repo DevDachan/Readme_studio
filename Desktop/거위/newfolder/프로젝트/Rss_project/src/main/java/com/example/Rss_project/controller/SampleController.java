@@ -29,7 +29,9 @@ public class SampleController {
     public String getTemplate(@PathVariable String templateNum) {
         long startTime = System.currentTimeMillis();
         TemplateDTO templateDTO = templateService.getTemplate(templateNum);
-        String temp=templateDTO.getTemplateName();
+        String temp=templateDTO.getTemplateContributor();
+        temp= temp.replace("repositoryName","NodeJs-TeamCCService");
+        temp= temp.replace("userName","Devdachan");
         return temp;
     }
 
