@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation  } from "react-router-dom";
 import styled from "styled-components";
 
 import ReadmeFileList from "./ReadmeFileList";
@@ -7,6 +7,7 @@ import ReadmeFileContent from "./ReadmeFileContent";
 
 function Result(props) {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const Wrapper = styled.div`
       padding: 0;
@@ -23,10 +24,11 @@ function Result(props) {
           <h1>Readme Generate</h1>
         </header>
 
+
         <div className="resultSection">
           <ReadmeFileList />
 
-          <ReadmeFileContent />
+          <ReadmeFileContent readme={location.state.readme}/>
         </div>
         <input type="button" value="Back" onClick={navigate("./")}/>
       </Wrapper>

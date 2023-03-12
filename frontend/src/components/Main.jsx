@@ -34,14 +34,20 @@ function Main(props) {
     formData.append('file', file);
 
     axios({
-      method: "get",
-      url: '/',
+      method: "post",
+      url: 'http://localhost:8090/readme',
       data: formData
     })
       .then(function (response){
         //handle success
         console.log("response success");
-        navigate('./result', {result: response});
+        console.log(response.data);
+        navigate('./result', {
+          state: {
+            readme: response.data,
+            a: "hello"
+          }
+        });
       })
       .catch(function(error){
         //handle error
