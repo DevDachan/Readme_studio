@@ -9,6 +9,7 @@ function Result(props) {
   const navigate = useNavigate();
   const location = useLocation();
 
+
   const Wrapper = styled.div`
       padding: 0;
       margin: 0 auto;
@@ -24,6 +25,11 @@ function Result(props) {
           <h1>Readme Generate</h1>
         </header>
 
+        <div>
+          {location.state.userName}
+          {location.state.repName}
+
+        </div>
 
         <div className="resultSection">
           <ReadmeFileList />

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import axios from "axios";
@@ -16,6 +16,9 @@ function Main(props) {
   `;
 
   const [file, setFile] = useState();
+  const [userName, setUserName] = useState();
+  const [repName, setRepName] = useState();
+  const [  githubRepLink, setGithubRepLink] = useState();
   const [fileName, setFileName] = useState("Project Select");
   const [fileSelected, setFileSelected] = useState(false);
 
@@ -29,6 +32,7 @@ function Main(props) {
     }
   }
 
+
   const submitReadme = (e) =>{
     const formData = new FormData();
     formData.append('file', file);
@@ -36,16 +40,19 @@ function Main(props) {
     axios({
       method: "post",
       url: 'http://localhost:8090/readme',
-      data: formData
+      data: {
+        readmeData: formData,
+        userName: userName,
+        repositoryName: repName
+      }
     })
       .then(function (response){
         //handle success
-        console.log("response success");
-        console.log(response.data);
         navigate('./result', {
           state: {
             readme: response.data,
-            a: "hello"
+            userName: userName,
+            repName: repName
           }
         });
       })
@@ -68,11 +75,15 @@ function Main(props) {
 
         <div>
           <form id="generate-form-git" method="post" action="#">
-            <input type="email" name="email" id="email" placeholder="Github Repository Link" />
+            <input type="text" name="email" id="email" placeholder="Github Repository Link" value={githubRepLink} onChange={e => setUserName(e.target.value)} />
             <input type="submit" value="Generate" />
           </form>
 
           <form id="generate-form-files">
+
+            <input type="text" name="userName" id="user-name" value={userName} onChange={e => setUserName(e.target.value)} placeholder="User Name"/>
+            <input type="text" name="repName" id="rep-name"  value={repName} onChange={e => setRepName(e.target.value)} placeholder="Repository Name"/>
+
             <input type="file" name="file" id="project-files" accept=".zip" onChange={getFile} style={{"display": "none"}}/>
             <label htmlFor="project-files" style={{"display":"inline", "marginRight": "20px"}}>
               <div id="file-selector" className={(fileSelected ? "fileSelected" : "fileNotSelected")}>{fileName}</div>
