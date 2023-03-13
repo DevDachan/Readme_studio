@@ -2,6 +2,8 @@ import React, { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import axios from "axios";
+import 'bootstrap/dist/css/bootstrap.css';
+
 
 function Main(props) {
   const navigate = useNavigate();
@@ -80,15 +82,24 @@ function Main(props) {
           </form>
 
           <form id="generate-form-files">
+            <div className="row">
+              <div className="col-sm-4">
+                <input type="text" name="userName" id="user-name" value={userName} onChange={e => setUserName(e.target.value)} placeholder="User Name"/>
+              </div>
+              <div className="col-sm-4">
+                <input type="text" name="repName" id="rep-name"  value={repName} onChange={e => setRepName(e.target.value)} placeholder="Repository Name"/>
+              </div>
 
-            <input type="text" name="userName" id="user-name" value={userName} onChange={e => setUserName(e.target.value)} placeholder="User Name"/>
-            <input type="text" name="repName" id="rep-name"  value={repName} onChange={e => setRepName(e.target.value)} placeholder="Repository Name"/>
-
+            <div className="col-sm-2">
             <input type="file" name="file" id="project-files" accept=".zip" onChange={getFile} style={{"display": "none"}}/>
             <label htmlFor="project-files" style={{"display":"inline", "marginRight": "20px"}}>
               <div id="file-selector" className={(fileSelected ? "fileSelected" : "fileNotSelected")}>{fileName}</div>
             </label>
-            <input type="button" value="Generate" onClick={submitReadme}/>
+            </div>
+            <div className="col-sm-2">
+              <input type="button" value="Generate" onClick={submitReadme}/>
+            </div>
+            </div>
           </form>
         </div>
       </Wrapper>
