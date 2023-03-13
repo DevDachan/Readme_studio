@@ -34,8 +34,8 @@ public class SampleController {
         System.out.println(repositoryName);
         TemplateDTO templateDTO = templateService.getTemplate("test");
         String temp=templateDTO.getTemplateContributor();
-        temp= temp.replace("repositoryName","Eta-scheduling");
-        temp= temp.replace("userName","geodo2");
+        temp= temp.replace("repositoryName",repositoryName);
+        temp= temp.replace("userName",userName);
         String sample_Data=
                 "![header](https://capsule-render.vercel.app/api?type=Waving&color=auto&height=300&section=header&text=Readme%20Studio&fontSize=90)\n" +
                         "<div align=center><h1>\uD83D\uDCDA  STACKS</h1></div>\n" +
@@ -80,5 +80,5 @@ public class SampleController {
     }
 
 
-    
+
 }
