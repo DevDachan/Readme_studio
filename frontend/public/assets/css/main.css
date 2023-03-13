@@ -23,6 +23,8 @@ section, summary, time, mark, audio, video {
   font: inherit;
   vertical-align: baseline; }
 
+
+
 article, aside, details, figcaption, figure,
 footer, header, hgroup, menu, nav, section {
   display: block; }
@@ -109,7 +111,8 @@ body {
     -moz-transition: none !important;
     -webkit-transition: none !important;
     -ms-transition: none !important;
-    transition: none !important; }
+    transition: none !important;
+  }
   body > * {
     position: relative;
     z-index: 2; }
@@ -177,7 +180,8 @@ body {
       -ms-animation-direction: alternate !important;
       animation-direction: alternate !important; }
   body.is-preload #bg {
-    opacity: 0; }
+    opacity: 0;
+  }
 
 @-moz-keyframes bg {
   0% {
