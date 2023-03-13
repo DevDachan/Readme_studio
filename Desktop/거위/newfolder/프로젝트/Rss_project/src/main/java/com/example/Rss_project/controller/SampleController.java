@@ -7,6 +7,8 @@ import com.example.Rss_project.data.dto.TemplateDTO;
 import com.example.Rss_project.data.entity.TemplateEntity;
 import com.example.Rss_project.data.service.TemplateService;
 import jakarta.validation.Valid;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,19 +17,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/Rss")
+
 public class SampleController {
     private TemplateService templateService;
-
 
     @Autowired
     public SampleController(TemplateService templateService) {
         this.templateService = templateService;
     }
 
-    @GetMapping(value = "/template/{templateNum}")
-    public String getTemplate(@PathVariable String templateNum) {
-        TemplateDTO templateDTO = templateService.getTemplate(templateNum);
+    @CrossOrigin(origins = "http://localhost:3000")
+    @RequestMapping(value = "/readme")
+    public String getTemplate() {
+        TemplateDTO templateDTO = templateService.getTemplate("test");
         String temp=templateDTO.getTemplateContributor();
         temp= temp.replace("repositoryName","Eta-scheduling");
         temp= temp.replace("userName","geodo2");
@@ -70,11 +72,11 @@ public class SampleController {
                 "## :four:쿼리 메소드\n" +
                 "\u200B\n" +
                 "## :five:Contributor\n" +
-                "\u200B\n" + temp;
+                "\u200B\n" +temp;
         return sample_Data;
     }
 
-    @RequestMapping(value = "/readme")
+    @RequestMapping(value = "/readme/test")
     public String sample(){
     String temp= "![header](https://capsule-render.vercel.app/api?type=Waving&color=auto&height=300&section=header&text=Readme%20Studio&fontSize=90)\n" +
             "<div align=center><h1>\uD83D\uDCDA  STACKS</h1></div>\n" +
