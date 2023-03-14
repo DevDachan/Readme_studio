@@ -18,9 +18,10 @@ function Main(props) {
   `;
 
   const [file, setFile] = useState();
-  const [userName, setUserName] = useState();
-  const [repName, setRepName] = useState();
-  const [githubRepLink, setGithubRepLink] = useState();
+  const userName = useRef();
+  const repName = useRef();
+  const githubRepLink = useRef();
+
   const [fileName, setFileName] = useState("Project Select");
   const [fileSelected, setFileSelected] = useState(false);
 
@@ -34,22 +35,22 @@ function Main(props) {
     }
   }
 
-
   const submitReadme = (e) =>{
+
     const formData = new FormData();
     formData.append('file', file);
-    setRepName(document.getElementById("rep-name").value);
-    setUserName(document.getElementById("user-name").value);
-    setGithubRepLink(document.getElementById("email").value);
+    formData.append('jsonParam1', userName.current.value);
+    formData.append('jsonParam2', repName.current.value);
+
+
+    console.log(formData);
+    console.log(userName.current.value);
+    console.log(repName.current.value);
 
     axios({
       method: "post",
       url: 'http://localhost:8090/readme',
-      data: {
-        readmeData: formData,
-        userName: userName,
-        repositoryName: repName
-      }
+      data: formData
     })
       .then(function (response){
         //handle success
@@ -80,17 +81,17 @@ function Main(props) {
 
         <div>
           <form id="generate-form-git" method="post" action="#">
-            <input type="text" name="email" id="email" placeholder="Github Repository Link" />
+            <input type="text" name="email" id="email" ref={githubRepLink} placeholder="Github Repository Link" />
             <input type="submit" value="Generate" />
           </form>
 
           <form id="generate-form-files">
             <div className="row">
               <div className="col-sm-4">
-                <input type="text" name="userName" id="user-name" placeholder="User Name"/>
+                <input type="text" name="userName" id="user-name" ref={userName} placeholder="User Name"/>
               </div>
               <div className="col-sm-4">
-                <input type="text" name="repName" id="rep-name"  placeholder="Repository Name"/>
+                <input type="text" name="repName" id="rep-name" ref={repName}  placeholder="Repository Name"/>
               </div>
 
             <div className="col-sm-3">
