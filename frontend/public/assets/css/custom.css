@@ -43,6 +43,12 @@
   margin-bottom: 80px;
 }
 
+/*main*/
+
+#rep-name, #email, #user-name{
+  color:white;
+}
+
 
 .readme{
   background-color: #c7c7c7;
