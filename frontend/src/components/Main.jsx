@@ -4,7 +4,6 @@ import styled from "styled-components";
 import axios from "axios";
 import 'bootstrap/dist/css/bootstrap.css';
 
-
 function Main(props) {
   const navigate = useNavigate();
   const readmeFileList = useState();
@@ -18,12 +17,12 @@ function Main(props) {
   `;
 
   const [file, setFile] = useState();
-  const userName = useRef();
-  const repName = useRef();
-  const githubRepLink = useRef();
-
+  const [userName, setUserName] = useState('');
+  const [repName, setRepName] = useState('');
+  const [githubRepLink, setGithubRepLink] = useState('');
   const [fileName, setFileName] = useState("Project Select");
   const [fileSelected, setFileSelected] = useState(false);
+
 
   const getFile = (e) =>{
     //e.preventDefault(); //prevent reload page
@@ -32,20 +31,41 @@ function Main(props) {
       setFile(uploadFile);
       setFileName(uploadFile.name);
       setFileSelected(true);
+      if(document.getElementById("user-name").value !== userName){
+        setUserName(document.getElementById("user-name").value)
+      }
+      if(document.getElementById("rep-name").value !== repName){
+        setRepName(document.getElementById("rep-name").value)
+      }
+
     }
   }
 
+  const changeUserName = e =>{
+    setUserName(e.target.value);
+  };
+
+  const changeRepName = e =>{
+    setRepName(e.target.value);
+  };
+
   const submitReadme = (e) =>{
+
+    setRepName(document.getElementById("rep-name").value);
+    setUserName(document.getElementById("user-name").value);
+    setGithubRepLink(document.getElementById("email").value);
+    if(document.getElementById("user-name").value !== userName){
+      setUserName(document.getElementById("user-name").value)
+    }
+    if(document.getElementById("rep-name").value !== repName){
+      setRepName(document.getElementById("rep-name").value)
+    }
 
     const formData = new FormData();
     formData.append('file', file);
-    formData.append('jsonParam1', userName.current.value);
-    formData.append('jsonParam2', repName.current.value);
+    formData.append('jsonParam1', userName);
+    formData.append('jsonParam2', repName);
 
-
-    console.log(formData);
-    console.log(userName.current.value);
-    console.log(repName.current.value);
 
     axios({
       method: "post",
@@ -81,17 +101,18 @@ function Main(props) {
 
         <div>
           <form id="generate-form-git" method="post" action="#">
-            <input type="text" name="email" id="email" ref={githubRepLink} placeholder="Github Repository Link" />
+            <input type="text" name="email" id="email" placeholder="Github Repository Link" />
             <input type="submit" value="Generate" />
           </form>
 
           <form id="generate-form-files">
             <div className="row">
               <div className="col-sm-4">
-                <input type="text" name="userName" id="user-name" ref={userName} placeholder="User Name"/>
+                <input type="text" name="userName" id="user-name" defaultValue={userName} placeholder="User Name"/>
               </div>
+
               <div className="col-sm-4">
-                <input type="text" name="repName" id="rep-name" ref={repName}  placeholder="Repository Name"/>
+                <input type="text" name="repName" id="rep-name" defaultValue={repName} placeholder="Repository Name"/>
               </div>
 
             <div className="col-sm-3">
