@@ -1,5 +1,7 @@
 package com.readme.rss.controller;
 
+import static java.lang.Thread.sleep;
+
 import com.readme.rss.data.dto.TemplateDTO;
 import com.readme.rss.data.service.TemplateService;
 import java.io.BufferedReader;
@@ -8,6 +10,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashMap;
 import java.util.Scanner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -27,23 +30,38 @@ public class UnzipController {
         this.templateService = templateService;
     }
     public static String fileName = "";
+    public static String userName = "";
+    public static String repositoryName = "";
     static String findURL = "";
     static String findURL_format = "";
     static String content = "";
     @PostMapping(value = "/readme")
-    public String getFileData(@RequestParam("jsonParam1") String jsonParam1,
+    public HashMap<String, Object> getFileData(@RequestParam("jsonParam1") String jsonParam1,
         @RequestParam("jsonParam2") String jsonParam2, @RequestParam("file") MultipartFile file)
         throws IOException, InterruptedException {
-        fileName = file.getOriginalFilename();
-        System.out.println("\n입력받은 zip 파일 명 : " + fileName);
-        Path savePath = Paths.get("./unzipTest.zip"); // unzipTest.zip이름으로 저장
-        file.transferTo(savePath); // 파일 다운로드
+        HashMap<String,Object> map = new HashMap<String,Object>();
 
-        String userName = jsonParam1;
-        String repositoryName = jsonParam2;
+        fileName = file.getOriginalFilename();
+        userName = jsonParam1;
+        repositoryName = jsonParam2;
 
         System.out.println("userName : " + userName);
         System.out.println("repositoryName : " + repositoryName);
+
+        if(fileName == ""){ // zip 파일이 첨부되지 않았을 때
+            System.out.println("\nzip 파일이 첨부되지 않았습니다!");
+        }
+
+        while(true) { // 나중에 로딩 페이지 만들기
+            sleep(1);
+            if (fileName != "" && userName != "" && repositoryName != "") { // zip 파일이 입력되면
+                break;
+            }
+        }
+
+        System.out.println("\n입력받은 zip 파일 명 : " + fileName);
+        Path savePath = Paths.get("./unzipTest.zip"); // unzipTest.zip이름으로 저장
+        file.transferTo(savePath); // 파일 다운로드
 
         TemplateDTO templateDTO = templateService.getTemplate("test1");
         String temp=templateDTO.getTemplateContributor();
@@ -128,12 +146,12 @@ public class UnzipController {
                 "\n<p>User Name : " + userName + "</p>\n" +
                 "\n<p>Repository Name : " + repositoryName + "</p>\n" +
                 "\n<p>Content : " + content + "</p>\n";
-            ;
+        ;
 
-//        return "User Name : " + userName + "\n\n" +
-//            "Repository Name : " + repositoryName + "\n" +
-//            "Content : " + content;
-        return sample_Data;
+        map.put("sample_data", sample_Data);
+        map.put("contributor", temp);
+
+        return map;
     }
 
     /* Http 통신 Test
