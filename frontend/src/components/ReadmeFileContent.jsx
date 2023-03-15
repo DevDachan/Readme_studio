@@ -20,8 +20,12 @@ function ReadmeFileList(props) {
       <Wrapper>
         <div className="contentDiv">
           <h3> A.md </h3>
-          <div>
-            {props.readme}
+          <div className="mdCSS">
+            {/* {props.readme} */}
+            {props.readme.sample_data}
+            <div></div>
+            {props.readme.contributor}
+            <img src="https://contrib.rocks/image?repo=DevDachan/Readme_generate" />
           </div>
         </div>
       </Wrapper>

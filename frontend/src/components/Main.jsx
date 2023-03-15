@@ -37,21 +37,24 @@ function Main(props) {
 
   const submitReadme = (e) =>{
     const formData = new FormData();
+    console.log("userName : " + userName);
+    console.log("repName : " + repName);
+    formData.append('jsonParam1', userName);
+    formData.append('jsonParam2', repName);
+    // formData.append('jsonParam1', "YeJi222");
+    // formData.append('jsonParam2', "SpringBoot_Sample_Structure.git");
     formData.append('file', file);
-    setRepName(document.getElementById("rep-name").value);
-    setUserName(document.getElementById("user-name").value);
-    setGithubRepLink(document.getElementById("email").value);
 
     axios({
       method: "post",
-      url: 'http://localhost:8090/readme',
-      data: {
-        readmeData: formData,
-        userName: userName,
-        repositoryName: repName
+      url: '/readme',
+      data: formData,
+      headers: {
+        'Content-Type': 'multipart/form-data'
       }
     })
       .then(function (response){
+        // console.log(response.data);
         //handle success
         navigate('./result', {
           state: {
@@ -60,6 +63,7 @@ function Main(props) {
             repName: repName
           }
         });
+        // console.log("result : ", response.data);
       })
       .catch(function(error){
         //handle error
@@ -87,21 +91,21 @@ function Main(props) {
           <form id="generate-form-files">
             <div className="row">
               <div className="col-sm-4">
-                <input type="text" name="userName" id="user-name" placeholder="User Name"/>
+                <input type="text" name="userName" id="user-name" value = {userName} onChange = {(e) => {setUserName(e.target.value)}} placeholder="User Name"/>
               </div>
               <div className="col-sm-4">
-                <input type="text" name="repName" id="rep-name"  placeholder="Repository Name"/>
+                <input type="text" name="repName" id="rep-name" value = {repName} onChange = {(e) => {setRepName(e.target.value)}} placeholder="Repository Name"/>
               </div>
 
-            <div className="col-sm-3">
-            <input type="file" name="file" id="project-files" accept=".zip" onChange={getFile} style={{"display": "none"}}/>
-            <label htmlFor="project-files" style={{"display":"inline", "marginRight": "20px"}}>
-              <div id="file-selector" className={(fileSelected ? "fileSelected" : "fileNotSelected")}>{fileName}</div>
-            </label>
-            </div>
-            <div className="col-sm-1">
-              <input type="button" value="Generate" onClick={submitReadme}/>
-            </div>
+              <div className="col-sm-3">
+                <input type="file" name="file" id="project-files" accept=".zip" onChange={getFile} style={{"display": "none"}}/>
+                <label htmlFor="project-files" style={{"display":"inline", "marginRight": "20px"}}>
+                  <div id="file-selector" className={(fileSelected ? "fileSelected" : "fileNotSelected")}>{fileName}</div>
+                </label>
+              </div>
+              <div className="col-sm-1">
+                <input type="button" value="Generate" onClick={submitReadme}/>
+              </div>
             </div>
           </form>
         </div>
