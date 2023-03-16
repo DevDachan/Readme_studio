@@ -35,7 +35,7 @@ public class UnzipController {
     static String findURL = "";
     static String findURL_format = "";
     static String content = "";
-    @PostMapping(value = "/readme")
+    @PostMapping(value = "/register")
     public HashMap<String, Object> getFileData(@RequestParam("jsonParam1") String jsonParam1,
         @RequestParam("jsonParam2") String jsonParam2, @RequestParam("file") MultipartFile file)
         throws IOException, InterruptedException {
@@ -52,7 +52,7 @@ public class UnzipController {
             System.out.println("\nzip 파일이 첨부되지 않았습니다!");
         }
 
-        while(true) { // 나중에 로딩 페이지 만들기
+        while(true) { // 나중에 로딩 페이지로
             sleep(1);
             if (fileName != "" && userName != "" && repositoryName != "") { // zip 파일이 입력되면
                 break;
