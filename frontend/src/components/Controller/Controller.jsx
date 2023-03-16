@@ -23,12 +23,13 @@ const submitContributor = (e) =>{
     method: "post",
     url: '/markdown',
     data: formData,
-    responseType: "blob",
+    responseType: "text",
     headers: {
       'Content-Type': 'multipart/form-data'
     }
   })
     .then(function (response){
+      console.log("result : ", response.data);
       //handle success
       /*
       navigate('./result', {
@@ -39,7 +40,7 @@ const submitContributor = (e) =>{
         }
       });
       */
-      console.log("result : ", response.data);
+      
       const blob = new Blob([response.data]);
       // blob 사용하여 객체 URL 생성
       const fileObjectUrl = window.URL.createObjectURL(blob);

@@ -2,8 +2,10 @@ package com.readme.rss.controller;
 
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -15,7 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 // @RequestMapping("/readme")
 public class MarkdownController {
     @PostMapping(value = "/markdown")
-    public File makeMDfile(@RequestParam("mdName") String mdName,
+    public byte[] makeMDfile(@RequestParam("mdName") String mdName,
         @RequestParam("userName") String userName, @RequestParam("repName") String repName) throws IOException { // 받을 인자: md파일 명,
         System.out.println();
         System.out.println("[Make Markdown Function]");
@@ -48,6 +50,10 @@ public class MarkdownController {
         mdWriter.flush(); // 버퍼의 남은 데이터를 모두 쓰기
         mdWriter.close();
 
-        return mdFile;
+        byte[] byteFile = Files.readAllBytes(mdFile.toPath());
+
+        System.out.println(byteFile);
+
+        return byteFile;
     }
 }
