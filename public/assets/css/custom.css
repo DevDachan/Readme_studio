@@ -1,0 +1,122 @@
+.fileNotSelected{
+  background-color: #77bd47;
+    border-radius: 6px;
+    border: 0;
+    color: #ffffff !important;
+    cursor: pointer;
+    display: inline-block;
+    font-weight: 700;
+    height: 2.75em;
+    line-height: 2.75em;
+    padding: 0 1.125em;
+    text-align: center;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.fileNotSelected:hover{
+  background-color: #a7ff6b;
+}
+
+.fileSelected{
+  background-color: #757293;
+    border-radius: 6px;
+    border: 0;
+    color: #ffffff !important;
+    cursor: pointer;
+    display: inline-block;
+    font-weight: 700;
+    height: 2.75em;
+    line-height: 2.75em;
+    padding: 0 1.125em;
+    text-align: center;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.fileSelected:hover{
+  background-color: #b3aeeb;
+}
+
+
+#root{
+  margin-left: -30px;
+  margin-right: -30px;
+  margin-bottom: 80px;
+}
+
+/*main*/
+
+#rep-name, #email, #user-name{
+  color:white;
+}
+
+
+/*editor*/
+#file-selector{
+  color:white;
+  background-color: #c7c7c7;
+}
+
+.file-selector-item{
+  color:white;
+  background-color: grey;
+}
+
+.bt-back{
+  width: 100%;
+}
+
+.readme{
+  background-color: #c7c7c7;
+  color: #4f3e3e;
+  padding: 2em;
+  width: 100%;
+  border-radius: 20px;
+  font-weight: bold;
+  margin:0px;
+}
+
+.contentDiv{
+  background-color: #c7c7c7;
+  color: #4f3e3e;
+  height: 100%;
+  width: 100%;
+  padding: 2em;
+  border-radius: 20px;
+  font-weight: bold;
+}
+.mdCSS{
+  padding: 5px;
+  word-break: break-all;
+}
+.btnCSS{
+  width: 80%;
+}
+
+<<<<<<< HEAD
+.resultSection{
+  display: grid;
+  grid-template-columns: 20% 80%;
+  margin-bottom: 2em;
+}
+=======
+.controller-div{
+  background-color: #c7c7c7;
+  color: #4f3e3e;
+  height: 100%;
+  width: 100%;
+  padding: 1em;
+  margin-left: 0px !important;
+  margin-bottom: 20px;
+  border-radius: 20px;
+  font-weight: bold;
+  justify-content: center;
+  text-align: center;
+}
+
+.controoler-title{
+  margin-bottom: 20px;
+  font-weight: bold;
+}
+>>>>>>> 06ec24cb2bf7bb92da459ee73e1bb6af09e88db7
