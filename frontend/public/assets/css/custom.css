@@ -50,27 +50,56 @@
 }
 
 
+/*editor*/
+#file-selector{
+  color:white;
+  background-color: #c7c7c7;
+}
+
+.file-selector-item{
+  color:white;
+  background-color: grey;
+}
+
+.bt-back{
+  width: 100%;
+}
+
 .readme{
   background-color: #c7c7c7;
   color: #4f3e3e;
   padding: 2em;
-  width: auto;
+  width: 100%;
   border-radius: 20px;
   font-weight: bold;
   margin:0px;
 }
+
 .contentDiv{
   background-color: #c7c7c7;
   color: #4f3e3e;
   height: 100%;
+  width: 100%;
   padding: 2em;
-  width: auto;
   border-radius: 20px;
   font-weight: bold;
 }
 
-.resultSection{
-  display: grid;
-  grid-template-columns: 1fr 3fr;
-  margin-bottom: 2em;
+.controller-div{
+  background-color: #c7c7c7;
+  color: #4f3e3e;
+  height: 100%;
+  width: 100%;
+  padding: 1em;
+  margin-left: 0px !important;
+  margin-bottom: 20px;
+  border-radius: 20px;
+  font-weight: bold;
+  justify-content: center;
+  text-align: center;
+}
+
+.controoler-title{
+  margin-bottom: 20px;
+  font-weight: bold;
 }
