@@ -2,17 +2,16 @@ import React, { useState } from "react";
 import styled from "styled-components";
 
 
+const Wrapper = styled.div`
+    padding: 0 2.5em;
+    margin: 0 auto;
+    width: calc(100% - 32px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+`;
+
 function Footer(props) {
-
-  const Wrapper = styled.div`
-      padding: 0 2.5em;
-      margin: 0 auto;
-      width: calc(100% - 32px);
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-  `;
-
   return (
       <Wrapper>
         <ul className="icons">

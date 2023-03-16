@@ -4,17 +4,19 @@ import styled from "styled-components";
 import axios from "axios";
 import 'bootstrap/dist/css/bootstrap.css';
 
+const Wrapper = styled.div`
+    padding: 0 2.5em;
+    margin: 0 auto;
+    width: calc(100% - 32px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+`;
+
+
 function Main(props) {
   const navigate = useNavigate();
   const readmeFileList = useState();
-  const Wrapper = styled.div`
-      padding: 0 2.5em;
-      margin: 0 auto;
-      width: calc(100% - 32px);
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-  `;
 
   const [file, setFile] = useState();
   const [userName, setUserName] = useState('');
@@ -69,14 +71,14 @@ function Main(props) {
 
     axios({
       method: "post",
-      url: 'http://localhost:8090/readme',
+      url: 'http://localhost:8090/register',
       data: formData
     })
       .then(function (response){
         //handle success
-        navigate('./result', {
+        navigate('./editor', {
           state: {
-            readme: response.data,
+            index: 1,
             userName: userName,
             repName: repName
           }
@@ -85,11 +87,18 @@ function Main(props) {
       .catch(function(error){
         //handle error
         console.log(error);
+        navigate('./editor', {
+          state: {
+            index: 1,
+            userName: userName,
+            repName: repName
+          }
+        });
       })
       .then(function(){
         // always executed
       });
-  }
+    }
 
   return (
       <Wrapper>
