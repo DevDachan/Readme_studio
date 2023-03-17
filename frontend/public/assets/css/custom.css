@@ -47,6 +47,7 @@
 
 #rep-name, #email, #user-name{
   color:white;
+  font-size: 1rem !important;
 }
 
 
@@ -62,7 +63,7 @@
 }
 
 .bt-back{
-  width: 100%;
+  width: 90%;
 }
 
 .readme{
@@ -102,4 +103,8 @@
 .controoler-title{
   margin-bottom: 20px;
   font-weight: bold;
+}
+
+.calign{
+  text-align: center;
 }
