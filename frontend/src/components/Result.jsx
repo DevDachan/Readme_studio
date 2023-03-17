@@ -17,23 +17,64 @@ const Wrapper = styled.div`
     justify-content: center;
 `;
 
+const submitContributor = (e) =>{
+  const formData = new FormData();
+  // hard coding
+  formData.append('mdName', "A");
+  formData.append('userName', "YeJi222");
+  formData.append('repName', "SpringBoot_RSS_Local");
 
-function Editor(props) {
+  axios({
+    method: "post",
+    url: '/markdown',
+    data: formData,
+    responseType: "text",
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    }
+  })
+    .then(function (response){
+      console.log("result : ", response.data);
+
+      const blob = new Blob([response.data]);
+      // blob 사용하여 객체 URL 생성
+      const fileObjectUrl = window.URL.createObjectURL(blob);
+      // blob 객체 URL을 설정할 링크 만들기
+      const link = document.createElement("a");
+      link.href = fileObjectUrl;
+      link.style.display = "none";
+
+      // 다운로드 파일 이름 지정
+      link.download = "A.md"; // 나중에 변수 쓰기
+      // 링크를 바디에 추가하고, 강제로 click 이벤트 발생시켜 파일 다운로드
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+
+      // 다운로드가 끝난 리소스(객체 URL)를 해제
+      window.URL.revokeObjectURL(fileObjectUrl);
+    })
+    .catch(function(error){
+      //handle error
+      console.log(error);
+    })
+    .then(function(){
+      // always executed
+    });
+}
+
+
+
+function Result(props) {
   const navigate = useNavigate();
   const location = useLocation();
-
-  const [readmeObject, setReadmeObject] = useState(["template", "Contributors"]);
-  const [currentReadme, setCurrentReadme] = useState("A");
-
-  const index = location.state.index;
-  const constrollerList = location.state.templateList;
 
   const goMain = (e) =>{
     navigate('../');
   }
 
 
-  const getTemplate = (e) =>{ // 어떤 Template을 가지고 있는지 확인하기 위함
+  const getTemplate = (e) =>{
 
     const formData = new FormData();
     formData.append('index', index);
@@ -46,8 +87,7 @@ function Editor(props) {
     })
     .then(function (response){
       //handle success
-      readmeObject.push(response.data);
-      setReadmeObject([...readmeObject, response.data]);
+      setReadmeObject(response);
     })
     .catch(function(error){
       //handle error
@@ -73,10 +113,10 @@ function Editor(props) {
           </div>
 
           <div className="col-sm-8 mb-4">
-            <ReadmeFileContent content={readmeObject} />
+            <ReadmeFileContent />
           </div>
           <div className="col-sm-4 mb-4">
-            <Controller constrollerList={constrollerList} prevContent={readmeObject} setContent={setReadmeObject}/>
+            <Controller constrollerList={constrollerList}/>
           </div>
           <div className="col-sm-12 calign mb-3">
             <input type="button" className="bt-back" value="Generate" onClick={goMain} />
@@ -89,4 +129,4 @@ function Editor(props) {
   );
 }
 
-export default Editor;
+export default Result;

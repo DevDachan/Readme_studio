@@ -14,17 +14,19 @@ const Wrapper = styled.div`
 
 function ReadmeFileContent(props) {
   const navigate = useNavigate();
+  const content = props.content;
+  const list = [];
+
+
+  for(var i = 0; i< content.length; i++){
+    list.push(<div className="readme">{content[i]}</div>);
+  }
 
   return (
       <Wrapper>
         <div className="contentDiv mb-2">
           <h3> A.md </h3>
-          <div className="readme">
-            template
-          </div>
-          <div className="readme">
-            Contributor
-          </div>
+          {list}
 
         </div>
       </Wrapper>
