@@ -74,31 +74,31 @@ function Main(props) {
       url: 'http://localhost:8090/register',
       data: formData
     })
-      .then(function (response){
-        //handle success
-        navigate('./editor', {
-          state: {
-            index: 1,
-            userName: userName,
-            repName: repName
-          }
-        });
-      })
-      .catch(function(error){
-        //handle error
-        console.log(error);
-        navigate('./editor', {
-          state: {
-            index: 1,
-            userName: userName,
-            repName: repName
-          }
-        });
-      })
-      .then(function(){
-        // always executed
+    .then(function (response){
+      //handle success
+      navigate('./editor', {
+        state: {
+          index: 1,
+          userName: userName,
+          repName: repName
+        }
       });
-    }
+    })
+    .catch(function(error){
+      //handle error
+      console.log(error);
+      navigate('./editor', {
+        state: {
+          index: 1,
+          userName: userName,
+          repName: repName
+        }
+      });
+    })
+    .then(function(){
+      // always executed
+    });
+  }
 
   return (
       <Wrapper>

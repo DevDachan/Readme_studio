@@ -20,8 +20,12 @@ function ReadmeFileContent(props) {
         <div className="contentDiv mb-2">
           <h3> A.md </h3>
           <div className="readme">
-            hi
+            template
           </div>
+          <div className="readme">
+            Contributor
+          </div>
+
         </div>
       </Wrapper>
   );
