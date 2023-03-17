@@ -30,17 +30,7 @@ const submitContributor = (e) =>{
   })
     .then(function (response){
       console.log("result : ", response.data);
-      //handle success
-      /*
-      navigate('./result', {
-        state: {
-          readme: response.data,
-          userName: userName,
-          repName: repName
-        }
-      });
-      */
-      
+
       const blob = new Blob([response.data]);
       // blob 사용하여 객체 URL 생성
       const fileObjectUrl = window.URL.createObjectURL(blob);
