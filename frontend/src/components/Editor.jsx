@@ -33,32 +33,13 @@ function Editor(props) {
   }
 
 
-  const getTemplate = (e) =>{ // 어떤 Template을 가지고 있는지 확인하기 위함
-
-    const formData = new FormData();
-    formData.append('index', index);
-    formData.append('template_id', e.number);
-
-    axios({
-      method: "get",
-      url: 'http://localhost:8090/plzTemplate',
-      data: formData
-    })
-    .then(function (response){
-      //handle success
-      readmeObject.push(response.data);
-      setReadmeObject([...readmeObject, response.data]);
-    })
-    .catch(function(error){
-      //handle error
-      console.log(error);
-    })
-    .then(function(){
-      // always executed
+  const generateReadme = (e) =>{
+    navigate('../result', {
+      state: {
+        result: readmeObject
+      }
     });
   }
-
-
 
   return (
       <Wrapper>
@@ -79,7 +60,7 @@ function Editor(props) {
             <Controller constrollerList={constrollerList} prevContent={readmeObject} setContent={setReadmeObject}/>
           </div>
           <div className="col-sm-12 calign mb-3">
-            <input type="button" className="bt-back" value="Generate" onClick={goMain} />
+            <input type="button" className="bt-back" value="Generate" onClick={generateReadme} />
           </div>
           <div className="col-sm-12 calign mb-2">
             <input type="button" className="bt-back" value="Back" onClick={goMain} />
