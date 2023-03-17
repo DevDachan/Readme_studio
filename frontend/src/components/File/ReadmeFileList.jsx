@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import styled from "styled-components";
 
 const Wrapper = styled.div`
@@ -15,9 +15,17 @@ const Wrapper = styled.div`
 function ReadmeFileContent(props) {
   const navigate = useNavigate();
 
+  const item = props.currentReadme;
+  const setItem = props.setCurrentReadme;
+
+
+  const selectList = e =>{
+    setItem(e.target.value);
+  }
+
   return (
       <Wrapper>
-        <select id="file-selector">
+        <select id="file-selector" value={item} onChange={selectList}>
           <option className="file-selector-item" value="A" > A </option>
           <option className="file-selector-item" value="B" > B </option>
           <option className="file-selector-item" value="C" > C </option>

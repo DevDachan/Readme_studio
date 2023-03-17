@@ -23,7 +23,7 @@ function Editor(props) {
   const location = useLocation();
 
   const [readmeObject, setReadmeObject] = useState();
-  const [currentReadme, setCurrentReadme] = useState();
+  const [currentReadme, setCurrentReadme] = useState("A");
 
   const index = location.index;
   const constrollerList = location.templateList;
@@ -66,7 +66,7 @@ function Editor(props) {
         </header>
         <div className="row">
           <div className="col-sm-3 mb-2">
-            <ReadmeFileList />
+            <ReadmeFileList currentReadme={currentReadme} setCurrentReadme={setCurrentReadme}/>
           </div>
 
           <div className="col-sm-9">
