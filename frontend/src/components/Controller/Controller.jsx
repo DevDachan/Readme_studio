@@ -40,7 +40,7 @@ function ReadmeFileContent(props) {
       .catch(function(error){
         //handle error
         console.log(error);
-        setContent([...prevContent, "hi"]);
+        setContent([...prevContent, "TEST Template data"]);
       })
       .then(function(){
         // always executed
