@@ -108,3 +108,26 @@
 .calign{
   text-align: center;
 }
+
+
+
+/* Result */
+
+.file-list-item{
+  list-style-type: none;
+}
+
+.file-list-header{
+  list-style-type: none;
+  border-bottom: 2px solid darkgrey;
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+}
+
+.file-list{
+  background-color: #1cb495;
+  padding: 1em;
+  border-radius: 20px;
+  color: white;
+  font-weight: bold;
+}

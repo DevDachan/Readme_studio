@@ -3,7 +3,7 @@ import { useNavigate, useLocation  } from "react-router-dom";
 import styled from "styled-components";
 import axios from "axios";
 
-import ReadmeFileList from "./File/ReadmeFileList";
+import ReadmeFileSelect from "./File/ReadmeFileSelect";
 import ReadmeFileContent from "./File/ReadmeFileContent";
 import Controller from "./Controller/Controller";
 
@@ -48,7 +48,7 @@ function Editor(props) {
         </header>
         <div className="row">
           <div className="col-sm-3 mb-2">
-            <ReadmeFileList currentReadme={currentReadme} setCurrentReadme={setCurrentReadme}/>
+            <ReadmeFileSelect currentReadme={currentReadme} setCurrentReadme={setCurrentReadme}/>
           </div>
           <div className="col-sm-9">
           </div>

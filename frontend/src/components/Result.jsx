@@ -94,7 +94,9 @@ function Result(props) {
           <h1>Readme Generate</h1>
         </header>
         <div className="row">
-
+          <div className="col-sm-12">
+            <ReadmeFileList />
+          </div>
           <div className="col-sm-12 calign mb-3">
             <input type="button" className="bt-back" value="download" onClick={submitReadme} />
           </div>
