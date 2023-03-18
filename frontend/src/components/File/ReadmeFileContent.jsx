@@ -2,6 +2,10 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
+import { unified } from "unified";
+import markdown from "remark-parse";
+import remark2rehype from "remark-rehype";
+import html from "rehype-stringify";
 
 const Wrapper = styled.div`
     padding: 0;
@@ -19,7 +23,16 @@ function ReadmeFileContent(props) {
 
 
   for(var i = 0; i< content.length; i++){
-    list.push(<div className="readme">{content[i]}</div>);
+
+    const template_md = unified()
+        .use(markdown)
+        .use(remark2rehype)
+        .use(html)
+        .processSync(content[i]).toString();
+
+    list.push(<div className="readme" dangerouslySetInnerHTML={ {__html: template_md}}></div>);
+
+
   }
 
   return (

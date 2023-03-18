@@ -22,7 +22,7 @@ function Editor(props) {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const [readmeObject, setReadmeObject] = useState(["template", "Contributors"]);
+  const [readmeObject, setReadmeObject] = useState(["## template", "# Contributors"]);
   const [currentReadme, setCurrentReadme] = useState("A");
 
   const index = location.state.index;
