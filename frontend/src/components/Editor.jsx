@@ -3,7 +3,7 @@ import { useNavigate, useLocation  } from "react-router-dom";
 import styled from "styled-components";
 import axios from "axios";
 
-import ReadmeFileList from "./File/ReadmeFileList";
+import ReadmeFileSelect from "./File/ReadmeFileSelect";
 import ReadmeFileContent from "./File/ReadmeFileContent";
 import Controller from "./Controller/Controller";
 
@@ -22,42 +22,24 @@ function Editor(props) {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const [readmeObject, setReadmeObject] = useState();
-  const [currentReadme, setCurrentReadme] = useState();
+  const [readmeObject, setReadmeObject] = useState(["## template", "# Contributors"]);
+  const [currentReadme, setCurrentReadme] = useState("A");
 
-  const index = location.index;
-  const constrollerList = location.templateList;
+  const index = location.state.index;
+  const constrollerList = location.state.templateList;
 
   const goMain = (e) =>{
     navigate('../');
   }
 
 
-  const getTemplate = (e) =>{
-
-    const formData = new FormData();
-    formData.append('index', index);
-    formData.append('template_id', e.number);
-
-    axios({
-      method: "get",
-      url: 'http://localhost:8090/plzTemplate',
-      data: formData
-    })
-    .then(function (response){
-      //handle success
-      setReadmeObject(response);
-    })
-    .catch(function(error){
-      //handle error
-      console.log(error);
-    })
-    .then(function(){
-      // always executed
+  const generateReadme = (e) =>{
+    navigate('../result', {
+      state: {
+        result: readmeObject
+      }
     });
   }
-
-
 
   return (
       <Wrapper>
@@ -66,20 +48,19 @@ function Editor(props) {
         </header>
         <div className="row">
           <div className="col-sm-3 mb-2">
-            <ReadmeFileList />
+            <ReadmeFileSelect currentReadme={currentReadme} setCurrentReadme={setCurrentReadme}/>
           </div>
-
           <div className="col-sm-9">
           </div>
 
           <div className="col-sm-8 mb-4">
-            <ReadmeFileContent />
+            <ReadmeFileContent content={readmeObject} />
           </div>
           <div className="col-sm-4 mb-4">
-            <Controller />
+            <Controller constrollerList={constrollerList} prevContent={readmeObject} setContent={setReadmeObject}/>
           </div>
           <div className="col-sm-12 calign mb-3">
-            <input type="button" className="bt-back" value="Generate" onClick={goMain} />
+            <input type="button" className="bt-back" value="Generate" onClick={generateReadme} />
           </div>
           <div className="col-sm-12 calign mb-2">
             <input type="button" className="bt-back" value="Back" onClick={goMain} />

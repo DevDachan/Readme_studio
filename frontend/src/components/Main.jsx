@@ -68,6 +68,7 @@ function Main(props) {
     formData.append('jsonParam1', userName);
     formData.append('jsonParam2', repName);
 
+    const templateList = ["Template", "Contributors"];
 
     axios({
       method: "post",
@@ -90,8 +91,7 @@ function Main(props) {
       navigate('./editor', {
         state: {
           index: 1,
-          userName: userName,
-          repName: repName
+          templateList:templateList
         }
       });
     })

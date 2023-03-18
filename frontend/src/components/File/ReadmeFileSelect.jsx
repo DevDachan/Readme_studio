@@ -25,13 +25,12 @@ function ReadmeFileContent(props) {
 
   return (
       <Wrapper>
-        <ul className="file-list">
-          <li className="file-list-header"> README List </li>
-          <li className="file-list-item"  value="A" > A </li>
-          <li className="file-list-item"  value="B" > B </li>
-          <li className="file-list-item"  value="C" > C </li>
-          <li className="file-list-item"  value="D" > D </li>
-        </ul>
+        <select id="file-selector" value={item} onChange={selectList}>
+          <option className="file-selector-item" value="A" > A </option>
+          <option className="file-selector-item" value="B" > B </option>
+          <option className="file-selector-item" value="C" > C </option>
+          <option className="file-selector-item" value="D" > D </option>
+        </select>
       </Wrapper>
   );
 }

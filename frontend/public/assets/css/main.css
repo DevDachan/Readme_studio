@@ -1,5 +1,6 @@
 @import url(fontawesome-all.min.css);
 @import url("https://fonts.googleapis.com/css?family=Roboto:400,700");
+
 /*
 	Eventually by HTML5 UP
 	html5up.net | @ajlkn
@@ -20,7 +21,7 @@ section, summary, time, mark, audio, video {
   padding: 0;
   border: 0;
   font-size: 100%;
-  font: inherit;
+  font-family: 'Noto Sans KR', sans-serif;;
   vertical-align: baseline; }
 
 
@@ -114,7 +115,6 @@ body {
     transition: none !important;
   }
   body > * {
-    position: relative;
     z-index: 2; }
   @media screen and (max-width: 1680px) {
     body {
