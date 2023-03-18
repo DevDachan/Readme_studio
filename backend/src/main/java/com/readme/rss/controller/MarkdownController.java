@@ -52,8 +52,6 @@ public class MarkdownController {
 
         byte[] byteFile = Files.readAllBytes(mdFile.toPath());
 
-        System.out.println(byteFile);
-
         return byteFile;
     }
 }
