@@ -29,7 +29,7 @@ function ReadmeFileContent(props) {
         .use(remark2rehype)
         .use(html)
         .processSync(content[i]).toString();
-
+    list.push(<div className="readme"> {content[i]}</div>);        
     list.push(<div className="readme" dangerouslySetInnerHTML={ {__html: template_md}}></div>);
 
 
