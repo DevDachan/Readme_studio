@@ -18,18 +18,16 @@ const Wrapper = styled.div`
 
 function ReadmeFileContent(props) {
   const navigate = useNavigate();
-  const content = props.content;
-  const list = [];
-
+  const content = props.content.content;
+  let list = [];
 
   for(var i = 0; i< content.length; i++){
-
     const template_md = unified()
         .use(markdown)
         .use(remark2rehype)
         .use(html)
         .processSync(content[i]).toString();
-    list.push(<div className="readme"> {content[i]}</div>);        
+    list.push(<div className="readme"> {content[i]}</div>);
     list.push(<div className="readme" dangerouslySetInnerHTML={ {__html: template_md}}></div>);
 
 

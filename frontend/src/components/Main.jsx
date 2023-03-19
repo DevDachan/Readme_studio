@@ -88,10 +88,17 @@ function Main(props) {
     .catch(function(error){
       //handle error
       console.log(error);
+
       navigate('./editor', {
         state: {
           index: 1,
-          templateList:templateList
+          templateList:templateList,
+          readmeObject:[
+            {id:"A", content : ["## template"]},
+            {id:"B", content : ["# Contributors"]},
+            {id:"C", content : ["# Contributors","## template"]},
+            {id:"D", content : ["# Contributors","## template","* hello!"]}
+          ]
         }
       });
     })
