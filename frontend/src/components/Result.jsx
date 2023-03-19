@@ -3,7 +3,7 @@ import { useNavigate, useLocation  } from "react-router-dom";
 import styled from "styled-components";
 import axios from "axios";
 
-import ReadmeFileList from "./File/ReadmeFileList";
+import ReadmeFileResultList from "./File/ReadmeFileResultList";
 import ReadmeFileContent from "./File/ReadmeFileContent";
 import Controller from "./Controller/Controller";
 
@@ -95,7 +95,7 @@ function Result(props) {
         </header>
         <div className="row">
           <div className="col-sm-12">
-            <ReadmeFileList />
+            <ReadmeFileResultList readmeList={result} />
           </div>
           <div className="col-sm-12 calign mb-3">
             <input type="button" className="bt-back" value="download" onClick={submitReadme} />

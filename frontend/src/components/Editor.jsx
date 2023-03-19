@@ -22,17 +22,15 @@ function Editor(props) {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const [readmeObject, setReadmeObject] = useState(["## template", "# Contributors"]);
+  const [readmeObject, setReadmeObject] = useState(location.state.readmeObject);
   const [currentReadme, setCurrentReadme] = useState("A");
 
-  const index = location.state.index;
-  const constrollerList = location.state.templateList;
+  let index = location.state.index;
+  let constrollerList = location.state.templateList;
 
   const goMain = (e) =>{
     navigate('../');
   }
-
-
   const generateReadme = (e) =>{
     navigate('../result', {
       state: {
@@ -40,6 +38,8 @@ function Editor(props) {
       }
     });
   }
+
+
 
   return (
       <Wrapper>
@@ -54,7 +54,7 @@ function Editor(props) {
           </div>
 
           <div className="col-sm-8 mb-4">
-            <ReadmeFileContent content={readmeObject} />
+            <ReadmeFileContent content={readmeObject.find(e => e.id === currentReadme)} />
           </div>
           <div className="col-sm-4 mb-4">
             <Controller constrollerList={constrollerList} prevContent={readmeObject} setContent={setReadmeObject}/>

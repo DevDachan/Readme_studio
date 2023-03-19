@@ -19,8 +19,8 @@ function Main(props) {
   const readmeFileList = useState();
 
   const [file, setFile] = useState();
-  const [userName, setUserName] = useState('');
-  const [repName, setRepName] = useState('');
+  const [userName, setUserName] = useState();
+  const [repName, setRepName] = useState();
   const [githubRepLink, setGithubRepLink] = useState('');
   const [fileName, setFileName] = useState("Project Select");
   const [fileSelected, setFileSelected] = useState(false);
@@ -88,10 +88,17 @@ function Main(props) {
     .catch(function(error){
       //handle error
       console.log(error);
+
       navigate('./editor', {
         state: {
           index: 1,
-          templateList:templateList
+          templateList:templateList,
+          readmeObject:[
+            {id:"A", content : ["## template"]},
+            {id:"B", content : ["# Contributors"]},
+            {id:"C", content : ["# Contributors","## template"]},
+            {id:"D", content : ["# Contributors","## template","* hello!"]}
+          ]
         }
       });
     })
@@ -117,11 +124,11 @@ function Main(props) {
           <form id="generate-form-files">
             <div className="row">
               <div className="col-sm-4">
-                <input type="text" name="userName" id="user-name" defaultValue={userName} placeholder="User Name"/>
+                <input type="text" name="userName" id="user-name" defaultValue={userName} required placeholder="User Name"/>
               </div>
 
               <div className="col-sm-4">
-                <input type="text" name="repName" id="rep-name" defaultValue={repName} placeholder="Repository Name"/>
+                <input type="text" name="repName" id="rep-name" defaultValue={repName} required placeholder="Repository Name"/>
               </div>
 
             <div className="col-sm-3">
