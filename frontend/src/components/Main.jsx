@@ -87,7 +87,7 @@ function Main(props) {
       navigate('./editor', {
         state: {
           project_id: response.data.project_id,
-          framework_list: ["contributor", "header"],
+          framework_list: response.data.templateList,
           readmeObject:readme_list
         }
       });

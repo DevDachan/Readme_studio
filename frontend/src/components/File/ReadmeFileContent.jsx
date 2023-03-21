@@ -6,6 +6,7 @@ import { unified } from "unified";
 import markdown from "remark-parse";
 import remark2rehype from "remark-rehype";
 import html from "rehype-stringify";
+import MDEditor from '@uiw/react-md-editor';
 
 const Wrapper = styled.div`
     padding: 0;
@@ -21,7 +22,7 @@ function ReadmeFileContent(props) {
   const content = props.content.content;
   const title = props.title;
   const list = [""];
-  let temp = [""];
+  let temp = "";
 
   for(var i = 0; i< content.length; i++){
     var template_md = unified()
@@ -29,8 +30,11 @@ function ReadmeFileContent(props) {
         .use(remark2rehype)
         .use(html)
         .processSync(content[i]).toString();
+
+    temp = temp + content[i];
+
     list.push(<div className="readme" key={i}> {content[i]}</div>);
-    list.push(<div className="readme" key={"md_"+i} dangerouslySetInnerHTML={ {__html: template_md}}></div>);
+    //list.push(<div className="readme" key={"md_"+i} dangerouslySetInnerHTML={ {__html: template_md}}></div>);
   }
 
   return (
@@ -39,6 +43,14 @@ function ReadmeFileContent(props) {
           <h3> {title} </h3>
           {list}
         </div>
+        <MDEditor.Markdown
+      		style={{
+            padding: "30px",
+            backgroundColor: "#c7c7c7",
+            borderRadius: "20px"
+          }}
+      		source={temp}
+        />
       </Wrapper>
   );
 }

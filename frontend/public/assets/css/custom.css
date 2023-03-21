@@ -59,6 +59,15 @@
   background-color: grey;
 }
 
+
+.sideBanner {
+  position: absolute;
+  width: 10em;
+  top: 50px;
+  right: 4%;
+  top: 20%;
+}
+
 .bt-back{
   width: 90%;
 }
@@ -71,6 +80,7 @@
   border-radius: 20px;
   font-weight: bold;
   margin:0px;
+  word-break: break-all;
 }
 
 .contentDiv{
@@ -106,7 +116,9 @@
   text-align: center;
 }
 
-
+img{
+  width: 100% !important;
+}
 
 /* Result */
 
