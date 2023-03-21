@@ -28,7 +28,8 @@ function Controller(props) {
     const tempReadme = content;
 
     formData.append('project_id', project_id);
-    formData.append('framework_name', e.value);
+    formData.append('framework_name', e.target.value);
+    console.log(e.target.value);
 
     axios({
       method: "post",

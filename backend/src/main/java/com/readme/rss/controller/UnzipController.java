@@ -58,6 +58,9 @@ public class UnzipController {
     static List<String> file_nameList = new ArrayList<>();
     static List<String> file_contentList = new ArrayList<>();
 
+    // about framework table
+    static List<String> frameworkNameList = new ArrayList<>();
+
     public static String projectIdGenerate(){
         int tempRandomId = 0;
         int min = 100000, max = 999999;
@@ -76,6 +79,7 @@ public class UnzipController {
 
         return randomId;
     }
+
     @PostMapping(value = "/register")
     public HashMap<String, Object> getFileData(@RequestParam("jsonParam1") String jsonParam1,
         @RequestParam("jsonParam2") String jsonParam2, @RequestParam("file") MultipartFile file)
@@ -104,11 +108,6 @@ public class UnzipController {
         Path savePath = Paths.get("./unzipTest.zip"); // unzipTest.zip이름으로 저장
         file.transferTo(savePath); // 파일 다운로드
 
-//        TemplateDTO templateDTO = templateService.getTemplate("test1");
-//        String temp=templateDTO.getTemplateContributor();
-//        temp= temp.replace("repositoryName",repositoryName);
-//        temp= temp.replace("userName",userName);
-
         ProcessBuilder builder = new ProcessBuilder();
 
         // unzipFiles 폴더 생성 - 압축풀기한 파일들을 저장하는 임시 폴더
@@ -118,10 +117,10 @@ public class UnzipController {
         File dirFile = new File("./unzipFiles");
         File[] fileList = dirFile.listFiles();
 
-        /*if(fileList.length != 0){ // 기존에 압축풀기한 파일들이 존재하면 기존 파일들 삭제하고 시작
+        if(fileList.length != 0){ // 기존에 압축풀기한 파일들이 존재하면 기존 파일들 삭제하고 시작
             System.out.println("기존 파일들 존재! 삭제하고 시작!");
             deleteUnzipFiles(builder);
-        }*/
+        }
 
         // 파일 압축 풀기
         builder.command("cmd.exe","/c","unzip", "unzipTest.zip", "-d", "./unzipFiles");
@@ -156,60 +155,20 @@ public class UnzipController {
         }
 
         // user table에 insert
-        userService.saveUser(randomId, repositoryName, userName);
+        userService.saveUser(randomId, userName, repositoryName);
 
         // content data 보냈으므로, 압축풀기한 파일들, 업로드된 zip 파일 모두 삭제
-        //deleteUnzipFiles(builder);
+        deleteUnzipFiles(builder);
 
-        String sample_Data=
-            "![header](https://capsule-render.vercel.app/api?type=Waving&color=auto&height=300&section=header&text=Readme%20Studio&fontSize=90)\n" +
-                "<div align=center><h1>\uD83D\uDCDA  STACKS</h1></div>\n" +
-                "<div align=center> \n" +
-                "  <img src=\"https://img.shields.io/badge/Spring-007396?style=for-the-badge&logo=Spring&logoColor=white\">\n" +
-                "  <br>\n" +
-                "  \n" +
-                "\u200B\n" +
-                "</div>\n" +
-                "\u200B\n" +
-                "## :one: 소개\n" +
-                "  이 프로젝트는 Readme Studio 서비스로  Spring Boot로 제작된 프로젝트입니다.\n" +
-                "## :two: 패키지 프레임워크 설치\n" +
-                "\u200B\n" +
-                "<b>clone 프로젝트 </b>\n" +
-                "```xml\n" +
-                "gh repo clone https://soominkiminsoo/SurveyForm1.git\n" +
-                "```\n" +
-                " <b>jar 파일 다운로드</b>\n" +
-                "* mysql-connector-j-8.0.31.jar\n" +
-                "* mail-1.4.7.jar\n" +
-                "* activation.jar\n" +
-                "   \n" +
-                "\u200B\n" +
-                "## :three:DB 구조\n" +
-                "C:.<br>\n" +
-                "├─dao<br>\n" +
-                "│    └─Impl<br>\n" +
-                "├─dto<br>\n" +
-                "├─entity<br>\n" +
-                "├─handler<br>\n" +
-                "│    └─Impl<br>\n" +
-                "├─repository<br>\n" +
-                "└─service<br>\n" +
-                "       └─Impl<br>\n" +
-                "\u200B\n" +
-                "## :four:쿼리 메소드\n" +
-                "\u200B\n" +
-                "## :five:Contributor\n" +
-                "\u200B\n" + "\n" +
-                "\n<p>User Name : " + userName + "</p>\n" +
-                "\n<p>Repository Name : " + repositoryName + "</p>\n" +
-                "\n<p>Content : " + content + "</p>\n";
-        ;
+        //----------- db select in framework table -----------//
+        frameworkNameList = frameworkRepository.findAllName();
 
-
-        map.put("project_id", randomIdList);
+        // map data : index(project_id), templateList(frameworkNameList), readmeName(fileName)
+        map.put("project_id", randomId);
+        map.put("templateList", frameworkNameList);
         map.put("readmeName", file_nameList);
 
+        System.out.println("map data : " + map);
 
         return map;
     }
@@ -301,39 +260,38 @@ public class UnzipController {
 
     public static void deleteUnzipFiles(ProcessBuilder builder) throws IOException {
         // upzip한 파일들, zip파일 모두 삭제
-        builder.command("cmd.exe","/c","rmdir", "/s", "unzipFiles");
+        builder.command("cmd.exe","/c","rmdir", "unzipFiles");
         builder.start();
-        builder.command("cmd.exe","/c","del", "./unzipTest.zip");
+        builder.command("cmd.exe","/c","del", "unzipTest.zip");
         builder.start();
 
         System.out.println("업로드된 zip파일, 압축풀기한 파일들 모두 삭제 완료!!");
     }
 
-    @PostMapping("/template")
-    public String saveData(@RequestParam("index") String index,
-        @RequestParam("template_id") String templateId) {
+    @PostMapping("/framework")
+    public String saveData(@RequestParam("project_id") String project_id,
+        @RequestParam("framework_name") String framework_name) {
         // 여기서 사용자가 누구인지 index값으로 알아내기
-
-        System.out.println(index+templateId+"파라미터 체크");
-        UserDTO userDTO = userService.getUser("152005");
+        String frame_content = "";
+        System.out.println(project_id+framework_name+"파라미터 체크");
+        UserDTO userDTO = userService.getUser(project_id);
         String user_name = userDTO.getUser_name();
         String repo_name = userDTO.getRepository_name();
         System.out.println(user_name + repo_name + "Test DB");
         // framework_id에 따른 content제공
-        // if(templateId=="Contributor"){
-        String Contributors = "contributor";
-        String frame_content = frameworkRepository.findcontent(Contributors);
-        System.out.println(frame_content + "frame content가 제대로 들어왔는지 확인");
-        frame_content = frame_content.replace("repositoryName", user_name);
-        frame_content = frame_content.replace("userName", repo_name);
+        if(framework_name.equals("contributor")){
+            frame_content = frameworkRepository.findcontent(framework_name);
+            System.out.println(frame_content + "frame content가 제대로 들어왔는지 확인");
+            frame_content = frame_content.replace("repositoryName", repo_name);
+            frame_content = frame_content.replace("userName", user_name);
 
-            /* header 값에 대한 framework
-          } else if (templateId=="Header") {
-            String Header = "Header";
-            String frame_content = frameworkRepository.findcontent(Header);
+            /* header 값에 대한 framework*/
+          } else if (framework_name.equals("header")) {
+            String Header = "header";
+            frame_content = frameworkRepository.findcontent(Header);
             frame_content=frame_content.replace("repoName",repo_name);
         }
-        */
+
         return frame_content;
     }
 }

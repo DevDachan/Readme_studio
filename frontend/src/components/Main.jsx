@@ -81,7 +81,7 @@ function Main(props) {
       //handle success
 
       for(var i =0; i<response.data.readmeName.length; i++){
-        readme_list.push({id: response.data.readmeName[i] , content : ["# test"]});
+        readme_list.push({id: response.data.readmeName[i] , content : [" "]});
       }
       console.log(readme_list);
       navigate('./editor', {
