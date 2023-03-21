@@ -24,9 +24,10 @@ function Editor(props) {
 
   const [readmeObject, setReadmeObject] = useState(location.state.readmeObject);
   const [currentReadme, setCurrentReadme] = useState("A");
+  const [forRelanderng, setForRelandering] = useState("");
 
-  let index = location.state.index;
-  let constrollerList = location.state.templateList;
+  let project_id = location.state.project_id;
+  let constrollerList = location.state.framework_list;
 
   const goMain = (e) =>{
     navigate('../');
@@ -39,7 +40,10 @@ function Editor(props) {
     });
   }
 
-
+  const setContent = (e) =>{
+    setReadmeObject(e);
+    setForRelandering(forRelanderng + "1");
+  }
 
   return (
       <Wrapper>
@@ -54,10 +58,10 @@ function Editor(props) {
           </div>
 
           <div className="col-sm-8 mb-4">
-            <ReadmeFileContent content={readmeObject.find(e => e.id === currentReadme)} />
+            <ReadmeFileContent content={readmeObject.find(e => e.id === currentReadme)} forRelanderng={forRelanderng} />
           </div>
           <div className="col-sm-4 mb-4">
-            <Controller constrollerList={constrollerList} prevContent={readmeObject} setContent={setReadmeObject}/>
+            <Controller constrollerList={constrollerList} project_id={project_id} currentReadme={currentReadme} content={readmeObject} setContent={setContent}/>
           </div>
           <div className="col-sm-12 calign mb-3">
             <input type="button" className="bt-back" value="Generate" onClick={generateReadme} />

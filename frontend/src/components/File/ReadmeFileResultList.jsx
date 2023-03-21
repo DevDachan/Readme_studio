@@ -29,7 +29,7 @@ function ReadmeFileResultContent(props) {
           <li className="file-list-header"> README List </li>
           {
             readmeList.map((it) => (
-              <li className="file-list-item" value={it.id}> {it.id}</li>
+              <li className="file-list-item" key={it.id} value={it.id}> {it.id}</li>
             ))
           }
 

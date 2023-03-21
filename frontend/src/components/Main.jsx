@@ -68,7 +68,7 @@ function Main(props) {
     formData.append('jsonParam1', userName);
     formData.append('jsonParam2', repName);
 
-    const templateList = ["Template", "Contributors"];
+    const frameworkList = ["contributor", "header"];
 
     axios({
       method: "post",
@@ -79,20 +79,24 @@ function Main(props) {
       //handle success
       navigate('./editor', {
         state: {
-          index: 1,
-          userName: userName,
-          repName: repName
+          project_id: response.data.project_id,
+          framework_list: response.data.framework_list,
+          readmeObject:[
+            {id:"A", content : ["## template"]},
+            {id:"B", content : ["# Contributors"]},
+            {id:"C", content : ["# Contributors","## template"]},
+            {id:"D", content : ["# Contributors","## template","* hello!"]}
+          ]
         }
       });
     })
     .catch(function(error){
       //handle error
       console.log(error);
-
       navigate('./editor', {
         state: {
-          index: 1,
-          templateList:templateList,
+          project_id: 12223,
+          framework_list: ["contributor", "header"],
           readmeObject:[
             {id:"A", content : ["## template"]},
             {id:"B", content : ["# Contributors"]},

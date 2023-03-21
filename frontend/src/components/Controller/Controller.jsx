@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState , useEffect} from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import axios from "axios";
@@ -13,34 +13,37 @@ const Wrapper = styled.div`
 `;
 
 
-function ReadmeFileContent(props) {
+function Controller(props) {
   const navigate = useNavigate();
-  const [index, setIndex] = useState(props.index);
+  const project_id = props.project_id;
   const setContent = props.setContent;
-  const constrollerList = props.constrollerList;
-  const prevContent = props.prevContent;
-  const list = [];
+  const content = props.content;
+  const currentReadme = props.currentReadme;
+  const controllerList = props.constrollerList;
 
+  const list = [];
 
   const submitContributor = (e) =>{
     const formData = new FormData();
+    const tempReadme = content;
 
-    formData.append('index', index);
-    formData.append('template_id', e.value);
+    formData.append('project_id', project_id);
+    formData.append('framework_name', e.value);
 
     axios({
       method: "post",
-      url: 'http://localhost:8090/template',
+      url: 'http://localhost:8090/framework',
       data: formData,
     })
       .then(function (response){
         console.log("result : ", response.data);
-        setContent([...prevContent, response.data]);
+        tempReadme.find(e => e.id === currentReadme).content = [...content.find(e => e.id === currentReadme).content, response.data];
+        setContent(tempReadme);
       })
       .catch(function(error){
         //handle error
-        console.log(error);
-        setContent([...prevContent, "TEST Template data"]);
+        tempReadme.find(e => e.id === currentReadme).content = [...content.find(e => e.id === currentReadme).content, "response.data"];
+        setContent(tempReadme);
       })
       .then(function(){
         // always executed
@@ -48,10 +51,9 @@ function ReadmeFileContent(props) {
   }
 
 
-  for(var i = 0; i< constrollerList.length; i++){
-    list.push(<input type="button" className="mb-2" value={constrollerList[i]} onClick={submitContributor}/>);
+  for(var i = 0; i< controllerList.length; i++){
+    list.push(<input type="button" className="mb-2" key={controllerList[i]} value={controllerList[i]} onClick={submitContributor}/>);
   }
-
   return (
       <Wrapper>
         <div className="controller-div row">
@@ -62,4 +64,4 @@ function ReadmeFileContent(props) {
   );
 }
 
-export default ReadmeFileContent;
+export default Controller;
