@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { useNavigate, useLocation  } from "react-router-dom";
 import styled from "styled-components";
+import axios from "axios";
 
-import ReadmeFileList from "./File/ReadmeFileList";
+import ReadmeFileSelect from "./File/ReadmeFileSelect";
 import ReadmeFileContent from "./File/ReadmeFileContent";
 import Controller from "./Controller/Controller";
 
@@ -21,8 +22,27 @@ function Editor(props) {
   const navigate = useNavigate();
   const location = useLocation();
 
+  const [readmeObject, setReadmeObject] = useState(location.state.readmeObject);
+  const [currentReadme, setCurrentReadme] = useState(readmeObject[0].id);
+  const [forRelanderng, setForRelandering] = useState("");
+
+  let project_id = location.state.project_id;
+  let controllerList = location.state.framework_list;
+  console.log(readmeObject);
   const goMain = (e) =>{
     navigate('../');
+  }
+  const generateReadme = (e) =>{
+    navigate('../result', {
+      state: {
+        result: readmeObject
+      }
+    });
+  }
+
+  const setContent = (e) =>{
+    setReadmeObject(e);
+    setForRelandering(forRelanderng + "1");
   }
 
   return (
@@ -30,24 +50,30 @@ function Editor(props) {
         <header id="header">
           <h1>Readme Generate</h1>
         </header>
+
         <div className="row">
           <div className="col-sm-3 mb-2">
-            <ReadmeFileList />
+            <ReadmeFileSelect readmeList={readmeObject} currentReadme={currentReadme} setCurrentReadme={setCurrentReadme}/>
           </div>
-
           <div className="col-sm-9">
           </div>
 
-          <div className="col-sm-8">
-            <ReadmeFileContent />
+          <div className="col-sm-8 mb-4">
+            <ReadmeFileContent title={currentReadme} content={readmeObject.find(e => e.id === currentReadme)} forRelanderng={forRelanderng} />
           </div>
-          <div className="col-sm-4">
-            <Controller />
+
+          <div className="col-sm-4 mr-2 sideBanner">
+            <Controller controllerList={controllerList} project_id={project_id} currentReadme={currentReadme} content={readmeObject} setContent={setContent}/>
           </div>
-          <div className="col-sm-12">
+
+          <div className="col-sm-12 calign mb-3">
+            <input type="button" className="bt-back" value="Generate" onClick={generateReadme} />
+          </div>
+          <div className="col-sm-12 calign mb-2">
             <input type="button" className="bt-back" value="Back" onClick={goMain} />
           </div>
         </div>
+
       </Wrapper>
   );
 }
