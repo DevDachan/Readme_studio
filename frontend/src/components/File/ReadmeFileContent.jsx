@@ -19,6 +19,7 @@ const Wrapper = styled.div`
 function ReadmeFileContent(props) {
   const navigate = useNavigate();
   const content = props.content.content;
+  const title = props.title;
   const list = [""];
   let temp = [""];
 
@@ -35,7 +36,7 @@ function ReadmeFileContent(props) {
   return (
       <Wrapper>
         <div className="contentDiv mb-2">
-          <h3> A.md </h3>
+          <h3> {title} </h3>
           {list}
         </div>
       </Wrapper>

@@ -19,7 +19,7 @@ function Controller(props) {
   const setContent = props.setContent;
   const content = props.content;
   const currentReadme = props.currentReadme;
-  const controllerList = props.constrollerList;
+  const controllerList = props.controllerList;
 
   const list = [];
 

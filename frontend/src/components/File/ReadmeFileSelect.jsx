@@ -17,7 +17,7 @@ function ReadmeFileContent(props) {
 
   const item = props.currentReadme;
   const setItem = props.setCurrentReadme;
-
+  const readmeList = props.readmeList;
 
   const selectList = e =>{
     setItem(e.target.value);
@@ -26,10 +26,11 @@ function ReadmeFileContent(props) {
   return (
       <Wrapper>
         <select id="file-selector" value={item} onChange={selectList}>
-          <option className="file-selector-item" value="A" > A </option>
-          <option className="file-selector-item" value="B" > B </option>
-          <option className="file-selector-item" value="C" > C </option>
-          <option className="file-selector-item" value="D" > D </option>
+          {
+            readmeList.map((it) => (
+              <option className="file-selector-item" key={it.id} value={it.id} > {it.id} </option>
+            ))
+          }
         </select>
       </Wrapper>
   );

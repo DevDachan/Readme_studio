@@ -79,14 +79,15 @@ function Main(props) {
     })
     .then(function (response){
       //handle success
-      for(var i =0; i<response.readmeName.length; i++){
-        readme_list.push({id: response.readmeName[i] , content : ["# test"]});
-      }
 
+      for(var i =0; i<response.data.readmeName.length; i++){
+        readme_list.push({id: response.data.readmeName[i] , content : ["# test"]});
+      }
+      console.log(readme_list);
       navigate('./editor', {
         state: {
           project_id: response.data.project_id,
-          framework_list: response.data.framework_list,
+          framework_list: ["contributor", "header"],
           readmeObject:readme_list
         }
       });

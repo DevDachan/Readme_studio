@@ -27,7 +27,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-@CrossOrigin(origins = "http://localhost:3005")
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 // @RequestMapping("/readme")
 public class UnzipController {
@@ -112,19 +112,19 @@ public class UnzipController {
         ProcessBuilder builder = new ProcessBuilder();
 
         // unzipFiles 폴더 생성 - 압축풀기한 파일들을 저장하는 임시 폴더
-        builder.command("mkdir", "unzipFiles");
+        builder.command("cmd.exe","/c","mkdir", "unzipFiles");
         builder.start();
 
         File dirFile = new File("./unzipFiles");
         File[] fileList = dirFile.listFiles();
 
-        if(fileList.length != 0){ // 기존에 압축풀기한 파일들이 존재하면 기존 파일들 삭제하고 시작
+        /*if(fileList.length != 0){ // 기존에 압축풀기한 파일들이 존재하면 기존 파일들 삭제하고 시작
             System.out.println("기존 파일들 존재! 삭제하고 시작!");
             deleteUnzipFiles(builder);
-        }
+        }*/
 
         // 파일 압축 풀기
-        builder.command("unzip", "unzipTest.zip", "-d", "./unzipFiles");
+        builder.command("cmd.exe","/c","unzip", "unzipTest.zip", "-d", "./unzipFiles");
         var process = builder.start(); // upzip 실행
 
         // unzip 실행 후, 콘솔에 출력해주기
@@ -159,7 +159,7 @@ public class UnzipController {
         userService.saveUser(randomId, repositoryName, userName);
 
         // content data 보냈으므로, 압축풀기한 파일들, 업로드된 zip 파일 모두 삭제
-        deleteUnzipFiles(builder);
+        //deleteUnzipFiles(builder);
 
         String sample_Data=
             "![header](https://capsule-render.vercel.app/api?type=Waving&color=auto&height=300&section=header&text=Readme%20Studio&fontSize=90)\n" +
@@ -206,8 +206,10 @@ public class UnzipController {
                 "\n<p>Content : " + content + "</p>\n";
         ;
 
+
         map.put("project_id", randomIdList);
-        // map.put("contributor", temp);
+        map.put("readmeName", file_nameList);
+
 
         return map;
     }
@@ -299,9 +301,9 @@ public class UnzipController {
 
     public static void deleteUnzipFiles(ProcessBuilder builder) throws IOException {
         // upzip한 파일들, zip파일 모두 삭제
-        builder.command("rm", "-rf", "./unzipFiles/");
+        builder.command("cmd.exe","/c","rmdir", "/s", "unzipFiles");
         builder.start();
-        builder.command("rm", "-rf", "./unzipTest.zip");
+        builder.command("cmd.exe","/c","del", "./unzipTest.zip");
         builder.start();
 
         System.out.println("업로드된 zip파일, 압축풀기한 파일들 모두 삭제 완료!!");
