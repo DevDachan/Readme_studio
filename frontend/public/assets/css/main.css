@@ -90,10 +90,7 @@ html, body {
       min-height: 100%; } }
 
 body {
-  display: -moz-flex;
-  display: -webkit-flex;
-  display: -ms-flex;
-  display: flex;
+  display: grid;
   -moz-flex-direction: column;
   -webkit-flex-direction: column;
   -ms-flex-direction: column;

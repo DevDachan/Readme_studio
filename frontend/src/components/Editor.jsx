@@ -28,7 +28,7 @@ function Editor(props) {
 
   let project_id = location.state.project_id;
   let controllerList = location.state.framework_list;
-
+  console.log(readmeObject);
   const goMain = (e) =>{
     navigate('../');
   }
@@ -50,6 +50,7 @@ function Editor(props) {
         <header id="header">
           <h1>Readme Generate</h1>
         </header>
+
         <div className="row">
           <div className="col-sm-3 mb-2">
             <ReadmeFileSelect readmeList={readmeObject} currentReadme={currentReadme} setCurrentReadme={setCurrentReadme}/>
@@ -60,9 +61,11 @@ function Editor(props) {
           <div className="col-sm-8 mb-4">
             <ReadmeFileContent title={currentReadme} content={readmeObject.find(e => e.id === currentReadme)} forRelanderng={forRelanderng} />
           </div>
-          <div className="col-sm-4 mb-4">
+
+          <div className="col-sm-4 mr-2 sideBanner">
             <Controller controllerList={controllerList} project_id={project_id} currentReadme={currentReadme} content={readmeObject} setContent={setContent}/>
           </div>
+
           <div className="col-sm-12 calign mb-3">
             <input type="button" className="bt-back" value="Generate" onClick={generateReadme} />
           </div>
@@ -70,6 +73,7 @@ function Editor(props) {
             <input type="button" className="bt-back" value="Back" onClick={goMain} />
           </div>
         </div>
+
       </Wrapper>
   );
 }
