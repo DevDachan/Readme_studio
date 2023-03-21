@@ -5,7 +5,9 @@ import com.readme.rss.data.entity.ProjectEntity;
 import com.readme.rss.data.handler.ProjectHandler;
 import com.readme.rss.data.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service
 public class ProjectServiceImpl implements ProjectService {
     ProjectHandler projectHandler;
 
