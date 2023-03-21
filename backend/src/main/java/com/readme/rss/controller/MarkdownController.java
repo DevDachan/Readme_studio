@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-@CrossOrigin(origins = "http://localhost:3005")
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 // @RequestMapping("/readme")
 public class MarkdownController {
@@ -51,8 +51,6 @@ public class MarkdownController {
         mdWriter.close();
 
         byte[] byteFile = Files.readAllBytes(mdFile.toPath());
-
-        System.out.println(byteFile);
 
         return byteFile;
     }
