@@ -38,7 +38,7 @@ function Controller(props) {
       data: formData,
     })
       .then(function (response){
-        console.log("result : ", response.data);
+        console.log("result : ", response.data); // frame content
         tempReadme.find(e => e.id === currentReadme).content = [...content.find(e => e.id === currentReadme).content, response.data];
         setContent(tempReadme);
       })
