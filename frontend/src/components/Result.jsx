@@ -80,7 +80,6 @@ function Result(props) {
 
       // 다운로드가 끝난 리소스(객체 URL)를 해제
       window.URL.revokeObjectURL(fileObjectUrl);
-      
     })
     .catch(function(error){
       //handle error
