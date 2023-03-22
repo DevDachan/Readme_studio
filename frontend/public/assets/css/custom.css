@@ -39,14 +39,12 @@
 }
 
 
-#root{
-  margin-bottom: 80px;
-}
 
 /*main*/
 
 #rep-name, #email, #user-name{
   color:white;
+  font-size: 1rem !important;
 }
 
 
@@ -61,8 +59,17 @@
   background-color: grey;
 }
 
+
+.sideBanner {
+  position: absolute;
+  width: 10em;
+  top: 50px;
+  right: 4%;
+  top: 20%;
+}
+
 .bt-back{
-  width: 100%;
+  width: 90%;
 }
 
 .readme{
@@ -73,6 +80,7 @@
   border-radius: 20px;
   font-weight: bold;
   margin:0px;
+  word-break: break-all;
 }
 
 .contentDiv{
@@ -101,5 +109,39 @@
 
 .controoler-title{
   margin-bottom: 20px;
+  font-weight: bold;
+}
+
+.calign{
+  text-align: center;
+}
+
+img{
+  width: 100% !important;
+}
+
+/* Result */
+
+.file-list-item{
+  list-style-type: none;
+}
+.file-list-item:hover{
+  border-bottom-color: transparent;
+  color: #1cb495 !important;
+  text-decoration: none;
+}
+
+.file-list-header{
+  list-style-type: none;
+  border-bottom: 2px solid darkgrey;
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+}
+
+.file-list{
+  background-color: #c7c7c7;
+  padding: 1em;
+  border-radius: 20px;
+  color: white;
   font-weight: bold;
 }

@@ -13,6 +13,7 @@ import NotFound from "./components/NotFound";
 import Main from "./components/Main";
 import Footer from "./components/Footer";
 import Editor from "./components/Editor";
+import Result from "./components/Result";
 
 
 function App() {
@@ -21,6 +22,8 @@ function App() {
       <Routes>
         <Route path="/" element={<Main />}></Route>
         <Route path="/editor" element={<Editor />}> </Route>
+        <Route path="/result" element={<Result />}> </Route>
+
         <Route path="*" element={<NotFound />}></Route>
       </Routes>
     </BrowserRouter>

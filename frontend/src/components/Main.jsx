@@ -19,8 +19,8 @@ function Main(props) {
   const readmeFileList = useState();
 
   const [file, setFile] = useState();
-  const [userName, setUserName] = useState('');
-  const [repName, setRepName] = useState('');
+  const [userName, setUserName] = useState();
+  const [repName, setRepName] = useState();
   const [githubRepLink, setGithubRepLink] = useState('');
   const [fileName, setFileName] = useState("Project Select");
   const [fileSelected, setFileSelected] = useState(false);
@@ -68,37 +68,48 @@ function Main(props) {
     formData.append('jsonParam1', userName);
     formData.append('jsonParam2', repName);
 
+    var readme_list = [];
+    const frameworkList = ["contributor", "header"];
+    const readmeObject = ["A", "B", "C", "D"];
 
     axios({
       method: "post",
       url: 'http://localhost:8090/register',
       data: formData
     })
-      .then(function (response){
-        //handle success
-        navigate('./editor', {
-          state: {
-            index: 1,
-            userName: userName,
-            repName: repName
-          }
-        });
-      })
-      .catch(function(error){
-        //handle error
-        console.log(error);
-        navigate('./editor', {
-          state: {
-            index: 1,
-            userName: userName,
-            repName: repName
-          }
-        });
-      })
-      .then(function(){
-        // always executed
+    .then(function (response){
+      //handle success
+
+      for(var i =0; i<response.data.readmeName.length; i++){
+        readme_list.push({id: response.data.readmeName[i], content : []});
+      }
+      console.log("readme_list : ", readme_list);
+      navigate('./editor', {
+        state: {
+          project_id: response.data.project_id,
+          framework_list: response.data.templateList,
+          readmeObject:readme_list
+        }
       });
-    }
+    })
+    .catch(function(error){
+      //handle error
+      console.log(error);
+      for(var i =0; i<readmeObject.length; i++){
+        readme_list.push({id: readmeObject[i] , content : ["# test"]});
+      }
+      navigate('./editor', {
+        state: {
+          project_id: 12223,
+          framework_list: ["contributor", "header"],
+          readmeObject:readme_list
+        }
+      });
+    })
+    .then(function(){
+      // always executed
+    });
+  }
 
   return (
       <Wrapper>
@@ -117,11 +128,11 @@ function Main(props) {
           <form id="generate-form-files">
             <div className="row">
               <div className="col-sm-4">
-                <input type="text" name="userName" id="user-name" defaultValue={userName} placeholder="User Name"/>
+                <input type="text" name="userName" id="user-name" defaultValue={userName} required placeholder="User Name"/>
               </div>
 
               <div className="col-sm-4">
-                <input type="text" name="repName" id="rep-name" defaultValue={repName} placeholder="Repository Name"/>
+                <input type="text" name="repName" id="rep-name" defaultValue={repName} required placeholder="Repository Name"/>
               </div>
 
             <div className="col-sm-3">

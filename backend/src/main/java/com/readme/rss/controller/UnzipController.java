@@ -144,10 +144,18 @@ public class UnzipController {
         // about framework table
         List<String> frameworkNameList = frameworkRepository.findAllName();
 
+        // file_nameList에 확장자를 md로 바꿔주기
+        List<String> filenameMD_list = new ArrayList<>();
+        for(int i = 0 ; i < file_nameList.size() ; i++){
+            int idx = file_nameList.get(i).indexOf('.');
+            String md_filename = file_nameList.get(i).substring(0, idx) + ".md";
+            filenameMD_list.add(md_filename);
+        }
+
         // map data : index(project_id), templateList(frameworkNameList), readmeName(fileName)
         map.put("project_id", randomId);
         map.put("templateList", frameworkNameList);
-        map.put("readmeName", file_nameList);
+        map.put("readmeName", filenameMD_list);
 
         System.out.println("map data : " + map);
 
