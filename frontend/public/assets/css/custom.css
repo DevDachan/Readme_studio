@@ -83,6 +83,19 @@
   word-break: break-all;
 }
 
+.div-readmeContent{
+  text-align: center;
+}
+
+.input-readmeContent{
+  width: 200px;
+}
+
+.input-readmeContent-checked{
+  width: 200px;
+  background-color: red !important;
+}
+
 .contentDiv{
   background-color: #c7c7c7;
   color: #4f3e3e;

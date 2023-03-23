@@ -19,10 +19,17 @@ const Wrapper = styled.div`
 
 function ReadmeFileContent(props) {
   const navigate = useNavigate();
+  const position = props.position;
+  const setPosition= props.setPosition;
+
   const content = props.content.content;
   const title = props.title;
   const list = [""];
   let temp = "";
+
+  const checkedPosition = (e) => {
+    setPosition(e.target.value);
+  }
 
   for(var i = 0; i< content.length; i++){
     var template_md = unified()
@@ -32,10 +39,26 @@ function ReadmeFileContent(props) {
         .processSync(content[i]).toString();
 
     temp = temp + content[i];
+    if( Number(i) === Number(position)-1){
+      list.push(
+        <div className="readme" key={i}>
+          <p>{content[i]}</p>
+          <div className="div-readmeContent">
+            <button className="input-readmeContent-checked" onClick={checkedPosition} key={"key_"+i} value={i+1}> V </button>
+          </div>
+        </div>);
+    }else{
+      list.push(
+        <div className="readme" key={i}>
+          <p>{content[i]}</p>
+          <div className="div-readmeContent">
+            <button className="input-readmeContent" onClick={checkedPosition} key={"key_"+i} value={i+1}> + </button>
 
-    list.push(<div className="readme" key={i}> {content[i]}</div>);
-    //list.push(<div className="readme" key={"md_"+i} dangerouslySetInnerHTML={ {__html: template_md}}></div>);
+          </div>
+        </div>);
+    }
   }
+
 
   return (
       <Wrapper>

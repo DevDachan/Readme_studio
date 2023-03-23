@@ -25,10 +25,12 @@ function Editor(props) {
   const [readmeObject, setReadmeObject] = useState(location.state.readmeObject);
   const [currentReadme, setCurrentReadme] = useState(readmeObject[0].id);
   const [forRelanderng, setForRelandering] = useState("");
+  const [position, setPosition] = useState(1);
+
 
   let project_id = location.state.project_id;
   let controllerList = location.state.framework_list;
-  console.log(readmeObject);
+
   const goMain = (e) =>{
     navigate('../');
   }
@@ -59,11 +61,25 @@ function Editor(props) {
           </div>
 
           <div className="col-sm-8 mb-4">
-            <ReadmeFileContent title={currentReadme} content={readmeObject.find(e => e.id === currentReadme)} forRelanderng={forRelanderng} />
+            <ReadmeFileContent
+            title={currentReadme}
+            content={readmeObject.find(e => e.id === currentReadme)}
+            forRelanderng={forRelanderng}
+            position={position}
+            setPosition={setPosition}
+            />
           </div>
 
           <div className="col-sm-4 mr-2 sideBanner">
-            <Controller controllerList={controllerList} project_id={project_id} currentReadme={currentReadme} content={readmeObject} setContent={setContent}/>
+            <Controller
+              controllerList={controllerList}
+              project_id={project_id}
+              currentReadme={currentReadme}
+              content={readmeObject}
+              setContent={setContent}
+              setPosition={setPosition}
+              position={position}
+            />
           </div>
 
           <div className="col-sm-12 calign mb-3">

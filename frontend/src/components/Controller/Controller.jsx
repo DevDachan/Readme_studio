@@ -21,16 +21,16 @@ function Controller(props) {
   const content = props.content;
   const currentReadme = props.currentReadme;
   const controllerList = props.controllerList;
-
+  const position = props.position;
+  const setPosition = props.setPosition;
   const list = [];
 
   const submitContributor = (e) =>{
     const formData = new FormData();
-    const tempReadme = content;
+    let tempReadme = content;
 
     formData.append('project_id', project_id);
     formData.append('framework_name', e.target.value);
-    console.log(e.target.value);
 
     axios({
       method: "post",
@@ -38,9 +38,10 @@ function Controller(props) {
       data: formData,
     })
       .then(function (response){
-        console.log("result : ", response.data); // frame content
-        tempReadme.find(e => e.id === currentReadme).content = [...content.find(e => e.id === currentReadme).content, response.data];
+        tempReadme.find(e => e.id === currentReadme).content.splice(position,0, response.data);
+
         setContent(tempReadme);
+        setPosition(tempReadme.find(e => e.id === currentReadme).content.length);
       })
       .catch(function(error){
         //handle error
