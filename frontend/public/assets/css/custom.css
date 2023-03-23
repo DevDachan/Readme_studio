@@ -89,11 +89,19 @@
 
 .input-readmeContent{
   width: 200px;
+  border-radius: 10px;
+}
+
+.delete-readmeContent{
+  width: 100px;
+  border-radius: 20px;
+  background-color: red !important;
 }
 
 .input-readmeContent-checked{
   width: 200px;
-  background-color: red !important;
+  border-radius: 10px;
+  background-color: #a5d9e7 !important;
 }
 
 .contentDiv{
@@ -104,6 +112,7 @@
   padding: 2em;
   border-radius: 20px;
   font-weight: bold;
+  min-width: 50vw;
 }
 
 .controller-div{

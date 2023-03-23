@@ -23,6 +23,8 @@ function ReadmeFileContent(props) {
   const setPosition= props.setPosition;
 
   const content = props.content.content;
+  const deleteContent = props.deleteContent;
+
   const title = props.title;
   const list = [""];
   let temp = "";
@@ -42,22 +44,26 @@ function ReadmeFileContent(props) {
     if( Number(i) === Number(position)-1){
       list.push(
         <div className="readme" key={i}>
+        <button className="delete-readmeContent" onClick={deleteContent} key={"delete_"+i} value={i}> Delete </button>
+
           <p>{content[i]}</p>
           <div className="div-readmeContent">
-            <button className="input-readmeContent-checked" onClick={checkedPosition} key={"key_"+i} value={i+1}> V </button>
+            <button className="input-readmeContent-checked" onClick={checkedPosition} key={"input_"+i} value={i+1}> V </button>
           </div>
         </div>);
     }else{
       list.push(
         <div className="readme" key={i}>
+          <button className="delete-readmeContent" onClick={deleteContent} key={"delete_"+i} value={i}> Delete </button>
+
           <p>{content[i]}</p>
           <div className="div-readmeContent">
-            <button className="input-readmeContent" onClick={checkedPosition} key={"key_"+i} value={i+1}> + </button>
-
+            <button className="input-readmeContent" onClick={checkedPosition} key={"input_"+i} value={i+1}> + </button>
           </div>
         </div>);
     }
   }
+
 
 
   return (

@@ -47,6 +47,17 @@ function Editor(props) {
     setForRelandering(forRelanderng + "1");
   }
 
+  const deleteContent = (e) =>{
+    var tempReadme = readmeObject;
+    if(Number(position) === tempReadme.find(e => e.id === currentReadme).content.length){
+      setPosition(position-1);
+    }
+    tempReadme.find(e => e.id === currentReadme).content.splice(e.target.value ,1);
+    setReadmeObject(tempReadme);
+    setForRelandering(forRelanderng + "1");
+  }
+
+
   return (
       <Wrapper>
         <header id="header">
@@ -67,6 +78,7 @@ function Editor(props) {
             forRelanderng={forRelanderng}
             position={position}
             setPosition={setPosition}
+            deleteContent={deleteContent}
             />
           </div>
 
