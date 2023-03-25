@@ -25,10 +25,12 @@ function Editor(props) {
   const [readmeObject, setReadmeObject] = useState(location.state.readmeObject);
   const [currentReadme, setCurrentReadme] = useState(readmeObject[0].id);
   const [forRelanderng, setForRelandering] = useState("");
+  const [position, setPosition] = useState(1);
+
 
   let project_id = location.state.project_id;
   let controllerList = location.state.framework_list;
-  console.log(readmeObject);
+
   const goMain = (e) =>{
     navigate('../');
   }
@@ -45,6 +47,39 @@ function Editor(props) {
     setForRelandering(forRelanderng + "1");
   }
 
+  const deleteContent = (e) =>{
+    var tempReadme = readmeObject;
+    if(Number(position) === tempReadme.find(e => e.id === currentReadme).content.length){
+      setPosition(position-1);
+    }
+    tempReadme.find(e => e.id === currentReadme).content.splice(e.target.value ,1);
+    setReadmeObject(tempReadme);
+    setForRelandering(forRelanderng + "1");
+  }
+
+  const changePosition = (e) =>{
+    var content = readmeObject.find(e => e.id === currentReadme).content;
+    var currentIndex = Number(e.target.name);
+    var changeIndex = Number(e.target.value-1);
+
+    //delete currentIndex item and copy
+    var chan_temp = Object.assign(content[changeIndex]);
+    var cur_temp = content.splice(currentIndex,1);
+
+    //insert changeIndex item into currentIndex
+    content.splice(currentIndex,0, chan_temp);
+
+    // delete changeIndex item
+    content.splice(changeIndex, 1);
+
+    // insert currentIndex copy item into changeIndex
+    content.splice(changeIndex, 0, cur_temp);
+
+    setReadmeObject(readmeObject);
+    setForRelandering(forRelanderng + "1");
+  }
+
+
   return (
       <Wrapper>
         <header id="header">
@@ -59,11 +94,27 @@ function Editor(props) {
           </div>
 
           <div className="col-sm-8 mb-4">
-            <ReadmeFileContent title={currentReadme} content={readmeObject.find(e => e.id === currentReadme)} forRelanderng={forRelanderng} />
+            <ReadmeFileContent
+            title={currentReadme}
+            content={readmeObject.find(e => e.id === currentReadme)}
+            changePosition={changePosition}
+            forRelanderng={forRelanderng}
+            position={position}
+            setPosition={setPosition}
+            deleteContent={deleteContent}
+            />
           </div>
 
           <div className="col-sm-4 mr-2 sideBanner">
-            <Controller controllerList={controllerList} project_id={project_id} currentReadme={currentReadme} content={readmeObject} setContent={setContent}/>
+            <Controller
+              controllerList={controllerList}
+              project_id={project_id}
+              currentReadme={currentReadme}
+              content={readmeObject}
+              setContent={setContent}
+              setPosition={setPosition}
+              position={position}
+            />
           </div>
 
           <div className="col-sm-12 calign mb-3">

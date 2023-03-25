@@ -19,11 +19,27 @@ const Wrapper = styled.div`
 
 function ReadmeFileContent(props) {
   const navigate = useNavigate();
+  const position = props.position;
+  const setPosition= props.setPosition;
+
+  const changePosition = props.changePosition;
+
+
   const content = props.content.content;
+  const deleteContent = props.deleteContent;
+
+
   const title = props.title;
   const list = [""];
   let temp = "";
 
+  const checkedPosition = (e) => {
+    setPosition(e.target.value);
+  }
+
+
+
+  //initial make content List
   for(var i = 0; i< content.length; i++){
     var template_md = unified()
         .use(markdown)
@@ -31,11 +47,57 @@ function ReadmeFileContent(props) {
         .use(html)
         .processSync(content[i]).toString();
 
-    temp = temp + content[i];
-
-    list.push(<div className="readme" key={i}> {content[i]}</div>);
-    //list.push(<div className="readme" key={"md_"+i} dangerouslySetInnerHTML={ {__html: template_md}}></div>);
+    temp = temp + content[i] ;
+    if( Number(i) === Number(position)-1){
+      list.push(
+        <div className="readme" key={i}>
+          <div className="row">
+            <div className="col-sm-8">
+              <select id="postionChange" value="change position" key={i} name={i} onChange={changePosition}>
+              <option value="change position" disabled hidden>change position</option>
+              {
+                content.map((it, index) => (
+                  <option className="file-selector-item" key={index+1} value={index+1} > {index+1} </option>
+                ))
+              }
+              </select>
+            </div>
+            <div className="col-sm-4">
+              <button className="delete-readmeContent" onClick={deleteContent} key={"delete_"+i} value={i}> Delete </button>
+            </div>
+          </div>
+          <p>{content[i]}</p>
+          <div className="div-readmeContent">
+            <button className="input-readmeContent-checked" onClick={checkedPosition} key={"input_"+i} value={i+1}> V </button>
+          </div>
+        </div>);
+    }else{
+      list.push(
+        <div className="readme" key={i}>
+          <div className="row">
+            <div className="col-sm-8">
+              <select id="postionChange" value="change position" key={i} name={i} onChange={changePosition}>
+              <option value="change position" disabled hidden>change position</option>
+              {
+                content.map((it, index) => (
+                  <option className="file-selector-item" key={index+1} value={index+1} > {index+1} </option>
+                ))
+              }
+              </select>
+            </div>
+            <div className="col-sm-4">
+              <button className="delete-readmeContent" onClick={deleteContent} key={"delete_"+i} value={i}> Delete </button>
+            </div>
+          </div>
+          <p>{content[i]}</p>
+          <div className="div-readmeContent">
+            <button className="input-readmeContent" onClick={checkedPosition} key={"input_"+i} value={i+1}> + </button>
+          </div>
+        </div>);
+    }
   }
+
+
 
   return (
       <Wrapper>
