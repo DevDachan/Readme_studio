@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import styled from "styled-components";
+<<<<<<< HEAD
 import axios from "axios";
+=======
+>>>>>>> 079e2369a85eb2d5220b9e3d15c58f2a073c9df8
 
 const Wrapper = styled.div`
     padding: 0;
@@ -12,6 +15,10 @@ const Wrapper = styled.div`
     justify-content: center;
 `;
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 079e2369a85eb2d5220b9e3d15c58f2a073c9df8
 function ReadmeFileResultContent(props) {
   const navigate = useNavigate();
 
@@ -23,6 +30,7 @@ function ReadmeFileResultContent(props) {
     setItem(e.target.value);
   }
 
+<<<<<<< HEAD
   const downloadMD = (e, mdID, fileName) =>{
     console.log("mdID : ", fileName);
 
@@ -64,13 +72,20 @@ function ReadmeFileResultContent(props) {
     });
   }
 
+=======
+>>>>>>> 079e2369a85eb2d5220b9e3d15c58f2a073c9df8
   return (
       <Wrapper>
         <ul className="file-list">
           <li className="file-list-header"> README List </li>
           {
+<<<<<<< HEAD
             readmeList.map((it, idx) => (
               <li onClick={(e) => {downloadMD(e, idx, it.id)}} className="file-list-item" key={it.id} value={it.id}> {it.id}</li>
+=======
+            readmeList.map((it) => (
+              <li className="file-list-item" key={it.id} value={it.id}> {it.id}</li>
+>>>>>>> 079e2369a85eb2d5220b9e3d15c58f2a073c9df8
             ))
           }
 

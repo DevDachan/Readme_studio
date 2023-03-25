@@ -81,9 +81,15 @@ function Main(props) {
       //handle success
 
       for(var i =0; i<response.data.readmeName.length; i++){
+<<<<<<< HEAD
         readme_list.push({id: response.data.readmeName[i], content : []});
       }
       console.log("readme_list : ", readme_list);
+=======
+        readme_list.push({id: response.data.readmeName[i] , content : [" "]});
+      }
+      console.log(readme_list);
+>>>>>>> 079e2369a85eb2d5220b9e3d15c58f2a073c9df8
       navigate('./editor', {
         state: {
           project_id: response.data.project_id,

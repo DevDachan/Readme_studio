@@ -125,11 +125,14 @@ img{
 .file-list-item{
   list-style-type: none;
 }
+<<<<<<< HEAD
 .file-list-item:hover{
   border-bottom-color: transparent;
   color: #1cb495 !important;
   text-decoration: none;
 }
+=======
+>>>>>>> 079e2369a85eb2d5220b9e3d15c58f2a073c9df8
 
 .file-list-header{
   list-style-type: none;
