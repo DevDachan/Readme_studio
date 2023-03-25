@@ -57,6 +57,28 @@ function Editor(props) {
     setForRelandering(forRelanderng + "1");
   }
 
+  const changePosition = (e) =>{
+    var content = readmeObject.find(e => e.id === currentReadme).content;
+    var currentIndex = Number(e.target.name);
+    var changeIndex = Number(e.target.value-1);
+
+    //delete currentIndex item and copy
+    var chan_temp = Object.assign(content[changeIndex]);
+    var cur_temp = content.splice(currentIndex,1);
+
+    //insert changeIndex item into currentIndex
+    content.splice(currentIndex,0, chan_temp);
+
+    // delete changeIndex item
+    content.splice(changeIndex, 1);
+
+    // insert currentIndex copy item into changeIndex
+    content.splice(changeIndex, 0, cur_temp);
+
+    setReadmeObject(readmeObject);
+    setForRelandering(forRelanderng + "1");
+  }
+
 
   return (
       <Wrapper>
@@ -75,6 +97,7 @@ function Editor(props) {
             <ReadmeFileContent
             title={currentReadme}
             content={readmeObject.find(e => e.id === currentReadme)}
+            changePosition={changePosition}
             forRelanderng={forRelanderng}
             position={position}
             setPosition={setPosition}

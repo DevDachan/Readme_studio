@@ -45,8 +45,7 @@ function Controller(props) {
       })
       .catch(function(error){
         //handle error
-        tempReadme.find(e => e.id === currentReadme).content = [...content.find(e => e.id === currentReadme).content, "response.data"];
-        setContent(tempReadme);
+        console.log(error);
       })
       .then(function(){
         // always executed
