@@ -51,7 +51,7 @@ function ReadmeFileContent(props) {
     if( Number(i) === Number(position)-1){
       list.push(
         <div className="readme" key={i}>
-          <div className="row">
+          <div className="row mb-3">
             <div className="col-sm-8">
               <select id="postionChange" value="change position" key={i} name={i} onChange={changePosition}>
               <option value="change position" disabled hidden>change position</option>
@@ -74,7 +74,7 @@ function ReadmeFileContent(props) {
     }else{
       list.push(
         <div className="readme" key={i}>
-          <div className="row">
+          <div className="row mb-3">
             <div className="col-sm-8">
               <select id="postionChange" value="change position" key={i} name={i} onChange={changePosition}>
               <option value="change position" disabled hidden>change position</option>

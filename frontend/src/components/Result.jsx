@@ -5,7 +5,6 @@ import axios from "axios";
 
 import ReadmeFileResultList from "./File/ReadmeFileResultList";
 import ReadmeFileContent from "./File/ReadmeFileContent";
-import Controller from "./Controller/Controller";
 
 const Wrapper = styled.div`
     padding: 0;
@@ -72,7 +71,7 @@ function Result(props) {
       link.style.display = "none";
 
       // 다운로드 파일 이름 지정
-      link.download = "mdFiles.zip"; 
+      link.download = "mdFiles.zip";
       // 링크를 바디에 추가하고, 강제로 click 이벤트 발생시켜 파일 다운로드
       document.body.appendChild(link);
       link.click();

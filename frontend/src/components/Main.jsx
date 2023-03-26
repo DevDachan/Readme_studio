@@ -115,7 +115,7 @@ function Main(props) {
       <Wrapper>
         <header id="header">
           <h1>Readme Generate</h1>
-          <p>Project의 내용을 파싱해 자동으로 Readme파일을 작성해주는 서비스 입니다.<br />
+          <p style={{backgroundColor:"transparent"}}>Project의 내용을 파싱해 자동으로 Readme파일을 작성해주는 서비스 입니다.<br />
           Github repository link 혹은 Project 파일을 업로드 해주세요</p>
         </header>
 
