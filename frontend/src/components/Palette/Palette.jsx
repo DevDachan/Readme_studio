@@ -14,13 +14,13 @@ const Wrapper = styled.div`
 `;
 
 
-function Controller(props) {
+function Palette(props) {
   const navigate = useNavigate();
   const project_id = props.project_id;
   const setContent = props.setContent;
   const content = props.content;
   const currentReadme = props.currentReadme;
-  const controllerList = props.controllerList;
+  const paletteList = props.paletteList;
   const position = props.position;
   const setPosition = props.setPosition;
   const list = [];
@@ -53,17 +53,28 @@ function Controller(props) {
   }
 
 
-  for(var i = 0; i< controllerList.length; i++){
-    list.push(<input type="button" className="mb-2" key={controllerList[i]} value={controllerList[i]} onClick={submitContributor}/>);
+  const emptyText = (e) => {
+    let tempReadme = content;
+    let emptyText = "<div className='empty_textarea'></div>";
+    tempReadme.find(e => e.id === currentReadme).content.splice(position,0, emptyText);
+
+    setContent(tempReadme);
+    setPosition(tempReadme.find(e => e.id === currentReadme).content.length);
+  }
+
+  list.push(<input type="button" className="mb-2" key={"empty_textarea"} value={"Text"} onClick={emptyText}/>);
+
+  for(var i = 0; i< paletteList.length; i++){
+    list.push(<input type="button" className="mb-2" key={paletteList[i]} value={paletteList[i]} onClick={submitContributor}/>);
   }
   return (
       <Wrapper>
-        <div className="controller-div row">
-          <h3 className="controoler-title"> Controller</h3>
+        <div className="palette-div row">
+          <h3 className="palette-title"> Palette</h3>
           {list}
         </div>
       </Wrapper>
   );
 }
 
-export default Controller;
+export default Palette;

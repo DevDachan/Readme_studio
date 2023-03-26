@@ -68,8 +68,19 @@
   top: 20%;
 }
 
+.sidebar {
+  position: sticky;
+  top: 20px; /* 원하는 위치로 조절 가능 */
+}
+
 .bt-back{
   width: 90%;
+  background-color: red !important;
+}
+
+.bt-generate{
+  width: 90%;
+  background-color: #a962cb !important;
 }
 
 .readme{
@@ -115,7 +126,7 @@
   min-width: 50vw;
 }
 
-.controller-div{
+.palette-div{
   background-color: #c7c7c7;
   color: #4f3e3e;
   height: 100%;
@@ -129,7 +140,7 @@
   text-align: center;
 }
 
-.controoler-title{
+.palette-title{
   margin-bottom: 20px;
   font-weight: bold;
 }
@@ -162,4 +173,10 @@
   border-radius: 20px;
   color: white;
   font-weight: bold;
+}
+
+
+
+p{
+  background-color: white;
 }

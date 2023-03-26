@@ -5,7 +5,7 @@ import axios from "axios";
 
 import ReadmeFileSelect from "./File/ReadmeFileSelect";
 import ReadmeFileContent from "./File/ReadmeFileContent";
-import Controller from "./Controller/Controller";
+import Palette from "./Palette/Palette";
 
 
 const Wrapper = styled.div`
@@ -29,7 +29,7 @@ function Editor(props) {
 
 
   let project_id = location.state.project_id;
-  let controllerList = location.state.framework_list;
+  let paletteList = location.state.framework_list;
 
   const goMain = (e) =>{
     navigate('../');
@@ -65,19 +65,30 @@ function Editor(props) {
     //delete currentIndex item and copy
     var chan_temp = Object.assign(content[changeIndex]);
     var cur_temp = content.splice(currentIndex,1);
-
-    //insert changeIndex item into currentIndex
-    content.splice(currentIndex,0, chan_temp);
-
-    // delete changeIndex item
-    content.splice(changeIndex, 1);
-
-    // insert currentIndex copy item into changeIndex
     content.splice(changeIndex, 0, cur_temp);
+
+    /* this line for change position*/
+    //insert changeIndex item into currentIndex
+    //content.splice(currentIndex,0, chan_temp);
+    // delete changeIndex item
+    //content.splice(changeIndex, 1);
+    // insert currentIndex copy item into changeIndex
+    //content.splice(changeIndex, 0, cur_temp);
 
     setReadmeObject(readmeObject);
     setForRelandering(forRelanderng + "1");
   }
+
+  const changeTextArea = (e) =>{
+    var position = e.target.name;
+    let tempReadme = readmeObject;
+    var content = e.target.value;
+
+    tempReadme.find(e => e.id === currentReadme).content[position] = "<div className='empty_textarea'>" + content + "</div>";
+
+    setContent(tempReadme);
+  }
+
 
 
   return (
@@ -87,10 +98,18 @@ function Editor(props) {
         </header>
 
         <div className="row">
+
+
           <div className="col-sm-3 mb-2">
             <ReadmeFileSelect readmeList={readmeObject} currentReadme={currentReadme} setCurrentReadme={setCurrentReadme}/>
           </div>
-          <div className="col-sm-9">
+          <div className="col-sm-3 calign mb-3">
+            <input type="button" className="bt-generate" value="Generate" onClick={generateReadme} />
+          </div>
+          <div className="col-sm-2 calign mb-2">
+            <input type="button" className="bt-back" value="Back" onClick={goMain} />
+          </div>
+          <div className="col-sm-3">
           </div>
 
           <div className="col-sm-8 mb-4">
@@ -102,12 +121,13 @@ function Editor(props) {
             position={position}
             setPosition={setPosition}
             deleteContent={deleteContent}
+            changeTextArea={changeTextArea}
             />
           </div>
 
           <div className="col-sm-4 mr-2 sideBanner">
-            <Controller
-              controllerList={controllerList}
+            <Palette
+              paletteList={paletteList}
               project_id={project_id}
               currentReadme={currentReadme}
               content={readmeObject}
@@ -115,13 +135,6 @@ function Editor(props) {
               setPosition={setPosition}
               position={position}
             />
-          </div>
-
-          <div className="col-sm-12 calign mb-3">
-            <input type="button" className="bt-back" value="Generate" onClick={generateReadme} />
-          </div>
-          <div className="col-sm-12 calign mb-2">
-            <input type="button" className="bt-back" value="Back" onClick={goMain} />
           </div>
         </div>
 
