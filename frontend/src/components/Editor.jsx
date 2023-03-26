@@ -79,6 +79,17 @@ function Editor(props) {
     setForRelandering(forRelanderng + "1");
   }
 
+  const changeTextArea = (e) =>{
+    var position = e.target.name;
+    let tempReadme = readmeObject;
+    var content = e.target.value;
+
+    tempReadme.find(e => e.id === currentReadme).content[position] = "<div className='empty_textarea'>" + content + "</div>";
+
+    setContent(tempReadme);
+  }
+
+
 
   return (
       <Wrapper>
@@ -110,6 +121,7 @@ function Editor(props) {
             position={position}
             setPosition={setPosition}
             deleteContent={deleteContent}
+            changeTextArea={changeTextArea}
             />
           </div>
 

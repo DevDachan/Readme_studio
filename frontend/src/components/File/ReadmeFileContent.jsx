@@ -26,6 +26,7 @@ function ReadmeFileContent(props) {
 
 
   const content = props.content.content;
+  const changeTextArea = props.changeTextArea;
   const deleteContent = props.deleteContent;
 
 
@@ -38,16 +39,31 @@ function ReadmeFileContent(props) {
   }
 
 
-
   //initial make content List
   for(var i = 0; i< content.length; i++){
+    var cur_content = "";
+    if(content[i].includes("empty_textarea")){
+      cur_content =  <textarea
+          placeholder="여기에 입력하세요"
+          value={content[i].split("<div className='empty_textarea'>")[1].split("</div>")[0]}
+          id={"textarea_"+i}
+          name={i}
+          onChange={changeTextArea}
+          wrap="hard"
+        ></textarea>;
+
+    }else{
+      cur_content = content[i];
+    }
+
     var template_md = unified()
         .use(markdown)
         .use(remark2rehype)
         .use(html)
         .processSync(content[i]).toString();
 
-    temp = temp + content[i] ;
+    temp = temp +"\n" +content[i] ;
+
     if( Number(i) === Number(position)-1){
       list.push(
         <div className="readme" key={i}>
@@ -66,7 +82,7 @@ function ReadmeFileContent(props) {
               <button className="delete-readmeContent" onClick={deleteContent} key={"delete_"+i} value={i}> Delete </button>
             </div>
           </div>
-          <p>{content[i]}</p>
+          <p>{cur_content}</p>
           <div className="div-readmeContent">
             <button className="input-readmeContent-checked" onClick={checkedPosition} key={"input_"+i} value={i+1}> V </button>
           </div>
@@ -89,7 +105,7 @@ function ReadmeFileContent(props) {
               <button className="delete-readmeContent" onClick={deleteContent} key={"delete_"+i} value={i}> Delete </button>
             </div>
           </div>
-          <p>{content[i]}</p>
+          <p>{cur_content}</p>
           <div className="div-readmeContent">
             <button className="input-readmeContent" onClick={checkedPosition} key={"input_"+i} value={i+1}> + </button>
           </div>
