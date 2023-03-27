@@ -98,8 +98,6 @@ function Editor(props) {
         </header>
 
         <div className="row">
-
-
           <div className="col-sm-3 mb-2">
             <ReadmeFileSelect readmeList={readmeObject} currentReadme={currentReadme} setCurrentReadme={setCurrentReadme}/>
           </div>

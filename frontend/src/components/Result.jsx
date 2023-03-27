@@ -29,33 +29,6 @@ function Result(props) {
   }
 
   const submitReadme = (e) =>{
-    var tempData = [ // cf
-      {
-        "id": "a.md",
-        "content": [
-          "test1",
-          "test2",
-          "test3"
-        ]
-      },
-      {
-        "id": "b.md",
-        "content": [
-          "test1",
-          "test2",
-          "test3"
-        ]
-      },
-      {
-        "id": "c.md",
-        "content": [
-          "test1",
-          "test2",
-          "test3"
-        ]
-      }
-    ];
-
     axios({
       method: "post",
       url: 'http://localhost:8090/mdZipFile',
