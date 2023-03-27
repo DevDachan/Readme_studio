@@ -84,7 +84,7 @@ function Editor(props) {
     let tempReadme = readmeObject;
     var content = e.target.value;
 
-    tempReadme.find(e => e.id === currentReadme).content[position] = "<div className='empty_textarea'>" + content + "</div>";
+    tempReadme.find(e => e.id === currentReadme).content[position] = "<!-- empty_textarea -->\n" + content;
 
     setContent(tempReadme);
   }

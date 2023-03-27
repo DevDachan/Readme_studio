@@ -55,7 +55,7 @@ function Palette(props) {
 
   const emptyText = (e) => {
     let tempReadme = content;
-    let emptyText = "<div className='empty_textarea'></div>";
+    let emptyText = "<!-- empty_textarea -->\n";
     tempReadme.find(e => e.id === currentReadme).content.splice(position,0, emptyText);
 
     setContent(tempReadme);
