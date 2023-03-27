@@ -84,7 +84,7 @@ function Editor(props) {
     let tempReadme = readmeObject;
     var content = e.target.value;
 
-    tempReadme.find(e => e.id === currentReadme).content[position] = "<div className='empty_textarea'>" + content + "</div>";
+    tempReadme.find(e => e.id === currentReadme).content[position] = "<!-- empty_textarea -->\n" + content;
 
     setContent(tempReadme);
   }
@@ -98,8 +98,6 @@ function Editor(props) {
         </header>
 
         <div className="row">
-
-
           <div className="col-sm-3 mb-2">
             <ReadmeFileSelect readmeList={readmeObject} currentReadme={currentReadme} setCurrentReadme={setCurrentReadme}/>
           </div>

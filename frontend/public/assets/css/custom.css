@@ -1,3 +1,8 @@
+.scrollHtml{
+  overflow: auto;
+  min-width: 1024px;
+}
+
 .fileNotSelected{
   background-color: #77bd47;
     border-radius: 6px;
@@ -177,6 +182,37 @@
 
 
 
-p{
-  background-color: white;
+/* for the markdown viewer*/
+.readmeDiv{
+  background-color: #c7c7c7;
+  height: 100%;
+  width: 100%;
+  padding: 2em;
+  border-radius: 20px;
+  min-width: 50vw;
+}
+
+.wmde-markdown > * {
+  color: black !important;
+}
+
+.wmde-markdown > p >* {
+  color: black !important;
+}
+
+textarea{
+  background-color: white !important;
+}
+
+
+
+/*result */
+
+.bt-down{
+  width: 90%;
+  background-color: #a962cb !important
+}
+
+.bt-main{
+  width: 90%;
 }

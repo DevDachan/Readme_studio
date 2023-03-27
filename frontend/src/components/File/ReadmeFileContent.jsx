@@ -6,7 +6,7 @@ import { unified } from "unified";
 import markdown from "remark-parse";
 import remark2rehype from "remark-rehype";
 import html from "rehype-stringify";
-import MDEditor from '@uiw/react-md-editor';
+import Markdown from "@uiw/react-markdown-preview";
 
 const Wrapper = styled.div`
     padding: 0;
@@ -45,7 +45,7 @@ function ReadmeFileContent(props) {
     if(content[i].includes("empty_textarea")){
       cur_content =  <textarea
           placeholder="여기에 입력하세요"
-          value={content[i].split("<div className='empty_textarea'>")[1].split("</div>")[0]}
+          value={content[i].split("<!-- empty_textarea -->\n")[1]}
           id={"textarea_"+i}
           name={i}
           onChange={changeTextArea}
@@ -121,14 +121,18 @@ function ReadmeFileContent(props) {
           <h3> {title} </h3>
           {list}
         </div>
-        <MDEditor.Markdown
-      		style={{
-            padding: "30px",
-            backgroundColor: "#c7c7c7",
-            borderRadius: "20px"
-          }}
-      		source={temp}
-        />
+        <div className="readmeDiv">
+          <Markdown
+        		style={{
+              padding: "30px",
+              backgroundColor: "white",
+              borderRadius: "20px",
+              whiteSpace: 'pre-wrap',
+              color: "black !important"
+            }}
+            source={temp}
+          / >
+        </div>
       </Wrapper>
   );
 }

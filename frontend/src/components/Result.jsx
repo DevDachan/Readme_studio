@@ -9,7 +9,7 @@ import ReadmeFileContent from "./File/ReadmeFileContent";
 const Wrapper = styled.div`
     padding: 0;
     margin: 0 auto;
-    width: calc(100% - 32px);
+    min-width: 860px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -24,34 +24,11 @@ function Result(props) {
     navigate('../');
   }
 
-  const submitReadme = (e) =>{
-    var tempData = [ // cf
-      {
-        "id": "a.md",
-        "content": [
-          "test1",
-          "test2",
-          "test3"
-        ]
-      },
-      {
-        "id": "b.md",
-        "content": [
-          "test1",
-          "test2",
-          "test3"
-        ]
-      },
-      {
-        "id": "c.md",
-        "content": [
-          "test1",
-          "test2",
-          "test3"
-        ]
-      }
-    ];
+  const goBack = (e) =>{
+    navigate(-1);
+  }
 
+  const submitReadme = (e) =>{
     axios({
       method: "post",
       url: 'http://localhost:8090/mdZipFile',
@@ -99,10 +76,13 @@ function Result(props) {
             <ReadmeFileResultList readmeList={result} />
           </div>
           <div className="col-sm-12 calign mb-3">
-            <input type="button" className="bt-back" value="Full Download" onClick={submitReadme} />
+            <input type="button" className="bt-down" value="Full Download" onClick={submitReadme} />
           </div>
           <div className="col-sm-12 calign mb-2">
-            <input type="button" className="bt-back" value="Back" onClick={goMain} />
+            <input type="button" className="bt-main" value="Main" onClick={goMain} />
+          </div>
+          <div className="col-sm-12 calign mb-2">
+            <input type="button" className="bt-back" value="Back" onClick={goBack} />
           </div>
         </div>
       </Wrapper>
