@@ -36,9 +36,10 @@ function ReadmeFileContent(props) {
   }
 
   //initial make content List
-  
+
   for(var i = 0; i< content.length; i++){
     var cur_content = "";
+    
     if(content[i].includes("empty_textarea")){
       cur_content =  <textarea
           placeholder="여기에 입력하세요"

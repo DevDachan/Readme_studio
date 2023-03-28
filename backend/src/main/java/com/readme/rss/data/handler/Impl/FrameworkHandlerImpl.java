@@ -18,13 +18,13 @@ public class FrameworkHandlerImpl implements FrameworkHandler {
     }
 
     @Override
-    public FrameworkEntity saveFrameworkEntity(String id, String name, String content){
-        FrameworkEntity frameworkEntity = new FrameworkEntity(id, name, content);
+    public FrameworkEntity saveFrameworkEntity(String type, String name, String content){
+        FrameworkEntity frameworkEntity = new FrameworkEntity(type, name, content);
         return frameworkDAO.saveFramework(frameworkEntity);
     }
 
     @Override
-    public FrameworkEntity getFrameworkEntity(String id){
-        return frameworkDAO.getFramework(id);
+    public FrameworkEntity getFrameworkEntity(String name){
+        return frameworkDAO.getFramework(name);
     }
 }
