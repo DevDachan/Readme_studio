@@ -24,7 +24,7 @@ function ReadmeFileContent(props) {
   const changePosition = props.changePosition;
   const content = props.content.content;
   const changeTextArea = props.changeTextArea;
-  const changeEndPeriod = props.changeEndPeriod;
+  const changePeriod = props.changePeriod;
   const deleteContent = props.deleteContent;
 
   const title = props.title;
@@ -39,7 +39,7 @@ function ReadmeFileContent(props) {
 
   for(var i = 0; i< content.length; i++){
     var cur_content = "";
-    
+
     if(content[i].includes("empty_textarea")){
       cur_content =  <textarea
           placeholder="여기에 입력하세요"
@@ -51,11 +51,11 @@ function ReadmeFileContent(props) {
         ></textarea>;
 
     } else if(content[i].includes("https://ifh.cc") || content[i].includes("PeriodImage")){
-      cur_content = <>
-        <div className="dateBox" >Start date : <input type="date" data-placeholder="날짜 선택" id={"period_start" + i} name={i}></input></div>
+      cur_content = <div>
+        <div className="dateBox" >Start date : <input type="date" data-placeholder="날짜 선택" id={"period_start" + i} onChange={changePeriod} name={i}></input></div>
         <div className="brCSS"></div>
-        <div className="dateBox" >End date : <input type="date" data-placeholder="날짜 선택" id={"period_end" + i} name={i} onChange={changeEndPeriod}></input></div>
-      </>;
+        <div className="dateBox" >End date : <input type="date" data-placeholder="날짜 선택" id={"period_end" + i} name={i} onChange={changePeriod}></input></div>
+      </div>;
     } else{
       cur_content = content[i];
     }
