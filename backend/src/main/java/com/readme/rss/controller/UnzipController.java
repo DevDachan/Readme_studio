@@ -16,11 +16,13 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.Scanner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -239,14 +241,14 @@ public class UnzipController {
 
     @PostMapping("/framework")
     public String saveData(@RequestParam("project_id") String project_id,
-        @RequestParam("framework_name") String framework_name) {
+        @RequestParam("framework_name") String framework_name,
+        @RequestParam("periodBoxLen") String periodBoxLen) {
         // 여기서 사용자가 누구인지 index값으로 알아내기
         String frame_content = "";
         System.out.println(project_id+framework_name+"파라미터 체크");
         UserDTO userDTO = userService.getUser(project_id);
         String user_name = userDTO.getUser_name();
         String repo_name = userDTO.getRepository_name();
-        System.out.println(user_name + repo_name + "Test DB");
 
         // framework_id에 따른 content제공
         if(framework_name.equals("contributor")){
@@ -260,7 +262,108 @@ public class UnzipController {
             String Header = "header";
             frame_content = frameworkRepository.findcontent(Header);
             frame_content=frame_content.replace("repoName",repo_name);
+        } else if (framework_name.equals("Period")) {
+            String Period = "Period";
+            frame_content = frameworkRepository.findcontent(Period);
+            frame_content=frame_content.replace("PeriodImage", "https://ifh.cc/g/2jWwt7.png");
+            frame_content=frame_content.replace("startDate", "Start Date");
+            frame_content=frame_content.replace("endDate", "End Date");
+            System.out.println(frame_content);
         }
+
+        return frame_content;
+    }
+
+    @PostMapping("/editPeriod")
+    public String editPeriodImage(@RequestBody Map<String, Object> endFlag) {
+        String frame_content = "";
+        frame_content = frameworkRepository.findcontent("Period");
+
+        if(Integer.parseInt(endFlag.get("endFlag").toString()) == 0) { // end 입력이 안되면
+            frame_content=frame_content.replace("PeriodImage", "https://ifh.cc/g/2jWwt7.png"); // ing
+        } else{
+            frame_content=frame_content.replace("PeriodImage", "https://ifh.cc/g/LGBnpy.png"); // finished
+        }
+        System.out.println(frame_content);
+
+        return frame_content;
+    }
+
+    @PostMapping("/alldata")
+    public String alldata(@RequestParam("project_id") String project_id,
+        @RequestParam("framework_name") String framework_name) {
+        // 여기서 사용자가 누구인지 index값으로 알아내기
+        String frame_content = "";
+        System.out.println(project_id+framework_name+"파라미터 체크");
+        UserDTO userDTO = userService.getUser(project_id);
+        String user_name = userDTO.getUser_name();
+        String repo_name = userDTO.getRepository_name();
+
+        frame_content = "Header_check\n" +
+            "\n" +
+            "\n" +
+            "Contributor_check\n" +
+            "<div style=\"font-weight:bold; font-size: 21px;\">Project Period</div>" +
+            "<div><img src=\"PeriodImage\" width=100%></div>" +
+            "<span style=\"width:20%\"><span/>" +
+            "<span style=\"margin-right: 55%; margin-left: 5%;\">startDate</span>" +
+            "<span width=20%>endDate</span>" +
+            "\n" +
+            "Period_check\n" +
+            "\n" +
+            "\n" +
+            "---\n" +
+            "## Table of contents[![](https://raw.githubusercontent.com/aregtech/areg-sdk/master/docs/img/pin.svg)](#table-of-contents)\n" +
+            "- [Install](#install)\n" +
+            "- [DB](#db)\n" +
+            "- [queryMethod](#querymethod)\n" +
+            "---\n" +
+            "\n" +
+            "## Install[![](https://raw.githubusercontent.com/aregtech/areg-sdk/master/docs/img/pin.svg)](#install)\n" +
+            "<div align=\"right\">[ <a href=\"#table-of-contents\">↑ to top ↑</a> ]</div>\n" +
+            "1. Java 설치\n" +
+            "   - Spring Boot를 사용하려면 Java 8 버전 이상이 필요합니다.<br><br />\n" +
+            "   - [Oracle Java](https://www.oracle.com/technetwork/java/javase/downloads/index.html) .<br><br />\n" +
+            "\n" +
+            "\n" +
+            "```\n" +
+            "sdk install spring boot\n" +
+            "```\n" +
+            "2. Spring Boot CLI 설치\n" +
+            "\n" +
+            "   Spring Boot CLI는 Spring Boot 애플리케이션을 빠르게 만들 수 있는 명령줄 도구입니다.\n" +
+            "```\n" +
+            " spring init --dependencies=web myproject\n" +
+            "```\n" +
+            "## DB[![](https://raw.githubusercontent.com/aregtech/areg-sdk/master/docs/img/pin.svg)](#db)\n" +
+            "<div align=\"right\">[ <a href=\"#table-of-contents\">↑ to top ↑</a> ]</div>\n" +
+            "\n" +
+            "\n" +
+            "## QueryMethod[![](https://raw.githubusercontent.com/aregtech/areg-sdk/master/docs/img/pin.svg)](#querymethod)\n" +
+            "<div align=\"right\">[ <a href=\"#table-of-contents\">↑ to top ↑</a> ]</div>\n" +
+            "\n" +
+            "- 데이터베이스에서 name이 \"John Doe\"이거나 age가 18 이상인 Person 엔티티를 조회하는 쿼리 메소드\n" +
+            "```\n" +
+            " public interface PersonRepository extends JpaRepository<Person, Long> {\n" +
+            "    List<Person> findByNameOrAgeGreaterThanEqual(String name, int age);\n" +
+            "}\n" +
+            "```\n" +
+            "- 데이터베이스에서 age가 18 이상인 Person 엔티티를 age를 기준으로 오름차순으로 조회하는 쿼리 메소드\n" +
+            "```\n" +
+            " public interface PersonRepository extends JpaRepository<Person, Long> {\n" +
+            "    List<Person> findByAgeGreaterThanEqualOrderByAgeAsc(int age);\n" +
+            "}\n" +
+            "```\n";
+
+        List<String> frameworkNameList = frameworkRepository.findAllName();
+        for(int i = 0 ; i < frameworkNameList.size() ; i++){
+            System.out.println(frameworkNameList.get(i) +" check data");
+            String temp=frameworkNameList.get(i) ;
+            System.out.println(frameworkRepository.findcontent(temp));
+            frame_content=frame_content.replace(temp+"_check",frameworkRepository.findcontent(temp));
+        }
+        frame_content= frame_content.replace("userName",user_name);
+        frame_content= frame_content.replace("repositoryName",repo_name);
 
         return frame_content;
     }

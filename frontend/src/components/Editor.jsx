@@ -17,7 +17,6 @@ const Wrapper = styled.div`
     justify-content: center;
 `;
 
-
 function Editor(props) {
   const navigate = useNavigate();
   const location = useLocation();
@@ -26,7 +25,6 @@ function Editor(props) {
   const [currentReadme, setCurrentReadme] = useState(readmeObject[0].id);
   const [forRelanderng, setForRelandering] = useState("");
   const [position, setPosition] = useState(1);
-
 
   let project_id = location.state.project_id;
   let paletteList = location.state.framework_list;
@@ -79,9 +77,9 @@ function Editor(props) {
     setForRelandering(forRelanderng + "1");
   }
 
+  let tempReadme = readmeObject;
   const changeTextArea = (e) =>{
     var position = e.target.name;
-    let tempReadme = readmeObject;
     var content = e.target.value;
 
     tempReadme.find(e => e.id === currentReadme).content[position] = "<!-- empty_textarea -->\n" + content;
@@ -89,7 +87,37 @@ function Editor(props) {
     setContent(tempReadme);
   }
 
+  const changeEndPeriod = (e) => {
+    var position = e.target.name;
+    const valueData = e.target.value;
+    var flag = {};
 
+    console.log("end value", valueData);
+    if(valueData === ""){
+      flag = {endFlag: 0};
+    } else{
+      flag = {endFlag: 1};
+    }
+
+    axios({
+      method: "post",
+      url: 'http://localhost:8090/editPeriod',
+      data: flag,
+      headers: {
+        "Content-Type" : "application/json"
+      }
+    })
+    .then(function (response){
+      tempReadme.find(e => e.id === currentReadme).content[position] = response.data;
+      setContent(tempReadme);
+    })
+    .catch(function(error){
+      
+    })
+    .then(function(){
+      // always executed
+    });
+  }
 
   return (
       <Wrapper>
@@ -113,13 +141,16 @@ function Editor(props) {
           <div className="col-sm-8 mb-4">
             <ReadmeFileContent
             title={currentReadme}
+            project_id={project_id}
             content={readmeObject.find(e => e.id === currentReadme)}
             changePosition={changePosition}
             forRelanderng={forRelanderng}
             position={position}
+            setContent={setContent}
             setPosition={setPosition}
             deleteContent={deleteContent}
             changeTextArea={changeTextArea}
+            changeEndPeriod={changeEndPeriod}
             />
           </div>
 

@@ -54,6 +54,34 @@
 
 
 /*editor*/
+input[type="date"]{
+  position: relative;
+  padding: 8px 10px 8px 10px;
+  border: 3px solid #ddd;
+  border-radius: 10px;
+  font-size:20px;
+  background-color: transparent;
+  color: black;
+  width: 300px;
+}
+
+input[type="date"]::-webkit-clear-button,
+input[type="date"]::-webkit-inner-spin-button { 
+    display: none;
+} 
+input[type="date"]::-webkit-calendar-picker-indicator { 
+    /* background: transparent; */
+    z-index: 1;
+} 
+
+.brCSS{
+  height: 10px;
+}
+
+.dateBox{
+  width: 300px;
+}
+
 #file-selector{
   color:white;
   background-color: #c7c7c7;
