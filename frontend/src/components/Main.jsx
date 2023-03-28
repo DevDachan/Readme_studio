@@ -81,15 +81,9 @@ function Main(props) {
       //handle success
 
       for(var i =0; i<response.data.readmeName.length; i++){
-<<<<<<< HEAD
         readme_list.push({id: response.data.readmeName[i], content : []});
       }
       console.log("readme_list : ", readme_list);
-=======
-        readme_list.push({id: response.data.readmeName[i] , content : [" "]});
-      }
-      console.log(readme_list);
->>>>>>> 079e2369a85eb2d5220b9e3d15c58f2a073c9df8
       navigate('./editor', {
         state: {
           project_id: response.data.project_id,
@@ -121,7 +115,7 @@ function Main(props) {
       <Wrapper>
         <header id="header">
           <h1>Readme Generate</h1>
-          <p>Project의 내용을 파싱해 자동으로 Readme파일을 작성해주는 서비스 입니다.<br />
+          <p style={{backgroundColor:"transparent"}}>Project의 내용을 파싱해 자동으로 Readme파일을 작성해주는 서비스 입니다.<br />
           Github repository link 혹은 Project 파일을 업로드 해주세요</p>
         </header>
 

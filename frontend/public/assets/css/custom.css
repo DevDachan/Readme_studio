@@ -1,3 +1,8 @@
+.scrollHtml{
+  overflow: auto;
+  min-width: 1024px;
+}
+
 .fileNotSelected{
   background-color: #77bd47;
     border-radius: 6px;
@@ -49,6 +54,34 @@
 
 
 /*editor*/
+input[type="date"]{
+  position: relative;
+  padding: 8px 10px 8px 10px;
+  border: 3px solid #ddd;
+  border-radius: 10px;
+  font-size:20px;
+  background-color: transparent;
+  color: black;
+  width: 300px;
+}
+
+input[type="date"]::-webkit-clear-button,
+input[type="date"]::-webkit-inner-spin-button { 
+    display: none;
+} 
+input[type="date"]::-webkit-calendar-picker-indicator { 
+    /* background: transparent; */
+    z-index: 1;
+} 
+
+.brCSS{
+  height: 10px;
+}
+
+.dateBox{
+  width: 300px;
+}
+
 #file-selector{
   color:white;
   background-color: #c7c7c7;
@@ -68,8 +101,19 @@
   top: 20%;
 }
 
+.sidebar {
+  position: sticky;
+  top: 20px; /* 원하는 위치로 조절 가능 */
+}
+
 .bt-back{
   width: 90%;
+  background-color: red !important;
+}
+
+.bt-generate{
+  width: 90%;
+  background-color: #a962cb !important;
 }
 
 .readme{
@@ -83,6 +127,27 @@
   word-break: break-all;
 }
 
+.div-readmeContent{
+  text-align: center;
+}
+
+.input-readmeContent{
+  width: 200px;
+  border-radius: 10px;
+}
+
+.delete-readmeContent{
+  width: 100px;
+  border-radius: 20px;
+  background-color: red !important;
+}
+
+.input-readmeContent-checked{
+  width: 200px;
+  border-radius: 10px;
+  background-color: #a5d9e7 !important;
+}
+
 .contentDiv{
   background-color: #c7c7c7;
   color: #4f3e3e;
@@ -91,9 +156,10 @@
   padding: 2em;
   border-radius: 20px;
   font-weight: bold;
+  min-width: 50vw;
 }
 
-.controller-div{
+.palette-div{
   background-color: #c7c7c7;
   color: #4f3e3e;
   height: 100%;
@@ -107,7 +173,7 @@
   text-align: center;
 }
 
-.controoler-title{
+.palette-title{
   margin-bottom: 20px;
   font-weight: bold;
 }
@@ -116,23 +182,16 @@
   text-align: center;
 }
 
-img{
-  width: 100% !important;
-}
-
 /* Result */
 
 .file-list-item{
   list-style-type: none;
 }
-<<<<<<< HEAD
 .file-list-item:hover{
   border-bottom-color: transparent;
   color: #1cb495 !important;
   text-decoration: none;
 }
-=======
->>>>>>> 079e2369a85eb2d5220b9e3d15c58f2a073c9df8
 
 .file-list-header{
   list-style-type: none;
@@ -147,4 +206,41 @@ img{
   border-radius: 20px;
   color: white;
   font-weight: bold;
+}
+
+
+
+/* for the markdown viewer*/
+.readmeDiv{
+  background-color: #c7c7c7;
+  height: 100%;
+  width: 100%;
+  padding: 2em;
+  border-radius: 20px;
+  min-width: 50vw;
+}
+
+.wmde-markdown > * {
+  color: black !important;
+}
+
+.wmde-markdown > p >* {
+  color: black !important;
+}
+
+textarea{
+  background-color: white !important;
+}
+
+
+
+/*result */
+
+.bt-down{
+  width: 90%;
+  background-color: #a962cb !important
+}
+
+.bt-main{
+  width: 90%;
 }

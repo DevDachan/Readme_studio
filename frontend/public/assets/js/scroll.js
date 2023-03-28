@@ -1,5 +1,5 @@
 // 기본 위치(top)값
-var floatPosition = parseInt($(".sideBanner").css('top'))
+var floatPosition = parseInt($(".sideBanner").css('top'));
 
 // scroll 인식
 $(window).scroll(function() {

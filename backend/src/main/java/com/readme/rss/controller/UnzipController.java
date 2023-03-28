@@ -16,11 +16,13 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.Scanner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -237,14 +239,14 @@ public class UnzipController {
 
     @PostMapping("/framework")
     public String saveData(@RequestParam("project_id") String project_id,
-        @RequestParam("framework_name") String framework_name) {
+        @RequestParam("framework_name") String framework_name,
+        @RequestParam("periodBoxLen") String periodBoxLen) {
         // 여기서 사용자가 누구인지 index값으로 알아내기
         String frame_content = "";
         System.out.println(project_id+framework_name+"파라미터 체크");
         UserDTO userDTO = userService.getUser(project_id);
         String user_name = userDTO.getUser_name();
         String repo_name = userDTO.getRepository_name();
-        System.out.println(user_name + repo_name + "Test DB");
 
         // framework_id에 따른 content제공
         if(framework_name.equals("contributor")){
@@ -258,7 +260,29 @@ public class UnzipController {
             String Header = "header";
             frame_content = frameworkRepository.findcontent(Header);
             frame_content=frame_content.replace("repoName",repo_name);
+        } else if (framework_name.equals("Period")) {
+            String Period = "Period";
+            frame_content = frameworkRepository.findcontent(Period);
+            frame_content=frame_content.replace("PeriodImage", "https://ifh.cc/g/2jWwt7.png");
+            frame_content=frame_content.replace("startDate", "Start Date");
+            frame_content=frame_content.replace("endDate", "End Date");
+            System.out.println(frame_content);
         }
+
+        return frame_content;
+    }
+
+    @PostMapping("/editPeriod")
+    public String editPeriodImage(@RequestBody Map<String, Object> endFlag) {
+        String frame_content = "";
+        frame_content = frameworkRepository.findcontent("Period");
+
+        if(Integer.parseInt(endFlag.get("endFlag").toString()) == 0) { // end 입력이 안되면
+            frame_content=frame_content.replace("PeriodImage", "https://ifh.cc/g/2jWwt7.png"); // ing
+        } else{
+            frame_content=frame_content.replace("PeriodImage", "https://ifh.cc/g/LGBnpy.png"); // finished
+        }
+        System.out.println(frame_content);
 
         return frame_content;
     }
