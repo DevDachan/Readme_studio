@@ -241,8 +241,7 @@ public class UnzipController {
 
     @PostMapping("/framework")
     public String saveData(@RequestParam("project_id") String project_id,
-        @RequestParam("framework_name") String framework_name,
-        @RequestParam("periodBoxLen") String periodBoxLen) {
+        @RequestParam("framework_name") String framework_name) {
         // 여기서 사용자가 누구인지 index값으로 알아내기
         String frame_content = "";
         System.out.println(project_id+framework_name+"파라미터 체크");
@@ -251,15 +250,15 @@ public class UnzipController {
         String repo_name = userDTO.getRepository_name();
 
         // framework_id에 따른 content제공
-        if(framework_name.equals("contributor")){
+        if(framework_name.equals("Contributor")){
             frame_content = frameworkRepository.findcontent(framework_name);
             System.out.println(frame_content + "frame content가 제대로 들어왔는지 확인");
             frame_content = frame_content.replace("repositoryName", repo_name);
             frame_content = frame_content.replace("userName", user_name);
 
             /* header 값에 대한 framework*/
-        } else if (framework_name.equals("header")) {
-            String Header = "header";
+        } else if (framework_name.equals("Header")) {
+            String Header = "Header";
             frame_content = frameworkRepository.findcontent(Header);
             frame_content=frame_content.replace("repoName",repo_name);
         } else if (framework_name.equals("Period")) {
@@ -270,19 +269,29 @@ public class UnzipController {
             frame_content=frame_content.replace("endDate", "End Date");
             System.out.println(frame_content);
         }
-
+        System.out.println(frame_content);
         return frame_content;
     }
 
     @PostMapping("/editPeriod")
-    public String editPeriodImage(@RequestBody Map<String, Object> endFlag) {
+    public String editPeriodImage(
+        @RequestParam("start_date") String start_date,
+        @RequestParam("end_date") String end_date) {
         String frame_content = "";
         frame_content = frameworkRepository.findcontent("Period");
-
-        if(Integer.parseInt(endFlag.get("endFlag").toString()) == 0) { // end 입력이 안되면
+        if(start_date.equals("no")){
+            frame_content=frame_content.replace("PeriodImage", "https://ifh.cc/g/2jWwt7.png");
+            frame_content=frame_content.replace("startDate", "Start Date");
+            frame_content=frame_content.replace("endDate", "End Date");
+        }
+        else if(end_date.equals("no")) { // end 입력이 안되면
             frame_content=frame_content.replace("PeriodImage", "https://ifh.cc/g/2jWwt7.png"); // ing
+            frame_content=frame_content.replace("startDate", start_date);
+            frame_content=frame_content.replace("endDate", "End Date");
         } else{
             frame_content=frame_content.replace("PeriodImage", "https://ifh.cc/g/LGBnpy.png"); // finished
+            frame_content=frame_content.replace("startDate", start_date);
+            frame_content=frame_content.replace("endDate", end_date);
         }
         System.out.println(frame_content);
 
@@ -290,11 +299,10 @@ public class UnzipController {
     }
 
     @PostMapping("/alldata")
-    public String alldata(@RequestParam("project_id") String project_id,
-        @RequestParam("framework_name") String framework_name) {
+    public String alldata(@RequestParam("project_id") String project_id) {
         // 여기서 사용자가 누구인지 index값으로 알아내기
         String frame_content = "";
-        System.out.println(project_id+framework_name+"파라미터 체크");
+        System.out.println(project_id+"파라미터 체크");
         UserDTO userDTO = userService.getUser(project_id);
         String user_name = userDTO.getUser_name();
         String repo_name = userDTO.getRepository_name();
@@ -304,16 +312,13 @@ public class UnzipController {
             "\n" +
             "Contributor_check\n" +
             "<div style=\"font-weight:bold; font-size: 21px;\">Project Period</div>" +
-            "<div><img src=\"PeriodImage\" width=100%></div>" +
+            "<div><img src='https://ifh.cc/g/LGBnpy.png' width=100%></div>" +
             "<span style=\"width:20%\"><span/>" +
-            "<span style=\"margin-right: 55%; margin-left: 5%;\">startDate</span>" +
-            "<span width=20%>endDate</span>" +
+            "<span style=\"margin-right: 55%; margin-left: 5%;\">Start Date</span>" +
+            "<span width=20%>End Date</span></br>   " +
             "\n" +
-            "Period_check\n" +
-            "\n" +
-            "\n" +
-            "---\n" +
-            "## Table of contents[![](https://raw.githubusercontent.com/aregtech/areg-sdk/master/docs/img/pin.svg)](#table-of-contents)\n" +
+            "\n"+
+            "## Table of contents[![](https://raw.githubusercontent.com/aregtech/areg-sdk/master/docs/img/pin.svg)](#table-of-contents)   </br>\n" +
             "- [Install](#install)\n" +
             "- [DB](#db)\n" +
             "- [queryMethod](#querymethod)\n" +

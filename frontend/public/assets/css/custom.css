@@ -66,13 +66,13 @@ input[type="date"]{
 }
 
 input[type="date"]::-webkit-clear-button,
-input[type="date"]::-webkit-inner-spin-button { 
+input[type="date"]::-webkit-inner-spin-button {
     display: none;
-} 
-input[type="date"]::-webkit-calendar-picker-indicator { 
+}
+input[type="date"]::-webkit-calendar-picker-indicator {
     /* background: transparent; */
     z-index: 1;
-} 
+}
 
 .brCSS{
   height: 10px;
@@ -220,13 +220,11 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   min-width: 50vw;
 }
 
-.wmde-markdown > * {
+.wmde-markdown  * {
   color: black !important;
 }
 
-.wmde-markdown > p >* {
-  color: black !important;
-}
+
 
 textarea{
   background-color: white !important;
