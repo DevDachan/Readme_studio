@@ -299,11 +299,10 @@ public class UnzipController {
     }
 
     @PostMapping("/alldata")
-    public String alldata(@RequestParam("project_id") String project_id,
-        @RequestParam("framework_name") String framework_name) {
+    public String alldata(@RequestParam("project_id") String project_id) {
         // 여기서 사용자가 누구인지 index값으로 알아내기
         String frame_content = "";
-        System.out.println(project_id+framework_name+"파라미터 체크");
+        System.out.println(project_id+"파라미터 체크");
         UserDTO userDTO = userService.getUser(project_id);
         String user_name = userDTO.getUser_name();
         String repo_name = userDTO.getRepository_name();
@@ -313,16 +312,13 @@ public class UnzipController {
             "\n" +
             "Contributor_check\n" +
             "<div style=\"font-weight:bold; font-size: 21px;\">Project Period</div>" +
-            "<div><img src=\"PeriodImage\" width=100%></div>" +
+            "<div><img src='https://ifh.cc/g/LGBnpy.png' width=100%></div>" +
             "<span style=\"width:20%\"><span/>" +
-            "<span style=\"margin-right: 55%; margin-left: 5%;\">startDate</span>" +
-            "<span width=20%>endDate</span>" +
+            "<span style=\"margin-right: 55%; margin-left: 5%;\">Start Date</span>" +
+            "<span width=20%>End Date</span></br>   " +
             "\n" +
-            "Period_check\n" +
-            "\n" +
-            "\n" +
-            "---\n" +
-            "## Table of contents[![](https://raw.githubusercontent.com/aregtech/areg-sdk/master/docs/img/pin.svg)](#table-of-contents)\n" +
+            "\n"+
+            "## Table of contents[![](https://raw.githubusercontent.com/aregtech/areg-sdk/master/docs/img/pin.svg)](#table-of-contents)   </br>\n" +
             "- [Install](#install)\n" +
             "- [DB](#db)\n" +
             "- [queryMethod](#querymethod)\n" +
