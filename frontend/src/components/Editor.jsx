@@ -56,19 +56,38 @@ function Editor(props) {
   }
   //--------------------------------------------------------------------
   const changePosition = (e) =>{
-    var content = readmeObject.find(e => e.id === currentReadme).content;
     var currentIndex = Number(e.target.name);
-    var changeIndex = Number(e.target.value-1);
 
-    //delete currentIndex item and copy
-    var chan_temp = Object.assign(content[changeIndex]);
-    var cur_temp = content.splice(currentIndex,1)[0];
+    if(e.target.id.includes("Down")){
+      if(currentIndex < readmeObject.find(e => e.id === currentReadme).content.length-1 ){
+        var content = readmeObject.find(e => e.id === currentReadme).content;
+        var changeIndex = currentIndex+1;
+        //delete currentIndex item and copy
+        var chan_temp = Object.assign(content[changeIndex]);
+        var cur_temp = content.splice(currentIndex,1)[0];
 
-    content.splice(changeIndex, 0, cur_temp);
+        content.splice(changeIndex, 0, cur_temp);
 
-    setReadmeObject(readmeObject);
-    setForRelandering(forRelanderng + "1");
+        setReadmeObject(readmeObject);
+        setForRelandering(forRelanderng + "1");
+      }
+    }else{
+      if(currentIndex !== 0){
+        var content = readmeObject.find(e => e.id === currentReadme).content;
+        var changeIndex = currentIndex-1;
+
+        //delete currentIndex item and copy
+        var chan_temp = Object.assign(content[changeIndex]);
+        var cur_temp = content.splice(currentIndex,1)[0];
+
+        content.splice(changeIndex, 0, cur_temp);
+
+        setReadmeObject(readmeObject);
+        setForRelandering(forRelanderng + "1");
+      }
+    }
   }
+
   //--------------------------------------------------------------------
   const changeTextArea = (e) =>{
     let tempReadme = readmeObject;

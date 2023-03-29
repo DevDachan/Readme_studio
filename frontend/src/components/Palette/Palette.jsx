@@ -87,7 +87,7 @@ function Palette(props) {
       });
   }
 
-  list.push(<input type="button" className="mb-2" key={"all_data"} value={"All Data"} onClick={allData}/>);
+  list.push(<input type="button" className="bt_alldata mb-2" key={"all_data"} value={"All Data"} onClick={allData}/>);
   list.push(<input type="button" className="mb-2" key={"empty_textarea"} value={"Text"} onClick={emptyText}/>);
 
 

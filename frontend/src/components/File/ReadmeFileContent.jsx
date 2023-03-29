@@ -73,14 +73,12 @@ function ReadmeFileContent(props) {
         <div className="readme" key={i}>
           <div className="row mb-3">
             <div className="col-sm-8">
-              <select id="postionChange" value="change position" key={i} name={i} onChange={changePosition}>
-              <option value="change position" disabled hidden>change position</option>
-              {
-                content.map((it, index) => (
-                  <option className="file-selector-item" key={index+1} value={index+1} > {index+1} </option>
-                ))
-              }
-              </select>
+              <button id={"postionChangeUp"+i} key={"up"+i} name={i} onClick={changePosition} style={{marginRight:"5px"}}>
+                ^
+              </button>
+              <button id={"postionChangeDown"+i} key={"down"+i} name={i} onClick={changePosition}>
+                v
+              </button>
             </div>
             <div className="col-sm-4">
               <button className="delete-readmeContent" onClick={deleteContent} key={"delete_"+i} value={i}> Delete </button>
@@ -96,14 +94,12 @@ function ReadmeFileContent(props) {
         <div className="readme" key={i}>
           <div className="row mb-3">
             <div className="col-sm-8">
-              <select id="postionChange" value="change position" key={i} name={i} onChange={changePosition}>
-              <option value="change position" disabled hidden>change position</option>
-              {
-                content.map((it, index) => (
-                  <option className="file-selector-item" key={index+1} value={index+1} > {index+1} </option>
-                ))
-              }
-              </select>
+              <button id={"postionChangeUp"+i} key={"up"+i} name={i} onClick={changePosition} style={{marginRight:"5px"}}>
+                ^
+              </button>
+              <button id={"postionChangeDown"+i} key={"down"+i} name={i} onClick={changePosition}>
+                v
+              </button>
             </div>
             <div className="col-sm-4">
               <button className="delete-readmeContent" onClick={deleteContent} key={"delete_"+i} value={i}> Delete </button>
