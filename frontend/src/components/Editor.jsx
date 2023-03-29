@@ -5,7 +5,9 @@ import axios from "axios";
 
 import ReadmeFileSelect from "./File/ReadmeFileSelect";
 import ReadmeFileContent from "./File/ReadmeFileContent";
+import ReadmeFileComponent from "./File/ReadmeFileComponent";
 import Palette from "./Palette/Palette";
+import Modal from "react-bootstrap/Modal";
 
 
 const Wrapper = styled.div`
@@ -25,6 +27,9 @@ function Editor(props) {
   const [currentReadme, setCurrentReadme] = useState(readmeObject[0].id);
   const [forRelanderng, setForRelandering] = useState("");
   const [position, setPosition] = useState(1);
+  const handleClose = () => setShow(false);
+  const handleOpen = () => setShow(true);
+  const [show, setShow] = useState(false);
 
   let project_id = location.state.project_id;
   let paletteList = location.state.framework_list;
@@ -205,8 +210,9 @@ function Editor(props) {
           <div className="col-sm-3">
           </div>
 
+
           <div className="col-sm-8 mb-4">
-            <ReadmeFileContent
+            <ReadmeFileComponent
             title={currentReadme}
             project_id={project_id}
             content={readmeObject.find(e => e.id === currentReadme)}
@@ -218,7 +224,22 @@ function Editor(props) {
             deleteContent={deleteContent}
             changeTextArea={changeTextArea}
             changePeriod={changePeriod}
+            handleOpen={handleOpen}
             />
+          <Modal className="modal-lg" show={show} onHide={handleClose}>
+            <Modal.Header>
+              <Modal.Title>README Preview</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <ReadmeFileContent
+                content={readmeObject.find(e => e.id === currentReadme)}
+              />
+            </Modal.Body>
+            <Modal.Footer>
+              <button onClick={handleClose}>닫기</button>
+            </Modal.Footer>
+          </Modal>
+
           </div>
 
           <div className="col-sm-4 mr-2 sideBanner">
