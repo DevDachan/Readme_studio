@@ -57,44 +57,48 @@ function ReadmeFileContent(props) {
 
     if( Number(i) === Number(position)-1){
       list.push(
+        <div>
         <div className="readme" key={i}>
           <div className="row mb-3">
             <div className="col-sm-8">
-              <button id={"postionChangeUp"+i} key={"up"+i} name={i} onClick={changePosition} style={{marginRight:"5px"}}>
+              <button className="bt-updown" id={"postionChangeUp"+i} key={"up"+i} name={i} onClick={changePosition} style={{marginRight:"5px"}}>
                 ^
               </button>
-              <button id={"postionChangeDown"+i} key={"down"+i} name={i} onClick={changePosition}>
+              <button className="bt-updown" id={"postionChangeDown"+i} key={"down"+i} name={i} onClick={changePosition}>
                 v
               </button>
             </div>
-            <div className="col-sm-4">
-              <button className="delete-readmeContent" onClick={deleteContent} key={"delete_"+i} value={i}> Delete </button>
+            <div className="col-sm-4"  style={{"textAlign":"right"}}>
+              <button className="delete-readmeComponent" onClick={deleteContent} key={"delete_"+i} value={i}> Delete </button>
             </div>
           </div>
           <p>{cur_content}</p>
-          <div className="div-readmeContent">
-            <button className="input-readmeContent-checked" onClick={checkedPosition} key={"input_"+i} value={i+1}> V </button>
+          </div>
+          <div className="div-readmeComponent">
+            <button className="input-readmeComponent-checked" onClick={checkedPosition} key={"input_"+i} value={i+1}> Selected </button>
           </div>
         </div>);
     }else{
       list.push(
-        <div className="readme" key={i}>
-          <div className="row mb-3">
-            <div className="col-sm-8">
-              <button id={"postionChangeUp"+i} key={"up"+i} name={i} onClick={changePosition} style={{marginRight:"5px"}}>
-                ^
-              </button>
-              <button id={"postionChangeDown"+i} key={"down"+i} name={i} onClick={changePosition}>
-                v
-              </button>
+        <div>
+          <div className="readme" key={i}>
+            <div className="row mb-3">
+              <div className="col-sm-8">
+                <button className="bt-updown" id={"postionChangeUp"+i} key={"up"+i} name={i} onClick={changePosition} style={{marginRight:"5px"}}>
+                  ^
+                </button>
+                <button className="bt-updown" id={"postionChangeDown"+i} key={"down"+i} name={i} onClick={changePosition}>
+                  v
+                </button>
+              </div>
+              <div className="col-sm-4" style={{"textAlign":"right"}}>
+                <button className="delete-readmeComponent" onClick={deleteContent} key={"delete_"+i} value={i}> Delete </button>
+              </div>
             </div>
-            <div className="col-sm-4">
-              <button className="delete-readmeContent" onClick={deleteContent} key={"delete_"+i} value={i}> Delete </button>
-            </div>
+            <p>{cur_content}</p>
           </div>
-          <p>{cur_content}</p>
-          <div className="div-readmeContent">
-            <button className="input-readmeContent" onClick={checkedPosition} key={"input_"+i} value={i+1}> + </button>
+          <div className="div-readmeComponent">
+            <button className="input-readmeComponent" onClick={checkedPosition} key={"input_"+i} value={i+1}> + </button>
           </div>
         </div>);
     }
