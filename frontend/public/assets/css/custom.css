@@ -117,14 +117,16 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 }
 
 .readme{
-  background-color: #c7c7c7;
+  background-color: #e2e2e2;
   color: #4f3e3e;
   padding: 2em;
   width: 100%;
-  border-bottom: 4px grey solid;
+  border-radius: 10px;
   font-weight: bold;
-  margin:0px;
+  margin:15px 0px 20px 0px;
+
   word-break: break-all;
+  box-shadow: 3px 3px 3px 3px grey;
 }
 
 .div-readmeContent{
@@ -188,7 +190,6 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 }
 
 .div-component-header{
-  border-bottom: 5px white solid;
   padding-bottom: 13px;
 }
 
@@ -218,6 +219,11 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   font-weight: bold;
 }
 
+.bt-updown{
+  border-radius: 15px;
+}
+
+
 
 
 /* for the markdown viewer*/
@@ -244,7 +250,9 @@ textarea{
   background-color: #b1f257 !important;
 }
 
-
+.modal-lg, .modal-xl{
+  --bs-modal-width: 80vw !important;
+}
 
 /*result */
 

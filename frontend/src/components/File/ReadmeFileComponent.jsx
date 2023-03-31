@@ -60,10 +60,10 @@ function ReadmeFileContent(props) {
         <div className="readme" key={i}>
           <div className="row mb-3">
             <div className="col-sm-8">
-              <button id={"postionChangeUp"+i} key={"up"+i} name={i} onClick={changePosition} style={{marginRight:"5px"}}>
+              <button className="bt-updown" id={"postionChangeUp"+i} key={"up"+i} name={i} onClick={changePosition} style={{marginRight:"5px"}}>
                 ^
               </button>
-              <button id={"postionChangeDown"+i} key={"down"+i} name={i} onClick={changePosition}>
+              <button className="bt-updown" id={"postionChangeDown"+i} key={"down"+i} name={i} onClick={changePosition}>
                 v
               </button>
             </div>
@@ -81,10 +81,10 @@ function ReadmeFileContent(props) {
         <div className="readme" key={i}>
           <div className="row mb-3">
             <div className="col-sm-8">
-              <button id={"postionChangeUp"+i} key={"up"+i} name={i} onClick={changePosition} style={{marginRight:"5px"}}>
+              <button className="bt-updown" id={"postionChangeUp"+i} key={"up"+i} name={i} onClick={changePosition} style={{marginRight:"5px"}}>
                 ^
               </button>
-              <button id={"postionChangeDown"+i} key={"down"+i} name={i} onClick={changePosition}>
+              <button className="bt-updown" id={"postionChangeDown"+i} key={"down"+i} name={i} onClick={changePosition}>
                 v
               </button>
             </div>
