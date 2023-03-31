@@ -129,22 +129,22 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   box-shadow: 3px 3px 3px 3px grey;
 }
 
-.div-readmeContent{
+.div-readmeComponent{
   text-align: center;
 }
 
-.input-readmeContent{
+.input-readmeComponent{
   width: 200px;
   border-radius: 10px;
 }
 
-.delete-readmeContent{
+.delete-readmeComponent{
   width: 100px;
   border-radius: 20px;
   background-color: red !important;
 }
 
-.input-readmeContent-checked{
+.input-readmeComponent-checked{
   width: 200px;
   border-radius: 10px;
   background-color: #a5d9e7 !important;
