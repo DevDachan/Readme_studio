@@ -2,6 +2,9 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
+import Md_editor from "@uiw/react-markdown-editor";
+
+
 
 const Wrapper = styled.div`
     padding: 0;
@@ -35,14 +38,15 @@ function ReadmeFileContent(props) {
     var cur_content = "";
 
     if(content[i].includes("empty_textarea")){
-      cur_content =  <textarea
-          placeholder="여기에 입력하세요"
-          value={content[i].split("<!-- empty_textarea -->\n")[1]}
-          id={"textarea_"+i}
+        cur_content = <Md_editor
+          height={200}
+          id={"md_editor_"+i}
           name={i}
-          onChange={changeTextArea}
-          wrap="hard"
-        ></textarea>;
+          value={content[i].split("<!-- empty_textarea -->\n")[1]}
+          onChange={ (e) => changeTextArea(e,i-1)}
+          key={"md_editor"+i}
+          preview="edit"
+          />;
 
     } else if(content[i].includes("https://ifh.cc") || content[i].includes("PeriodImage")){
       cur_content = <div>

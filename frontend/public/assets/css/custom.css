@@ -193,6 +193,12 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   padding-bottom: 13px;
 }
 
+.md-editor-toolbar-warp  *{
+  color: black;
+}
+
+
+
 /* Result */
 
 .file-list-item{

@@ -94,11 +94,10 @@ function Editor(props) {
   }
 
   //--------------------------------------------------------------------
-  const changeTextArea = (e) =>{
+  const changeTextArea = (e,i) =>{
     let tempReadme = readmeObject;
-    var position = e.target.name;
-    var content = e.target.value;
-
+    var position = i;
+    var content = e;
     tempReadme.find(e => e.id === currentReadme).content[position] = "<!-- empty_textarea -->\n" + content;
 
     setContent(tempReadme);
