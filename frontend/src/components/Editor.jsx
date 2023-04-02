@@ -33,6 +33,15 @@ function Editor(props) {
 
   let project_id = location.state.project_id;
   let paletteList = location.state.framework_list;
+  let project_detail =
+    `
+      <!-- empty_textarea -->\n
+      🚪 Stack : Spring boot
+      🌠 Version:   3.0.4
+      📚 DB : MariaDB
+    `;
+
+
 
   const goMain = (e) =>{
     navigate('../');
@@ -190,7 +199,7 @@ function Editor(props) {
   }
 
   const addReadme = (e) => {
-    setReadmeObject([...readmeObject, {id: "README"+readmeObject.length+".md", content : []}]);
+    setReadmeObject([...readmeObject, {id: "README"+readmeObject.length+".md", content : [project_detail]}]);
   }
 
   const deleteReadme = (e) => {
