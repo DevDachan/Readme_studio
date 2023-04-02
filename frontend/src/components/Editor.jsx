@@ -33,6 +33,9 @@ function Editor(props) {
 
   let project_id = location.state.project_id;
   let paletteList = location.state.framework_list;
+  let project_detail = location.state.defaultData;
+
+
 
   const goMain = (e) =>{
     navigate('../');
@@ -96,8 +99,9 @@ function Editor(props) {
   //--------------------------------------------------------------------
   const changeTextArea = (e,i) =>{
     let tempReadme = readmeObject;
-    var position = i;
     var content = e;
+    var position_id = i.target.parentElement.parentElement.parentElement.parentElement.id;
+    var position = Number(position_id.substr(10,3));
     tempReadme.find(e => e.id === currentReadme).content[position] = "<!-- empty_textarea -->\n" + content;
 
     setContent(tempReadme);
@@ -164,7 +168,6 @@ function Editor(props) {
         setContent(tempReadme);
       })
       .catch(function(error){
-
       })
       .then(function(){
         // always executed
@@ -189,6 +192,17 @@ function Editor(props) {
       });
     }
   }
+
+  const addReadme = (e) => {
+    setReadmeObject([...readmeObject, {id: "README"+readmeObject.length+".md", content : [project_detail]}]);
+  }
+
+  const deleteReadme = (e) => {
+    var temp =readmeObject;
+    temp= temp.filter((e) => e.id !== currentReadme);
+    setReadmeObject(temp);
+    setCurrentReadme(temp[0].id);
+  }
   //--------------------------------------------------------------------
   return (
       <Wrapper>
@@ -200,17 +214,21 @@ function Editor(props) {
           <div className="col-sm-3 mb-2">
             <ReadmeFileSelect readmeList={readmeObject} currentReadme={currentReadme} setCurrentReadme={setCurrentReadme}/>
           </div>
+          <div className="col-sm-1 calign mb-3">
+            <input type="button" className="bt-add" value="Add" onClick={addReadme} />
+          </div>
+
           <div className="col-sm-3 calign mb-3">
             <input type="button" className="bt-generate" value="Generate" onClick={generateReadme} />
           </div>
           <div className="col-sm-2 calign mb-2">
             <input type="button" className="bt-back" value="Back" onClick={goMain} />
           </div>
-          <div className="col-sm-3">
+          <div className="col-sm-1">
           </div>
 
 
-          <div className="col-sm-8 mb-4">
+          <div className="col-sm-9 mb-4">
             <ReadmeFileComponent
             title={currentReadme}
             project_id={project_id}
@@ -224,6 +242,7 @@ function Editor(props) {
             changeTextArea={changeTextArea}
             changePeriod={changePeriod}
             handleOpen={handleOpen}
+            deleteReadme={deleteReadme}
             />
           <Modal className="modal-lg" show={show} onHide={handleClose}>
             <Modal.Header>
@@ -241,7 +260,7 @@ function Editor(props) {
 
           </div>
 
-          <div className="col-sm-4 mr-2 sideBanner">
+          <div className="col-sm-3 mr-2 sideBanner">
             <Palette
               paletteList={paletteList}
               project_id={project_id}
