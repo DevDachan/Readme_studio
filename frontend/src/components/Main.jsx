@@ -77,14 +77,22 @@ function Main(props) {
     })
     .then(function (response){
       //handle success
-      for(var i =0; i<response.data.readmeName.length; i++){
-        readme_list.push({id: response.data.readmeName[i], content : []});
-      }
+
+      var defaultData = `
+      <!-- empty_textarea -->\n
+      🚪 Stack : Spring boot
+      🌠 Version:   3.0.4
+      📚 DB : MariaDB
+      `;
+
+      readme_list.push({id: response.data.readmeName[i], content : [defaultData]});
+
       navigate('./editor', {
         state: {
           project_id: response.data.project_id,
           framework_list: response.data.templateList,
-          readmeObject:readme_list
+          readmeObject:readme_list,
+          defaultData: defaultData
         }
       });
     })
