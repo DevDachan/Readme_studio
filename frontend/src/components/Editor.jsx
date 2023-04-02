@@ -33,13 +33,7 @@ function Editor(props) {
 
   let project_id = location.state.project_id;
   let paletteList = location.state.framework_list;
-  let project_detail =
-    `
-      <!-- empty_textarea -->\n
-      🚪 Stack : Spring boot
-      🌠 Version:   3.0.4
-      📚 DB : MariaDB
-    `;
+  let project_detail = location.state.defaultData;
 
 
 

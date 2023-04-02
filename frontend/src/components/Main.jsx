@@ -69,6 +69,8 @@ function Main(props) {
     formData.append('jsonParam2', repName);
 
     var readme_list = [];
+    const frameworkList = ["contributor", "header"];
+    const readmeObject = ["A", "B", "C", "D"];
 
     axios({
       method: "post",
@@ -77,20 +79,22 @@ function Main(props) {
     })
     .then(function (response){
       //handle success
-
       var defaultData = `
       <!-- empty_textarea -->\n
       🚪 Stack : Spring boot
-      🌠 Version:   3.0.4
-      📚 DB : MariaDB
+      🌠 Version:  ${response.data.springBootVersion}
+      📕 Gruop ID : ${response.data.groupId}
+      📘 Artifact ID : ${response.data.artifactId}
+      📙 Java Version : ${response.data.javaVersion}
+      📚 DB : ${response.data.databaseName}
       `;
 
-      readme_list.push({id: response.data.readmeName[i], content : [defaultData]});
+      readme_list.push({id: response.data.readmeName, content : [defaultData]});
 
       navigate('./editor', {
         state: {
           project_id: response.data.project_id,
-          framework_list: response.data.templateList,
+          framework_list: response.data.frameworkList,
           readmeObject:readme_list,
           defaultData: defaultData
         }
@@ -98,7 +102,6 @@ function Main(props) {
     })
     .catch(function(error){
       //handle error
-      console.log(error);
     })
     .then(function(){
       // always executed

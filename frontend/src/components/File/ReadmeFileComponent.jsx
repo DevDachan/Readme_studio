@@ -25,7 +25,6 @@ function ReadmeFileContent(props) {
   const changePeriod = props.changePeriod;
   const deleteContent = props.deleteContent;
   const handleOpen = props.handleOpen;
-  const deleteReadme = props.deleteReadme;
   const title = props.title;
   const list = [""];
 
@@ -121,9 +120,6 @@ function ReadmeFileContent(props) {
             </div>
           </div>
           {list}
-          <div className="col-sm-12 calign">
-            <input type="button" className="bt-back mt-5" value="Delete"  onClick={deleteReadme}/>
-          </div>
         </div>
       </Wrapper>
   );

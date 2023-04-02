@@ -98,8 +98,8 @@ public class UnzipController {
         return springBootVersion;
     }
 
-    public static List<String> findPackageName(String xmlContent) {
-        List<String> packageName = new ArrayList<>();
+    public static String findPackageName(String xmlContent) {
+        String packageName = "";
         String tempStr = "";
         // <dependencies></dependencies> 안에 있는 groupId 제거하기 위한 작업
         Pattern pattern = Pattern.compile("(?<=\\<dependencies>)(.*?)(?=<\\/dependencies>)");
@@ -141,9 +141,7 @@ public class UnzipController {
         if (matcher.find()) {
             name = matcher.group();
         }
-
-        packageName.add(groupId);
-        packageName.add(name);
+        packageName = groupId + "." + name;
 
         return packageName;
     }
@@ -238,9 +236,8 @@ public class UnzipController {
         builder.start();
 
         // 파일 압축 풀기
-
         //builder.command("unzip", "unzipTest.zip", "-d", "./unzipFiles"); // mac
-        //builder.command("cmd.exe","/c","unzip", "unzipTest.zip", "-d", "./unzipFiles"); // window
+        builder.command("cmd.exe","/c","unzip", "unzipTest.zip", "-d", "./unzipFiles"); // window
         var process = builder.start(); // upzip 실행
 
         // unzip 실행 후, 콘솔에 출력해주기
@@ -323,11 +320,14 @@ public class UnzipController {
 
         // 필요한 데이터 : 스프링부트 버전, 패키지명, 자바 jdk 버전, (+ dependency 종류)
         String springBootVersion = findSpringBootVersion(noWhiteSpaceXml);
-        List<String> packageName = findPackageName(noWhiteSpaceXml);
-        String groupId = packageName.get(0);
-        String artifactId = packageName.get(1);
+        String packageName = findPackageName(noWhiteSpaceXml);
         String javaVersion = findJavaVersion(noWhiteSpaceXml);
         List<String> dependencyList = findDependencies(noWhiteSpaceXml); // 미완
+
+        System.out.println("springBootVersion : " + springBootVersion);
+        System.out.println("packageName : " + packageName);
+        System.out.println("javaVersion : " + javaVersion);
+        System.out.println("dependencyList : " + dependencyList); // 미완
 
         // =============== application.properties에서 필요한 데이터 파싱 =============== //
         String propertiesPath = ""; // test
@@ -339,36 +339,30 @@ public class UnzipController {
             }
         }
         // System.out.println("propertiesPath : " + propertiesPath); // test
-        // System.out.println("propertiesContent : " + propertiesContent);
+        System.out.println("propertiesContent : " + propertiesContent);
 
         // 공백 제거한 propertiesContent - 정규식을 쓰기 위해 줄바꿈 제거
         String noWhiteSpaceProperties = propertiesContent.replaceAll("\n", "");
 
         // 필요한 데이터 : 사용하는 database명
         String databaseName = findDatabaseName(noWhiteSpaceProperties);
+        System.out.println("databaseName : " + databaseName);
 
         //----------- db select in framework table -----------//
         // about framework table
         List<String> frameworkNameList = frameworkRepository.findAllName();
 
-        System.out.println("project_id : " + randomId);
-        System.out.println("frameworkList : " + frameworkNameList);
-        System.out.println("javaVersion : " + javaVersion);
-        System.out.println("springBootVersion : " + springBootVersion);
-        System.out.println("groupId : " + groupId);
-        System.out.println("artifactId : " + artifactId);
-        System.out.println("javaVersion : " + javaVersion);
-        System.out.println("databaseName : " + databaseName);
-        // System.out.println("dependencyList : " + dependencyList); // 미완
+        List<String> projectData = new ArrayList<>();
+        projectData.add("Readme.md");
+        projectData.add(springBootVersion);
+        projectData.add(packageName);
+        projectData.add(javaVersion);
+        projectData.add(databaseName);
 
-        map.put("project_id", randomId); // index(project_id)
-        map.put("frameworkList", frameworkNameList); // templateList(frameworkNameList)
-        map.put("readmeName", "Readme.md"); // Readme.md
-        map.put("springBootVersion", springBootVersion); // springboot 버전
-        map.put("groupId", groupId); // groupId
-        map.put("artifactId", artifactId); // artifactId
-        map.put("javaVersion", javaVersion); // javaVersion
-        map.put("databaseName", databaseName); // db명
+        // map data : index(project_id), templateList(frameworkNameList), readmeName(fileName)
+        map.put("project_id", randomId);
+        map.put("templateList", frameworkNameList);
+        map.put("readmeName", projectData); // Readme.md, springboot 버전, db정보
         // map.put("readmeName", javaFileName); // test용
 
         System.out.println("map data : " + map);
