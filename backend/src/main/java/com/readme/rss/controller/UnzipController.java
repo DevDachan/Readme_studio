@@ -160,31 +160,26 @@ public class UnzipController {
     }
 
     // 미완 - dependency 내역 다운할 때 함수
-    public static List<String> findDependencies(String xmlContent) {
-        List<String> dependencies = new ArrayList<>();
+    public static String findDependencies(String xmlContent) {
+        String dependencies = "";
         String tempStr = "";
-        Pattern pattern = Pattern.compile("(?<=\\<dependencies>)(.*?)(?=<\\/dependencies>)");
+        Pattern pattern = Pattern.compile("(<dependencies>)(.*?)(</dependencies>)");
         Matcher matcher = pattern.matcher(xmlContent);
         if (matcher.find()) {
             tempStr = matcher.group();
+
+            tempStr = tempStr.replaceAll("\\s+", ""); // 연속된 공백 제거
         }
+        // tempStr = tempStr.replaceAll("<dependencies>", "<dependencies>\n    ");
+        tempStr = tempStr.replaceAll("<dependency>", "\n    <dependency>\n        ");
+        tempStr = tempStr.replaceAll("<artifactId>", "\n        <artifactId>");
+        tempStr = tempStr.replaceAll("<optional>", "\n        <optional>");
+        tempStr = tempStr.replaceAll("<scope>", "\n        <scope>");
+        tempStr = tempStr.replaceAll("<version>", "\n        <version>");
+        tempStr = tempStr.replaceAll("</dependency>", "\n    </dependency>");
+        tempStr = tempStr.replaceAll("</dependencies>", "\n</dependencies>");
 
-        pattern = Pattern.compile("(?<=\\<dependency>)(.*?)(?=<\\/dependency>)");
-        matcher = pattern.matcher(tempStr);
-        while (matcher.find()) {
-            tempStr = matcher.group();
-            // tempStr = tempStr.replaceAll("</groupId>", "</groupId>\n");
-            // tempStr = tempStr.replaceAll("</artifactId>", "</artifactId>\n");
-
-            System.out.println("idx : " + tempStr.substring(tempStr.indexOf("<"), tempStr.indexOf(">") + 1));
-            tempStr = tempStr.replaceAll("</(.*?)>", "</(.*?)>");
-
-
-            String dependency = "<dependency>\n" + tempStr + "\n</dependency>";
-            System.out.println("\ntempStr :\n" + dependency);
-
-            if(matcher.group() == null) break;
-        }
+        dependencies = "```pom.xml\n" + tempStr + "\n```";
 
         return dependencies;
     }
@@ -326,7 +321,7 @@ public class UnzipController {
         String groupId = packageName.get(0);
         String artifactId = packageName.get(1);
         String javaVersion = findJavaVersion(noWhiteSpaceXml);
-        List<String> dependencyList = findDependencies(noWhiteSpaceXml); // 미완
+        String dependencies = findDependencies(noWhiteSpaceXml); // 미완
 
         // =============== application.properties에서 필요한 데이터 파싱 =============== //
         String propertiesPath = ""; // test
@@ -352,13 +347,13 @@ public class UnzipController {
 
         System.out.println("project_id : " + randomId);
         System.out.println("frameworkList : " + frameworkNameList);
-        System.out.println("javaVersion : " + javaVersion);
+        System.out.println("readmeName : " + "Readme.md");
         System.out.println("springBootVersion : " + springBootVersion);
         System.out.println("groupId : " + groupId);
         System.out.println("artifactId : " + artifactId);
         System.out.println("javaVersion : " + javaVersion);
         System.out.println("databaseName : " + databaseName);
-        // System.out.println("dependencyList : " + dependencyList); // 미완
+        System.out.println("dependencies : \n" + dependencies); // 미완
 
         map.put("project_id", randomId); // index(project_id)
         map.put("frameworkList", frameworkNameList); // templateList(frameworkNameList)
@@ -368,7 +363,7 @@ public class UnzipController {
         map.put("artifactId", artifactId); // artifactId
         map.put("javaVersion", javaVersion); // javaVersion
         map.put("databaseName", databaseName); // db명
-        // map.put("readmeName", javaFileName); // test용
+        map.put("dependencies", dependencies); // dependencies
 
         System.out.println("map data : " + map);
 
