@@ -67,6 +67,7 @@ function Main(props) {
     formData.append('file', file);
     formData.append('jsonParam1', userName);
     formData.append('jsonParam2', repName);
+    //formData.append('rendering', "1"); // yeji
 
     var readme_list = [];
     const frameworkList = ["contributor", "header"];
@@ -87,7 +88,7 @@ function Main(props) {
       navigate('./editor', {
         state: {
           project_id: response.data.project_id,
-          framework_list: response.data.templateList,
+          framework_list: response.data.frameworkList,
           readmeObject:readme_list
         }
       });
