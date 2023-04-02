@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
-import Md_editor from "@uiw/react-markdown-editor";
+import Md_editor from "@uiw/react-md-editor";
 
 
 
@@ -36,18 +36,17 @@ function ReadmeFileContent(props) {
 
   for(var i = 0; i< content.length; i++){
     var cur_content = "";
-
+    var temp_num = i;
     if(content[i].includes("empty_textarea")){
         cur_content = <Md_editor
           height={200}
           id={"md_editor_"+i}
           name={i}
           value={content[i].split("<!-- empty_textarea -->\n")[1]}
-          onChange={ (e) => changeTextArea(e,i-1)}
+          onChange={ (e,v) => changeTextArea(e,v)}
+          color={"black"}
           key={"md_editor"+i}
-          preview="edit"
           />;
-
     } else if(content[i].includes("https://ifh.cc") || content[i].includes("PeriodImage")){
       cur_content = <div>
         <div className="dateBox" >Start date : <input type="date" data-placeholder="날짜 선택" id={"period_start" + i} onChange={changePeriod} name={i}></input></div>

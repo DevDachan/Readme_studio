@@ -244,15 +244,11 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   min-width: 50vw;
 }
 
-.wmde-markdown  * {
+.wmde-markdown-var  * {
   color: black !important;
 }
 
 
-
-textarea{
-  background-color: white !important;
-}
 
 .bt_alldata{
   background-color: #b1f257 !important;

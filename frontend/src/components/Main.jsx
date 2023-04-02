@@ -79,15 +79,13 @@ function Main(props) {
     })
     .then(function (response){
       //handle success
-      var defaultData = `
-      <!-- empty_textarea -->\n
-      🚪 Stack : Spring boot
-      🌠 Version:  ${response.data.springBootVersion}
-      📕 Gruop ID : ${response.data.groupId}
-      📘 Artifact ID : ${response.data.artifactId}
-      📙 Java Version : ${response.data.javaVersion}
-      📚 DB : ${response.data.databaseName}
-      `;
+      var defaultData = "<!-- empty_textarea -->\n"+
+      "🚪 Stack : Spring boot    \n"+
+      "🌠 Version:  "+ response.data.springBootVersion+"   \n"+
+      "📕 Gruop ID : "+ response.data.groupId+"   \n"+
+      "📘 Artifact ID : "+ response.data.artifactId+"   \n"+
+      "📙 Java Version :"+ response.data.javaVersion+"   \n"+
+      "📚 DB : "+ response.data.databaseName;
 
       readme_list.push({id: response.data.readmeName, content : [defaultData]});
 
