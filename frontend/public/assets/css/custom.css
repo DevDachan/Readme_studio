@@ -70,6 +70,7 @@ input[type="date"]::-webkit-inner-spin-button {
     display: none;
 }
 input[type="date"]::-webkit-calendar-picker-indicator {
+    /* background: transparent; */
     z-index: 1;
 }
 
@@ -93,12 +94,11 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 
 .sideBanner {
-  position: fixed;
+  position: absolute;
   width: 10em;
   top: 50px;
   right: 4%;
   top: 20%;
-  min-width: 300px;
 }
 
 .sidebar {
@@ -198,10 +198,8 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 }
 
 
-.bt-add{
-  background-color: #0dcaf0 !important;
-}
 
+/* Result */
 
 .file-list-item{
   list-style-type: none;
@@ -259,7 +257,7 @@ textarea{
 }
 
 .modal-lg, .modal-xl{
-  --bs-modal-width: 70vw !important;
+  --bs-modal-width: 80vw !important;
 }
 
 /*result */
