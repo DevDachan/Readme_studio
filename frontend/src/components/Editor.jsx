@@ -209,7 +209,6 @@ function Editor(props) {
           <div className="col-sm-3">
           </div>
 
-
           <div className="col-sm-8 mb-4">
             <ReadmeFileComponent
             title={currentReadme}
