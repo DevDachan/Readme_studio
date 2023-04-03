@@ -200,7 +200,7 @@ function Editor(props) {
   const deleteReadme = (e) => {
     var temp = readmeObject;
     if(temp.length == 1 ){
-      temp = [{id: "README"+readmeObject.length+".md", content : [project_detail]}];
+      temp = [{id: "README.md", content : [project_detail]}];
       setReadmeObject(temp);
       setCurrentReadme(temp[0].id);
     }else{

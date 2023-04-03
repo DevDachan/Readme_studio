@@ -47,13 +47,15 @@ function ReadmeFileContent(props) {
           color={"black"}
           key={"md_editor"+i}
           />;
-    } else if(content[i].includes("https://ifh.cc") || content[i].includes("PeriodImage")){
+    }else if(content[i].includes("<!-- All Data -->")){
+      cur_content = "<!-- All Data -->";
+    }else if(content[i].includes("https://ifh.cc") || content[i].includes("PeriodImage")){
       cur_content = <div>
         <div className="dateBox" >Start date : <input type="date" data-placeholder="날짜 선택" id={"period_start" + i} onChange={changePeriod} name={i}></input></div>
         <div className="brCSS"></div>
         <div className="dateBox" >End date : <input type="date" data-placeholder="날짜 선택" id={"period_end" + i} name={i} onChange={changePeriod}></input></div>
       </div>;
-    } else{
+    }else{
       cur_content = content[i];
     }
 
@@ -120,7 +122,7 @@ function ReadmeFileContent(props) {
           </div>
           {list}
           <div className="col-sm-12 calign">
-            <input type="button" className="bt-back mt-5" value="Delete"  onClick={deleteReadme}/>
+            <input type="button" className="bt-back mt-5" value="Delete This README"  onClick={deleteReadme}/>
           </div>
         </div>
       </Wrapper>
