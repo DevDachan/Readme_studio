@@ -13,6 +13,7 @@ public class ProjectDTO {
     String file_name;
     String file_path;
     String file_content;
+    String detail;
 
     public ProjectEntity toEntity(){
         return ProjectEntity.builder()
@@ -20,6 +21,7 @@ public class ProjectDTO {
             .file_name(file_name)
             .file_path(file_path)
             .file_content(file_content)
+            .detail(detail)
             .build();
     }
 }

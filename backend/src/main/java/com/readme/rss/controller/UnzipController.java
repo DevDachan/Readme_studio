@@ -124,7 +124,7 @@ public class UnzipController {
             tempStr = matcher.group();
         }
         tempXmlContent = tempXmlContent.replaceAll(tempStr, "");
-        System.out.println("xmlContent in findPackageName : " + tempXmlContent);
+        // System.out.println("xmlContent in findPackageName : " + tempXmlContent);
 
         // =================== package명 구하기 ===================
         String groupId = "";
@@ -159,8 +159,8 @@ public class UnzipController {
         return javaVersion;
     }
 
-    // 미완 - dependency 내역 다운할 때 함수
-    public static String findDependencies(String xmlContent) {
+    // dependencies 구하는 함수
+    public static List<Object> findDependencies(String xmlContent) {
         String dependencies = "";
         String tempStr = "";
         Pattern pattern = Pattern.compile("(<dependencies>)(.*?)(</dependencies>)");
@@ -181,7 +181,43 @@ public class UnzipController {
 
         dependencies = "```pom.xml\n" + tempStr + "\n```";
 
-        return dependencies;
+        List<String> dependencyContents = new ArrayList<>();
+        pattern = Pattern.compile("(?<=\\<dependency>)(.*?)(?=<\\/dependency>)");
+        matcher = pattern.matcher(xmlContent);
+        while (matcher.find()) {
+            dependencyContents.add(matcher.group());
+        }
+        // System.out.println("dependencyContents : " + dependencyContents);
+
+        List<String> dependencyName = new ArrayList<>();
+        String artifactId = "";
+        for(int i = 0 ; i < dependencyContents.size() ; i++){
+            Pattern pattern2 = Pattern.compile("(?<=\\<artifactId>)(.*?)(?=<\\/artifactId>)");
+            Matcher matcher2 = pattern2.matcher(dependencyContents.get(i));
+            if(dependencyContents.get(i).contains("<version>")){
+                System.out.println("have version : " + dependencyContents.get(i));
+                if(matcher2.find()){
+                    String tempArtifactId = matcher2.group();
+                    Pattern pattern3 = Pattern.compile("(?<=\\<version>)(.*?)(?=<\\/version>)");
+                    Matcher matcher3 = pattern3.matcher(dependencyContents.get(i));
+                    if(matcher3.find()){
+                        String version = matcher3.group();
+                        artifactId = tempArtifactId + " (version: " + version + ")";
+                    }
+                }
+            } else{
+                if(matcher2.find()){
+                    artifactId = matcher2.group();
+                }
+            }
+            dependencyName.add(artifactId);
+        }
+        System.out.println("dependency name : " + dependencyName);
+        List<Object> retDependency = new ArrayList<>();
+        retDependency.add(dependencyName);
+        retDependency.add(dependencies);
+
+        return retDependency;
     }
 
     public static String findDatabaseName(String propertiesContent) {
@@ -263,6 +299,7 @@ public class UnzipController {
         List<String> javaFileName = new ArrayList<>();
         List<String> javaFilePath = new ArrayList<>();
         List<String> javaFileContent = new ArrayList<>();
+        List<String> javaFileDetail = new ArrayList<>();
 
         for(int i = 0 ; i < file_nameList.size() ; i++){
 
@@ -273,6 +310,17 @@ public class UnzipController {
                 javaFileName.add(file_nameList.get(i));
                 javaFilePath.add(file_pathList.get(i));
                 javaFileContent.add(file_contentList.get(i));
+
+                if((file_nameList.get(i).contains("pom.xml")) ||
+                    (file_pathList.get(i).contains("src/main/resources/application.properties"))){
+                    javaFileDetail.add("etc"); // 기타
+                } else{ // java 파일
+                    if(file_contentList.get(i).contains("implements")){
+                        javaFileDetail.add("Impl");
+                    } else{ // class
+                        javaFileDetail.add("noImpl");
+                    }
+                }
             }
         }
 
@@ -286,7 +334,7 @@ public class UnzipController {
         // project table에 .java 파일만 insert
         for(int i = 0 ; i < javaFileName.size() ; i++){
             try{
-                projectService.saveProject(randomId, javaFileName.get(i), javaFilePath.get(i), javaFileContent.get(i));
+                projectService.saveProject(randomId, javaFileName.get(i), javaFilePath.get(i), javaFileContent.get(i), javaFileDetail.get(i));
             } catch (Exception e){
                 System.out.print(javaFileName.get(i)); // 어느 파일이 길이가 긴지 확인
             }
@@ -302,15 +350,85 @@ public class UnzipController {
         // =============== pom.xml에서 필요한 데이터 파싱 =============== //
         String xmlPath = ""; // test
         String xmlContent = "";
+        // =============== application.properties에서 필요한 데이터 파싱 =============== //
+        String propertiesPath = ""; // test
+        String propertiesContent = "";
+        // =============== 디렉토리별 파일 구분 =============== //
+        List<String> controllerDir = new ArrayList<>();
+        List<String> dtoDir = new ArrayList<>();
+        List<String> repositoryDir = new ArrayList<>();
+        List<String> daoDir = new ArrayList<>();
+        List<String> daoImplDir = new ArrayList<>();
+        List<String> entityDir = new ArrayList<>();
+        List<String> entityImplDir = new ArrayList<>();
+        List<String> handlerDir = new ArrayList<>();
+        List<String> handlerImplDir = new ArrayList<>();
+        List<String> serviceDir = new ArrayList<>();
+        List<String> serviceImplDir = new ArrayList<>();
+        List<String> etcDir = new ArrayList<>();
+
         List<ProjectEntity> getProjectTableRow = projectRepository.findFileContent(randomId);
         for(int i = 0 ; i < getProjectTableRow.size() ; i++){
             if(getProjectTableRow.get(i).getFile_path().contains("pom.xml")){
                 xmlPath = getProjectTableRow.get(i).getFile_path();
                 xmlContent = getProjectTableRow.get(i).getFile_content();
+            } else if(getProjectTableRow.get(i).getFile_path().contains("application.properties")){
+                propertiesPath = getProjectTableRow.get(i).getFile_path(); // test
+                propertiesContent = getProjectTableRow.get(i).getFile_content();
             }
+
+            // 주요 자바 파일들 디렉토리별로 구분하기
+            if(getProjectTableRow.get(i).getFile_path().contains("CONTROLLER".toLowerCase())){
+                controllerDir.add(getProjectTableRow.get(i).getFile_name());
+            } else if(getProjectTableRow.get(i).getFile_path().contains("DTO".toLowerCase())){
+                dtoDir.add(getProjectTableRow.get(i).getFile_name());
+            } else if(getProjectTableRow.get(i).getFile_path().contains("REPOSITORY".toLowerCase())){
+                repositoryDir.add(getProjectTableRow.get(i).getFile_name());
+            } else if(getProjectTableRow.get(i).getFile_path().contains("DAO".toLowerCase())){
+                if(getProjectTableRow.get(i).getDetail().equals("Impl")){
+                    daoImplDir.add(getProjectTableRow.get(i).getFile_name());
+                } else if(getProjectTableRow.get(i).getDetail().equals("noImpl")){
+                    daoDir.add(getProjectTableRow.get(i).getFile_name());
+                }
+            } else if(getProjectTableRow.get(i).getFile_path().contains("ENTITY".toLowerCase())){
+                if(getProjectTableRow.get(i).getDetail().equals("Impl")){
+                    entityImplDir.add(getProjectTableRow.get(i).getFile_name());
+                } else if(getProjectTableRow.get(i).getDetail().equals("noImpl")){
+                    entityDir.add(getProjectTableRow.get(i).getFile_name());
+                }
+            } else if(getProjectTableRow.get(i).getFile_path().contains("HANDLER".toLowerCase())){
+                if(getProjectTableRow.get(i).getDetail().equals("Impl")){
+                    handlerImplDir.add(getProjectTableRow.get(i).getFile_name());
+                } else if(getProjectTableRow.get(i).getDetail().equals("noImpl")){
+                    handlerDir.add(getProjectTableRow.get(i).getFile_name());
+                }
+            } else if(getProjectTableRow.get(i).getFile_path().contains("SERVICE".toLowerCase())){
+                if(getProjectTableRow.get(i).getDetail().equals("Impl")){
+                    serviceImplDir.add(getProjectTableRow.get(i).getFile_name());
+                } else if(getProjectTableRow.get(i).getDetail().equals("noImpl")){
+                    serviceDir.add(getProjectTableRow.get(i).getFile_name());
+                }
+            } else{
+                etcDir.add(getProjectTableRow.get(i).getFile_name());
+            }
+
         }
         // System.out.println("pomXmlPath : " + xmlPath); // test
         // System.out.println("pomXmlContent : " + xmlContent);
+        // System.out.println("propertiesPath : " + propertiesPath); // test
+        // System.out.println("propertiesContent : " + propertiesContent);
+        System.out.println("controllerDir : " + controllerDir);
+        System.out.println("dtoDir : " + dtoDir);
+        System.out.println("repositoryDir : " + repositoryDir);
+        System.out.println("daoDir : " + daoDir);
+        System.out.println("daoImplDir : " + daoImplDir);
+        System.out.println("entityDir : " + entityDir);
+        System.out.println("entityImplDir : " + entityImplDir);
+        System.out.println("handlerDir : " + handlerDir);
+        System.out.println("handlerImplDir : " + handlerImplDir);
+        System.out.println("serviceDir : " + serviceDir);
+        System.out.println("serviceImplDir : " + serviceImplDir);
+        System.out.println("etcDir : " + etcDir);
 
         // 공백 제거한 xmlContent - 정규식을 쓰기 위해 줄바꿈 제거
         String noWhiteSpaceXml = xmlContent.replaceAll("\n", "");
@@ -321,19 +439,7 @@ public class UnzipController {
         String groupId = packageName.get(0);
         String artifactId = packageName.get(1);
         String javaVersion = findJavaVersion(noWhiteSpaceXml);
-        String dependencies = findDependencies(noWhiteSpaceXml); // 미완
-
-        // =============== application.properties에서 필요한 데이터 파싱 =============== //
-        String propertiesPath = ""; // test
-        String propertiesContent = "";
-        for(int i = 0 ; i < getProjectTableRow.size() ; i++){
-            if(getProjectTableRow.get(i).getFile_path().contains("application.properties")){
-                propertiesPath = getProjectTableRow.get(i).getFile_path(); // test
-                propertiesContent = getProjectTableRow.get(i).getFile_content();
-            }
-        }
-        // System.out.println("propertiesPath : " + propertiesPath); // test
-        // System.out.println("propertiesContent : " + propertiesContent);
+        // String dependencies = findDependencies(noWhiteSpaceXml); // 미완
 
         // 공백 제거한 propertiesContent - 정규식을 쓰기 위해 줄바꿈 제거
         String noWhiteSpaceProperties = propertiesContent.replaceAll("\n", "");
@@ -345,6 +451,7 @@ public class UnzipController {
         // about framework table
         List<String> frameworkNameList = frameworkRepository.findAllName();
 
+        /*
         System.out.println("project_id : " + randomId);
         System.out.println("frameworkList : " + frameworkNameList);
         System.out.println("readmeName : " + "Readme.md");
@@ -353,7 +460,8 @@ public class UnzipController {
         System.out.println("artifactId : " + artifactId);
         System.out.println("javaVersion : " + javaVersion);
         System.out.println("databaseName : " + databaseName);
-        System.out.println("dependencies : \n" + dependencies); // 미완
+        System.out.println("dependencies : \n" + dependencies);
+         */
 
         map.put("project_id", randomId); // index(project_id)
         map.put("frameworkList", frameworkNameList); // templateList(frameworkNameList)
@@ -363,9 +471,9 @@ public class UnzipController {
         map.put("artifactId", artifactId); // artifactId
         map.put("javaVersion", javaVersion); // javaVersion
         map.put("databaseName", databaseName); // db명
-        map.put("dependencies", dependencies); // dependencies
+        // map.put("dependencies", dependencies); // dependencies
 
-        System.out.println("map data : " + map);
+        // System.out.println("map data : " + map);
 
         return map;
     }
@@ -447,6 +555,28 @@ public class UnzipController {
             frame_content=frame_content.replace("PeriodImage", "https://ifh.cc/g/2jWwt7.png");
             frame_content=frame_content.replace("startDate", "Start Date");
             frame_content=frame_content.replace("endDate", "End Date");
+            // System.out.println("frame_content : " + frame_content);
+        } else if (framework_name.equals("Dependency")) {
+            String Dependency = "Dependency";
+            String xmlContent = "";
+            List<ProjectEntity> getProjectTableRow = projectRepository.findFileContent(project_id);
+            for(int i = 0 ; i < getProjectTableRow.size() ; i++) {
+                if (getProjectTableRow.get(i).getFile_path().contains("pom.xml")) {
+                    xmlContent = getProjectTableRow.get(i).getFile_content();
+                }
+            }
+
+            String noWhiteSpaceXml = xmlContent.replaceAll("\n", "");
+            String dependencyTags = "\n" + findDependencies(noWhiteSpaceXml).get(1).toString();
+            List<String> dependencyNameList = (List<String>) findDependencies(noWhiteSpaceXml).get(0);
+            String dependencyName = "\n";
+            for(int i = 0 ; i < dependencyNameList.size() ; i++){
+                dependencyName = dependencyName + dependencyNameList.get(i) + "<br>";
+            }
+
+            frame_content = frameworkRepository.findcontent(Dependency);
+            frame_content=frame_content.replace("DependencyNames", dependencyName);
+            frame_content=frame_content.replace("DependencyContents", dependencyTags);
             // System.out.println("frame_content : " + frame_content);
         }
 

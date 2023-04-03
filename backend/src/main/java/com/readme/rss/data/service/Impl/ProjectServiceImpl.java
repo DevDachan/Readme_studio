@@ -19,10 +19,10 @@ public class ProjectServiceImpl implements ProjectService {
     // Service(Client) <-> Controller : DTO
     // Service <-> DAO(DB) : Entity
     @Override
-    public ProjectDTO saveProject(String id, String file_name, String file_path, String file_content){
-        ProjectEntity projectEntity = projectHandler.saveProjectEntity(id, file_name, file_path, file_content);
+    public ProjectDTO saveProject(String id, String file_name, String file_path, String file_content, String detail){
+        ProjectEntity projectEntity = projectHandler.saveProjectEntity(id, file_name, file_path, file_content, detail);
 
-        ProjectDTO projectDTO = new ProjectDTO(projectEntity.getId(), projectEntity.getFile_name(), projectEntity.getFile_path(),projectEntity.getFile_content());
+        ProjectDTO projectDTO = new ProjectDTO(projectEntity.getId(), projectEntity.getFile_name(), projectEntity.getFile_path(),projectEntity.getFile_content(), projectEntity.getDetail());
         return projectDTO;
     }
 
@@ -30,7 +30,7 @@ public class ProjectServiceImpl implements ProjectService {
     public ProjectDTO getProject(String id){
         ProjectEntity projectEntity = projectHandler.getProjectEntity(id);
 
-        ProjectDTO projectDTO = new ProjectDTO(projectEntity.getId(), projectEntity.getFile_name(), projectEntity.getFile_path(),projectEntity.getFile_content());
+        ProjectDTO projectDTO = new ProjectDTO(projectEntity.getId(), projectEntity.getFile_name(), projectEntity.getFile_path(), projectEntity.getFile_content(), projectEntity.getDetail());
         return projectDTO;
     }
 }
