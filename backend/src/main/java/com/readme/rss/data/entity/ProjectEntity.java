@@ -25,11 +25,13 @@ public class ProjectEntity {
     @Id
     String file_path;
     String file_content;
+    String detail;
     public ProjectDTO toDto(){
         return ProjectDTO.builder()
             .id(id)
             .file_name(file_name)
             .file_path(file_path)
+            .file_content(file_content)
             .file_content(file_content)
             .build();
     }

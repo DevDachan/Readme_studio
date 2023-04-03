@@ -67,6 +67,7 @@ function Main(props) {
     formData.append('file', file);
     formData.append('jsonParam1', userName);
     formData.append('jsonParam2', repName);
+    //formData.append('rendering', "1"); // yeji
 
     var readme_list = [];
     const frameworkList = ["contributor", "header"];

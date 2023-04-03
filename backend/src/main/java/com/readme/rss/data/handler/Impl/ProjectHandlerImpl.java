@@ -18,8 +18,8 @@ public class ProjectHandlerImpl implements ProjectHandler {
     }
 
     @Override
-    public ProjectEntity saveProjectEntity(String id, String file_name, String file_path, String file_content){
-        ProjectEntity projectEntity = new ProjectEntity(id, file_name, file_path,file_content);
+    public ProjectEntity saveProjectEntity(String id, String file_name, String file_path, String file_content, String detail){
+        ProjectEntity projectEntity = new ProjectEntity(id, file_name, file_path, file_content, detail);
         return projectDAO.saveProject(projectEntity);
     }
 
