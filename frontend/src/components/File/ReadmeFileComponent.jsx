@@ -18,7 +18,7 @@ function ReadmeFileContent(props) {
   const navigate = useNavigate();
   const position = props.position;
   const setPosition= props.setPosition;
-
+  const deleteReadme = props.deleteReadme;
   const changePosition = props.changePosition;
   const content = props.content.content;
   const changeTextArea = props.changeTextArea;
@@ -119,6 +119,9 @@ function ReadmeFileContent(props) {
             </div>
           </div>
           {list}
+          <div className="col-sm-12 calign">
+            <input type="button" className="bt-back mt-5" value="Delete"  onClick={deleteReadme}/>
+          </div>
         </div>
       </Wrapper>
   );

@@ -242,6 +242,8 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   padding: 2em;
   border-radius: 20px;
   min-width: 50vw;
+  max-width: 1000px;
+  margin: auto;
 }
 
 .wmde-markdown-var  * {
@@ -257,6 +259,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .modal-lg, .modal-xl{
   --bs-modal-width: 70vw !important;
 }
+
 
 /*result */
 
