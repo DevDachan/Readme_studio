@@ -74,8 +74,7 @@ function Palette(props) {
       data: formData,
     })
       .then(function (response){
-        tempReadme.find(e => e.id === currentReadme).content = [response.data];
-
+        tempReadme.find(e => e.id === currentReadme).content = ["<!-- All Data -->\n"+response.data];
         setContent(tempReadme);
       })
       .catch(function(error){

@@ -198,10 +198,16 @@ function Editor(props) {
   }
 
   const deleteReadme = (e) => {
-    var temp =readmeObject;
-    temp= temp.filter((e) => e.id !== currentReadme);
-    setReadmeObject(temp);
-    setCurrentReadme(temp[0].id);
+    var temp = readmeObject;
+    if(temp.length == 1 ){
+      temp = [{id: "README.md", content : [project_detail]}];
+      setReadmeObject(temp);
+      setCurrentReadme(temp[0].id);
+    }else{
+      temp= temp.filter((e) => e.id !== currentReadme);
+      setReadmeObject(temp);
+      setCurrentReadme(temp[0].id);
+    }
   }
   //--------------------------------------------------------------------
   return (
