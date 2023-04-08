@@ -67,6 +67,7 @@ function Main(props) {
     formData.append('file', file);
     formData.append('jsonParam1', userName);
     formData.append('jsonParam2', repName);
+    //formData.append('rendering', "1"); // yeji
 
     var readme_list = [];
     const frameworkList = ["contributor", "header"];
@@ -79,32 +80,27 @@ function Main(props) {
     })
     .then(function (response){
       //handle success
+      var defaultData = "<!-- empty_textarea -->\n"+
+      "🚪 Stack : Spring boot    \n"+
+      "🌠 Version:  "+ response.data.springBootVersion+"   \n"+
+      "📕 Gruop ID : "+ response.data.groupId+"   \n"+
+      "📘 Artifact ID : "+ response.data.artifactId+"   \n"+
+      "📙 Java Version :"+ response.data.javaVersion+"   \n"+
+      "📚 DB : "+ response.data.databaseName;
 
-      for(var i =0; i<response.data.readmeName.length; i++){
-        readme_list.push({id: response.data.readmeName[i], content : []});
-      }
-      console.log("readme_list : ", readme_list);
+      readme_list.push({id: response.data.readmeName, content : [defaultData]});
+
       navigate('./editor', {
         state: {
           project_id: response.data.project_id,
-          framework_list: response.data.templateList,
-          readmeObject:readme_list
+          framework_list: response.data.frameworkList,
+          readmeObject:readme_list,
+          defaultData: defaultData
         }
       });
     })
     .catch(function(error){
       //handle error
-      console.log(error);
-      for(var i =0; i<readmeObject.length; i++){
-        readme_list.push({id: readmeObject[i] , content : ["# test"]});
-      }
-      navigate('./editor', {
-        state: {
-          project_id: 12223,
-          framework_list: ["contributor", "header"],
-          readmeObject:readme_list
-        }
-      });
     })
     .then(function(){
       // always executed

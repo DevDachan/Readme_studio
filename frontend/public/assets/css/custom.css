@@ -70,7 +70,6 @@ input[type="date"]::-webkit-inner-spin-button {
     display: none;
 }
 input[type="date"]::-webkit-calendar-picker-indicator {
-    /* background: transparent; */
     z-index: 1;
 }
 
@@ -94,11 +93,12 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 
 .sideBanner {
-  position: absolute;
+  position: fixed;
   width: 10em;
   top: 50px;
   right: 4%;
   top: 20%;
+  min-width: 300px;
 }
 
 .sidebar {
@@ -117,32 +117,34 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 }
 
 .readme{
-  background-color: #c7c7c7;
+  background-color: #e2e2e2;
   color: #4f3e3e;
   padding: 2em;
   width: 100%;
-  border-radius: 20px;
+  border-radius: 10px;
   font-weight: bold;
-  margin:0px;
+  margin:15px 0px 20px 0px;
+
   word-break: break-all;
+  box-shadow: 3px 3px 3px 3px grey;
 }
 
-.div-readmeContent{
+.div-readmeComponent{
   text-align: center;
 }
 
-.input-readmeContent{
+.input-readmeComponent{
   width: 200px;
   border-radius: 10px;
 }
 
-.delete-readmeContent{
+.delete-readmeComponent{
   width: 100px;
   border-radius: 20px;
   background-color: red !important;
 }
 
-.input-readmeContent-checked{
+.input-readmeComponent-checked{
   width: 200px;
   border-radius: 10px;
   background-color: #a5d9e7 !important;
@@ -182,7 +184,24 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   text-align: center;
 }
 
-/* Result */
+.bt-preview{
+  border-radius: 5px;
+  width: 100%;
+}
+
+.div-component-header{
+  padding-bottom: 13px;
+}
+
+.md-editor-toolbar-warp  *{
+  color: black;
+}
+
+
+.bt-add{
+  background-color: #0dcaf0 !important;
+}
+
 
 .file-list-item{
   list-style-type: none;
@@ -208,6 +227,11 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   font-weight: bold;
 }
 
+.bt-updown{
+  border-radius: 15px;
+}
+
+
 
 
 /* for the markdown viewer*/
@@ -218,18 +242,23 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   padding: 2em;
   border-radius: 20px;
   min-width: 50vw;
+  max-width: 1000px;
+  margin: auto;
 }
 
-.wmde-markdown  * {
+.wmde-markdown-var  * {
   color: black !important;
 }
 
 
 
-textarea{
-  background-color: white !important;
+.bt_alldata{
+  background-color: #b1f257 !important;
 }
 
+.modal-lg, .modal-xl{
+  --bs-modal-width: 70vw !important;
+}
 
 
 /*result */
