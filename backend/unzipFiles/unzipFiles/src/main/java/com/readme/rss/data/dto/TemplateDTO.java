@@ -2,7 +2,6 @@
 // database table의 컬럼과는 독립적이다
 
 package com.readme.rss.data.dto;
-import com.readme.rss.data.entity.TemplateEntity;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;

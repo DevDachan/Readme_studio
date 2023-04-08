@@ -3,6 +3,8 @@ package com.readme.rss.data.dao.Impl;
 import com.readme.rss.data.dao.ProjectDAO;
 import com.readme.rss.data.entity.ProjectEntity;
 import com.readme.rss.data.repository.ProjectRepository;
+import java.util.List;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,5 +27,11 @@ public class ProjectDAOImpl implements ProjectDAO {
     public ProjectEntity getProject(String id){
         ProjectEntity projectEntity = projectRepository.getReferenceById(id);
         return projectEntity;
+    }
+
+    @Override
+    public List<ProjectEntity> getController(int projectId){
+        List<ProjectEntity>  result = projectRepository.getController(projectId);
+        return result;
     }
 }

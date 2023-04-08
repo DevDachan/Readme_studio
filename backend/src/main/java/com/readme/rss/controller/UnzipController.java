@@ -6,6 +6,7 @@ import com.readme.rss.data.dto.UserDTO;
 import com.readme.rss.data.entity.ProjectEntity;
 import com.readme.rss.data.repository.FrameworkRepository;
 import com.readme.rss.data.repository.ProjectRepository;
+import com.readme.rss.data.service.FrameworkService;
 import com.readme.rss.data.service.ProjectService;
 import com.readme.rss.data.service.UserService;
 import java.io.BufferedReader;
@@ -17,6 +18,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.Scanner;
 import java.util.regex.Matcher;
@@ -28,20 +30,23 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-@CrossOrigin(origins = "http://localhost:3000")
+//@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 public class UnzipController {
     private ProjectService projectService;
     private UserService userService;
+    private FrameworkService frameworkService;
+
     private ProjectRepository projectRepository;
     private FrameworkRepository frameworkRepository;
 
     @Autowired
-    public UnzipController(ProjectService projectService, UserService userService, ProjectRepository projectRepository, FrameworkRepository frameworkRepository) {
+    public UnzipController(ProjectService projectService, UserService userService, ProjectRepository projectRepository, FrameworkRepository frameworkRepository,FrameworkService frameworkService) {
         this.projectService = projectService;
         this.userService = userService;
         this.projectRepository = projectRepository;
         this.frameworkRepository = frameworkRepository;
+        this.frameworkService = frameworkService;
     }
 
     // global variable
@@ -583,6 +588,110 @@ public class UnzipController {
 
         return frame_content;
     }
+
+    @PostMapping("/test")
+    public String userAPI(@RequestParam("project_id") int projectId){
+        List<ProjectEntity> result = projectService.getController(projectId);
+        String mdResult = "|HTTP|API|URL|Return Type|Parameters|\n"
+            + "          |----|----|---|---|---|\n";
+
+        int start_index = 0, end_index = 0;
+        String urlTemp, returnType, parameters;
+        String[] apiTemp;
+        String current_content;
+
+        for(int i = 0; i < result.size(); i++){
+            current_content = result.get(i).getFile_content();
+
+            mdResult += "|**"+  result.get(i).getFile_name()+"**|\n";
+
+            // find post mapping
+            while(true){
+                start_index = current_content.indexOf("@PostMapping(", end_index);
+                end_index = current_content.indexOf(")", start_index);
+
+                if(start_index < 0){
+                    break;
+                }else{
+                    urlTemp = current_content.substring(start_index,end_index);
+                    urlTemp = urlTemp.split("\"")[1];
+
+                    start_index = current_content.indexOf("public", end_index);
+                    end_index = current_content.indexOf("(", start_index);
+                    apiTemp = current_content.substring(start_index,end_index).split(" ");
+                    returnType = "";
+                    for(int k = 1; k < apiTemp.length-1; k++){
+                        returnType += apiTemp[k];
+                    }
+
+                    start_index = current_content.indexOf("(", end_index);
+                    end_index = current_content.indexOf("{", start_index);
+                    parameters = current_content.substring(start_index+1,end_index);
+                    parameters = parameters.substring(0,parameters.lastIndexOf(")"));
+                    parameters= parameters.replace("," ,"</br>");
+                    parameters= parameters.replace("\n" ," ");
+
+                    mdResult += "| Post |" +
+                        apiTemp[apiTemp.length-1] + "|" +
+                        urlTemp + "|"+
+                        returnType +"|"+
+                        parameters +"|\n";
+                }
+            }
+            // find get mapping
+            while(true){
+                start_index = current_content.indexOf("@GetMapping(", end_index);
+                end_index = current_content.indexOf(")", start_index);
+
+                if(start_index < 0){
+                    break;
+                }else{
+                    urlTemp = current_content.substring(start_index,end_index);
+                    urlTemp = urlTemp.split("\"")[1];
+
+                    start_index = current_content.indexOf("public", end_index);
+                    end_index = current_content.indexOf("(", start_index);
+                    apiTemp = current_content.substring(start_index,end_index).split(" ");
+                    returnType = "";
+                    for(int k = 1; k < apiTemp.length-1; k++){
+                        returnType += apiTemp[k];
+                    }
+
+                    start_index = current_content.indexOf("(", end_index);
+                    end_index = current_content.indexOf("{", start_index);
+                    parameters = current_content.substring(start_index+1,end_index);
+                    parameters = parameters.substring(0,parameters.lastIndexOf(")"));
+                    parameters= parameters.replace("," ,"</br>");
+                    parameters= parameters.replace("\n" ," ");
+
+                    mdResult += "| Get |" +
+                        apiTemp[apiTemp.length-1] + "|" +
+                        urlTemp + "|"+
+                        returnType +"|"+
+                        parameters +"|\n";
+                }
+            }
+
+        }
+
+        /*
+        |제목|내용|설명|
+        |------|---|---|
+        |테스트1|테스트2|테스트3|
+        |테스트1|테스트2|테스트3|
+        |테스트1|테스트2|테스트3|
+        */
+        // 문자열 파싱
+        // 1. GETMapping, PostMapping, RequestMapping (만약 RequestMapping일 경우에는 value값)
+        // 2. 제일 상단 @RequestMapping("/shop-backend/order")와 같은 mapping 찾기
+        // 3. 찾은 URL과 해당 API가 Return하는 data 형식 제공하기.
+
+
+
+        return mdResult;
+    }
+
+
 
     @PostMapping("/editPeriod")
     public String editPeriodImage(

@@ -4,6 +4,9 @@ import com.readme.rss.data.dto.ProjectDTO;
 import com.readme.rss.data.entity.ProjectEntity;
 import com.readme.rss.data.handler.ProjectHandler;
 import com.readme.rss.data.service.ProjectService;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,5 +35,11 @@ public class ProjectServiceImpl implements ProjectService {
 
         ProjectDTO projectDTO = new ProjectDTO(projectEntity.getId(), projectEntity.getFile_name(), projectEntity.getFile_path(), projectEntity.getFile_content(), projectEntity.getDetail());
         return projectDTO;
+    }
+
+    @Override
+    public List<ProjectEntity>  getController(int projectId){
+        List<ProjectEntity> result = projectHandler.getController(projectId);
+        return result;
     }
 }
