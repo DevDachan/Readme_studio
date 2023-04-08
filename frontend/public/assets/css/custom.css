@@ -117,34 +117,32 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 }
 
 .readme{
-  background-color: #e2e2e2;
+  background-color: #c7c7c7;
   color: #4f3e3e;
   padding: 2em;
   width: 100%;
-  border-radius: 10px;
+  border-radius: 20px;
   font-weight: bold;
-  margin:15px 0px 20px 0px;
-
+  margin:0px;
   word-break: break-all;
-  box-shadow: 3px 3px 3px 3px grey;
 }
 
-.div-readmeComponent{
+.div-readmeContent{
   text-align: center;
 }
 
-.input-readmeComponent{
+.input-readmeContent{
   width: 200px;
   border-radius: 10px;
 }
 
-.delete-readmeComponent{
+.delete-readmeContent{
   width: 100px;
   border-radius: 20px;
   background-color: red !important;
 }
 
-.input-readmeComponent-checked{
+.input-readmeContent-checked{
   width: 200px;
   border-radius: 10px;
   background-color: #a5d9e7 !important;
@@ -184,21 +182,6 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   text-align: center;
 }
 
-.bt-preview{
-  border-radius: 5px;
-  width: 100%;
-}
-
-.div-component-header{
-  padding-bottom: 13px;
-}
-
-.md-editor-toolbar-warp  *{
-  color: black;
-}
-
-
-
 /* Result */
 
 .file-list-item{
@@ -225,11 +208,6 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   font-weight: bold;
 }
 
-.bt-updown{
-  border-radius: 15px;
-}
-
-
 
 
 /* for the markdown viewer*/
@@ -252,13 +230,7 @@ textarea{
   background-color: white !important;
 }
 
-.bt_alldata{
-  background-color: #b1f257 !important;
-}
 
-.modal-lg, .modal-xl{
-  --bs-modal-width: 80vw !important;
-}
 
 /*result */
 

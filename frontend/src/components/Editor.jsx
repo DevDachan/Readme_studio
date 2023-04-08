@@ -5,9 +5,7 @@ import axios from "axios";
 
 import ReadmeFileSelect from "./File/ReadmeFileSelect";
 import ReadmeFileContent from "./File/ReadmeFileContent";
-import ReadmeFileComponent from "./File/ReadmeFileComponent";
 import Palette from "./Palette/Palette";
-import Modal from "react-bootstrap/Modal";
 
 
 const Wrapper = styled.div`
@@ -27,9 +25,6 @@ function Editor(props) {
   const [currentReadme, setCurrentReadme] = useState(readmeObject[0].id);
   const [forRelanderng, setForRelandering] = useState("");
   const [position, setPosition] = useState(1);
-  const handleClose = () => setShow(false);
-  const handleOpen = () => setShow(true);
-  const [show, setShow] = useState(false);
 
   let project_id = location.state.project_id;
   let paletteList = location.state.framework_list;
@@ -61,43 +56,25 @@ function Editor(props) {
   }
   //--------------------------------------------------------------------
   const changePosition = (e) =>{
+    var content = readmeObject.find(e => e.id === currentReadme).content;
     var currentIndex = Number(e.target.name);
+    var changeIndex = Number(e.target.value-1);
 
-    if(e.target.id.includes("Down")){
-      if(currentIndex < readmeObject.find(e => e.id === currentReadme).content.length-1 ){
-        var content = readmeObject.find(e => e.id === currentReadme).content;
-        var changeIndex = currentIndex+1;
-        //delete currentIndex item and copy
-        var chan_temp = Object.assign(content[changeIndex]);
-        var cur_temp = content.splice(currentIndex,1)[0];
+    //delete currentIndex item and copy
+    var chan_temp = Object.assign(content[changeIndex]);
+    var cur_temp = content.splice(currentIndex,1)[0];
 
-        content.splice(changeIndex, 0, cur_temp);
+    content.splice(changeIndex, 0, cur_temp);
 
-        setReadmeObject(readmeObject);
-        setForRelandering(forRelanderng + "1");
-      }
-    }else{
-      if(currentIndex !== 0){
-        var content = readmeObject.find(e => e.id === currentReadme).content;
-        var changeIndex = currentIndex-1;
-
-        //delete currentIndex item and copy
-        var chan_temp = Object.assign(content[changeIndex]);
-        var cur_temp = content.splice(currentIndex,1)[0];
-
-        content.splice(changeIndex, 0, cur_temp);
-
-        setReadmeObject(readmeObject);
-        setForRelandering(forRelanderng + "1");
-      }
-    }
+    setReadmeObject(readmeObject);
+    setForRelandering(forRelanderng + "1");
   }
-
   //--------------------------------------------------------------------
-  const changeTextArea = (e,i) =>{
+  const changeTextArea = (e) =>{
     let tempReadme = readmeObject;
-    var position = i;
-    var content = e;
+    var position = e.target.name;
+    var content = e.target.value;
+
     tempReadme.find(e => e.id === currentReadme).content[position] = "<!-- empty_textarea -->\n" + content;
 
     setContent(tempReadme);
@@ -210,7 +187,7 @@ function Editor(props) {
           </div>
 
           <div className="col-sm-8 mb-4">
-            <ReadmeFileComponent
+            <ReadmeFileContent
             title={currentReadme}
             project_id={project_id}
             content={readmeObject.find(e => e.id === currentReadme)}
@@ -222,22 +199,7 @@ function Editor(props) {
             deleteContent={deleteContent}
             changeTextArea={changeTextArea}
             changePeriod={changePeriod}
-            handleOpen={handleOpen}
             />
-          <Modal className="modal-lg" show={show} onHide={handleClose}>
-            <Modal.Header>
-              <Modal.Title>README Preview</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-              <ReadmeFileContent
-                content={readmeObject.find(e => e.id === currentReadme)}
-              />
-            </Modal.Body>
-            <Modal.Footer>
-              <button onClick={handleClose}>닫기</button>
-            </Modal.Footer>
-          </Modal>
-
           </div>
 
           <div className="col-sm-4 mr-2 sideBanner">
