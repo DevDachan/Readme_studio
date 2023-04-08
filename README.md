@@ -37,7 +37,7 @@
 - Getting Started
     - 설치
 - 사용 방법
-- [C](https://www.notion.so/RS-Readme-f407371fbd41455abb959a2028ab4ef8)ontributors
+- [](https://www.notion.so/RS-Readme-f407371fbd41455abb959a2028ab4ef8)Contributors
 - Trouble Shooting
 
 # 🌟 프로젝트 설명
