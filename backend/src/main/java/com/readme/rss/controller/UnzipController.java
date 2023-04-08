@@ -321,7 +321,9 @@ public class UnzipController {
                     (file_pathList.get(i).contains("src/main/resources/application.properties"))){
                     javaFileDetail.add("etc"); // 기타
                 } else{ // java 파일
-                    if(file_contentList.get(i).contains("implements")){
+                    if(file_contentList.get(i).contains("@RestController")){
+                        javaFileDetail.add("controller");
+                    } else if(file_contentList.get(i).contains("implements")) {
                         javaFileDetail.add("Impl");
                     } else{ // class
                         javaFileDetail.add("noImpl");
