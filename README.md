@@ -67,26 +67,29 @@
 
 ### **framework**
 
-| name | 제공되는 interface framework의 이름 |
+| name | content |
 | --- | --- |
-| content | 해당 framework에서 사용되는 내용 (태그 정보) |
-| type | 각 framework를 나누기 위한 ID값 |
+| **name** | 제공되는 interface framework의 이름 |
+| **content** | 해당 framework에서 사용되는 내용 (태그 정보) |
+| **type** | 각 framework를 나누기 위한 ID값 |
 
 ### project
 
-| ID | 프로젝트에 부여된 고유 random id |
-| --- | --- |
-| file_name | 파일 이름 |
-| file_path | 파일이 프로젝트 내에서 저장된 위치 |
-| file_content | 파일의 내용 |
-| detail | 해당 파일의 종류 |
+| name | content |
+| --- | --- |   
+| **ID** | 프로젝트에 부여된 고유 random id |   
+| **file_name** | 파일 이름 |
+| **file_path** | 파일이 프로젝트 내에서 저장된 위치 |
+| **file_content** | 파일의 내용 |
+| **detail** | 해당 파일의 종류 |
 
 ### user
 
-| project_id | 프로젝트에 부여된 고유 random id |
+| name | content |
 | --- | --- |
-| repository_name | 프로젝트 Github Repository 이름 |
-| user_name | 프로젝트 관리자 Github name |
+| **project_id** | 프로젝트에 부여된 고유 random id |
+| **repository_name** | 프로젝트 Github Repository 이름 |
+| **user_name** | 프로젝트 관리자 Github name |
 
 ### 🚀 기술 스택
 
