@@ -1,8 +1,5 @@
 package com.readme.rss.data.dao.Impl;
 
-import com.readme.rss.data.dao.TemplateDAO;
-import com.readme.rss.data.entity.TemplateEntity;
-import com.readme.rss.data.repository.TemplateRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

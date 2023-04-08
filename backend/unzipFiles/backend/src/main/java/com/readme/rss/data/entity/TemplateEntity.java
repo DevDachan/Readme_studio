@@ -7,7 +7,6 @@
 
 package com.readme.rss.data.entity;
 
-import com.readme.rss.data.dto.TemplateDTO;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
