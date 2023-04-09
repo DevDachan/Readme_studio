@@ -4,7 +4,6 @@ import static java.lang.Thread.sleep;
 
 import com.readme.rss.data.dto.UserDTO;
 import com.readme.rss.data.entity.ProjectEntity;
-import com.readme.rss.data.repository.FrameworkRepository;
 import com.readme.rss.data.repository.ProjectRepository;
 import com.readme.rss.data.service.FrameworkService;
 import com.readme.rss.data.service.ProjectService;
@@ -38,10 +37,9 @@ public class UnzipController {
     private FrameworkService frameworkService;
 
     private ProjectRepository projectRepository;
-    private FrameworkRepository frameworkRepository;
 
     @Autowired
-    public UnzipController(ProjectService projectService, UserService userService, ProjectRepository projectRepository, FrameworkRepository frameworkRepository,FrameworkService frameworkService) {
+    public UnzipController(ProjectService projectService, UserService userService, ProjectRepository projectRepository ,FrameworkService frameworkService) {
         this.projectService = projectService;
         this.userService = userService;
         this.projectRepository = projectRepository;
@@ -420,7 +418,8 @@ public class UnzipController {
         String databaseName = findDatabaseName(noWhiteSpaceProperties);
 
         //----------- db select in framework table -----------//
-        List<String> frameworkNameList = frameworkRepository.findAllName();
+        List<String> frameworkNameList = frameworkService.getFrameworkNameList();
+
         map.put("project_id", randomId); // index(project_id)
         map.put("frameworkList", frameworkNameList); // templateList(frameworkNameList)
         map.put("readmeName", "Readme.md"); // Readme.md
@@ -497,16 +496,16 @@ public class UnzipController {
 
         // framework_id에 따른 content제공
         if(framework_name.equals("Contributor")){
-            frame_content = frameworkRepository.findcontent(framework_name);
+            frame_content = frameworkService.findContent(framework_name);
             frame_content = frame_content.replace("repositoryName", repo_name);
             frame_content = frame_content.replace("userName", user_name);
         } else if (framework_name.equals("Header")) {
             String Header = "header";
-            frame_content = frameworkRepository.findcontent(Header);
+            frame_content = frameworkService.findContent(Header);
             frame_content=frame_content.replace("repoName",repo_name);
         } else if (framework_name.equals("Period")) {
             String Period = "Period";
-            frame_content = frameworkRepository.findcontent(Period);
+            frame_content = frameworkService.findContent(Period);
             frame_content=frame_content.replace("PeriodImage", "https://ifh.cc/g/2jWwt7.png");
             frame_content=frame_content.replace("startDate", "Start Date");
             frame_content=frame_content.replace("endDate", "End Date");
@@ -527,7 +526,7 @@ public class UnzipController {
             for(int i = 0 ; i < dependencyNameList.size() ; i++){
                 dependencyName = dependencyName + dependencyNameList.get(i) + "<br>";
             }
-            frame_content = frameworkRepository.findcontent(Dependency);
+            frame_content = frameworkService.findContent(Dependency);
             frame_content=frame_content.replace("DependencyNames", dependencyName);
             frame_content=frame_content.replace("DependencyContents", dependencyTags);
         }
@@ -624,8 +623,8 @@ public class UnzipController {
     public String editPeriodImage(
         @RequestParam("start_date") String start_date,
         @RequestParam("end_date") String end_date) {
-        String frame_content = "";
-        frame_content = frameworkRepository.findcontent("Period");
+        String frame_content = frameworkService.findContent("Period");
+
         if(start_date.equals("no")){
             frame_content=frame_content.replace("PeriodImage", "https://ifh.cc/g/2jWwt7.png"); // ing
             frame_content=frame_content.replace("startDate", "Start Date");
@@ -703,10 +702,10 @@ public class UnzipController {
             "}\n" +
             "```\n";
 
-        List<String> frameworkNameList = frameworkRepository.findAllName();
+        List<String> frameworkNameList = frameworkService.getFrameworkNameList();
         for(int i = 0 ; i < frameworkNameList.size() ; i++){
             String temp=frameworkNameList.get(i) ;
-            frame_content=frame_content.replace(temp+"_check",frameworkRepository.findcontent(temp));
+            frame_content=frame_content.replace(temp+"_check",frameworkService.findContent(temp));
         }
         frame_content= frame_content.replace("userName",user_name);
         frame_content= frame_content.replace("repositoryName",repo_name);
