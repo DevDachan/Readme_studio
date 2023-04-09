@@ -6,6 +6,7 @@ package com.readme.rss.data.handler;
 
 import com.readme.rss.data.entity.FrameworkEntity;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public interface FrameworkHandler {
@@ -13,5 +14,8 @@ public interface FrameworkHandler {
 
     FrameworkEntity getFrameworkEntity(String name);
 
+    List<String> getFrameworkNameList();
+
+    String findContent(String name);
 
 }

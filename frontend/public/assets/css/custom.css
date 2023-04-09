@@ -249,7 +249,9 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .wmde-markdown-var  * {
   color: black !important;
 }
-
+.wmde-markdown  * {
+  color: black !important;
+}
 
 
 .bt_alldata{

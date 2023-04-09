@@ -42,4 +42,14 @@ public class ProjectServiceImpl implements ProjectService {
         List<ProjectEntity> result = projectHandler.getController(projectId);
         return result;
     }
+
+    @Override
+    public List<String> getIdAll(){
+        return projectHandler.getIdAll();
+    }
+
+    @Override
+    public List<ProjectEntity> getFileContent(String id){
+        return projectHandler.getFileContent(id);
+    }
 }
