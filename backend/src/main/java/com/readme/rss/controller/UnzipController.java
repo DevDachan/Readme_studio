@@ -30,7 +30,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-//@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 public class UnzipController {
     private ProjectService projectService;
@@ -91,8 +91,6 @@ public class UnzipController {
             if (matcher.find()) {
                 springBootVersion = matcher.group();
             }
-            // System.out.println("springBootVersion : " + springBootVersion);
-
             pattern = Pattern.compile("(?<=\\<version>)(.*?)(?=<\\/version>)");
             matcher = pattern.matcher(springBootVersion);
             if (matcher.find()) {
@@ -106,6 +104,7 @@ public class UnzipController {
     public static List<String> findPackageName(String xmlContent) {
         List<String> packageName = new ArrayList<>();
         String tempStr = "";
+
         // <dependencies></dependencies> 안에 있는 groupId 제거하기 위한 작업
         Pattern pattern = Pattern.compile("(?<=\\<dependencies>)(.*?)(?=<\\/dependencies>)");
         Matcher matcher = pattern.matcher(xmlContent);
@@ -129,7 +128,7 @@ public class UnzipController {
             tempStr = matcher.group();
         }
         tempXmlContent = tempXmlContent.replaceAll(tempStr, "");
-        // System.out.println("xmlContent in findPackageName : " + tempXmlContent);
+
 
         // =================== package명 구하기 ===================
         String groupId = "";
@@ -172,10 +171,9 @@ public class UnzipController {
         Matcher matcher = pattern.matcher(xmlContent);
         if (matcher.find()) {
             tempStr = matcher.group();
-
             tempStr = tempStr.replaceAll("\\s+", ""); // 연속된 공백 제거
         }
-        // tempStr = tempStr.replaceAll("<dependencies>", "<dependencies>\n    ");
+
         tempStr = tempStr.replaceAll("<dependency>", "\n    <dependency>\n        ");
         tempStr = tempStr.replaceAll("<artifactId>", "\n        <artifactId>");
         tempStr = tempStr.replaceAll("<optional>", "\n        <optional>");
@@ -192,7 +190,6 @@ public class UnzipController {
         while (matcher.find()) {
             dependencyContents.add(matcher.group());
         }
-        // System.out.println("dependencyContents : " + dependencyContents);
 
         List<String> dependencyName = new ArrayList<>();
         String artifactId = "";
@@ -217,7 +214,6 @@ public class UnzipController {
             }
             dependencyName.add(artifactId);
         }
-        System.out.println("dependency name : " + dependencyName);
         List<Object> retDependency = new ArrayList<>();
         retDependency.add(dependencyName);
         retDependency.add(dependencies);
@@ -248,9 +244,6 @@ public class UnzipController {
         String userName = jsonParam1;
         String repositoryName = jsonParam2;
 
-        System.out.println("userName : " + userName);
-        System.out.println("repositoryName : " + repositoryName);
-
         if(fileName == ""){ // zip 파일이 첨부되지 않았을 때
             System.out.println("\nzip 파일이 첨부되지 않았습니다!");
         }
@@ -261,23 +254,19 @@ public class UnzipController {
                 break;
             }
         }
-
         System.out.println("\n입력받은 zip 파일 명 : " + fileName);
-        Path savePath = Paths.get("./unzipTest.zip"); // unzipTest.zip이름으로 저장
+
+        Path savePath = Paths.get("./unzipTest.zip");
         file.transferTo(savePath); // 파일 다운로드
 
         ProcessBuilder builder = new ProcessBuilder();
-
-        // unzipFiles 폴더 생성 - 압축풀기한 파일들을 저장하는 임시 폴더
         //builder.command("mkdir", "unzipFiles"); // mac
         builder.command("cmd.exe","/c","mkdir", "unzipFiles"); // window
         builder.start();
 
-        // 파일 압축 풀기
-
         //builder.command("unzip", "unzipTest.zip", "-d", "./unzipFiles"); // mac
         //builder.command("cmd.exe","/c","unzip", "unzipTest.zip", "-d", "./unzipFiles"); // window
-        var process = builder.start(); // upzip 실행
+        var process = builder.start();
 
         // unzip 실행 후, 콘솔에 출력해주기
         try (var reader = new BufferedReader(
@@ -292,14 +281,11 @@ public class UnzipController {
         String searchDirPath = "./unzipFiles";
         System.out.println("\n[압축 해제한 폴더 속 파일 리스트]");
         int retSearchFiles = 0; // 파일 리스트 다 뽑아냈는지 확인할 수 있는 리턴값
-        System.out.println("retSearchFiles before : " + retSearchFiles);
         retSearchFiles = searchFiles(searchDirPath);
 
         //------------- db insert 관련 -------------//
-        // project table에서 id 가져오기
         randomIdList = projectRepository.findDistinctId();
         System.out.println("\nDistinct Project Id : " + randomIdList);
-
         String randomId = projectIdGenerate();
 
         List<String> javaFileName = new ArrayList<>();
@@ -308,20 +294,19 @@ public class UnzipController {
         List<String> javaFileDetail = new ArrayList<>();
 
         for(int i = 0 ; i < file_nameList.size() ; i++){
-
             if((file_nameList.get(i).contains("pom.xml")) ||
                 (file_nameList.get(i).contains(".java") && file_pathList.get(i).contains("src/main/java/")) ||
                 (file_pathList.get(i).contains("src/main/resources/application.properties"))){
-
                 javaFileName.add(file_nameList.get(i));
                 javaFilePath.add(file_pathList.get(i));
                 javaFileContent.add(file_contentList.get(i));
-
                 if((file_nameList.get(i).contains("pom.xml")) ||
                     (file_pathList.get(i).contains("src/main/resources/application.properties"))){
                     javaFileDetail.add("etc"); // 기타
                 } else{ // java 파일
-                    if(file_contentList.get(i).contains("implements")){
+                    if(file_contentList.get(i).contains("@RestController")){
+                        javaFileDetail.add("controller");
+                    } else if(file_contentList.get(i).contains("implements")) {
                         javaFileDetail.add("Impl");
                     } else{ // class
                         javaFileDetail.add("noImpl");
@@ -329,9 +314,7 @@ public class UnzipController {
                 }
             }
         }
-
         if(retSearchFiles == 1){ // 파일 리스트 다 뽑아냈으면 전역변수 초기화
-            System.out.println("retSearchFiles after : " + retSearchFiles);
             file_nameList.clear();
             file_pathList.clear();
             file_contentList.clear();
@@ -352,7 +335,6 @@ public class UnzipController {
         // content data 보냈으므로, 압축풀기한 파일들, 업로드된 zip 파일 모두 삭제
         deleteUnzipFiles(builder);
 
-        // db(project table)에서 file content 찾기
         // =============== pom.xml에서 필요한 데이터 파싱 =============== //
         String xmlPath = ""; // test
         String xmlContent = "";
@@ -419,22 +401,6 @@ public class UnzipController {
             }
 
         }
-        // System.out.println("pomXmlPath : " + xmlPath); // test
-        // System.out.println("pomXmlContent : " + xmlContent);
-        // System.out.println("propertiesPath : " + propertiesPath); // test
-        // System.out.println("propertiesContent : " + propertiesContent);
-        System.out.println("controllerDir : " + controllerDir);
-        System.out.println("dtoDir : " + dtoDir);
-        System.out.println("repositoryDir : " + repositoryDir);
-        System.out.println("daoDir : " + daoDir);
-        System.out.println("daoImplDir : " + daoImplDir);
-        System.out.println("entityDir : " + entityDir);
-        System.out.println("entityImplDir : " + entityImplDir);
-        System.out.println("handlerDir : " + handlerDir);
-        System.out.println("handlerImplDir : " + handlerImplDir);
-        System.out.println("serviceDir : " + serviceDir);
-        System.out.println("serviceImplDir : " + serviceImplDir);
-        System.out.println("etcDir : " + etcDir);
 
         // 공백 제거한 xmlContent - 정규식을 쓰기 위해 줄바꿈 제거
         String noWhiteSpaceXml = xmlContent.replaceAll("\n", "");
@@ -454,21 +420,7 @@ public class UnzipController {
         String databaseName = findDatabaseName(noWhiteSpaceProperties);
 
         //----------- db select in framework table -----------//
-        // about framework table
         List<String> frameworkNameList = frameworkRepository.findAllName();
-
-        /*
-        System.out.println("project_id : " + randomId);
-        System.out.println("frameworkList : " + frameworkNameList);
-        System.out.println("readmeName : " + "Readme.md");
-        System.out.println("springBootVersion : " + springBootVersion);
-        System.out.println("groupId : " + groupId);
-        System.out.println("artifactId : " + artifactId);
-        System.out.println("javaVersion : " + javaVersion);
-        System.out.println("databaseName : " + databaseName);
-        System.out.println("dependencies : \n" + dependencies);
-         */
-
         map.put("project_id", randomId); // index(project_id)
         map.put("frameworkList", frameworkNameList); // templateList(frameworkNameList)
         map.put("readmeName", "Readme.md"); // Readme.md
@@ -477,10 +429,6 @@ public class UnzipController {
         map.put("artifactId", artifactId); // artifactId
         map.put("javaVersion", javaVersion); // javaVersion
         map.put("databaseName", databaseName); // db명
-        // map.put("dependencies", dependencies); // dependencies
-
-        // System.out.println("map data : " + map);
-
         return map;
     }
 
@@ -534,11 +482,12 @@ public class UnzipController {
     }
 
     @PostMapping("/framework")
-    public String saveData(@RequestParam("project_id") String project_id,
-        @RequestParam("framework_name") String framework_name) {
-        // 여기서 사용자가 누구인지 index값으로 알아내기
+    public String saveData(
+        @RequestParam("project_id") String project_id,
+        @RequestParam("framework_name") String framework_name
+    ) {
+
         String frame_content = "";
-        System.out.println(project_id+framework_name+"파라미터 체크");
         UserDTO userDTO = userService.getUser(project_id);
         String user_name = userDTO.getUser_name();
         String repo_name = userDTO.getRepository_name();
@@ -551,7 +500,7 @@ public class UnzipController {
             frame_content = frameworkRepository.findcontent(framework_name);
             frame_content = frame_content.replace("repositoryName", repo_name);
             frame_content = frame_content.replace("userName", user_name);
-        } else if (framework_name.equals("Header")) { /* header 값에 대한 framework*/
+        } else if (framework_name.equals("Header")) {
             String Header = "header";
             frame_content = frameworkRepository.findcontent(Header);
             frame_content=frame_content.replace("repoName",repo_name);
@@ -561,7 +510,6 @@ public class UnzipController {
             frame_content=frame_content.replace("PeriodImage", "https://ifh.cc/g/2jWwt7.png");
             frame_content=frame_content.replace("startDate", "Start Date");
             frame_content=frame_content.replace("endDate", "End Date");
-            // System.out.println("frame_content : " + frame_content);
         } else if (framework_name.equals("Dependency")) {
             String Dependency = "Dependency";
             String xmlContent = "";
@@ -579,21 +527,18 @@ public class UnzipController {
             for(int i = 0 ; i < dependencyNameList.size() ; i++){
                 dependencyName = dependencyName + dependencyNameList.get(i) + "<br>";
             }
-
             frame_content = frameworkRepository.findcontent(Dependency);
             frame_content=frame_content.replace("DependencyNames", dependencyName);
             frame_content=frame_content.replace("DependencyContents", dependencyTags);
-            // System.out.println("frame_content : " + frame_content);
         }
 
         return frame_content;
     }
 
-    @PostMapping("/test")
-    public String userAPI(@RequestParam("project_id") int projectId){
+    public String webAPI( int projectId){
         List<ProjectEntity> result = projectService.getController(projectId);
         String mdResult = "|HTTP|API|URL|Return Type|Parameters|\n"
-            + "          |----|----|---|---|---|\n";
+                        + "|----|----|---|---|---|\n";
 
         int start_index = 0, end_index = 0;
         String urlTemp, returnType, parameters;
@@ -602,7 +547,6 @@ public class UnzipController {
 
         for(int i = 0; i < result.size(); i++){
             current_content = result.get(i).getFile_content();
-
             mdResult += "|**"+  result.get(i).getFile_name()+"**|\n";
 
             // find post mapping
@@ -673,25 +617,8 @@ public class UnzipController {
             }
 
         }
-
-        /*
-        |제목|내용|설명|
-        |------|---|---|
-        |테스트1|테스트2|테스트3|
-        |테스트1|테스트2|테스트3|
-        |테스트1|테스트2|테스트3|
-        */
-        // 문자열 파싱
-        // 1. GETMapping, PostMapping, RequestMapping (만약 RequestMapping일 경우에는 value값)
-        // 2. 제일 상단 @RequestMapping("/shop-backend/order")와 같은 mapping 찾기
-        // 3. 찾은 URL과 해당 API가 Return하는 data 형식 제공하기.
-
-
-
         return mdResult;
     }
-
-
 
     @PostMapping("/editPeriod")
     public String editPeriodImage(
@@ -713,8 +640,6 @@ public class UnzipController {
             frame_content=frame_content.replace("startDate", start_date);
             frame_content=frame_content.replace("endDate", end_date);
         }
-        System.out.println(frame_content);
-
         return frame_content;
     }
 
@@ -780,9 +705,7 @@ public class UnzipController {
 
         List<String> frameworkNameList = frameworkRepository.findAllName();
         for(int i = 0 ; i < frameworkNameList.size() ; i++){
-            System.out.println(frameworkNameList.get(i) +" check data");
             String temp=frameworkNameList.get(i) ;
-            System.out.println(frameworkRepository.findcontent(temp));
             frame_content=frame_content.replace(temp+"_check",frameworkRepository.findcontent(temp));
         }
         frame_content= frame_content.replace("userName",user_name);
