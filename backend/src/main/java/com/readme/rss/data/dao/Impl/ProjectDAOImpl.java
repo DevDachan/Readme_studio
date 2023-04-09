@@ -34,4 +34,14 @@ public class ProjectDAOImpl implements ProjectDAO {
         List<ProjectEntity>  result = projectRepository.getController(projectId);
         return result;
     }
+
+    @Override
+    public List<String> getIdAll(){
+        return projectRepository.getIdAll();
+    }
+
+    @Override
+    public List<ProjectEntity> getFileContent(String id){
+        return projectRepository.getFileContent( id);
+    }
 }

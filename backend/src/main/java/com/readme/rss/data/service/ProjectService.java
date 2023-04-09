@@ -11,4 +11,8 @@ public interface ProjectService {
     ProjectDTO getProject(String id);
 
     List<ProjectEntity> getController(int projectId);
+
+    List<String> getIdAll();
+
+    List<ProjectEntity> getFileContent(String id);
 }

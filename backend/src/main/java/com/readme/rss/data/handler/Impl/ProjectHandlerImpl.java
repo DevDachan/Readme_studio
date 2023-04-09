@@ -36,4 +36,14 @@ public class ProjectHandlerImpl implements ProjectHandler {
         List<ProjectEntity> result = projectDAO.getController(projectId);
         return result;
     }
+
+    @Override
+    public List<String> getIdAll(){
+        return projectDAO.getIdAll();
+    }
+
+    @Override
+    public List<ProjectEntity> getFileContent(String id){
+        return projectDAO.getFileContent(id);
+    }
 }

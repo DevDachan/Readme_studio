@@ -4,7 +4,6 @@ import static java.lang.Thread.sleep;
 
 import com.readme.rss.data.dto.UserDTO;
 import com.readme.rss.data.entity.ProjectEntity;
-import com.readme.rss.data.repository.ProjectRepository;
 import com.readme.rss.data.service.FrameworkService;
 import com.readme.rss.data.service.ProjectService;
 import com.readme.rss.data.service.UserService;
@@ -36,14 +35,10 @@ public class UnzipController {
     private UserService userService;
     private FrameworkService frameworkService;
 
-    private ProjectRepository projectRepository;
-
     @Autowired
-    public UnzipController(ProjectService projectService, UserService userService, ProjectRepository projectRepository ,FrameworkService frameworkService) {
+    public UnzipController(ProjectService projectService, UserService userService ,FrameworkService frameworkService) {
         this.projectService = projectService;
         this.userService = userService;
-        this.projectRepository = projectRepository;
-        this.frameworkRepository = frameworkRepository;
         this.frameworkService = frameworkService;
     }
 
@@ -282,7 +277,7 @@ public class UnzipController {
         retSearchFiles = searchFiles(searchDirPath);
 
         //------------- db insert 관련 -------------//
-        randomIdList = projectRepository.findDistinctId();
+        randomIdList = projectService.getIdAll();
         System.out.println("\nDistinct Project Id : " + randomIdList);
         String randomId = projectIdGenerate();
 
@@ -353,7 +348,8 @@ public class UnzipController {
         List<String> serviceImplDir = new ArrayList<>();
         List<String> etcDir = new ArrayList<>();
 
-        List<ProjectEntity> getProjectTableRow = projectRepository.findFileContent(randomId);
+        List<ProjectEntity> getProjectTableRow = projectService.getFileContent(randomId);
+
         for(int i = 0 ; i < getProjectTableRow.size() ; i++){
             if(getProjectTableRow.get(i).getFile_path().contains("pom.xml")){
                 xmlPath = getProjectTableRow.get(i).getFile_path();
@@ -512,7 +508,7 @@ public class UnzipController {
         } else if (framework_name.equals("Dependency")) {
             String Dependency = "Dependency";
             String xmlContent = "";
-            List<ProjectEntity> getProjectTableRow = projectRepository.findFileContent(project_id);
+            List<ProjectEntity> getProjectTableRow = projectService.getFileContent(project_id);
             for(int i = 0 ; i < getProjectTableRow.size() ; i++) {
                 if (getProjectTableRow.get(i).getFile_path().contains("pom.xml")) {
                     xmlContent = getProjectTableRow.get(i).getFile_content();
