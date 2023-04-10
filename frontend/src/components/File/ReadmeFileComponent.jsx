@@ -49,7 +49,17 @@ function ReadmeFileContent(props) {
           />;
     }else if(content[i].includes("<!-- All Data -->")){
       cur_content = "<!-- All Data -->";
-    }else if(content[i].includes("https://ifh.cc") || content[i].includes("PeriodImage")){
+    }else if(content[i].includes("<!-- Web API -->")){
+      cur_content = <Md_editor
+        height={200}
+        id={"md_editor_"+i}
+        name={i}
+        value={content[i].split("<!-- Web API -->\n")[1]}
+        onChange={ (e,v) => changeTextArea(e,v)}
+        color={"black"}
+        key={"md_editor"+i}
+        />;
+    }else if(content[i].includes("https://ifh.cc")){
       cur_content = <div>
         <div className="dateBox" >Start date : <input type="date" data-placeholder="날짜 선택" id={"period_start" + i} onChange={changePeriod} name={i}></input></div>
         <div className="brCSS"></div>
@@ -67,10 +77,10 @@ function ReadmeFileContent(props) {
           <div className="row mb-3">
             <div className="col-sm-8">
               <button className="bt-updown" id={"postionChangeUp"+i} key={"up"+i} name={i} onClick={changePosition} style={{marginRight:"5px"}}>
-                ^
+                <img className="img-updown" src="../images/up_arrow.png" style={{width:"30%"}}/ >
               </button>
               <button className="bt-updown" id={"postionChangeDown"+i} key={"down"+i} name={i} onClick={changePosition}>
-                v
+                <img className="img-updown" src="../images/down_arrow.png" style={{width:"30%"}}/ >
               </button>
             </div>
             <div className="col-sm-4"  style={{"textAlign":"right"}}>
@@ -90,10 +100,10 @@ function ReadmeFileContent(props) {
             <div className="row mb-3">
               <div className="col-sm-8">
                 <button className="bt-updown" id={"postionChangeUp"+i} key={"up"+i} name={i} onClick={changePosition} style={{marginRight:"5px"}}>
-                  ^
+                  <img className="img-updown" src="../images/up_arrow.png" style={{width:"30%"}} />
                 </button>
                 <button className="bt-updown" id={"postionChangeDown"+i} key={"down"+i} name={i} onClick={changePosition}>
-                  v
+                  <img className="img-updown" src="../images/down_arrow.png" style={{width:"30%"}}/ >
                 </button>
               </div>
               <div className="col-sm-4" style={{"textAlign":"right"}}>

@@ -8,7 +8,7 @@ public interface ProjectDAO {
     ProjectEntity saveProject(ProjectEntity projectEntity);
     ProjectEntity getProject(String id);
 
-    List<ProjectEntity> getController(int projectId);
+    List<ProjectEntity> getController(String projectId);
 
     List<String> getIdAll();
 

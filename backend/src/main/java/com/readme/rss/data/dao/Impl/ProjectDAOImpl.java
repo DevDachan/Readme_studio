@@ -30,7 +30,7 @@ public class ProjectDAOImpl implements ProjectDAO {
     }
 
     @Override
-    public List<ProjectEntity> getController(int projectId){
+    public List<ProjectEntity> getController(String projectId){
         List<ProjectEntity>  result = projectRepository.getController(projectId);
         return result;
     }
