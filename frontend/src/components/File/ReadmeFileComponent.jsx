@@ -49,7 +49,17 @@ function ReadmeFileContent(props) {
           />;
     }else if(content[i].includes("<!-- All Data -->")){
       cur_content = "<!-- All Data -->";
-    }else if(content[i].includes("https://ifh.cc") || content[i].includes("PeriodImage")){
+    }else if(content[i].includes("<!-- Web API -->")){
+      cur_content = <Md_editor
+        height={200}
+        id={"md_editor_"+i}
+        name={i}
+        value={content[i].split("<!-- Web API -->\n")[1]}
+        onChange={ (e,v) => changeTextArea(e,v)}
+        color={"black"}
+        key={"md_editor"+i}
+        />;
+    }else if(content[i].includes("https://ifh.cc")){
       cur_content = <div>
         <div className="dateBox" >Start date : <input type="date" data-placeholder="날짜 선택" id={"period_start" + i} onChange={changePeriod} name={i}></input></div>
         <div className="brCSS"></div>

@@ -32,7 +32,7 @@ public class ProjectHandlerImpl implements ProjectHandler {
     }
 
     @Override
-    public List<ProjectEntity> getController(int projectId){
+    public List<ProjectEntity> getController(String projectId){
         List<ProjectEntity> result = projectDAO.getController(projectId);
         return result;
     }

@@ -38,7 +38,7 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public List<ProjectEntity>  getController(int projectId){
+    public List<ProjectEntity>  getController(String projectId){
         List<ProjectEntity> result = projectHandler.getController(projectId);
         return result;
     }

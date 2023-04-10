@@ -505,7 +505,9 @@ public class UnzipController {
             frame_content=frame_content.replace("PeriodImage", "https://ifh.cc/g/2jWwt7.png");
             frame_content=frame_content.replace("startDate", "Start Date");
             frame_content=frame_content.replace("endDate", "End Date");
-        } else if (framework_name.equals("Dependency")) {
+        }else if(framework_name.equals("WebAPI")) {
+            frame_content = webAPI(project_id);
+        }else if (framework_name.equals("Dependency")) {
             String Dependency = "Dependency";
             String xmlContent = "";
             List<ProjectEntity> getProjectTableRow = projectService.getFileContent(project_id);
@@ -530,9 +532,10 @@ public class UnzipController {
         return frame_content;
     }
 
-    public String webAPI( int projectId){
+    public String webAPI( String projectId){
         List<ProjectEntity> result = projectService.getController(projectId);
-        String mdResult = "|HTTP|API|URL|Return Type|Parameters|\n"
+        String mdResult = "<!-- Web API -->\n"
+            + "|HTTP|API|URL|Return Type|Parameters|\n"
                         + "|----|----|---|---|---|\n";
 
         int start_index = 0, end_index = 0;
