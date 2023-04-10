@@ -121,12 +121,11 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   color: #4f3e3e;
   padding: 2em;
   width: 100%;
-  border-radius: 10px;
+  border-radius: 2px;
   font-weight: bold;
   margin:15px 0px 20px 0px;
-
+  border: 2px solid #d9b4b4;
   word-break: break-all;
-  box-shadow: 3px 3px 3px 3px grey;
 }
 
 .div-readmeComponent{
@@ -169,7 +168,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   padding: 1em;
   margin-left: 0px !important;
   margin-bottom: 20px;
-  border-radius: 20px;
+  border-radius: 8px;
   font-weight: bold;
   justify-content: center;
   text-align: center;
@@ -228,22 +227,43 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 }
 
 .bt-updown{
-  border-radius: 15px;
+  width: 20%;
+  border-radius: 5px;
+}
+
+.bt-updown:hover{
+  background-color: white !important;
 }
 
 
 
+.bt-updown:hover > .img-updown{
+  filter: opacity(0.8) drop-shadow(0 0 0 black);
+}
+
+.img-updown{
+  border: 0px;
+}
+
 
 /* for the markdown viewer*/
 .readmeDiv{
-  background-color: #c7c7c7;
+  border:3px solid #dedcdc !important;
   height: 100%;
   width: 100%;
   padding: 2em;
-  border-radius: 20px;
+  border-radius: 10px;
   min-width: 50vw;
   max-width: 1000px;
   margin: auto;
+
+}
+
+
+.bt-close{
+  background-color: #dc3545;
+  border-radius: 3px;
+  width: 10rem;
 }
 
 .wmde-markdown-var  * {
@@ -261,6 +281,15 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .modal-lg, .modal-xl{
   --bs-modal-width: 70vw !important;
 }
+
+.modal-title{
+  font-weight: bold !important;
+  margin-top: 20px !important;
+  margin-left: 20px !important;
+  font-size: 2.5rem !important;
+
+}
+
 
 
 /*result */

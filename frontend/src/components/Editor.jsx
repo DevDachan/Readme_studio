@@ -221,7 +221,7 @@ function Editor(props) {
             <ReadmeFileSelect readmeList={readmeObject} currentReadme={currentReadme} setCurrentReadme={setCurrentReadme}/>
           </div>
           <div className="col-sm-1 calign mb-3">
-            <input type="button" className="bt-add" value="Add" onClick={addReadme} />
+            <input type="button" className="btn-6" value="Add" onClick={addReadme} />
           </div>
 
           <div className="col-sm-3 calign mb-3">
@@ -258,7 +258,7 @@ function Editor(props) {
               />
             </Modal.Body>
             <Modal.Footer>
-              <button onClick={handleClose}>닫기</button>
+              <button className="bt-close" onClick={handleClose}>닫기</button>
             </Modal.Footer>
           </Modal>
 
