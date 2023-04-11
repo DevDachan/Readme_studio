@@ -9,18 +9,18 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class UserServiceImpl implements UserService {
-    UserHandler userHandeler;
+    UserHandler userHandler;
 
     @Autowired
     public UserServiceImpl(UserHandler userHandler){
-        this.userHandeler = userHandler;
+        this.userHandler = userHandler;
     }
 
     // Service(Client) <-> Controller : DTO
     // Service <-> DAO(DB) : Entity
     @Override
     public UserDTO saveUser(String project_id, String user_name, String repository_name){
-        UserEntity userEntity = userHandeler.saveUserEntity(project_id, user_name, repository_name);
+        UserEntity userEntity = userHandler.saveUserEntity(project_id, user_name, repository_name);
 
         UserDTO userDTO = new UserDTO(userEntity.getProject_id(), userEntity.getUser_name(), userEntity.getRepository_name());
         return userDTO;
@@ -28,10 +28,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDTO getUser(String project_id){
-        UserEntity userEntity = userHandeler.getUserEntity(project_id);
+        UserEntity userEntity = userHandler.getUserEntity(project_id);
 
         UserDTO userDTO = new UserDTO(userEntity.getProject_id(), userEntity.getUser_name(), userEntity.getRepository_name());
         return userDTO;
     }
-///check
 }

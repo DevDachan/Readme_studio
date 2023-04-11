@@ -26,20 +26,22 @@ public class MarkdownController {
 
         ProcessBuilder builder = new ProcessBuilder();
 
+        // mdFiles 폴더 생성 - 생성한 md 파일들을 저장하는 임시 폴더
         builder.command("mkdir", "mdFiles"); // mac
         // builder.command("cmd.exe","/c","mkdir", "mdFiles"); // window
         builder.start();
 
         File mdFile = null;
         for (int i = 0; i < readme.size(); i++) {
-            String mdName = readme.get(i).get("id").toString();
-            ArrayList<String> framework = (ArrayList<String>) readme.get(i).get("content");
-            String content = "";
+            String mdName = readme.get(i).get("id").toString(); // md file name
+            ArrayList<String> framework = (ArrayList<String>) readme.get(i).get("content"); // md framework content list
+            String content = ""; // md file 하나의 string으로
             for (int j = 0; j < framework.size(); j++) {
                 content = content + framework.get(j) + "\n\n";
             }
+            System.out.println(mdName + " : " + content);
 
-            String filePath = "./mdFiles/" + mdName;
+            String filePath = "./mdFiles/" + mdName; // ex) ./mdFiles/A.md
 
             mdFile = new File(filePath);
             mdFile.createNewFile(); // 파일 새로 생성
@@ -51,10 +53,12 @@ public class MarkdownController {
             mdWriter.write(content);
             mdWriter.newLine();
 
-            mdWriter.flush();
+            mdWriter.flush(); // 버퍼의 남은 데이터를 모두 쓰기
             mdWriter.close();
         }
 
+        // md 파일들 압축하기
+        // builder.directory(new File("./mdFiles")); // mdFiles로 이동
         builder.command("zip", "mdZipFiles.zip", "-r", "./mdFiles"); // mac
         // builder.command("cmd.exe", "/c", "zip", "mdZipFiles.zip", "-r", "./mdFiles"); // window
         var process = builder.start(); // zip 실행
@@ -95,7 +99,10 @@ public class MarkdownController {
     }
 
     @PostMapping(value = "/mdFile")
-    public byte[] makeMDfile(@RequestBody Map<String, Object> readme) throws IOException {
+    public byte[] makeMDfile(@RequestBody Map<String, Object> readme) throws IOException { // 받을 인자: md파일 명,
+        System.out.println();
+        System.out.println("[Make Markdown Files Function]");
+
         ProcessBuilder builder = new ProcessBuilder();
 
         // mdFiles 폴더 생성
@@ -103,16 +110,15 @@ public class MarkdownController {
         // builder.command("cmd.exe","/c","mkdir", "mdFiles"); // window
         builder.start();
 
-        String content = "";
         File mdFile = null;
         String mdName = readme.get("id").toString(); // md file name
-        ArrayList<String> framework = (ArrayList<String>) readme.get("content");
-
+        ArrayList<String> framework = (ArrayList<String>) readme.get("content"); // md framework content list
+        String content = ""; // md file 하나의 string으로
         for (int i = 0; i < framework.size(); i++) {
             content = content + framework.get(i) + "\n\n";
         }
-
-        String filePath = "./mdFile/" + mdName;
+        // System.out.println(mdName + " : " + content);
+        String filePath = "./mdFile/" + mdName; // ex) ./mdFile/A.md
         mdFile = new File(filePath);
         mdFile.createNewFile(); // 파일 새로 생성
 
@@ -123,16 +129,16 @@ public class MarkdownController {
         mdWriter.write(content);
         mdWriter.newLine();
 
-        mdWriter.flush();
+        mdWriter.flush(); // 버퍼의 남은 데이터를 모두 쓰기
         mdWriter.close();
 
         byte[] resultFile = Files.readAllBytes(mdFile.toPath());
 
         // md 파일 지우기
         /* mac */
-        builder.command("rm", "-rf", "./mdFile");
+        builder.command("rm", "-rf", "./mdFile"); // 파일 삭제
         builder.start();
-        builder.command("mkdir", "mdFile");
+        builder.command("mkdir", "mdFile"); // 폴더 다시 생성해주기
         builder.start();
 
         /* window

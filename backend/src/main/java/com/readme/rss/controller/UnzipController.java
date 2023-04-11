@@ -4,6 +4,10 @@ import static java.lang.Thread.sleep;
 
 import com.readme.rss.data.dto.UserDTO;
 import com.readme.rss.data.entity.ProjectEntity;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import com.readme.rss.data.service.FrameworkService;
 import com.readme.rss.data.service.ProjectService;
 import com.readme.rss.data.service.UserService;
@@ -16,7 +20,6 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 import java.util.Scanner;
 import java.util.regex.Matcher;
@@ -36,7 +39,7 @@ public class UnzipController {
     private FrameworkService frameworkService;
 
     @Autowired
-    public UnzipController(ProjectService projectService, UserService userService ,FrameworkService frameworkService) {
+    public UnzipController(ProjectService projectService, UserService userService, FrameworkService frameworkService) {
         this.projectService = projectService;
         this.userService = userService;
         this.frameworkService = frameworkService;
@@ -122,7 +125,6 @@ public class UnzipController {
         }
         tempXmlContent = tempXmlContent.replaceAll(tempStr, "");
 
-
         // =================== package명 구하기 ===================
         String groupId = "";
         String name = "";
@@ -190,7 +192,6 @@ public class UnzipController {
             Pattern pattern2 = Pattern.compile("(?<=\\<artifactId>)(.*?)(?=<\\/artifactId>)");
             Matcher matcher2 = pattern2.matcher(dependencyContents.get(i));
             if(dependencyContents.get(i).contains("<version>")){
-                System.out.println("have version : " + dependencyContents.get(i));
                 if(matcher2.find()){
                     String tempArtifactId = matcher2.group();
                     Pattern pattern3 = Pattern.compile("(?<=\\<version>)(.*?)(?=<\\/version>)");
@@ -249,17 +250,20 @@ public class UnzipController {
         }
         System.out.println("\n입력받은 zip 파일 명 : " + fileName);
 
-        Path savePath = Paths.get("./unzipTest.zip");
+        Path savePath = Paths.get("./unzipTest.zip"); // unzipTest.zip이름으로 저장
         file.transferTo(savePath); // 파일 다운로드
 
         ProcessBuilder builder = new ProcessBuilder();
+
+        // unzipFiles 폴더 생성 - 압축풀기한 파일들을 저장하는 임시 폴더
         //builder.command("mkdir", "unzipFiles"); // mac
         builder.command("cmd.exe","/c","mkdir", "unzipFiles"); // window
         builder.start();
 
+        // 파일 압축 풀기
         //builder.command("unzip", "unzipTest.zip", "-d", "./unzipFiles"); // mac
         //builder.command("cmd.exe","/c","unzip", "unzipTest.zip", "-d", "./unzipFiles"); // window
-        var process = builder.start();
+        var process = builder.start(); // upzip 실행
 
         // unzip 실행 후, 콘솔에 출력해주기
         try (var reader = new BufferedReader(
@@ -277,8 +281,8 @@ public class UnzipController {
         retSearchFiles = searchFiles(searchDirPath);
 
         //------------- db insert 관련 -------------//
+        // project table에서 id 가져오기
         randomIdList = projectService.getIdAll();
-        System.out.println("\nDistinct Project Id : " + randomIdList);
         String randomId = projectIdGenerate();
 
         List<String> javaFileName = new ArrayList<>();
@@ -290,9 +294,11 @@ public class UnzipController {
             if((file_nameList.get(i).contains("pom.xml")) ||
                 (file_nameList.get(i).contains(".java") && file_pathList.get(i).contains("src/main/java/")) ||
                 (file_pathList.get(i).contains("src/main/resources/application.properties"))){
+
                 javaFileName.add(file_nameList.get(i));
                 javaFilePath.add(file_pathList.get(i));
                 javaFileContent.add(file_contentList.get(i));
+
                 if((file_nameList.get(i).contains("pom.xml")) ||
                     (file_pathList.get(i).contains("src/main/resources/application.properties"))){
                     javaFileDetail.add("etc"); // 기타
@@ -349,7 +355,6 @@ public class UnzipController {
         List<String> etcDir = new ArrayList<>();
 
         List<ProjectEntity> getProjectTableRow = projectService.getFileContent(randomId);
-
         for(int i = 0 ; i < getProjectTableRow.size() ; i++){
             if(getProjectTableRow.get(i).getFile_path().contains("pom.xml")){
                 xmlPath = getProjectTableRow.get(i).getFile_path();
@@ -393,8 +398,21 @@ public class UnzipController {
             } else{
                 etcDir.add(getProjectTableRow.get(i).getFile_name());
             }
-
         }
+        /* test
+        System.out.println("controllerDir : " + controllerDir);
+        System.out.println("dtoDir : " + dtoDir);
+        System.out.println("repositoryDir : " + repositoryDir);
+        System.out.println("daoDir : " + daoDir);
+        System.out.println("daoImplDir : " + daoImplDir);
+        System.out.println("entityDir : " + entityDir);
+        System.out.println("entityImplDir : " + entityImplDir);
+        System.out.println("handlerDir : " + handlerDir);
+        System.out.println("handlerImplDir : " + handlerImplDir);
+        System.out.println("serviceDir : " + serviceDir);
+        System.out.println("serviceImplDir : " + serviceImplDir);
+        System.out.println("etcDir : " + etcDir);
+         */
 
         // 공백 제거한 xmlContent - 정규식을 쓰기 위해 줄바꿈 제거
         String noWhiteSpaceXml = xmlContent.replaceAll("\n", "");
@@ -414,6 +432,7 @@ public class UnzipController {
         String databaseName = findDatabaseName(noWhiteSpaceProperties);
 
         //----------- db select in framework table -----------//
+        // about framework table
         List<String> frameworkNameList = frameworkService.getFrameworkNameList();
 
         map.put("project_id", randomId); // index(project_id)
@@ -424,6 +443,7 @@ public class UnzipController {
         map.put("artifactId", artifactId); // artifactId
         map.put("javaVersion", javaVersion); // javaVersion
         map.put("databaseName", databaseName); // db명
+
         return map;
     }
 
@@ -477,25 +497,20 @@ public class UnzipController {
     }
 
     @PostMapping("/framework")
-    public String saveData(
-        @RequestParam("project_id") String project_id,
-        @RequestParam("framework_name") String framework_name
-    ) {
-
+    public String saveData(@RequestParam("project_id") String project_id,
+        @RequestParam("framework_name") String framework_name) throws IOException {
         String frame_content = "";
         UserDTO userDTO = userService.getUser(project_id);
         String user_name = userDTO.getUser_name();
         String repo_name = userDTO.getRepository_name();
-
         System.out.println("user_name : " + user_name);
-        System.out.println("repo_name : " + repo_name);
 
         // framework_id에 따른 content제공
         if(framework_name.equals("Contributor")){
             frame_content = frameworkService.findContent(framework_name);
             frame_content = frame_content.replace("repositoryName", repo_name);
             frame_content = frame_content.replace("userName", user_name);
-        } else if (framework_name.equals("Header")) {
+        } else if (framework_name.equals("Header")) { /* header 값에 대한 framework*/
             String Header = "header";
             frame_content = frameworkService.findContent(Header);
             frame_content=frame_content.replace("repoName",repo_name);
@@ -505,9 +520,37 @@ public class UnzipController {
             frame_content=frame_content.replace("PeriodImage", "https://ifh.cc/g/2jWwt7.png");
             frame_content=frame_content.replace("startDate", "Start Date");
             frame_content=frame_content.replace("endDate", "End Date");
-        }else if(framework_name.equals("WebAPI")) {
+        } else if(framework_name.equals("WebAPI")) {
             frame_content = webAPI(project_id);
-        }else if (framework_name.equals("Dependency")) {
+        } else if (framework_name.equals("Social")){
+            String url = "https://github.com/";
+            url = url + user_name;
+            String[] social_link = {"instagram", "facebook", "linkedin", "notion", "twitter", "github", "gmail"};
+            String[] logo_color = {"E4405F","1877F2","0A66C2","000000","1DA1F2","181717","F06B66" };
+            String social_temp =" ";
+            System.out.println(url);
+            social_temp = frameworkService.findContent("Social");
+
+            Document doc = Jsoup.connect(url).get();
+            Elements elements = doc.getElementsByClass("vcard-details");
+            for (Element headline : elements) {
+                String[] urlparsing = headline.text().split(" ");
+                for (int i = 0; i < urlparsing.length; i++) {
+                    System.out.println(urlparsing[i]);
+                    for( int j = 0; j< social_link.length; j++){
+                        if(urlparsing[i].contains(social_link[j])){
+                            String temp= social_link[j]+"_Link";
+                            System.out.println(temp + urlparsing[i]);
+                            String temp_data=" ";
+                            temp_data=social_temp.replace("logo_color",logo_color[j]);
+                            temp_data=temp_data.replace("social",social_link[j]);
+                            temp_data=temp_data.replace(temp, urlparsing[i]);
+                            frame_content +=temp_data;
+                        }
+                    }
+                }
+            }
+        } else if (framework_name.equals("Dependency")) {
             String Dependency = "Dependency";
             String xmlContent = "";
             List<ProjectEntity> getProjectTableRow = projectService.getFileContent(project_id);
@@ -521,8 +564,16 @@ public class UnzipController {
             String dependencyTags = "\n" + findDependencies(noWhiteSpaceXml).get(1).toString();
             List<String> dependencyNameList = (List<String>) findDependencies(noWhiteSpaceXml).get(0);
             String dependencyName = "\n";
+            String dependencyBtn = "<a href=\"https://mvnrepository.com/\"><img src=\"https://img.shields.io/badge/NUM-DEPENDENCYNAME-9cf\"></a>";
+
             for(int i = 0 ; i < dependencyNameList.size() ; i++){
-                dependencyName = dependencyName + dependencyNameList.get(i) + "<br>";
+                String tempBtn = dependencyBtn;
+                String dependencyFormat = dependencyNameList.get(i);
+                dependencyFormat = dependencyFormat.replace("-", "--");
+                tempBtn = tempBtn.replace("NUM", Integer.toString(i+1));
+                tempBtn = tempBtn.replace("DEPENDENCYNAME",  dependencyFormat);
+
+                dependencyName = dependencyName + tempBtn + "   ";
             }
             frame_content = frameworkService.findContent(Dependency);
             frame_content=frame_content.replace("DependencyNames", dependencyName);
@@ -536,7 +587,7 @@ public class UnzipController {
         List<ProjectEntity> result = projectService.getController(projectId);
         String mdResult = "<!-- Web API -->\n"
             + "|HTTP|API|URL|Return Type|Parameters|\n"
-                        + "|----|----|---|---|---|\n";
+            + "|----|----|---|---|---|\n";
 
         int start_index = 0, end_index = 0;
         String urlTemp, returnType, parameters;
@@ -549,12 +600,13 @@ public class UnzipController {
 
             // find post mapping
             while(true){
+                // indexOf(String str, int fromIndex)
                 start_index = current_content.indexOf("@PostMapping(", end_index);
                 end_index = current_content.indexOf(")", start_index);
 
                 if(start_index < 0){
                     break;
-                }else{
+                } else{
                     urlTemp = current_content.substring(start_index,end_index);
                     urlTemp = urlTemp.split("\"")[1];
 
@@ -587,7 +639,7 @@ public class UnzipController {
 
                 if(start_index < 0){
                     break;
-                }else{
+                } else{
                     urlTemp = current_content.substring(start_index,end_index);
                     urlTemp = urlTemp.split("\"")[1];
 
@@ -638,6 +690,7 @@ public class UnzipController {
             frame_content=frame_content.replace("startDate", start_date);
             frame_content=frame_content.replace("endDate", end_date);
         }
+
         return frame_content;
     }
 
