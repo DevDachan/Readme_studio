@@ -79,10 +79,10 @@ function ReadmeFileContent(props) {
           <div className="row mb-3">
             <div className="col-sm-8">
               <button className="bt-updown" id={"postionChangeUp"+i} key={"up"+i} name={i} onClick={changePosition} style={{marginRight:"5px"}}>
-                <img className="img-updown" src="../images/up_arrow.png" style={{width:"30%"}}/ >
+                ↑
               </button>
               <button className="bt-updown" id={"postionChangeDown"+i} key={"down"+i} name={i} onClick={changePosition}>
-                <img className="img-updown" src="../images/down_arrow.png" style={{width:"30%"}}/ >
+                ↓
               </button>
             </div>
             <div className="col-sm-4"  style={{"textAlign":"right"}}>
@@ -102,10 +102,10 @@ function ReadmeFileContent(props) {
             <div className="row mb-3">
               <div className="col-sm-8">
                 <button className="bt-updown" id={"postionChangeUp"+i} key={"up"+i} name={i} onClick={changePosition} style={{marginRight:"5px"}}>
-                  <img className="img-updown" src="../images/up_arrow.png" style={{width:"30%"}} />
+                  ↑
                 </button>
                 <button className="bt-updown" id={"postionChangeDown"+i} key={"down"+i} name={i} onClick={changePosition}>
-                  <img className="img-updown" src="../images/down_arrow.png" style={{width:"30%"}}/ >
+                  ↓
                 </button>
               </div>
               <div className="col-sm-4" style={{"textAlign":"right"}}>
