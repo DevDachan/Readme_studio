@@ -1,3 +1,6 @@
+// DTO : 계층간 데이터 교환을 위한 객체를 의미
+// database table의 컬럼과는 독립적이다
+
 package com.readme.rss.data.dto;
 
 import com.readme.rss.data.entity.FrameworkEntity;
