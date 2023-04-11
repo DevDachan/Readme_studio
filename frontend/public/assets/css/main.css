@@ -1,5 +1,6 @@
 @import url(fontawesome-all.min.css);
 @import url("https://fonts.googleapis.com/css?family=Roboto:400,700");
+
 /*
 	Eventually by HTML5 UP
 	html5up.net | @ajlkn
@@ -20,8 +21,10 @@ section, summary, time, mark, audio, video {
   padding: 0;
   border: 0;
   font-size: 100%;
-  font: inherit;
+  font-family: 'Noto Sans KR', sans-serif;;
   vertical-align: baseline; }
+
+
 
 article, aside, details, figcaption, figure,
 footer, header, hgroup, menu, nav, section {
@@ -87,10 +90,7 @@ html, body {
       min-height: 100%; } }
 
 body {
-  display: -moz-flex;
-  display: -webkit-flex;
-  display: -ms-flex;
-  display: flex;
+  display: grid;
   -moz-flex-direction: column;
   -webkit-flex-direction: column;
   -ms-flex-direction: column;
@@ -109,9 +109,9 @@ body {
     -moz-transition: none !important;
     -webkit-transition: none !important;
     -ms-transition: none !important;
-    transition: none !important; }
+    transition: none !important;
+  }
   body > * {
-    position: relative;
     z-index: 2; }
   @media screen and (max-width: 1680px) {
     body {
@@ -177,7 +177,8 @@ body {
       -ms-animation-direction: alternate !important;
       animation-direction: alternate !important; }
   body.is-preload #bg {
-    opacity: 0; }
+    opacity: 0;
+  }
 
 @-moz-keyframes bg {
   0% {
@@ -790,7 +791,7 @@ button,
 
 @media screen and (max-width: 736px) {
   #header h1 {
-    font-size: 2em; }
+     }
   #header p {
     font-size: 1em; } }
 
@@ -842,9 +843,8 @@ button,
   transition: opacity 0.5s ease-in-out;
   bottom: 4em;
   color: rgba(255, 255, 255, 0.5);
-  left: 4em;
   opacity: 0.5;
-  position: absolute; }
+}
   #footer .icons {
     margin: 0 0 0.5em 0; }
   #footer .copyright {
@@ -869,8 +869,7 @@ button,
     margin-bottom: 0; }
   @media screen and (max-width: 1680px) {
     #footer {
-      bottom: 3.5em;
-      left: 3.5em; } }
+      bottom: 3.5em; } }
   @media screen and (max-width: 736px) {
     #footer {
       bottom: 2em;
