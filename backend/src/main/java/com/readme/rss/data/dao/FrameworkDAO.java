@@ -9,7 +9,6 @@ package com.readme.rss.data.dao;
 
 import com.readme.rss.data.entity.FrameworkEntity;
 import java.util.List;
-import java.util.Map;
 
 public interface FrameworkDAO {
     FrameworkEntity saveFramework(FrameworkEntity frameworkEntity);
@@ -18,3 +17,4 @@ public interface FrameworkDAO {
 
     String findContent(String name);
 }
+
