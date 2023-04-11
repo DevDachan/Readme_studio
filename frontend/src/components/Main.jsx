@@ -22,7 +22,7 @@ function Main(props) {
   const [userName, setUserName] = useState();
   const [repName, setRepName] = useState();
   const [githubRepLink, setGithubRepLink] = useState('');
-  const [fileName, setFileName] = useState("Project Select");
+  const [fileName, setFileName] = useState("Upload");
   const [fileSelected, setFileSelected] = useState(false);
 
 
@@ -117,28 +117,40 @@ function Main(props) {
 
         <div>
           <form id="generate-form-git" method="post" action="#">
-            <input type="text" name="email" id="email" placeholder="Github Repository Link" />
-            <input type="submit" value="Generate" />
+            <input type="text" name="email" className="ip-url" id="email" placeholder="Github Repository Link" />
+            <input type="submit" className="btn-3d blue" value="Generate" />
           </form>
 
           <form id="generate-form-files">
             <div className="row">
-              <div className="col-sm-4">
-                <input type="text" name="userName" id="user-name" defaultValue={userName} required placeholder="User Name"/>
+              <div className="col-sm-3">
+                <input type="text" name="userName" id="user-name" defaultValue={userName}
+                  style={{
+                    height: "3em",
+                    marginTop: "40px"
+                  }}
+                required placeholder="User Name"/>
               </div>
 
-              <div className="col-sm-4">
-                <input type="text" name="repName" id="rep-name" defaultValue={repName} required placeholder="Repository Name"/>
+
+
+              <div className="col-sm-3">
+                <input type="text" name="repName" id="rep-name"
+                  style={{
+                    height: "3em",
+                    marginTop: "40px"
+                  }}
+                defaultValue={repName} required placeholder="Repository Name"/>
               </div>
 
             <div className="col-sm-3">
             <input type="file" name="file" id="project-files" accept=".zip" onChange={getFile} style={{"display": "none"}}/>
-            <label htmlFor="project-files" style={{"display":"inline", "marginRight": "20px"}}>
-              <div id="file-selector" className={(fileSelected ? "fileSelected" : "fileNotSelected")}>{fileName}</div>
+            <label htmlFor="project-files" className="btn-3d green">
+              <div id="file-selector" >{fileName}</div>
             </label>
             </div>
-            <div className="col-sm-1">
-              <input type="button" value="Generate" onClick={submitReadme}/>
+            <div className="col-sm-3">
+              <input type="button" className="btn-3d blue" value="Generate" onClick={submitReadme}/>
             </div>
             </div>
           </form>
