@@ -125,10 +125,10 @@ function ReadmeFileContent(props) {
       <Wrapper>
         <div className="contentDiv mb-2">
           <div className="row div-component-header">
-            <div className="col-sm-9">
+            <div className="col-sm-8">
               <h3 className="header-text"> {title} </h3>
             </div>
-            <div className="col-sm-3">
+            <div className="col-sm-4">
               <button className=" btn-3d cyan" onClick={handleOpen} variant="outline-primary">Preview</button>
             </div>
           </div>
