@@ -213,22 +213,24 @@ function Editor(props) {
   return (
       <Wrapper>
         <header id="header">
-          <h1>Readme Generate</h1>
+          <h1 className="header-text">Readme Generate</h1>
         </header>
 
         <div className="row">
           <div className="col-sm-3 mb-2">
+            <br/>
             <ReadmeFileSelect readmeList={readmeObject} currentReadme={currentReadme} setCurrentReadme={setCurrentReadme}/>
+
           </div>
-          <div className="col-sm-1 calign mb-3">
-            <input type="button" className="btn-6" value="Add" onClick={addReadme} />
+          <div className="col-sm-2 calign mb-3">
+            <input type="button" className="btn-3d green" value="Add" onClick={addReadme} />
           </div>
 
-          <div className="col-sm-3 calign mb-3">
-            <input type="button" className="bt-generate" value="Generate" onClick={generateReadme} />
+          <div className="col-sm-2 calign mb-3">
+            <input type="button" className="bt-generate btn-3d blue" value="Generate" onClick={generateReadme} />
           </div>
           <div className="col-sm-2 calign mb-2">
-            <input type="button" className="bt-back" value="Back" onClick={goMain} />
+            <input type="button" className="btn-3d red bt-back" value="Back" onClick={goMain} />
           </div>
           <div className="col-sm-1">
           </div>

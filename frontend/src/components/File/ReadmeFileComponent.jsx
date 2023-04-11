@@ -46,6 +46,7 @@ function ReadmeFileContent(props) {
           onChange={ (e,v) => changeTextArea(e,v)}
           color={"black"}
           key={"md_editor"+i}
+          highlightEnable={false}
           />;
     }else if(content[i].includes("<!-- All Data -->")){
       cur_content = "<!-- All Data -->";
@@ -58,6 +59,7 @@ function ReadmeFileContent(props) {
         onChange={ (e,v) => changeTextArea(e,v)}
         color={"black"}
         key={"md_editor"+i}
+        highlightEnable={false}
         />;
     }else if(content[i].includes("https://ifh.cc")){
       cur_content = <div>
@@ -77,10 +79,10 @@ function ReadmeFileContent(props) {
           <div className="row mb-3">
             <div className="col-sm-8">
               <button className="bt-updown" id={"postionChangeUp"+i} key={"up"+i} name={i} onClick={changePosition} style={{marginRight:"5px"}}>
-                <img className="img-updown" src="../images/up_arrow.png" style={{width:"30%"}}/ >
+                ↑
               </button>
               <button className="bt-updown" id={"postionChangeDown"+i} key={"down"+i} name={i} onClick={changePosition}>
-                <img className="img-updown" src="../images/down_arrow.png" style={{width:"30%"}}/ >
+                ↓
               </button>
             </div>
             <div className="col-sm-4"  style={{"textAlign":"right"}}>
@@ -100,10 +102,10 @@ function ReadmeFileContent(props) {
             <div className="row mb-3">
               <div className="col-sm-8">
                 <button className="bt-updown" id={"postionChangeUp"+i} key={"up"+i} name={i} onClick={changePosition} style={{marginRight:"5px"}}>
-                  <img className="img-updown" src="../images/up_arrow.png" style={{width:"30%"}} />
+                  ↑
                 </button>
                 <button className="bt-updown" id={"postionChangeDown"+i} key={"down"+i} name={i} onClick={changePosition}>
-                  <img className="img-updown" src="../images/down_arrow.png" style={{width:"30%"}}/ >
+                  ↓
                 </button>
               </div>
               <div className="col-sm-4" style={{"textAlign":"right"}}>
@@ -123,11 +125,11 @@ function ReadmeFileContent(props) {
       <Wrapper>
         <div className="contentDiv mb-2">
           <div className="row div-component-header">
-            <div className="col-sm-9">
-              <h3> {title} </h3>
+            <div className="col-sm-8">
+              <h3 className="header-text"> {title} </h3>
             </div>
-            <div className="col-sm-3">
-              <button className="bt-preview" onClick={handleOpen} variant="outline-primary">Preview</button>
+            <div className="col-sm-4">
+              <button className=" btn-3d cyan" onClick={handleOpen} variant="outline-primary">Preview</button>
             </div>
           </div>
           {list}

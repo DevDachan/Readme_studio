@@ -12,6 +12,7 @@ const Wrapper = styled.div`
     justify-content: center;
 `;
 
+
 function ReadmeFileContent(props) {
   const navigate = useNavigate();
   const content = props.content.content;
@@ -30,7 +31,6 @@ function ReadmeFileContent(props) {
               padding: "30px",
               backgroundColor: "white",
               borderRadius: "20px",
-              whiteSpace: 'pre-wrap',
               color: "black !important"
             }}
             source={temp}

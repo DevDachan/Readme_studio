@@ -3,6 +3,13 @@
   min-width: 1024px;
 }
 
+.ip-url{
+  height : auto !important;
+  width: 30em !important;
+  border: 4px solid grey !important;
+}
+
+
 .fileNotSelected{
   background-color: #77bd47;
     border-radius: 6px;
@@ -83,13 +90,8 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 #file-selector{
   color:white;
-  background-color: #c7c7c7;
 }
 
-.file-selector-item{
-  color:white;
-  background-color: grey;
-}
 
 
 .sideBanner {
@@ -107,13 +109,12 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 }
 
 .bt-back{
-  width: 90%;
-  background-color: red !important;
+  width: 80%;
 }
 
 .bt-generate{
   width: 90%;
-  background-color: #a962cb !important;
+  padding-left: 15px !important;
 }
 
 .readme{
@@ -233,6 +234,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 .bt-updown:hover{
   background-color: white !important;
+  color: #1cb495 !important;
 }
 
 
@@ -259,6 +261,16 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 }
 
+.wmde-markdown {
+  margin: 10px 0 0 10px !important;
+}
+
+
+.wmde-markdown table{
+  width: 100% !important;
+  display: table !important;
+	table-layout: fixed;
+}
 
 .bt-close{
   background-color: #dc3545;
@@ -288,6 +300,123 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   margin-left: 20px !important;
   font-size: 2.5rem !important;
 
+}
+
+.header-text{
+  margin-top: 20px;
+    margin-left: 10px;
+    font-size: 3rem;
+    font-weight: bold;
+}
+
+
+/* 3D Button */
+.btn-3d {
+  position: relative;
+  display: inline-block;
+  font-size: 22px;
+  padding: 20px 60px;
+  color: white;
+  margin: 20px 10px 10px;
+  border-radius: 6px;
+  text-align: center;
+  transition: top .01s linear;
+  text-shadow: 0 1px 0 rgba(0,0,0,0.15);
+}
+.btn-3d.red:hover    {background-color: #e74c3c;}
+.btn-3d.blue:hover   {background-color: #699DD1;}
+.btn-3d.green:hover  {background-color: #80C49D;}
+.btn-3d.purple:hover {background-color: #D19ECB;}
+.btn-3d.yellow:hover {background-color: #F0D264;}
+.btn-3d.cyan:hover   {background-color: #82D1E3;}
+
+.btn-3d:active {
+  top: 9px;
+}
+
+/* 3D button colors */
+.btn-3d.red {
+  background-color: #e74c3c;
+  box-shadow: 0 0 0 1px #c63702 inset,
+        0 0 0 2px rgba(255,255,255,0.15) inset,
+        0 8px 0 0 #C24032,
+        0 8px 0 1px rgba(161, 149, 149,.4),
+        0 8px 8px 1px rgba(0,0,0,0.5);
+}
+.btn-3d.red:active {
+  box-shadow: 0 0 0 1px #c63702 inset,
+        0 0 0 2px rgba(255,255,255,0.15) inset,
+        0 0 0 1px rgba(0,0,0,0.4);
+}
+
+.btn-3d.blue {
+  background-color: #6DA2D9;
+  box-shadow: 0 0 0 1px #6698cb inset,
+        0 0 0 2px rgba(255,255,255,0.15) inset,
+        0 8px 0 0 rgba(110, 164, 219, .7),
+        0 8px 0 1px rgba(161, 149, 149,.4),
+        0 8px 8px 1px rgba(0,0,0,0.5);
+}
+.btn-3d.blue:active {
+  box-shadow: 0 0 0 1px #6191C2 inset,
+        0 0 0 2px rgba(255,255,255,0.15) inset,
+        0 0 0 1px rgba(0,0,0,0.4);
+}
+
+.btn-3d.green {
+  background-color: #82c8a0;
+  box-shadow: 0 0 0 1px #82c8a0 inset,
+        0 0 0 2px rgba(255,255,255,0.15) inset,
+        0 8px 0 0 rgba(126, 194, 155, .7),
+        0 8px 0 1px rgba(161, 149, 149,.4),
+        0 8px 8px 1px rgba(0,0,0,0.5);
+}
+.btn-3d.green:active {
+  box-shadow: 0 0 0 1px #82c8a0 inset,
+        0 0 0 2px rgba(255,255,255,0.15) inset,
+        0 0 0 1px rgba(0,0,0,0.4);
+}
+
+.btn-3d.purple {
+  background-color: #cb99c5;
+  box-shadow: 0 0 0 1px #cb99c5 inset,
+        0 0 0 2px rgba(255,255,255,0.15) inset,
+        0 8px 0 0 rgba(189, 142, 183, .7),
+        0 8px 0 1px rgba(161, 149, 149,.4),
+        0 8px 8px 1px rgba(0,0,0,0.5);
+}
+.btn-3d.purple:active {
+  box-shadow: 0 0 0 1px #cb99c5 inset,
+        0 0 0 2px rgba(255,255,255,0.15) inset,
+        0 0 0 1px rgba(0,0,0,0.4);
+}
+
+.btn-3d.cyan {
+  background-color: #7fccde;
+  box-shadow: 0 0 0 1px #7fccde inset,
+        0 0 0 2px rgba(255,255,255,0.15) inset,
+        0 8px 0 0 rgba(102, 164, 178, .6),
+        0 8px 0 1px rgba(161, 149, 149,.4),
+        0 8px 8px 1px rgba(0,0,0,0.5);
+}
+.btn-3d.cyan:active {
+  box-shadow: 0 0 0 1px #7fccde inset,
+        0 0 0 2px rgba(255,255,255,0.15) inset,
+        0 0 0 1px rgba(0,0,0,0.4);
+}
+
+.btn-3d.yellow {
+  background-color: #F0D264;
+  box-shadow: 0 0 0 1px #F0D264 inset,
+        0 0 0 2px rgba(255,255,255,0.15) inset,
+        0 8px 0 0 rgba(196, 172, 83, .7),
+        0 8px 0 1px rgba(161, 149, 149,.4),
+        0 8px 8px 1px rgba(0,0,0,0.5);
+}
+.btn-3d.yellow:active {
+  box-shadow: 0 0 0 1px #F0D264 inset,
+        0 0 0 2px rgba(255,255,255,0.15) inset,
+        0 0 0 1px rgba(0,0,0,0.4);
 }
 
 

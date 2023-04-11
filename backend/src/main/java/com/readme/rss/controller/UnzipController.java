@@ -545,7 +545,7 @@ public class UnzipController {
 
         for(int i = 0; i < result.size(); i++){
             current_content = result.get(i).getFile_content();
-            mdResult += "|**"+  result.get(i).getFile_name()+"**|\n";
+            mdResult += "||**"+  result.get(i).getFile_name()+"**|\n";
 
             // find post mapping
             while(true){
@@ -574,7 +574,7 @@ public class UnzipController {
                     parameters= parameters.replace("\n" ," ");
 
                     mdResult += "| Post |" +
-                        apiTemp[apiTemp.length-1] + "|" +
+                        apiTemp[apiTemp.length-1]+"()" + "|" +
                         urlTemp + "|"+
                         returnType +"|"+
                         parameters +"|\n";
@@ -607,7 +607,7 @@ public class UnzipController {
                     parameters= parameters.replace("\n" ," ");
 
                     mdResult += "| Get |" +
-                        apiTemp[apiTemp.length-1] + "|" +
+                        apiTemp[apiTemp.length-1]+"()" + "|" +
                         urlTemp + "|"+
                         returnType +"|"+
                         parameters +"|\n";
