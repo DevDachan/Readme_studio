@@ -550,7 +550,7 @@ public class UnzipController {
 
         System.out.println("user_name : " + user_name);
         System.out.println("repo_name : " + repo_name);
-
+        System.out.println("repod_name : " + repo_name);
         // framework_id에 따른 content제공
         if(framework_name.equals("Contributor")){
             frame_content = frameworkRepository.findcontent(framework_name);
