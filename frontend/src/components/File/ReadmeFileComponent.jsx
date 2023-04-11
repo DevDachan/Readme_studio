@@ -46,6 +46,7 @@ function ReadmeFileContent(props) {
           onChange={ (e,v) => changeTextArea(e,v)}
           color={"black"}
           key={"md_editor"+i}
+          highlightEnable={false}
           />;
     }else if(content[i].includes("<!-- All Data -->")){
       cur_content = "<!-- All Data -->";
@@ -58,6 +59,7 @@ function ReadmeFileContent(props) {
         onChange={ (e,v) => changeTextArea(e,v)}
         color={"black"}
         key={"md_editor"+i}
+        highlightEnable={false}
         />;
     }else if(content[i].includes("https://ifh.cc")){
       cur_content = <div>

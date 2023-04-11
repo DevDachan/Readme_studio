@@ -259,6 +259,12 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 }
 
+.wmde-markdown table{
+  width: 100% !important;
+  display: table !important;
+	table-layout: fixed;
+}
+
 
 .bt-close{
   background-color: #dc3545;
