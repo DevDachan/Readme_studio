@@ -128,6 +128,7 @@ public class UnzipController {
         // =================== package명 구하기 ===================
         String groupId = "";
         String name = "";
+        
         // groupId 구하기
         pattern = Pattern.compile("(?<=\\<groupId>)(.*?)(?=<\\/groupId>)");
         matcher = pattern.matcher(tempXmlContent);
