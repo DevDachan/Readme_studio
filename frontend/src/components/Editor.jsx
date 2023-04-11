@@ -223,7 +223,7 @@ function Editor(props) {
 
           </div>
           <div className="col-sm-2 calign mb-3">
-            <input type="button" className="btn-3d green" value="Add" onClick={addReadme} />
+            <input type="button" className="btn-3d green bt-add" value="Add" onClick={addReadme} />
           </div>
 
           <div className="col-sm-2 calign mb-3">
