@@ -1,0 +1,273 @@
+.scrollHtml{
+  overflow: auto;
+  min-width: 1024px;
+}
+
+.fileNotSelected{
+  background-color: #77bd47;
+    border-radius: 6px;
+    border: 0;
+    color: #ffffff !important;
+    cursor: pointer;
+    display: inline-block;
+    font-weight: 700;
+    height: 2.75em;
+    line-height: 2.75em;
+    padding: 0 1.125em;
+    text-align: center;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.fileNotSelected:hover{
+  background-color: #a7ff6b;
+}
+
+.fileSelected{
+  background-color: #757293;
+    border-radius: 6px;
+    border: 0;
+    color: #ffffff !important;
+    cursor: pointer;
+    display: inline-block;
+    font-weight: 700;
+    height: 2.75em;
+    line-height: 2.75em;
+    padding: 0 1.125em;
+    text-align: center;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.fileSelected:hover{
+  background-color: #b3aeeb;
+}
+
+
+
+/*main*/
+
+#rep-name, #email, #user-name{
+  color:white;
+  font-size: 1rem !important;
+}
+
+
+/*editor*/
+input[type="date"]{
+  position: relative;
+  padding: 8px 10px 8px 10px;
+  border: 3px solid #ddd;
+  border-radius: 10px;
+  font-size:20px;
+  background-color: transparent;
+  color: black;
+  width: 300px;
+}
+
+input[type="date"]::-webkit-clear-button,
+input[type="date"]::-webkit-inner-spin-button {
+    display: none;
+}
+input[type="date"]::-webkit-calendar-picker-indicator {
+    z-index: 1;
+}
+
+.brCSS{
+  height: 10px;
+}
+
+.dateBox{
+  width: 300px;
+}
+
+#file-selector{
+  color:white;
+  background-color: #c7c7c7;
+}
+
+.file-selector-item{
+  color:white;
+  background-color: grey;
+}
+
+
+.sideBanner {
+  position: fixed;
+  width: 10em;
+  top: 50px;
+  right: 4%;
+  top: 20%;
+  min-width: 300px;
+}
+
+.sidebar {
+  position: sticky;
+  top: 20px; /* 원하는 위치로 조절 가능 */
+}
+
+.bt-back{
+  width: 90%;
+  background-color: red !important;
+}
+
+.bt-generate{
+  width: 90%;
+  background-color: #a962cb !important;
+}
+
+.readme{
+  background-color: #e2e2e2;
+  color: #4f3e3e;
+  padding: 2em;
+  width: 100%;
+  border-radius: 10px;
+  font-weight: bold;
+  margin:15px 0px 20px 0px;
+
+  word-break: break-all;
+  box-shadow: 3px 3px 3px 3px grey;
+}
+
+.div-readmeComponent{
+  text-align: center;
+}
+
+.input-readmeComponent{
+  width: 200px;
+  border-radius: 10px;
+}
+
+.delete-readmeComponent{
+  width: 100px;
+  border-radius: 20px;
+  background-color: red !important;
+}
+
+.input-readmeComponent-checked{
+  width: 200px;
+  border-radius: 10px;
+  background-color: #a5d9e7 !important;
+}
+
+.contentDiv{
+  background-color: #c7c7c7;
+  color: #4f3e3e;
+  height: 100%;
+  width: 100%;
+  padding: 2em;
+  border-radius: 20px;
+  font-weight: bold;
+  min-width: 50vw;
+}
+
+.palette-div{
+  background-color: #c7c7c7;
+  color: #4f3e3e;
+  height: 100%;
+  width: 100%;
+  padding: 1em;
+  margin-left: 0px !important;
+  margin-bottom: 20px;
+  border-radius: 20px;
+  font-weight: bold;
+  justify-content: center;
+  text-align: center;
+}
+
+.palette-title{
+  margin-bottom: 20px;
+  font-weight: bold;
+}
+
+.calign{
+  text-align: center;
+}
+
+.bt-preview{
+  border-radius: 5px;
+  width: 100%;
+}
+
+.div-component-header{
+  padding-bottom: 13px;
+}
+
+.md-editor-toolbar-warp  *{
+  color: black;
+}
+
+
+.bt-add{
+  background-color: #0dcaf0 !important;
+}
+
+
+.file-list-item{
+  list-style-type: none;
+}
+.file-list-item:hover{
+  border-bottom-color: transparent;
+  color: #1cb495 !important;
+  text-decoration: none;
+}
+
+.file-list-header{
+  list-style-type: none;
+  border-bottom: 2px solid darkgrey;
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+}
+
+.file-list{
+  background-color: #c7c7c7;
+  padding: 1em;
+  border-radius: 20px;
+  color: white;
+  font-weight: bold;
+}
+
+.bt-updown{
+  border-radius: 15px;
+}
+
+
+
+
+/* for the markdown viewer*/
+.readmeDiv{
+  background-color: #c7c7c7;
+  height: 100%;
+  width: 100%;
+  padding: 2em;
+  border-radius: 20px;
+  min-width: 50vw;
+  max-width: 1000px;
+  margin: auto;
+}
+
+.wmde-markdown-var  * {
+  color: black !important;
+}
+
+
+
+.bt_alldata{
+  background-color: #b1f257 !important;
+}
+
+.modal-lg, .modal-xl{
+  --bs-modal-width: 70vw !important;
+}
+
+
+/*result */
+
+.bt-down{
+  width: 90%;
+  background-color: #a962cb !important
+}
+
+.bt-main{
+  width: 90%;
+}
