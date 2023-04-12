@@ -92,7 +92,7 @@ function Main(props) {
 
       navigate('./editor', {
         state: {
-          project_id: 889261,
+          project_id: response.data.project_id,
           framework_list: response.data.frameworkList,
           readmeObject:readme_list,
           defaultData: defaultData
