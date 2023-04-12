@@ -31,7 +31,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "http://localhost:3005")
 @RestController
 public class UnzipController {
     private ProjectService projectService;
@@ -128,7 +128,7 @@ public class UnzipController {
         // =================== package명 구하기 ===================
         String groupId = "";
         String name = "";
-        
+
         // groupId 구하기
         pattern = Pattern.compile("(?<=\\<groupId>)(.*?)(?=<\\/groupId>)");
         matcher = pattern.matcher(tempXmlContent);
@@ -257,12 +257,12 @@ public class UnzipController {
         ProcessBuilder builder = new ProcessBuilder();
 
         // unzipFiles 폴더 생성 - 압축풀기한 파일들을 저장하는 임시 폴더
-        //builder.command("mkdir", "unzipFiles"); // mac
-        builder.command("cmd.exe","/c","mkdir", "unzipFiles"); // window
+        builder.command("mkdir", "unzipFiles"); // mac
+        // builder.command("cmd.exe","/c","mkdir", "unzipFiles"); // window
         builder.start();
 
         // 파일 압축 풀기
-        //builder.command("unzip", "unzipTest.zip", "-d", "./unzipFiles"); // mac
+        builder.command("unzip", "unzipTest.zip", "-d", "./unzipFiles"); // mac
         //builder.command("cmd.exe","/c","unzip", "unzipTest.zip", "-d", "./unzipFiles"); // window
         var process = builder.start(); // upzip 실행
 
@@ -481,18 +481,18 @@ public class UnzipController {
 
     public static void deleteUnzipFiles(ProcessBuilder builder) throws IOException {
         // upzip한 파일들, zip파일 모두 삭제
-        /* mac
+        /* mac */
         builder.command("rm", "-rf", "./unzipFiles/");
         builder.start();
         builder.command("rm", "-rf", "./unzipTest.zip");
-        builder.start();*/
+        builder.start();
 
-        /* window*/
+        /* window
         builder.command("cmd.exe","/c","rmdir", "unzipFiles");
         builder.start();
         builder.command("cmd.exe","/c","del", "unzipTest.zip");
         builder.start();
-
+        */
 
         System.out.println("업로드된 zip파일, 압축풀기한 파일들 모두 삭제 완료!!");
     }
@@ -522,8 +522,10 @@ public class UnzipController {
             frame_content=frame_content.replace("startDate", "Start Date");
             frame_content=frame_content.replace("endDate", "End Date");
         } else if(framework_name.equals("WebAPI")) {
-            frame_content = webAPI(project_id);
+            frame_content = "### Web API<br>";
+            frame_content += webAPI(project_id);
         } else if (framework_name.equals("Social")){
+            frame_content = "### Social<br>";
             String url = "https://github.com/";
             url = url + user_name;
             String[] social_link = {"instagram", "facebook", "linkedin", "notion", "twitter", "github", "gmail"};
