@@ -92,7 +92,7 @@ function ReadmeFileContent(props) {
           <p>{cur_content}</p>
           </div>
           <div className="div-readmeComponent">
-            <button className="input-readmeComponent-checked" onClick={checkedPosition} key={"input_"+i} value={i+1}> Selected </button>
+            <button className="input-readmeComponent-checked" id={"select_"+i} id={"select_"+i} onClick={checkedPosition} key={"input_"+i} value={i+1}> Selected </button>
           </div>
         </div>);
     }else{
@@ -115,7 +115,7 @@ function ReadmeFileContent(props) {
             <p>{cur_content}</p>
           </div>
           <div className="div-readmeComponent">
-            <button className="input-readmeComponent" onClick={checkedPosition} key={"input_"+i} value={i+1}> + </button>
+            <button className="input-readmeComponent" id={"select_"+i} onClick={checkedPosition} key={"input_"+i} value={i+1}> + </button>
           </div>
         </div>);
     }

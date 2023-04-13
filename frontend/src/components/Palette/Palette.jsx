@@ -29,7 +29,7 @@ function Palette(props) {
   const list = [];
 
 
-  const submitContributor = (e) =>{
+  const addContent = (e) =>{
     const formData = new FormData();
     let tempReadme = content;
 
@@ -43,8 +43,8 @@ function Palette(props) {
     })
       .then(function (response){
         tempReadme.find(e => e.id === currentReadme).content.splice(position,0, response.data);
-
         setContent(tempReadme);
+        document.getElementById("select_"+(position-1)).scrollIntoView(true);
         setPosition(tempReadme.find(e => e.id === currentReadme).content.length);
       })
       .catch(function(error){
@@ -63,6 +63,7 @@ function Palette(props) {
     tempReadme.find(e => e.id === currentReadme).content.splice(position,0, emptyText);
 
     setContent(tempReadme);
+    document.getElementById("select_"+(position-1)).scrollIntoView(true);
     setPosition(tempReadme.find(e => e.id === currentReadme).content.length);
   }
 
@@ -79,6 +80,8 @@ function Palette(props) {
       .then(function (response){
         tempReadme.find(e => e.id === currentReadme).content = ["<!-- All Data -->\n"+response.data];
         setContent(tempReadme);
+        document.getElementById("select_"+(position-1)).scrollIntoView(true);
+        setPosition(tempReadme.find(e => e.id === currentReadme).content.length);
       })
       .catch(function(error){
         //handle error
@@ -95,7 +98,7 @@ function Palette(props) {
 
 
   for(var i = 0; i< paletteList.length; i++){
-    list.push(<input type="button" className="mb-4 btn-3d green" key={paletteList[i]} value={paletteList[i]} onClick={submitContributor}/>);
+    list.push(<input type="button" className="mb-4 btn-3d green" key={paletteList[i]} value={paletteList[i]} onClick={addContent}/>);
   }
   return (
       <Wrapper>
