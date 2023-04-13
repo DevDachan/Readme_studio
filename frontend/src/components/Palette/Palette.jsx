@@ -4,13 +4,16 @@ import styled from "styled-components";
 import axios from "axios";
 
 const Wrapper = styled.div`
-    padding: 0;
-    margin: 0 auto;
-    display: flex;
-    width: 70%;
+    padding: 30px;
+    margin: 0;
+    width: 100%;
+    height: 100%;
     flex-direction: column;
     justify-content: center;
     text-align: center;
+    background-color: #c7c7c7;
+    overflow:auto;
+
 `;
 
 

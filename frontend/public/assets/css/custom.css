@@ -96,10 +96,13 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 .sideBanner {
   position: fixed;
-  width: 10em;
-  top: 50px;
-  right: 4%;
-  top: 20%;
+  width: 20vw;
+  top: 0px !important;
+  right: 0px;
+  bottom: 0px;
+  top: 0px;
+  height: 100%;
+  cursor: default;
   min-width: 300px;
 }
 
@@ -165,14 +168,11 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 }
 
 .palette-div{
-  background-color: #c7c7c7;
   color: #4f3e3e;
-  height: 100%;
   width: 100%;
   padding: 1em;
   margin-left: 0px !important;
   margin-bottom: 20px;
-  border-radius: 8px;
   font-weight: bold;
   justify-content: center;
   text-align: center;
@@ -249,6 +249,57 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .img-updown{
   border: 0px;
 }
+
+
+
+
+#aside {
+    margin-top: 100px;
+    width: 31%;
+   float: right;
+    padding-top: 30px;
+    height: auto;
+    box-sizing: border-box;
+
+/*    border-top: 1px solid #e6e6e6; */
+}
+#aside .inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    height: auto;
+
+}
+#aside h2 {
+    margin-bottom: 7px;
+    padding-bottom: 10px;
+    left: 5px;
+    font-size:1em;
+    color: #b0d197;
+  border-bottom: 1.5px solid #b0d197;
+}
+#aside .sidebar-1 {
+    width: 85%;
+    min-height: 10px;
+    box-sizing: border-box;
+    float: right;
+}
+#aside .sidebar-2 {
+    width: 85%;
+  min-height: 10px;
+  box-sizing: border-box;
+  float: right;
+}
+#aside .sidebar-3 {
+    width: 85%;
+    min-height: 10px;
+  box-sizing: border-box;
+  float: right;
+}
+
+
+
+
+
 
 
 /* for the markdown viewer*/
