@@ -188,8 +188,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 }
 
 .bt-preview{
-  border-radius: 5px;
-  width: 100%;
+  text-align: right;
 }
 
 .div-component-header{
@@ -204,6 +203,8 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .bt-add{
   width: 70% !important;
 }
+
+
 
 
 .file-list-item{
