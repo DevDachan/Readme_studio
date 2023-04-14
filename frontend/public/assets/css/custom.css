@@ -121,20 +121,33 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 }
 
 .readme{
-  background-color: #e2e2e2;
+  background-color: white;
   color: #4f3e3e;
-  padding: 2em;
   width: 100%;
-  border-radius: 2px;
+  border-radius: 6px;
   font-weight: bold;
   margin:15px 0px 20px 0px;
-  border: 2px solid #d9b4b4;
+  border: 3px solid #ddf4ff;
   word-break: break-all;
+  display: grid;
 }
 
 .div-readmeComponent{
   text-align: center;
 }
+
+.readme-header{
+  background-color: #ddf4ff;
+  padding: 20px 0px 30px 0px;
+  margin: 0px !important;
+  margin-bottom: 20px;
+
+}
+
+.readme-footer{
+  padding: 20px;
+}
+
 
 .input-readmeComponent{
   width: 200px;
@@ -157,7 +170,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 }
 
 .contentDiv{
-  background-color: #c7c7c7;
+  background-color: white;
   color: #4f3e3e;
   height: 100%;
   width: 100%;
@@ -250,6 +263,11 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .img-updown{
   border: 0px;
 }
+
+.w-md-editor-text{
+  font-weight: 600;
+}
+
 
 
 
@@ -357,11 +375,19 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 }
 
-.header-text{
+.title-text{
   margin-top: 20px;
     margin-left: 10px;
     font-size: 3rem;
     font-weight: bold;
+}
+
+.header-text{
+  margin-top: 20px;
+    margin-left: 10px;
+    font-size: 3rem;
+    font-weight: 400;
+    color: black;
 }
 
 

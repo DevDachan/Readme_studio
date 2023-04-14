@@ -213,7 +213,7 @@ function Editor(props) {
   return (
       <Wrapper>
         <header id="header">
-          <h1 className="header-text">Readme Generate</h1>
+          <h1 className="title-text">Readme Generate</h1>
         </header>
         <section>
           <article>

@@ -76,7 +76,7 @@ function ReadmeFileContent(props) {
       list.push(
         <div>
         <div className="readme" key={i}>
-          <div className="row mb-3">
+          <div className="readme-header row">
             <div className="col-sm-8">
               <button className="bt-updown" id={"postionChangeUp"+i} key={"up"+i} name={i} onClick={changePosition} style={{marginRight:"5px"}}>
                 ↑
@@ -86,10 +86,14 @@ function ReadmeFileContent(props) {
               </button>
             </div>
             <div className="col-sm-4"  style={{"textAlign":"right"}}>
-              <button className="btn-3d red delete-readmeComponent" onClick={deleteContent} key={"delete_"+i} value={i}> Delete </button>
+              <button className="red delete-readmeComponent" onClick={deleteContent} key={"delete_"+i} value={i}> Delete </button>
             </div>
+
+
           </div>
-          <p>{cur_content}</p>
+          <div className="readme-footer">
+            <p>{cur_content}</p>
+          </div>
           </div>
           <div className="div-readmeComponent">
             <button className="input-readmeComponent-checked" id={"select_"+i} id={"select_"+i} onClick={checkedPosition} key={"input_"+i} value={i+1}> Selected </button>
@@ -99,7 +103,7 @@ function ReadmeFileContent(props) {
       list.push(
         <div>
           <div className="readme" key={i}>
-            <div className="row mb-3">
+            <div className="readme-header row">
               <div className="col-sm-8">
                 <button className="bt-updown" id={"postionChangeUp"+i} key={"up"+i} name={i} onClick={changePosition} style={{marginRight:"5px"}}>
                   ↑
@@ -109,10 +113,12 @@ function ReadmeFileContent(props) {
                 </button>
               </div>
               <div className="col-sm-4" style={{"textAlign":"right"}}>
-                <button className="btn-3d red delete-readmeComponent" onClick={deleteContent} key={"delete_"+i} value={i}> Delete </button>
+                <button className="red delete-readmeComponent" onClick={deleteContent} key={"delete_"+i} value={i}> Delete </button>
               </div>
             </div>
-            <p>{cur_content}</p>
+            <div className="readme-footer">
+              <p>{cur_content}</p>
+            </div>
           </div>
           <div className="div-readmeComponent">
             <button className="input-readmeComponent" id={"select_"+i} onClick={checkedPosition} key={"input_"+i} value={i+1}> + </button>
