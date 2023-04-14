@@ -88,6 +88,8 @@ function ReadmeFileContent(props) {
             <div className="col-sm-4"  style={{"textAlign":"right"}}>
               <button className="red delete-readmeComponent" onClick={deleteContent} key={"delete_"+i} value={i}> Delete </button>
             </div>
+
+
           </div>
           <div className="readme-footer">
             <p>{cur_content}</p>

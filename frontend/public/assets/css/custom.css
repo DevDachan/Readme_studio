@@ -375,11 +375,19 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 }
 
-.header-text{
+.title-text{
   margin-top: 20px;
     margin-left: 10px;
     font-size: 3rem;
     font-weight: bold;
+}
+
+.header-text{
+  margin-top: 20px;
+    margin-left: 10px;
+    font-size: 3rem;
+    font-weight: 400;
+    color: black;
 }
 
 
