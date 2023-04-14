@@ -400,6 +400,7 @@ public class UnzipController {
                 etcDir.add(getProjectTableRow.get(i).getFile_name());
             }
         }
+
         /* test
         System.out.println("controllerDir : " + controllerDir);
         System.out.println("dtoDir : " + dtoDir);
@@ -522,7 +523,7 @@ public class UnzipController {
             frame_content=frame_content.replace("startDate", "Start Date");
             frame_content=frame_content.replace("endDate", "End Date");
         } else if(framework_name.equals("WebAPI")) {
-            frame_content = "### Web API<br>";
+            frame_content = frameworkService.findContent("WebAPI");
             frame_content += webAPI(project_id);
         } else if (framework_name.equals("Social")){
             frame_content = "### Social<br>";
@@ -581,12 +582,43 @@ public class UnzipController {
             frame_content = frameworkService.findContent(Dependency);
             frame_content=frame_content.replace("DependencyNames", dependencyName);
             frame_content=frame_content.replace("DependencyContents", dependencyTags);
+        } else if (framework_name.equals("DB Table")) {
+            frame_content = frameworkService.findContent("DB Table");
+            frame_content += dbTable(project_id);
         }
 
         return frame_content;
     }
 
-    public String webAPI( String projectId){
+    public String dbTable(String project_id){
+        String dbTable = "<!-- DB Table -->\n";
+
+        // entity parsing 하기 위해 entity 파일 찾기
+        List<String> entityDir = new ArrayList<>();
+        List<String> entityImplDir = new ArrayList<>();
+
+        List<ProjectEntity> getProjectTableRow = projectService.getFileContent(project_id);
+
+        for(int i = 0 ; i < getProjectTableRow.size() ; i++){
+            if(getProjectTableRow.get(i).getFile_path().contains("ENTITY".toLowerCase())){
+                if(getProjectTableRow.get(i).getDetail().equals("Impl")){
+                    entityImplDir.add(getProjectTableRow.get(i).getFile_name());
+                } else if(getProjectTableRow.get(i).getDetail().equals("noImpl")){
+                    entityDir.add(getProjectTableRow.get(i).getFile_name());
+                }
+            }
+        }
+
+        System.out.println("entityDir : " + entityDir);
+        System.out.println("entityImplDir : " + entityImplDir);
+
+        
+
+
+        return dbTable;
+    }
+
+    public String webAPI(String projectId){
         List<ProjectEntity> result = projectService.getController(projectId);
         String mdResult = "<!-- Web API -->\n"
             + "|HTTP|API|URL|Return Type|Parameters|\n"
@@ -668,7 +700,6 @@ public class UnzipController {
                         parameters +"|\n";
                 }
             }
-
         }
         return mdResult;
     }
