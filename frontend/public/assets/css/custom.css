@@ -94,18 +94,6 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 
 
-.sideBanner {
-  position: fixed;
-  width: 20vw;
-  top: 0px !important;
-  right: 0px;
-  bottom: 0px;
-  top: 0px;
-  height: 100%;
-  cursor: default;
-  min-width: 300px;
-}
-
 .sidebar {
   position: sticky;
   top: 20px; /* 원하는 위치로 조절 가능 */
@@ -180,6 +168,13 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   min-width: 700px;
 }
 
+.editorDiv{
+  display: grid;
+  grid-template-columns: 1fr 4fr;
+  background-color: white;
+  border-radius: 8px;
+}
+
 .palette-div{
   color: #4f3e3e;
   width: 100%;
@@ -193,16 +188,21 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 .palette-title{
   margin-bottom: 20px;
-  font-weight: bold;
+  font-weight: 600;
+  color: black;
 }
 
 .calign{
   text-align: center;
 }
 
-.bt-preview{
+.lalign{
+  text-align: left;
+}
+.ralign{
   text-align: right;
 }
+
 
 .div-component-header{
   padding-bottom: 13px;
@@ -377,17 +377,20 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 .title-text{
   margin-top: 20px;
-    margin-left: 10px;
-    font-size: 3rem;
-    font-weight: bold;
+  margin-left: 10px;
+  font-family: Poppins;
+  line-height: 72%;
+  text-align: Center;
+  vertical-align: Top;
 }
 
 .header-text{
   margin-top: 20px;
-    margin-left: 10px;
-    font-size: 3rem;
-    font-weight: 400;
-    color: black;
+  margin-left: 10px;
+  font-size: 3rem;
+  font-weight: 400;
+  color: black;
+  text-align: center;
 }
 
 
@@ -403,6 +406,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   text-align: center;
   transition: top .01s linear;
   text-shadow: 0 1px 0 rgba(0,0,0,0.15);
+  min-width: 125px;
 }
 .btn-3d.red:hover    {background-color: #e74c3c;}
 .btn-3d.blue:hover   {background-color: #699DD1;}

@@ -11,9 +11,7 @@ const Wrapper = styled.div`
     flex-direction: column;
     justify-content: center;
     text-align: center;
-    background-color: #c7c7c7;
     overflow:auto;
-
 `;
 
 

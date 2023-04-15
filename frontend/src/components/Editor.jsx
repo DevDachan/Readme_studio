@@ -235,49 +235,47 @@ function Editor(props) {
                 </div>
                 <div className="col-sm-1">
                 </div>
-                <div className="col-sm-9 mb-4">
-                  <ReadmeFileComponent
-                  title={currentReadme}
-                  project_id={project_id}
-                  content={readmeObject.find(e => e.id === currentReadme)}
-                  changePosition={changePosition}
-                  forRelanderng={forRelanderng}
-                  position={position}
-                  setContent={setContent}
-                  setPosition={setPosition}
-                  deleteContent={deleteContent}
-                  changeTextArea={changeTextArea}
-                  changePeriod={changePeriod}
-                  handleOpen={handleOpen}
-                  deleteReadme={deleteReadme}
-                  />
-                <Modal className="modal-lg" show={show} onHide={handleClose}>
-                  <Modal.Header>
-                    <Modal.Title>README Preview</Modal.Title>
-                  </Modal.Header>
-                  <Modal.Body>
-                    <ReadmeFileContent
-                      content={readmeObject.find(e => e.id === currentReadme)}
+                <div className="col-sm-12 mb-4">
+                  <div className="editorDiv">
+                    <Palette
+                      paletteList={paletteList}
+                      project_id={project_id}
+                      currentReadme={currentReadme}
+                      content={readmeObject}
+                      setContent={setContent}
+                      setPosition={setPosition}
+                      position={position}
                     />
-                  </Modal.Body>
-                  <Modal.Footer>
-                    <button className="bt-close" onClick={handleClose}>닫기</button>
-                  </Modal.Footer>
-                </Modal>
-            </div>
-            <aside>
-              <div className="sideBanner">
-                <Palette
-                  paletteList={paletteList}
-                  project_id={project_id}
-                  currentReadme={currentReadme}
-                  content={readmeObject}
-                  setContent={setContent}
-                  setPosition={setPosition}
-                  position={position}
-                />
+                    <ReadmeFileComponent
+                    title={currentReadme}
+                    project_id={project_id}
+                    content={readmeObject.find(e => e.id === currentReadme)}
+                    changePosition={changePosition}
+                    forRelanderng={forRelanderng}
+                    position={position}
+                    setContent={setContent}
+                    setPosition={setPosition}
+                    deleteContent={deleteContent}
+                    changeTextArea={changeTextArea}
+                    changePeriod={changePeriod}
+                    handleOpen={handleOpen}
+                    deleteReadme={deleteReadme}
+                    />
+                  <Modal className="modal-lg" show={show} onHide={handleClose}>
+                    <Modal.Header>
+                      <Modal.Title>README Preview</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                      <ReadmeFileContent
+                        content={readmeObject.find(e => e.id === currentReadme)}
+                      />
+                    </Modal.Body>
+                    <Modal.Footer>
+                      <button className="bt-close" onClick={handleClose}>닫기</button>
+                    </Modal.Footer>
+                  </Modal>
+                </div>
               </div>
-            </aside>
           </div>
         </article>
       </section>
