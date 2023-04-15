@@ -92,7 +92,7 @@ function ReadmeFileContent(props) {
 
           </div>
           <div className="readme-footer">
-            <p>{cur_content}</p>
+            <p className="readme-footer-content">{cur_content}</p>
           </div>
           </div>
           <div className="div-readmeComponent">
@@ -117,7 +117,7 @@ function ReadmeFileContent(props) {
               </div>
             </div>
             <div className="readme-footer">
-              <p>{cur_content}</p>
+              <p className="readme-footer-content">{cur_content}</p>
             </div>
           </div>
           <div className="div-readmeComponent">

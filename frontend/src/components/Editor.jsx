@@ -214,7 +214,8 @@ function Editor(props) {
       <Wrapper>
         <header id="header">
           <img src="/images/logo.png" className="logo-image"/>
-          <h1 className="title-text">Readme Generate</h1>
+          <h1 className="title-text">README STUDIO</h1>
+          <h2 className="subtitle-text">README GENERATION WEB SERVICE</h2>
         </header>
         <section>
           <article>

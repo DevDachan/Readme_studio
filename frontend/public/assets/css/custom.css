@@ -72,6 +72,26 @@
   margin-bottom: 2rem;
 }
 
+.title-text{
+  margin-top: 20px;
+  margin-left: 10px;
+  font-family: Poppins;
+  line-height: 72%;
+  text-align: center;
+  vertical-align: Top;
+}
+
+
+.subtitle-text{
+  margin-top: 20px;
+  margin-left: 10px;
+  font-family: Poppins;
+  line-height: 72%;
+  text-align: center;
+  vertical-align: Top;
+  color: #D4D9DB;
+}
+
 
 input[type="date"]{
   position: relative;
@@ -146,6 +166,14 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 .readme-footer{
   padding: 20px;
+  background-color:#ddf4ff;
+  border-radius: 8px;
+}
+
+.readme-footer-content{
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
 }
 
 
@@ -387,14 +415,6 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 }
 
-.title-text{
-  margin-top: 20px;
-  margin-left: 10px;
-  font-family: Poppins;
-  line-height: 72%;
-  text-align: Center;
-  vertical-align: Top;
-}
 
 .header-text{
   margin-top: 20px;
