@@ -11,9 +11,8 @@ const Wrapper = styled.div`
     flex-direction: column;
     justify-content: center;
     text-align: center;
-    background-color: #c7c7c7;
     overflow:auto;
-
+    border-right: 2px solid #E8E8E8;
 `;
 
 
@@ -102,6 +101,7 @@ function Palette(props) {
   }
   return (
       <Wrapper>
+        <h3 className="palette-optionsTitle"> Options</h3>
         <div className="palette-div row">
           <h3 className="palette-title"> Palette</h3>
           {list}

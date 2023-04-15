@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 import Md_editor from "@uiw/react-md-editor";
-
+import ReadmeFileSelect from "./ReadmeFileSelect";
 
 
 const Wrapper = styled.div`
@@ -16,6 +16,17 @@ const Wrapper = styled.div`
 
 function ReadmeFileContent(props) {
   const navigate = useNavigate();
+  //for Header
+  const readmeList= props.readmeList;
+  const setCurrentReadme=props.setCurrentReadme;
+  const currentReadme=props.currentReadme;
+  const addReadme=props.addReadme;
+  const generateReadme=props.generateReadme;
+  const goMain=props.goMain;
+
+
+
+  // for content
   const position = props.position;
   const setPosition= props.setPosition;
   const deleteReadme = props.deleteReadme;
@@ -27,6 +38,7 @@ function ReadmeFileContent(props) {
   const handleOpen = props.handleOpen;
   const title = props.title;
   const list = [""];
+
 
   const checkedPosition = (e) => {
     setPosition(e.target.value);
@@ -92,7 +104,7 @@ function ReadmeFileContent(props) {
 
           </div>
           <div className="readme-footer">
-            <p>{cur_content}</p>
+            <p className="readme-footer-content">{cur_content}</p>
           </div>
           </div>
           <div className="div-readmeComponent">
@@ -117,7 +129,7 @@ function ReadmeFileContent(props) {
               </div>
             </div>
             <div className="readme-footer">
-              <p>{cur_content}</p>
+              <p className="readme-footer-content">{cur_content}</p>
             </div>
           </div>
           <div className="div-readmeComponent">
@@ -130,18 +142,34 @@ function ReadmeFileContent(props) {
   return (
       <Wrapper>
         <div className="contentDiv mb-2">
+          <div className="row ">
+            <div className="col-sm-3 mb-2">
+              <br/>
+              <ReadmeFileSelect readmeList={readmeList} currentReadme={currentReadme} setCurrentReadme={setCurrentReadme}/>
+            </div>
+            <div className="col-sm-2 calign mb-3">
+              <input type="button" className="btn-3d green bt-add" value="Add" onClick={addReadme} />
+            </div>
+
+            <div className="col-sm-2 calign mb-3">
+              <input type="button" className="bt-generate btn-3d blue" value="Generate" onClick={generateReadme} />
+            </div>
+            <div className="col-sm-2 calign mb-2">
+              <input type="button" className="btn-3d red bt-back" value="Back" onClick={goMain} />
+            </div>
+          </div>
           <div className="row div-component-header">
-            <div className="col-sm-8">
+            <div className="col-sm-12">
               <h3 className="header-text"> {title} </h3>
             </div>
-            <div className="col-sm-4 bt-preview">
+            <div className="col-sm-6 ralign">
               <button className=" btn-3d cyan" onClick={handleOpen} variant="outline-primary">Preview</button>
+            </div>
+            <div className="col-sm-6 calign lalign">
+              <button className="btn-3d red"  onClick={deleteReadme}>Delete This README</button>
             </div>
           </div>
           {list}
-          <div className="col-sm-12 calign">
-            <input type="button" className="btn-3d red mt-5" value="Delete This README"  onClick={deleteReadme}/>
-          </div>
         </div>
       </Wrapper>
   );

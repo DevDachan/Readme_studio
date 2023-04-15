@@ -1,6 +1,6 @@
 .scrollHtml{
   overflow: auto;
-  min-width: 1024px;
+  min-width: 1280px;
 }
 
 .ip-url{
@@ -61,6 +61,39 @@
 
 
 /*editor*/
+
+#header{
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.logo-image{
+  width: 90px;
+  height: 80px;
+  margin-bottom: 2rem;
+}
+
+.title-text{
+  margin-top: 20px;
+  margin-left: 10px;
+  font-family: Poppins;
+  line-height: 72%;
+  text-align: center;
+  vertical-align: Top;
+}
+
+
+.subtitle-text{
+  margin-top: 20px;
+  margin-left: 10px;
+  font-family: Poppins;
+  line-height: 72%;
+  text-align: center;
+  vertical-align: Top;
+  color: #D4D9DB;
+}
+
+
 input[type="date"]{
   position: relative;
   padding: 8px 10px 8px 10px;
@@ -89,22 +122,10 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 }
 
 #file-selector{
-  color:white;
+  color:black;
+  border: 2px solid black;
 }
 
-
-
-.sideBanner {
-  position: fixed;
-  width: 20vw;
-  top: 0px !important;
-  right: 0px;
-  bottom: 0px;
-  top: 0px;
-  height: 100%;
-  cursor: default;
-  min-width: 300px;
-}
 
 .sidebar {
   position: sticky;
@@ -146,13 +167,32 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 .readme-footer{
   padding: 20px;
+  background-color:#ddf4ff;
+  border-radius: 8px;
+}
+
+.readme-footer-content{
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
 }
 
 
 .input-readmeComponent{
   width: 200px;
+  background-color:white;
+  border: 3px solid #C5C5C5;
+  color:#C5C5C5 !important;
   border-radius: 10px;
 }
+
+.input-readmeComponent:hover{
+  width: 200px;
+  background-color:white;
+  border: 3px solid #ddf4ff;
+  color:#ddf4ff !important;
+}
+
 
 .delete-readmeComponent{
   border-radius: 20px;
@@ -180,6 +220,13 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   min-width: 700px;
 }
 
+.editorDiv{
+  display: grid;
+  grid-template-columns: 1fr 4fr;
+  background-color: white;
+  border-radius: 8px;
+}
+
 .palette-div{
   color: #4f3e3e;
   width: 100%;
@@ -193,6 +240,17 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 .palette-title{
   margin-bottom: 20px;
+  font-weight: 600;
+  color: black;
+  text-align: left;
+}
+
+.palette-optionsTitle{
+  color: black;
+  font-size: 2.5rem;
+  text-align: left;
+  margin-bottom: 20px;
+  padding-left: 10px;
   font-weight: bold;
 }
 
@@ -200,9 +258,13 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   text-align: center;
 }
 
-.bt-preview{
+.lalign{
+  text-align: left;
+}
+.ralign{
   text-align: right;
 }
+
 
 .div-component-header{
   padding-bottom: 13px;
@@ -375,19 +437,14 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 }
 
-.title-text{
-  margin-top: 20px;
-    margin-left: 10px;
-    font-size: 3rem;
-    font-weight: bold;
-}
 
 .header-text{
   margin-top: 20px;
-    margin-left: 10px;
-    font-size: 3rem;
-    font-weight: 400;
-    color: black;
+  margin-left: 10px;
+  font-size: 3rem;
+  font-weight: 700;
+  color: black;
+  text-align: center;
 }
 
 
@@ -396,13 +453,15 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   position: relative;
   display: inline-block;
   font-size: 22px;
-  padding: 20px 60px;
+  padding: 10px 60px;
   color: white;
   margin: 20px 10px 10px;
   border-radius: 6px;
   text-align: center;
   transition: top .01s linear;
   text-shadow: 0 1px 0 rgba(0,0,0,0.15);
+  min-width: 125px;
+  font-size: 0.9rem;
 }
 .btn-3d.red:hover    {background-color: #e74c3c;}
 .btn-3d.blue:hover   {background-color: #699DD1;}
