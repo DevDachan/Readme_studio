@@ -3,7 +3,6 @@ import { useNavigate, useLocation  } from "react-router-dom";
 import styled from "styled-components";
 import axios from "axios";
 
-import ReadmeFileSelect from "./File/ReadmeFileSelect";
 import ReadmeFileContent from "./File/ReadmeFileContent";
 import ReadmeFileComponent from "./File/ReadmeFileComponent";
 import Palette from "./Palette/Palette";
@@ -217,24 +216,10 @@ function Editor(props) {
           <h1 className="title-text">README STUDIO</h1>
           <h2 className="subtitle-text">README GENERATION WEB SERVICE</h2>
         </header>
+
         <section>
           <article>
               <div className="row">
-                <div className="col-sm-3 mb-2">
-                  <br/>
-                  <ReadmeFileSelect readmeList={readmeObject} currentReadme={currentReadme} setCurrentReadme={setCurrentReadme}/>
-
-                </div>
-                <div className="col-sm-2 calign mb-3">
-                  <input type="button" className="btn-3d green bt-add" value="Add" onClick={addReadme} />
-                </div>
-
-                <div className="col-sm-2 calign mb-3">
-                  <input type="button" className="bt-generate btn-3d blue" value="Generate" onClick={generateReadme} />
-                </div>
-                <div className="col-sm-2 calign mb-2">
-                  <input type="button" className="btn-3d red bt-back" value="Back" onClick={goMain} />
-                </div>
                 <div className="col-sm-1">
                 </div>
                 <div className="col-sm-12 mb-4">
@@ -248,7 +233,9 @@ function Editor(props) {
                       setPosition={setPosition}
                       position={position}
                     />
+
                     <ReadmeFileComponent
+                    //for content
                     title={currentReadme}
                     project_id={project_id}
                     content={readmeObject.find(e => e.id === currentReadme)}
@@ -262,6 +249,13 @@ function Editor(props) {
                     changePeriod={changePeriod}
                     handleOpen={handleOpen}
                     deleteReadme={deleteReadme}
+                    //for Header
+                    readmeList={readmeObject}
+                    setCurrentReadme={setCurrentReadme}
+                    currentReadme={currentReadme}
+                    addReadme={addReadme}
+                    generateReadme={generateReadme}
+                    goMain={goMain}
                     />
                   <Modal className="modal-lg" show={show} onHide={handleClose}>
                     <Modal.Header>
