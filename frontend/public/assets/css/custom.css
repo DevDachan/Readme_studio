@@ -61,6 +61,18 @@
 
 
 /*editor*/
+
+#header{
+  text-align: center;
+}
+
+.logo-image{
+  width: 90px;
+  height: 80px;
+  margin-bottom: 2rem;
+}
+
+
 input[type="date"]{
   position: relative;
   padding: 8px 10px 8px 10px;

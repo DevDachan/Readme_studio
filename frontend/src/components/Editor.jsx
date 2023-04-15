@@ -213,6 +213,7 @@ function Editor(props) {
   return (
       <Wrapper>
         <header id="header">
+          <img src="/images/logo.png" className="logo-image"/>
           <h1 className="title-text">Readme Generate</h1>
         </header>
         <section>
