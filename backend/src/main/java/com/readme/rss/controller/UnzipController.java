@@ -400,6 +400,7 @@ public class UnzipController {
                 etcDir.add(getProjectTableRow.get(i).getFile_name());
             }
         }
+
         /* test
         System.out.println("controllerDir : " + controllerDir);
         System.out.println("dtoDir : " + dtoDir);
@@ -522,7 +523,7 @@ public class UnzipController {
             frame_content=frame_content.replace("startDate", "Start Date");
             frame_content=frame_content.replace("endDate", "End Date");
         } else if(framework_name.equals("WebAPI")) {
-            frame_content = "### Web API<br>";
+            frame_content = frameworkService.findContent("WebAPI");
             frame_content += webAPI(project_id);
         } else if (framework_name.equals("Social")){
             frame_content = "### Social<br>";
@@ -581,12 +582,118 @@ public class UnzipController {
             frame_content = frameworkService.findContent(Dependency);
             frame_content=frame_content.replace("DependencyNames", dependencyName);
             frame_content=frame_content.replace("DependencyContents", dependencyTags);
+        } else if (framework_name.equals("DB Table")) {
+            frame_content = frameworkService.findContent("DB Table");
+            frame_content += dbTable(project_id);
         }
 
         return frame_content;
     }
 
-    public String webAPI( String projectId){
+    public String dbTable(String project_id){
+        String dbTable = "\n<!-- DB Table -->\n";
+
+        // entity parsing 하기 위해 entity 파일 찾기
+        List<String> entityDir = new ArrayList<>();
+        List<String> entityDirContent = new ArrayList<>();
+        List<ProjectEntity> getProjectTableRow = projectService.getFileContent(project_id);
+
+        for(int i = 0 ; i < getProjectTableRow.size() ; i++){
+            if(getProjectTableRow.get(i).getFile_path().contains("ENTITY".toLowerCase())){
+                if(getProjectTableRow.get(i).getDetail().equals("noImpl")){
+                    entityDir.add(getProjectTableRow.get(i).getFile_name());
+                    entityDirContent.add(getProjectTableRow.get(i).getFile_content());
+                }
+            }
+        }
+        int tableLen = entityDir.size();
+        System.out.println("Table 개수 : " + tableLen);
+
+        for(int i = 0 ; i < tableLen ; i++) {
+            String frameworkContent = entityDirContent.get(i);
+            String tableNameLine = frameworkContent.substring(frameworkContent.indexOf("@Table("),
+                frameworkContent.indexOf(")") + 1);
+            String tableName = tableNameLine.split("\"")[1];
+            System.out.println("table name : " + tableName);
+
+            dbTable += "#### 🌱 " + tableName + " Table\n"
+                + "|*Column Name*|\n"
+                + "|----|\n";
+
+            // 주석처리 라인 지우기
+            int startIdx = 0, endIdx = 0;
+            List<String> commentLineList = new ArrayList<>();
+            String commentLine = "";
+            while(true) {
+                // indexOf(String str, int fromIndex)
+                startIdx = frameworkContent.indexOf("//", endIdx);
+                endIdx = frameworkContent.indexOf("\n", startIdx);
+
+                if (startIdx < 0) { // 주석처리 없는 경우 스킵
+                    break;
+                } else { // 주석처리 있는 경우 그 라인 리스트에 담기
+                    commentLine = frameworkContent.substring(startIdx, endIdx);
+                    commentLineList.add(commentLine);
+                }
+            }
+
+            for(int k = 0 ; k < commentLineList.size() ; k++){ // 주석 라인들 다 지우기
+                frameworkContent = frameworkContent.replace(commentLineList.get(k), "");
+            }
+
+            // 공백 제거한 xmlContent - 정규식을 쓰기 위해 줄바꿈 제거
+            String noWhiteSpaceContent = frameworkContent.replaceAll("\n", " ");
+
+            // class { 이후 내용만 get
+            Pattern pattern4 = Pattern.compile("(class )(.*?)(\\{)");
+            Matcher matcher4 = pattern4.matcher(noWhiteSpaceContent);
+            while (matcher4.find()) {
+                int afterBraceIdx = noWhiteSpaceContent.indexOf(matcher4.group(3).trim());
+                noWhiteSpaceContent = noWhiteSpaceContent.substring(afterBraceIdx); // afterBrace
+            }
+
+            // column name parsing
+            String[] dataType = {"String", "int", "long", "boolean", "char", "byte", "short", "float", "double"};
+
+            for(int j = 0 ; j < dataType.length ; j++){
+                String type = dataType[j];
+                String pkColumn = "";
+
+                if (noWhiteSpaceContent.contains(type)) {
+                    Pattern pattern = Pattern.compile("(@Id )(.*?)(;)"); // find PK
+                    Matcher matcher = pattern.matcher(noWhiteSpaceContent);
+
+                    while (matcher.find()) {
+                        pkColumn = matcher.group(2).trim() + matcher.group(3).trim();
+
+                        // pk인 컬럼 추가
+                        Pattern pattern2 = Pattern.compile("(" + type + " )(.*?)(;)");
+                        Matcher matcher2 = pattern2.matcher(pkColumn);
+                        while (matcher2.find()) {
+                            String columnName = matcher2.group(2).trim() + " **(PK)**";
+                            dbTable += "|" + columnName + "|\n";
+
+                            // pkColumn 제거
+                            noWhiteSpaceContent = noWhiteSpaceContent.replaceAll("@Id", "");
+                            noWhiteSpaceContent = noWhiteSpaceContent.replaceAll(matcher2.group(), "");
+                        }
+                    }
+
+                    // pk 아닌 컬럼 테이블에 추가
+                    Pattern pattern3 = Pattern.compile("(" + type + " )(.*?)(;)");
+                    Matcher matcher3 = pattern3.matcher(noWhiteSpaceContent);
+                    while (matcher3.find()) {
+                        String columnName = matcher3.group(2).trim();
+                        dbTable += "|" + columnName + "|\n";
+                    }
+                }
+            }
+        }
+
+        return dbTable;
+    }
+
+    public String webAPI(String projectId){
         List<ProjectEntity> result = projectService.getController(projectId);
         String mdResult = "<!-- Web API -->\n"
             + "|HTTP|API|URL|Return Type|Parameters|\n"
@@ -668,7 +775,6 @@ public class UnzipController {
                         parameters +"|\n";
                 }
             }
-
         }
         return mdResult;
     }
