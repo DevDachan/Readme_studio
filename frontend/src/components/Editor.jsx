@@ -269,7 +269,7 @@ function Editor(props) {
                       />
                     </Modal.Body>
                     <Modal.Footer>
-                      <button className="bt-close" onClick={handleClose}>닫기</button>
+                      <button className="bt-close" onClick={handleClose}>Close</button>
                     </Modal.Footer>
                   </Modal>
                 </div>

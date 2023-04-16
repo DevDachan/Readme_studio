@@ -88,12 +88,8 @@ function ReadmeFileContent(props) {
         <div className="readme" key={i}>
           <div className="readme-header row">
             <div className="col-sm-8">
-              <button className="bt-updown" id={"postionChangeUp"+i} key={"up"+i} name={i} onClick={changePosition} style={{marginRight:"5px"}}>
-                ↑
-              </button>
-              <button className="bt-updown" id={"postionChangeDown"+i} key={"down"+i} name={i} onClick={changePosition}>
-                ↓
-              </button>
+              <button className="bt-up" id={"postionChangeUp"+i} key={"up"+i} name={i} onClick={changePosition} style={{marginRight:"5px"}} />
+              <button className="bt-down" id={"postionChangeDown"+i} key={"down"+i} name={i} onClick={changePosition} />
             </div>
             <div className="col-sm-4"  style={{"textAlign":"right"}}>
               <button className="red delete-readmeComponent" onClick={deleteContent} key={"delete_"+i} value={i}> X </button>
@@ -115,12 +111,8 @@ function ReadmeFileContent(props) {
           <div className="readme" key={i}>
             <div className="readme-header row">
               <div className="col-sm-8">
-                <button className="bt-updown" id={"postionChangeUp"+i} key={"up"+i} name={i} onClick={changePosition} style={{marginRight:"5px"}}>
-                  ↑
-                </button>
-                <button className="bt-updown" id={"postionChangeDown"+i} key={"down"+i} name={i} onClick={changePosition}>
-                  ↓
-                </button>
+                <button className="bt-up" id={"postionChangeUp"+i} key={"up"+i} name={i} onClick={changePosition} style={{marginRight:"5px"}} />
+                <button className="bt-down" id={"postionChangeDown"+i} key={"down"+i} name={i} onClick={changePosition} />
               </div>
               <div className="col-sm-4" style={{"textAlign":"right"}}>
                 <button className="red delete-readmeComponent" onClick={deleteContent} key={"delete_"+i} value={i}> X </button>
@@ -142,7 +134,7 @@ function ReadmeFileContent(props) {
         <div className="contentDiv mb-2">
           <div className="row border-line" style={{height: "6rem"}}>
             <div className="col-sm-1 calign mb-3">
-              <input type="button" className="btn-3d green bt-add" value="+" onClick={addReadme} />
+              <input type="button" className="bt-add" value="" onClick={addReadme} />
             </div>
             <div className="col-sm-4 mb-2">
               <br/>

@@ -52,8 +52,10 @@
 
 select {
   width: 200px;
-  border: 1px solid #999;
+  border: 3px solid #E8E8E8;
+  border-radius: 10px;
   font-family: inherit;
+  font-weight: bold;
   background: url('/images/arrow.PNG') no-repeat 95% 50%;
   background-size: 20px;
   border-radius: 0px;
@@ -185,7 +187,6 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .readme-footer{
   padding: 20px;
   background-color:#ddf4ff;
-  border-radius: 8px;
 }
 
 .readme-footer-content{
@@ -295,8 +296,20 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 .bt-add{
   width: 50px !important;
+  height: 50px !important;
   min-width: 50px !important;
+  min-height: 50px !important;
+  padding: 0px !important;
+  background: url('/images/plus.PNG') no-repeat 50% 50%;
+  background-size: 20px;
+
   border-radius: 20px !important;
+  margin-top: 23px;
+  background-color: white !important;
+  color: black !important;
+  border-radius: 40px !important;
+  border: 4px solid #C5C5C5 !important;
+  font-family: Inter;
 }
 
 
@@ -326,9 +339,25 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   font-weight: bold;
 }
 
-.bt-updown{
-  width: 20%;
-  border-radius: 5px;
+.bt-up{
+  width: 9%;
+  max-width: 45px;
+  background: url('/images/up_arrow.PNG') no-repeat 50% 50%;
+  background-size: 15px;
+  background-color: #C5C5C5;
+  border-radius: 50px;
+  padding: 3px;
+}
+
+.bt-down{
+  width: 9%;
+  max-width: 45px;
+
+  background: url('/images/down_arrow.PNG') no-repeat 50% 50%;
+  background-size: 15px;
+  background-color: #C5C5C5;
+  border-radius: 50px;
+  padding: 3px;
 }
 
 .bt-updown:hover{
@@ -563,10 +592,7 @@ select::-ms-expand {
 
 /*result */
 
-.bt-down{
-  width: 90%;
-  background-color: #a962cb !important
-}
+
 
 .bt-main{
   width: 90%;
