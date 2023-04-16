@@ -224,7 +224,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .input-readmeComponent-checked{
   width: 200px;
   border-radius: 10px;
-  background-color: #a5d9e7 !important;
+  background-color: black !important;
 }
 
 .contentDiv{
