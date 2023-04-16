@@ -105,6 +105,8 @@ function Editor(props) {
 
     setContent(tempReadme);
   }
+
+
   //--------------------------------------------------------------------
   const changePeriod = (e) => {
     let tempReadme = readmeObject;
@@ -139,8 +141,6 @@ function Editor(props) {
         setContent(tempReadme);
       })
       .catch(function(error){
-      })
-      .then(function(){
       });
 
     }else if(e.target.id.includes("period_end")){
@@ -167,9 +167,6 @@ function Editor(props) {
         setContent(tempReadme);
       })
       .catch(function(error){
-      })
-      .then(function(){
-        // always executed
       });
 
     }else{
@@ -185,16 +182,16 @@ function Editor(props) {
         setContent(tempReadme);
       })
       .catch(function(error){
-      })
-      .then(function(){
-        // always executed
       });
     }
   }
 
+
   const addReadme = (e) => {
     setReadmeObject([...readmeObject, {id: "README"+readmeObject.length+".md", content : [project_detail]}]);
   }
+
+
 
   const deleteReadme = (e) => {
     var temp = readmeObject;
@@ -235,6 +232,7 @@ function Editor(props) {
                       setContent={setContent}
                       setPosition={setPosition}
                       position={position}
+                      forRelanderng={forRelanderng}
                     />
 
                     <ReadmeFileComponent
