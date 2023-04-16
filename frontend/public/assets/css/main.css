@@ -737,7 +737,7 @@ button,
   background-color: #1cb495;
   border-radius: 6px;
   border: 0;
-  color: #ffffff !important;
+  color: #ffffff;
   cursor: pointer;
   display: inline-block;
   font-weight: 700;

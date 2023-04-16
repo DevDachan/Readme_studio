@@ -50,6 +50,23 @@
   background-color: #b3aeeb;
 }
 
+select {
+  width: 200px;
+  border: 1px solid #999;
+  font-family: inherit;
+  background: url('/images/arrow.PNG') no-repeat 95% 50%;
+  background-size: 20px;
+  border-radius: 0px;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+option{
+  background-color: white !important;
+  color: black !important;
+}
+
+
 
 
 /*main*/
@@ -121,11 +138,6 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   width: 300px;
 }
 
-#file-selector{
-  color:black;
-  border: 2px solid black;
-}
-
 
 .sidebar {
   position: sticky;
@@ -137,8 +149,13 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 }
 
 .bt-generate{
-  width: 90%;
+  width: 100%;
   padding-left: 15px !important;
+  padding-right: 15px !important;
+  margin: 20px 10px;
+  background: white !important;
+  color: #D69D0B !important;
+  font-size: 1.3rem;
 }
 
 .readme{
@@ -198,7 +215,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   border-radius: 20px;
   margin: 0px !important;
   padding: 10px !important;
-  width: 60%;
+  width: 20%;
   font-size: 1rem !important;
   background-color: red !important;
 }
@@ -214,7 +231,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   color: #4f3e3e;
   height: 100%;
   width: 100%;
-  padding: 2em;
+  padding: 1em 2em;
   border-radius: 20px;
   font-weight: bold;
   min-width: 700px;
@@ -255,14 +272,14 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 }
 
 .calign{
-  text-align: center;
+  text-align: center !important;
 }
 
 .lalign{
-  text-align: left;
+  text-align: left !important;
 }
 .ralign{
-  text-align: right;
+  text-align: right !important;
 }
 
 
@@ -276,7 +293,9 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 
 .bt-add{
-  width: 70% !important;
+  width: 50px !important;
+  min-width: 50px !important;
+  border-radius: 20px !important;
 }
 
 
@@ -332,55 +351,15 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 
 
-
-
-#aside {
-    margin-top: 100px;
-    width: 31%;
-   float: right;
-    padding-top: 30px;
-    height: auto;
-    box-sizing: border-box;
-
-/*    border-top: 1px solid #e6e6e6; */
-}
-#aside .inner {
-    max-width: 1200px;
-    margin: 0 auto;
-    height: auto;
-
-}
-#aside h2 {
-    margin-bottom: 7px;
-    padding-bottom: 10px;
-    left: 5px;
-    font-size:1em;
-    color: #b0d197;
-  border-bottom: 1.5px solid #b0d197;
-}
-#aside .sidebar-1 {
-    width: 85%;
-    min-height: 10px;
-    box-sizing: border-box;
-    float: right;
-}
-#aside .sidebar-2 {
-    width: 85%;
-  min-height: 10px;
-  box-sizing: border-box;
-  float: right;
-}
-#aside .sidebar-3 {
-    width: 85%;
-    min-height: 10px;
-  box-sizing: border-box;
-  float: right;
+.border-line{
+  border-bottom: 2px solid #D1D5DB;
 }
 
 
 
-
-
+select::-ms-expand {
+    display: none;
+}
 
 
 /* for the markdown viewer*/

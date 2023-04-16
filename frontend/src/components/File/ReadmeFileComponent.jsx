@@ -22,8 +22,6 @@ function ReadmeFileContent(props) {
   const currentReadme=props.currentReadme;
   const addReadme=props.addReadme;
   const generateReadme=props.generateReadme;
-  const goMain=props.goMain;
-
 
 
   // for content
@@ -98,7 +96,7 @@ function ReadmeFileContent(props) {
               </button>
             </div>
             <div className="col-sm-4"  style={{"textAlign":"right"}}>
-              <button className="red delete-readmeComponent" onClick={deleteContent} key={"delete_"+i} value={i}> Delete </button>
+              <button className="red delete-readmeComponent" onClick={deleteContent} key={"delete_"+i} value={i}> X </button>
             </div>
 
 
@@ -142,22 +140,21 @@ function ReadmeFileContent(props) {
   return (
       <Wrapper>
         <div className="contentDiv mb-2">
-          <div className="row ">
-            <div className="col-sm-3 mb-2">
+          <div className="row border-line" style={{height: "6rem"}}>
+            <div className="col-sm-1 calign mb-3">
+              <input type="button" className="btn-3d purple bt-add" value="+" onClick={addReadme} />
+            </div>
+            <div className="col-sm-4 mb-2">
               <br/>
               <ReadmeFileSelect readmeList={readmeList} currentReadme={currentReadme} setCurrentReadme={setCurrentReadme}/>
             </div>
-            <div className="col-sm-2 calign mb-3">
-              <input type="button" className="btn-3d green bt-add" value="Add" onClick={addReadme} />
+
+            <div className="col-sm-7 ralign mb-3">
+              <input type="button" className="bt-generate ralign" value="👉🏻 Generate MD Files " onClick={generateReadme} />
             </div>
 
-            <div className="col-sm-2 calign mb-3">
-              <input type="button" className="bt-generate btn-3d blue" value="Generate" onClick={generateReadme} />
-            </div>
-            <div className="col-sm-2 calign mb-2">
-              <input type="button" className="btn-3d red bt-back" value="Back" onClick={goMain} />
-            </div>
           </div>
+
           <div className="row div-component-header">
             <div className="col-sm-12">
               <h3 className="header-text"> {title} </h3>

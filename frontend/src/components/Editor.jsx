@@ -220,7 +220,10 @@ function Editor(props) {
         <section>
           <article>
               <div className="row">
-                <div className="col-sm-1">
+                <div className="col-sm-10 ralign mb-2">
+                </div>
+                <div className="col-sm-2 ralign mb-2">
+                  <input type="button" className="btn-3d red bt-back" value="Back" onClick={goMain} />
                 </div>
                 <div className="col-sm-12 mb-4">
                   <div className="editorDiv">
@@ -255,7 +258,6 @@ function Editor(props) {
                     currentReadme={currentReadme}
                     addReadme={addReadme}
                     generateReadme={generateReadme}
-                    goMain={goMain}
                     />
                   <Modal className="modal-lg" show={show} onHide={handleClose}>
                     <Modal.Header>
