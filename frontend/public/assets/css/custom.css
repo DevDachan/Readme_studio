@@ -10,6 +10,21 @@
   border: 4px solid grey !important;
 }
 
+.btn-inputfile{
+  background-color: grey !important;
+  color: white !important;
+  width: 150px;
+  height: 50px;
+  padding-top: 15px;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.btn-inputfile:hover{
+  background-color: white !important;
+  color: black  !important;
+}
+
 
 .fileNotSelected{
   background-color: #77bd47;
@@ -123,6 +138,7 @@ input[type="date"]{
   background-color: white;
   color: black;
   width: 300px;
+  font-weight: 600;
 }
 
 input[type="date"]::-webkit-clear-button,
