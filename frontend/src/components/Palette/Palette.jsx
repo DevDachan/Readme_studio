@@ -92,12 +92,12 @@ function Palette(props) {
   }
 
   list.push(<input type="button" className="mb-4 btn-3d yellow" key={"all_data"} value={"All Data"} onClick={allData}/>);
-  list.push(<input type="button" className="mb-4 btn-3d green" key={"empty_textarea"} value={"Text"} onClick={emptyText}/>);
+  list.push(<input type="button" className="mb-4 btn-3d cyan" key={"empty_textarea"} value={"Text"} onClick={emptyText}/>);
 
 
 
   for(var i = 0; i< paletteList.length; i++){
-    list.push(<input type="button" className="mb-4 btn-3d green" key={paletteList[i]} value={paletteList[i]} onClick={addContent}/>);
+    list.push(<input type="button" className="mb-4 btn-3d cyan" key={paletteList[i]} value={paletteList[i]} onClick={addContent}/>);
   }
   return (
       <Wrapper>

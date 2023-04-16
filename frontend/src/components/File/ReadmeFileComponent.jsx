@@ -123,7 +123,7 @@ function ReadmeFileContent(props) {
                 </button>
               </div>
               <div className="col-sm-4" style={{"textAlign":"right"}}>
-                <button className="red delete-readmeComponent" onClick={deleteContent} key={"delete_"+i} value={i}> Delete </button>
+                <button className="red delete-readmeComponent" onClick={deleteContent} key={"delete_"+i} value={i}> X </button>
               </div>
             </div>
             <div className="readme-footer">
@@ -142,7 +142,7 @@ function ReadmeFileContent(props) {
         <div className="contentDiv mb-2">
           <div className="row border-line" style={{height: "6rem"}}>
             <div className="col-sm-1 calign mb-3">
-              <input type="button" className="btn-3d purple bt-add" value="+" onClick={addReadme} />
+              <input type="button" className="btn-3d green bt-add" value="+" onClick={addReadme} />
             </div>
             <div className="col-sm-4 mb-2">
               <br/>
@@ -160,10 +160,10 @@ function ReadmeFileContent(props) {
               <h3 className="header-text"> {title} </h3>
             </div>
             <div className="col-sm-6 ralign">
-              <button className=" btn-3d cyan" onClick={handleOpen} variant="outline-primary">Preview</button>
+              <button className=" btn-3d black bt-preview" onClick={handleOpen} variant="outline-primary">Preview</button>
             </div>
-            <div className="col-sm-6 calign lalign">
-              <button className="btn-3d red"  onClick={deleteReadme}>Delete This README</button>
+            <div className="col-sm-6 lalign">
+              <button className="btn-3d red bt-deleteReadme"  onClick={deleteReadme}>DELETE README</button>
             </div>
           </div>
           {list}
