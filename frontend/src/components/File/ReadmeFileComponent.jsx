@@ -42,6 +42,11 @@ function ReadmeFileContent(props) {
     setPosition(e.target.value);
   }
 
+  const focusIn = (e) =>{
+    var id = e.target.parentElement.parentElement.parentElement.parentElement.id;
+    id = Number(id.split("_")[2])+1;
+    setPosition(id);
+  }
   //initial make content List
 
   for(var i = 0; i< content.length; i++){
@@ -54,6 +59,7 @@ function ReadmeFileContent(props) {
           name={i}
           value={content[i].split("<!-- empty_textarea -->\n")[1]}
           onChange={ (e,v) => changeTextArea(e,v)}
+          onFocus={ (e) => focusIn(e)}
           color={"black"}
           key={"md_editor"+i}
           highlightEnable={false}
@@ -67,6 +73,7 @@ function ReadmeFileContent(props) {
         name={i}
         value={content[i].split("<!-- Web API -->\n")[1]}
         onChange={ (e,v) => changeTextArea(e,v)}
+        onFocus={ (e) => focusIn(e)}
         color={"black"}
         key={"md_editor"+i}
         highlightEnable={false}
@@ -85,14 +92,14 @@ function ReadmeFileContent(props) {
     if( Number(i) === Number(position)-1){
       list.push(
         <div>
-        <div className="readme" key={i}>
+        <div className="readme" id={"readme_"+i} key={i}>
           <div className="readme-header row">
             <div className="col-sm-8">
               <button className="bt-up" id={"postionChangeUp"+i} key={"up"+i} name={i} onClick={changePosition} style={{marginRight:"5px"}} />
               <button className="bt-down" id={"postionChangeDown"+i} key={"down"+i} name={i} onClick={changePosition} />
             </div>
             <div className="col-sm-4"  style={{"textAlign":"right"}}>
-              <button className="red delete-readmeComponent" onClick={deleteContent} key={"delete_"+i} value={i}> X </button>
+              <button className="delete-readmeComponent" onClick={deleteContent} key={"delete_"+i} value={i}> X </button>
             </div>
 
 
@@ -108,14 +115,14 @@ function ReadmeFileContent(props) {
     }else{
       list.push(
         <div>
-          <div className="readme" key={i}>
+          <div className="readme" id={"readme_"+i} key={i}>
             <div className="readme-header row">
               <div className="col-sm-8">
                 <button className="bt-up" id={"postionChangeUp"+i} key={"up"+i} name={i} onClick={changePosition} style={{marginRight:"5px"}} />
                 <button className="bt-down" id={"postionChangeDown"+i} key={"down"+i} name={i} onClick={changePosition} />
               </div>
               <div className="col-sm-4" style={{"textAlign":"right"}}>
-                <button className="red delete-readmeComponent" onClick={deleteContent} key={"delete_"+i} value={i}> X </button>
+                <button className="delete-readmeComponent" onClick={deleteContent} key={"delete_"+i} value={i}> X </button>
               </div>
             </div>
             <div className="readme-footer">
@@ -151,11 +158,11 @@ function ReadmeFileContent(props) {
             <div className="col-sm-12">
               <h3 className="header-text"> {title} </h3>
             </div>
-            <div className="col-sm-6 ralign">
-              <button className=" btn-3d black bt-preview" onClick={handleOpen} variant="outline-primary">Preview</button>
+            <div className="col-sm-6 ralign" style={{paddingRight: "3px"}}>
+              <button className=" bt-preview" onClick={handleOpen} variant="outline-primary">Preview</button>
             </div>
-            <div className="col-sm-6 lalign">
-              <button className="btn-3d red bt-deleteReadme"  onClick={deleteReadme}>DELETE README</button>
+            <div className="col-sm-6 lalign" style={{paddingLeft: "3px"}}>
+              <button className="bt-deleteReadme"  onClick={deleteReadme}>DELETE README</button>
             </div>
           </div>
           {list}
