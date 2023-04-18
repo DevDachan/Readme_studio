@@ -42,7 +42,10 @@ function Editor(props) {
   const generateReadme = (e) =>{
     navigate('../result', {
       state: {
-        result: readmeObject
+        result: readmeObject,
+        project_id: project_id,
+        paletteList:paletteList,
+        project_detail:project_detail
       }
     });
   }
@@ -208,7 +211,7 @@ function Editor(props) {
   //--------------------------------------------------------------------
   return (
       <Wrapper>
-        <header id="header">
+        <header id="editor-header">
           <img src="/images/logo.png" className="logo-image"/>
           <h1 className="title-text">README STUDIO</h1>
           <h2 className="subtitle-text">README GENERATION WEB SERVICE</h2>

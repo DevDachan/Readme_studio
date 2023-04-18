@@ -4,12 +4,15 @@ import styled from "styled-components";
 import axios from "axios";
 
 const Wrapper = styled.div`
-    padding: 0;
-    margin: 0 auto;
-    width: calc(100% - 32px);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+  padding: 30px;
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  overflow:auto;
+  border-right: 2px solid #D1D5DB;
 `;
 
 function ReadmeFileResultContent(props) {
@@ -18,14 +21,11 @@ function ReadmeFileResultContent(props) {
   const item = props.currentReadme;
   const setItem = props.setCurrentReadme;
   const readmeList = props.readmeList;
+  const list = [];
+  const submitReadme = props.submitReadme;
 
-  const selectList = e =>{
-    setItem(e.target.value);
-  }
 
   const downloadMD = (e, mdID, fileName) =>{
-    console.log("mdID : ", fileName);
-
     axios({
       method: "post",
       url: 'http://localhost:8090/mdFile',
@@ -53,28 +53,31 @@ function ReadmeFileResultContent(props) {
 
       // 다운로드가 끝난 리소스(객체 URL)를 해제
       window.URL.revokeObjectURL(fileObjectUrl);
-      
+
     })
     .catch(function(error){
       //handle error
       console.log(error);
-    })
-    .then(function(){
-      // always executed
     });
   }
-  
+
+  const chageMd = (e, mdId) =>{
+    setItem(e.target.value);
+  }
+
+
   return (
       <Wrapper>
-        <ul className="file-list">
-          <li className="file-list-header"> README List </li>
+        <h3 className="palette-optionsTitle"> Results</h3>
+        <input type="button" className="bt-download" value="Download" onClick={submitReadme} />
+        <div className="palette-div row">
+          <h3 className="palette-title"> MD LIST</h3>
           {
             readmeList.map((it, idx) => (
-              <li onClick={(e) => {downloadMD(e, idx, it.id)}} className="file-list-item" key={it.id} value={it.id}> {it.id}</li>
+              <input type="button" className="mb-2 btn-palette" key={it.id} onClick={(e) => {chageMd(e, idx)}} value={it.id}/>
             ))
           }
-
-        </ul>
+        </div>
       </Wrapper>
   );
 }
