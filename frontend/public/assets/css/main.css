@@ -700,25 +700,6 @@ input[type="checkbox"] + label:before {
 input[type="radio"] + label:before {
   border-radius: 100%; }
 
-::-webkit-input-placeholder {
-  color: rgba(255, 255, 255, 0.5) !important;
-  opacity: 1.0; }
-
-:-moz-placeholder {
-  color: rgba(255, 255, 255, 0.5) !important;
-  opacity: 1.0; }
-
-::-moz-placeholder {
-  color: rgba(255, 255, 255, 0.5) !important;
-  opacity: 1.0; }
-
-:-ms-input-placeholder {
-  color: rgba(255, 255, 255, 0.5) !important;
-  opacity: 1.0; }
-
-.formerize-placeholder {
-  color: rgba(255, 255, 255, 0.5) !important;
-  opacity: 1.0; }
 
 /* Button */
 input[type="submit"],
@@ -768,13 +749,6 @@ button,
   .button.disabled,
   .button:disabled {
     opacity: 0.5; }
-  @media screen and (max-width: 480px) {
-    input[type="submit"],
-    input[type="reset"],
-    input[type="button"],
-    button,
-    .button {
-      padding: 0; } }
 
 /* Header */
 #header h1 {

@@ -7,7 +7,19 @@
 .ip-url{
   height : auto !important;
   width: 30em !important;
-  border: 4px solid grey !important;
+  border-radius: 22px!important;
+  background-color: white !important;
+  color: #000000ff !important;
+  padding: 1px 50px !important;
+  font-weight: 500 !important;
+  background: url('/images/url.PNG') no-repeat 5% 50%;
+  background-size : 13px;
+
+
+}
+
+.ip-url:focus{
+  border: 0px !important;
 }
 
 .btn-inputfile{
@@ -89,7 +101,7 @@ option{
 
 /*main*/
 
-#rep-name, #email, #user-name{
+#rep-name, #user-name{
   color:white;
   font-size: 1rem !important;
 }
@@ -97,7 +109,7 @@ option{
 
 /*editor*/
 
-#header{
+#editor-header{
   text-align: center;
   margin-bottom: 40px;
 }
@@ -115,6 +127,7 @@ option{
   line-height: 72%;
   text-align: center;
   vertical-align: Top;
+  font-size: 4rem;
 }
 
 
@@ -126,6 +139,7 @@ option{
   text-align: center;
   vertical-align: Top;
   color: #D4D9DB;
+  font-size: 2rem;3
 }
 
 
@@ -283,6 +297,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   color: black;
   text-align: left;
   padding-left: 0px !important;
+  font-size: 1.5rem;
 }
 
 .palette-optionsTitle{
@@ -303,6 +318,11 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 }
 .ralign{
   text-align: right !important;
+}
+
+.col-sm-2 {
+    flex: 0 0 auto;
+    width: 16.66666667% !important;
 }
 
 
@@ -516,4 +536,21 @@ textarea:focus {
 
 .bt-main{
   width: 90%;
+}
+
+.resultDiv{
+  background-color: white;
+  color: #4f3e3e;
+  height: 100%;
+  width: 100%;
+  padding: 1em 2em;
+  border-radius: 20px;
+  font-weight: bold;
+  min-width: 700px;
+}
+
+.result-readmeName{
+  color: black !important;
+  font-size: 3rem;
+  margin-left: 10px;
 }

@@ -117,7 +117,8 @@ function Main(props) {
 
         <div>
           <form id="generate-form-git" method="post" action="#">
-            <input type="text" name="email" className="ip-url" id="email" placeholder="Github Repository Link" />
+            <input type="text" autocomplete="off" name="email" className="ip-url" id="email"
+            placeholder="Github Repository Link" maxlength="100" />
             <input type="submit" className="btn-3d blue" value="Generate" />
           </form>
 
@@ -130,8 +131,6 @@ function Main(props) {
                   }}
                 required placeholder="User Name"/>
               </div>
-
-
 
               <div className="col-sm-3">
                 <input type="text" name="repName" id="rep-name"
