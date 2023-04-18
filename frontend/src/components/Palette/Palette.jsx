@@ -4,13 +4,15 @@ import styled from "styled-components";
 import axios from "axios";
 
 const Wrapper = styled.div`
-    padding: 0;
-    margin: 0 auto;
-    display: flex;
-    width: 70%;
+    padding: 30px;
+    margin: 0;
+    width: 100%;
+    height: 100%;
     flex-direction: column;
     justify-content: center;
     text-align: center;
+    overflow:auto;
+    border-right: 2px solid #D1D5DB;
 `;
 
 
@@ -26,7 +28,7 @@ function Palette(props) {
   const list = [];
 
 
-  const submitContributor = (e) =>{
+  const addContent = (e) =>{
     const formData = new FormData();
     let tempReadme = content;
 
@@ -40,8 +42,8 @@ function Palette(props) {
     })
       .then(function (response){
         tempReadme.find(e => e.id === currentReadme).content.splice(position,0, response.data);
-
         setContent(tempReadme);
+        document.getElementById("select_"+(position-1)).scrollIntoView(true);
         setPosition(tempReadme.find(e => e.id === currentReadme).content.length);
       })
       .catch(function(error){
@@ -60,6 +62,7 @@ function Palette(props) {
     tempReadme.find(e => e.id === currentReadme).content.splice(position,0, emptyText);
 
     setContent(tempReadme);
+    document.getElementById("select_"+(position-1)).scrollIntoView(true);
     setPosition(tempReadme.find(e => e.id === currentReadme).content.length);
   }
 
@@ -76,26 +79,26 @@ function Palette(props) {
       .then(function (response){
         tempReadme.find(e => e.id === currentReadme).content = ["<!-- All Data -->\n"+response.data];
         setContent(tempReadme);
+        document.getElementById("select_"+(position-1)).scrollIntoView(true);
+        setPosition(tempReadme.find(e => e.id === currentReadme).content.length);
       })
       .catch(function(error){
         //handle error
         console.log(error);
-      })
-      .then(function(){
-        // always executed
       });
   }
 
-  list.push(<input type="button" className="mb-4 btn-3d yellow" key={"all_data"} value={"All Data"} onClick={allData}/>);
-  list.push(<input type="button" className="mb-4 btn-3d green" key={"empty_textarea"} value={"Text"} onClick={emptyText}/>);
+  list.push(<input type="button" className="mb-2 btn-palette" key={"all_data"} value={"All Data"} onClick={allData}/>);
+  list.push(<input type="button" className="mb-2 btn-palette" key={"empty_textarea"} value={"Text"} onClick={emptyText}/>);
 
 
 
   for(var i = 0; i< paletteList.length; i++){
-    list.push(<input type="button" className="mb-4 btn-3d green" key={paletteList[i]} value={paletteList[i]} onClick={submitContributor}/>);
+    list.push(<input type="button" className="mb-2 btn-palette" key={paletteList[i]} value={paletteList[i]} onClick={addContent}/>);
   }
   return (
       <Wrapper>
+        <h3 className="palette-optionsTitle"> Options</h3>
         <div className="palette-div row">
           <h3 className="palette-title"> Palette</h3>
           {list}

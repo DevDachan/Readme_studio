@@ -92,7 +92,7 @@ function Main(props) {
 
       navigate('./editor', {
         state: {
-          project_id: response.data.project_id,
+          project_id: 544931,
           framework_list: response.data.frameworkList,
           readmeObject:readme_list,
           defaultData: defaultData
@@ -126,8 +126,7 @@ function Main(props) {
               <div className="col-sm-3">
                 <input type="text" name="userName" id="user-name" defaultValue={userName}
                   style={{
-                    height: "3em",
-                    marginTop: "40px"
+                    height: "3em"
                   }}
                 required placeholder="User Name"/>
               </div>
@@ -137,20 +136,19 @@ function Main(props) {
               <div className="col-sm-3">
                 <input type="text" name="repName" id="rep-name"
                   style={{
-                    height: "3em",
-                    marginTop: "40px"
+                    height: "3em"
                   }}
                 defaultValue={repName} required placeholder="Repository Name"/>
               </div>
 
             <div className="col-sm-3">
             <input type="file" name="file" id="project-files" accept=".zip" onChange={getFile} style={{"display": "none"}}/>
-            <label htmlFor="project-files" className="btn-3d green">
+            <label htmlFor="project-files" className="btn-inputfile">
               <div id="file-selector" >{fileName}</div>
             </label>
             </div>
             <div className="col-sm-3">
-              <input type="button" className="btn-3d blue" value="Generate" onClick={submitReadme}/>
+              <input type="button" className="btn-inputfile" value="Generate" onClick={submitReadme}/>
             </div>
             </div>
           </form>

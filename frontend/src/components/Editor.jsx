@@ -3,7 +3,6 @@ import { useNavigate, useLocation  } from "react-router-dom";
 import styled from "styled-components";
 import axios from "axios";
 
-import ReadmeFileSelect from "./File/ReadmeFileSelect";
 import ReadmeFileContent from "./File/ReadmeFileContent";
 import ReadmeFileComponent from "./File/ReadmeFileComponent";
 import Palette from "./Palette/Palette";
@@ -106,6 +105,8 @@ function Editor(props) {
 
     setContent(tempReadme);
   }
+
+
   //--------------------------------------------------------------------
   const changePeriod = (e) => {
     let tempReadme = readmeObject;
@@ -140,8 +141,6 @@ function Editor(props) {
         setContent(tempReadme);
       })
       .catch(function(error){
-      })
-      .then(function(){
       });
 
     }else if(e.target.id.includes("period_end")){
@@ -168,9 +167,6 @@ function Editor(props) {
         setContent(tempReadme);
       })
       .catch(function(error){
-      })
-      .then(function(){
-        // always executed
       });
 
     }else{
@@ -186,16 +182,16 @@ function Editor(props) {
         setContent(tempReadme);
       })
       .catch(function(error){
-      })
-      .then(function(){
-        // always executed
       });
     }
   }
 
+
   const addReadme = (e) => {
     setReadmeObject([...readmeObject, {id: "README"+readmeObject.length+".md", content : [project_detail]}]);
   }
+
+
 
   const deleteReadme = (e) => {
     var temp = readmeObject;
@@ -213,72 +209,72 @@ function Editor(props) {
   return (
       <Wrapper>
         <header id="header">
-          <h1 className="header-text">Readme Generate</h1>
+          <img src="/images/logo.png" className="logo-image"/>
+          <h1 className="title-text">README STUDIO</h1>
+          <h2 className="subtitle-text">README GENERATION WEB SERVICE</h2>
         </header>
 
-        <div className="row">
-          <div className="col-sm-3 mb-2">
-            <br/>
-            <ReadmeFileSelect readmeList={readmeObject} currentReadme={currentReadme} setCurrentReadme={setCurrentReadme}/>
+        <section>
+          <article>
+              <div className="row">
+                <div className="col-sm-10 ralign mb-2">
+                </div>
+                <div className="col-sm-2 ralign mb-2">
+                  <input type="button" className="btn-3d red bt-back" value="Back" onClick={goMain} />
+                </div>
+                <div className="col-sm-12 mb-4">
+                  <div className="editorDiv">
+                    <Palette
+                      paletteList={paletteList}
+                      project_id={project_id}
+                      currentReadme={currentReadme}
+                      content={readmeObject}
+                      setContent={setContent}
+                      setPosition={setPosition}
+                      position={position}
+                      forRelanderng={forRelanderng}
+                    />
 
+                    <ReadmeFileComponent
+                    //for content
+                    title={currentReadme}
+                    project_id={project_id}
+                    content={readmeObject.find(e => e.id === currentReadme)}
+                    changePosition={changePosition}
+                    forRelanderng={forRelanderng}
+                    position={position}
+                    setContent={setContent}
+                    setPosition={setPosition}
+                    deleteContent={deleteContent}
+                    changeTextArea={changeTextArea}
+                    changePeriod={changePeriod}
+                    handleOpen={handleOpen}
+                    deleteReadme={deleteReadme}
+                    //for Header
+                    readmeList={readmeObject}
+                    setCurrentReadme={setCurrentReadme}
+                    currentReadme={currentReadme}
+                    addReadme={addReadme}
+                    generateReadme={generateReadme}
+                    />
+                  <Modal className="modal-lg" show={show} onHide={handleClose}>
+                    <Modal.Header>
+                      <Modal.Title>README Preview</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                      <ReadmeFileContent
+                        content={readmeObject.find(e => e.id === currentReadme)}
+                      />
+                    </Modal.Body>
+                    <Modal.Footer>
+                      <button className="bt-close" onClick={handleClose}>Close</button>
+                    </Modal.Footer>
+                  </Modal>
+                </div>
+              </div>
           </div>
-          <div className="col-sm-2 calign mb-3">
-            <input type="button" className="btn-3d green bt-add" value="Add" onClick={addReadme} />
-          </div>
-
-          <div className="col-sm-2 calign mb-3">
-            <input type="button" className="bt-generate btn-3d blue" value="Generate" onClick={generateReadme} />
-          </div>
-          <div className="col-sm-2 calign mb-2">
-            <input type="button" className="btn-3d red bt-back" value="Back" onClick={goMain} />
-          </div>
-          <div className="col-sm-1">
-          </div>
-          <div className="col-sm-9 mb-4">
-            <ReadmeFileComponent
-            title={currentReadme}
-            project_id={project_id}
-            content={readmeObject.find(e => e.id === currentReadme)}
-            changePosition={changePosition}
-            forRelanderng={forRelanderng}
-            position={position}
-            setContent={setContent}
-            setPosition={setPosition}
-            deleteContent={deleteContent}
-            changeTextArea={changeTextArea}
-            changePeriod={changePeriod}
-            handleOpen={handleOpen}
-            deleteReadme={deleteReadme}
-            />
-          <Modal className="modal-lg" show={show} onHide={handleClose}>
-            <Modal.Header>
-              <Modal.Title>README Preview</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-              <ReadmeFileContent
-                content={readmeObject.find(e => e.id === currentReadme)}
-              />
-            </Modal.Body>
-            <Modal.Footer>
-              <button className="bt-close" onClick={handleClose}>닫기</button>
-            </Modal.Footer>
-          </Modal>
-
-          </div>
-
-          <div className="col-sm-3 mr-2 sideBanner">
-            <Palette
-              paletteList={paletteList}
-              project_id={project_id}
-              currentReadme={currentReadme}
-              content={readmeObject}
-              setContent={setContent}
-              setPosition={setPosition}
-              position={position}
-            />
-          </div>
-        </div>
-
+        </article>
+      </section>
       </Wrapper>
   );
 }
