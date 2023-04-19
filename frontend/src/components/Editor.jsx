@@ -212,18 +212,18 @@ function Editor(props) {
   return (
       <Wrapper>
         <header id="editor-header">
-          <img src="/images/logo.png" className="logo-image"/>
-          <h1 className="title-text">README STUDIO</h1>
+          <img src="/images/logo.png" className="logo-image" onClick={goMain}/>
+          <h1 className="title-text" onClick={goMain} >README STUDIO</h1>
           <h2 className="subtitle-text">README GENERATION WEB SERVICE</h2>
         </header>
 
         <section>
           <article>
               <div className="row">
-                <div className="col-sm-10 ralign mb-2">
+                <div className="col-sm-2 lalign mb-2">
+                  <input type="button" className="bt-back" value="" onClick={goMain} />
                 </div>
-                <div className="col-sm-2 ralign mb-2">
-                  <input type="button" className="btn-3d red bt-back" value="Back" onClick={goMain} />
+                <div className="col-sm-10 ralign mb-2">
                 </div>
                 <div className="col-sm-12 mb-4">
                   <div className="editorDiv">
