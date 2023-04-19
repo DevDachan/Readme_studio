@@ -31,7 +31,7 @@ function ReadmeFileContent(props) {
               padding: "30px",
               backgroundColor: "white",
               borderRadius: "20px",
-              color: "black !important"
+              color: "black"
             }}
             source={temp}
           />

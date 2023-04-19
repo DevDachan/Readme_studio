@@ -4,7 +4,8 @@ import styled from "styled-components";
 
 import Md_editor from "@uiw/react-md-editor";
 import ReadmeFileSelect from "./ReadmeFileSelect";
-
+import Markdown from "@uiw/react-markdown-preview";
+import ReactDOMServer from 'react-dom/server';
 
 const Wrapper = styled.div`
     padding: 0;
@@ -14,7 +15,46 @@ const Wrapper = styled.div`
     justify-content: center;
 `;
 
-function ReadmeFileContent(props) {
+
+function parseTable(data){
+  var tr_temp = data.split("|\n");
+  const list = [""];
+  const tr = [""];
+
+  for(var i = 0; i < tr_temp.length-1; i++){
+    const td = [];
+    var td_temp = tr_temp[i].split("|");
+    if(i == 1) continue;
+    for(var w = 1; w < td_temp.length; w++){
+      td.push(<td> {td_temp[w]}  </td>);
+    }
+    tr.push( <tr> {td} </tr>);
+  }
+
+  list.push( <table className="webapi-table" contenteditable="true"> {tr} </table>);
+
+  return list;
+}
+
+function makeTable(data){
+  var count_td = data.split('</tr>')[0].split('<td>').length -1;
+  var line = "|---";
+  line = line.repeat(count_td);
+  line = "\n"+line + "|\n";
+  var temp = data.replace(/<table class="webapi-table">/g, '');
+  temp = temp.replace(/<\/table>/g, '');
+  temp = temp.replace(/<td>\s*/g, '');
+  temp = temp.replace(/<\/td>/g, '|');
+  temp = temp.replace(/<\/tr>/, line);
+  temp = temp.replace(/<tr>/g, '|');
+  temp = temp.replace(/<\/tr>/g, "\n");
+  temp = temp.replace(/<!-- -->/g, "");
+  return temp;
+}
+
+
+
+function ReadmeFileComponent(props) {
   const navigate = useNavigate();
   //for Header
   const readmeList= props.readmeList;
@@ -49,6 +89,13 @@ function ReadmeFileContent(props) {
   }
   //initial make content List
 
+
+  const changeWebApi = (e) =>{
+    const inputString = e.outerHTML;
+    // 이때 inputString은 전체 Dom객체를 나타낸다.
+  }
+
+
   for(var i = 0; i< content.length; i++){
     var cur_content = "";
     var temp_num = i;
@@ -66,8 +113,10 @@ function ReadmeFileContent(props) {
           />;
     }else if(content[i].includes("<!-- All Data -->")){
       cur_content = "<!-- All Data -->";
+    }else if(content[i].includes("<!-- DB Table -->")){
+      cur_content = parseTable(content[i].split("<!-- DB Table -->\n")[1]);
     }else if(content[i].includes("<!-- Web API -->")){
-      cur_content = <Md_editor
+      /*cur_content = <Md_editor
         height={200}
         id={"md_editor_"+i}
         name={i}
@@ -77,7 +126,11 @@ function ReadmeFileContent(props) {
         color={"black"}
         key={"md_editor"+i}
         highlightEnable={false}
-        />;
+        contentEditable
+        suppressContentEditableWarning
+        />;*/
+      cur_content = parseTable(content[i].split("<!-- Web API -->\n")[1]);
+
     }else if(content[i].includes("https://ifh.cc")){
       cur_content = <div>
         <div className="dateBox" >Start date : <input type="date" data-placeholder="날짜 선택" id={"period_start" + i} onChange={changePeriod} name={i}></input></div>
@@ -170,4 +223,4 @@ function ReadmeFileContent(props) {
   );
 }
 
-export default ReadmeFileContent;
+export default ReadmeFileComponent;
