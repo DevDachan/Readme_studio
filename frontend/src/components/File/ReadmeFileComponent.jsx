@@ -158,11 +158,10 @@ function ReadmeFileContent(props) {
             <div className="col-sm-12">
               <h3 className="header-text"> {title} </h3>
             </div>
-            <div className="col-sm-6 ralign" style={{paddingRight: "3px"}}>
-              <button className=" bt-preview" onClick={handleOpen} variant="outline-primary">Preview</button>
-            </div>
-            <div className="col-sm-6 lalign" style={{paddingLeft: "3px"}}>
-              <button className="bt-deleteReadme"  onClick={deleteReadme}>DELETE README</button>
+            <div className="col-sm-12 calign">
+                <button className=" bt-preview" onClick={handleOpen} variant="outline-primary">Preview</button>
+                <button className="bt-deleteReadme"  onClick={deleteReadme}>DELETE README</button>
+
             </div>
           </div>
           {list}
