@@ -275,6 +275,27 @@ public class UnzipController {
             }
         }
 
+        // project architecture
+        // tree 명령어
+        builder.directory(new File("./unzipFiles")); // 현재 위치 이동
+        builder.start();
+        builder.command("tree"); // mac
+        // builder.command("cmd.exe","/c","tree"); // window
+        process = builder.start();
+
+        // tree 명령어 실행 후, 콘솔에 출력해주기
+        try (var reader = new BufferedReader(
+            new InputStreamReader(process.getInputStream()))) {
+            String commandResult;
+            while ((commandResult = reader.readLine()) != null) {
+                // architecture += commandResult + "   \n";
+                System.out.println(commandResult);
+            }
+        }
+
+        builder.directory(new File("../backend")); // 원래 위치로 이동
+        builder.start();
+
         // 압축 푼 파일들 중에서 원하는 정보 찾기(ex. url 찾기)
         String searchDirPath = "./unzipFiles";
         System.out.println("\n[압축 해제한 폴더 속 파일 리스트]");
@@ -643,7 +664,7 @@ public class UnzipController {
             String commandResult;
             while ((commandResult = reader.readLine()) != null) {
                 architecture += commandResult + "   \n";
-                System.out.println(commandResult);
+                // System.out.println(commandResult);
             }
         }
         architecture += "```\n";
