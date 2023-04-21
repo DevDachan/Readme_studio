@@ -105,7 +105,6 @@ function Editor(props) {
     var position_id = i.target.parentElement.parentElement.parentElement.parentElement.id;
     var position = Number(position_id.substr(10,3));
     tempReadme.find(e => e.id === currentReadme).content[position] = "<!-- empty_textarea -->\n" + content;
-
     setContent(tempReadme);
   }
 
@@ -253,6 +252,7 @@ function Editor(props) {
                     changePeriod={changePeriod}
                     handleOpen={handleOpen}
                     deleteReadme={deleteReadme}
+                    setContent={setContent}
                     //for Header
                     readmeList={readmeObject}
                     setCurrentReadme={setCurrentReadme}

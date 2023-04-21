@@ -554,6 +554,11 @@ textarea:focus {
 }
 
 
+td > p {
+  white-space: pre-wrap;
+}
+
+
 /*result */
 
 
