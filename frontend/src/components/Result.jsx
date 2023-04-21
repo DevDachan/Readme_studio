@@ -222,7 +222,7 @@ function Result(props) {
               <div className="col-sm-10 ralign mb-2">
               </div>
               <div className="col-sm-2 ralign mb-2">
-                <input type="button" className="btn-3d red bt-back" value="Back" onClick={goBack} />
+                <input type="button" className="btn-3d red bt-back" value="" onClick={goBack} />
               </div>
               <div className="col-sm-12 mb-4">
                 <div className="editorDiv">
