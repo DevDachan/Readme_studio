@@ -55,7 +55,6 @@ function Main(props) {
 
     setRepName(document.getElementById("rep-name").value);
     setUserName(document.getElementById("user-name").value);
-    setGithubRepLink(document.getElementById("email").value);
     if(document.getElementById("user-name").value !== userName){
       setUserName(document.getElementById("user-name").value)
     }
@@ -107,16 +106,11 @@ function Main(props) {
 
   const linkSubmitReadme = (e) =>{
 
-    setGithubRepLink(document.getElementById("email").value);
-    if(document.getElementById("email").value !== githubRepLink){
-      setGithubRepLink(document.getElementById("email").value);
-    }
-
     const formData = new FormData();
-    formData.append('jsonParam1', githubRepLink);
+    formData.append('jsonParam1', document.getElementById("repoLink").value);
 
     var readme_list = [];
-
+    console.log(document.getElementById("repoLink").value);
     axios({
       method: "post",
       url: 'http://localhost:8090/register2',
@@ -161,7 +155,7 @@ function Main(props) {
 
         <div>
           <form id="generate-form-git" method="post" action="#">
-            <input type="text" autocomplete="off" name="email" className="ip-url" id="email"
+            <input type="text" autocomplete="off" name="email" className="ip-url" id="repoLink"
             placeholder="Github Repository Link" maxLength="100" />
             <input type="button" className="btn-3d blue" value="Generate" onClick={linkSubmitReadme}/>
           </form>
