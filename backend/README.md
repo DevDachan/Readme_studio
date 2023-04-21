@@ -146,3 +146,133 @@
 |project_id **(PK)**|
 |user_name|
 |repository_name|
+   
+## 8. Task8
+1. Git Repository Link 받아서 파일 다운로드 및 처리   
+2. Project Architecture tree 형식으로 데이터 보내기   
+
+```bash
+.   
+├── README.md   
+├── mdFile   
+├── mdFiles   
+├── mvnw   
+├── mvnw.cmd   
+├── pom.xml   
+├── src   
+│   ├── main   
+│   │   ├── java   
+│   │   │   └── com   
+│   │   │       └── readme   
+│   │   │           └── rss   
+│   │   │               ├── RssApplication.java   
+│   │   │               ├── controller   
+│   │   │               │   ├── MarkdownController.java   
+│   │   │               │   └── UnzipController.java   
+│   │   │               └── data   
+│   │   │                   ├── dao   
+│   │   │                   │   ├── FrameworkDAO.java   
+│   │   │                   │   ├── Impl   
+│   │   │                   │   │   ├── FrameworkDAOImpl.java   
+│   │   │                   │   │   ├── ProjectDAOImpl.java   
+│   │   │                   │   │   └── UserDAOImpl.java   
+│   │   │                   │   ├── ProjectDAO.java   
+│   │   │                   │   └── UserDAO.java   
+│   │   │                   ├── dto   
+│   │   │                   │   ├── FrameworkDTO.java   
+│   │   │                   │   ├── ProjectDTO.java   
+│   │   │                   │   └── UserDTO.java   
+│   │   │                   ├── entity   
+│   │   │                   │   ├── FrameworkEntity.java   
+│   │   │                   │   ├── ProjectEntity.java   
+│   │   │                   │   ├── UserEntity.java   
+│   │   │                   │   └── compositeKey   
+│   │   │                   │       └── ProjectPK.java   
+│   │   │                   ├── handler   
+│   │   │                   │   ├── FrameworkHandler.java   
+│   │   │                   │   ├── Impl   
+│   │   │                   │   │   ├── FrameworkHandlerImpl.java   
+│   │   │                   │   │   ├── ProjectHandlerImpl.java   
+│   │   │                   │   │   └── UserHandlerImpl.java   
+│   │   │                   │   ├── ProjectHandler.java   
+│   │   │                   │   └── UserHandler.java   
+│   │   │                   ├── repository   
+│   │   │                   │   ├── FrameworkRepository.java   
+│   │   │                   │   ├── ProjectRepository.java   
+│   │   │                   │   └── UserRepository.java   
+│   │   │                   └── service   
+│   │   │                       ├── FrameworkService.java   
+│   │   │                       ├── Impl   
+│   │   │                       │   ├── FrameworkServiceImpl.java   
+│   │   │                       │   ├── ProjectServiceImpl.java   
+│   │   │                       │   └── UserServiceImpl.java   
+│   │   │                       ├── ProjectService.java   
+│   │   │                       └── UserService.java   
+│   │   └── resources   
+│   │       └── application.properties   
+│   └── test   
+│       └── java   
+│           └── com   
+│               └── readme   
+│                   └── rss   
+│                       └── RssApplicationTests.java   
+└── target   
+    ├── classes   
+    │   ├── application.properties   
+    │   └── com   
+    │       └── readme   
+    │           └── rss   
+    │               ├── RssApplication.class   
+    │               ├── controller   
+    │               │   ├── MarkdownController.class   
+    │               │   └── UnzipController.class   
+    │               └── data   
+    │                   ├── dao   
+    │                   │   ├── FrameworkDAO.class   
+    │                   │   ├── Impl   
+    │                   │   │   ├── FrameworkDAOImpl.class   
+    │                   │   │   ├── ProjectDAOImpl.class   
+    │                   │   │   └── UserDAOImpl.class   
+    │                   │   ├── ProjectDAO.class   
+    │                   │   └── UserDAO.class   
+    │                   ├── dto   
+    │                   │   ├── FrameworkDTO$FrameworkDTOBuilder.class   
+    │                   │   ├── FrameworkDTO.class   
+    │                   │   ├── ProjectDTO$ProjectDTOBuilder.class   
+    │                   │   ├── ProjectDTO.class   
+    │                   │   ├── UserDTO$UserDTOBuilder.class   
+    │                   │   └── UserDTO.class   
+    │                   ├── entity   
+    │                   │   ├── FrameworkEntity$FrameworkEntityBuilder.class   
+    │                   │   ├── FrameworkEntity.class   
+    │                   │   ├── ProjectEntity$ProjectEntityBuilder.class   
+    │                   │   ├── ProjectEntity.class   
+    │                   │   ├── UserEntity$UserEntityBuilder.class   
+    │                   │   ├── UserEntity.class   
+    │                   │   └── compositeKey   
+    │                   │       └── ProjectPK.class   
+    │                   ├── handler   
+    │                   │   ├── FrameworkHandler.class   
+    │                   │   ├── Impl   
+    │                   │   │   ├── FrameworkHandlerImpl.class   
+    │                   │   │   ├── ProjectHandlerImpl.class   
+    │                   │   │   └── UserHandlerImpl.class   
+    │                   │   ├── ProjectHandler.class   
+    │                   │   └── UserHandler.class   
+    │                   ├── repository   
+    │                   │   ├── FrameworkRepository.class   
+    │                   │   ├── ProjectRepository.class   
+    │                   │   └── UserRepository.class   
+    │                   └── service   
+    │                       ├── FrameworkService.class   
+    │                       ├── Impl   
+    │                       │   ├── FrameworkServiceImpl.class   
+    │                       │   ├── ProjectServiceImpl.class   
+    │                       │   └── UserServiceImpl.class   
+    │                       ├── ProjectService.class   
+    │                       └── UserService.class   
+    └── generated-sources   
+        └── annotations   
+   
+46 directories, 75 files   
+```
