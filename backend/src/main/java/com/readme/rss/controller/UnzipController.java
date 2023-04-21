@@ -4,6 +4,7 @@ import static java.lang.Thread.sleep;
 
 import com.readme.rss.data.dto.UserDTO;
 import com.readme.rss.data.entity.ProjectEntity;
+import java.util.Arrays;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -476,15 +477,244 @@ public class UnzipController {
         return map;
     }
 
-    
+    @PostMapping(value = "/register2")
+    public HashMap<String, Object> getFileData(@RequestParam("jsonParam1") String repoLink)
+        throws IOException, InterruptedException {
+        HashMap<String,Object> map = new HashMap<String,Object>();
+
+        System.out.println("repoLink : " + repoLink);
+        String repoLinkInfo = repoLink.substring(19);
+        System.out.println("repoLinkInfo : " + repoLinkInfo);
+        String userName = repoLinkInfo.split("/")[0];
+
+        String repositoryName = repoLinkInfo.split("/")[1].substring(0, repoLinkInfo.split("/")[1].indexOf(".git"));
+        System.out.println("userName : " + userName + ", repositoryName : " + repositoryName);
+
+        ProcessBuilder builder = new ProcessBuilder();
+
+        // clone(file name : unzipFiles)
+        builder.command("git", "clone", repoLink, "unzipFiles"); // mac
+        // builder.command("cmd.exe","/c","git", "clone", repoLink, "unzipFiles"); // window
+        var process = builder.start();
+
+        try (var reader = new BufferedReader( // clone 완료 후 아래 코드 실행
+            new InputStreamReader(process.getInputStream()))) {
+            String commandResult;
+            while ((commandResult = reader.readLine()) != null) {
+                System.out.println(commandResult);
+            }
+        }
+
+        // project architecture
+        builder.directory(new File("./unzipFiles")); // 현재 위치 이동
+        builder.start();
+
+        // tree 명령어
+        builder.command("tree"); // mac
+        // builder.command("cmd.exe","/c","tree"); // window
+        process = builder.start();
+
+        String architecture = "\n<!-- Project Architecture -->\n";
+        architecture += "```bash\n";
+
+        // tree 명령어 실행 후, 콘솔에 출력해주기
+        try (var reader = new BufferedReader(
+            new InputStreamReader(process.getInputStream()))) {
+            String commandResult;
+            while ((commandResult = reader.readLine()) != null) {
+                architecture += commandResult + "   \n";
+            }
+        }
+        architecture += "```\n";
+
+        System.out.println("architecture : " + architecture);
+
+        builder.directory(new File("../backend")); // 원래 위치로 이동
+        builder.start();
+
+        // 압축 푼 파일들 중에서 원하는 정보 찾기(ex. url 찾기)
+        String searchDirPath = "./unzipFiles";
+        System.out.println("\n[파일 리스트]");
+        int retSearchFiles = 0; // 파일 리스트 다 뽑아냈는지 확인할 수 있는 리턴값
+        retSearchFiles = searchFiles(searchDirPath);
+        System.out.println("retSearchFiles : " + retSearchFiles);
+
+        //------------- db insert 관련 -------------//
+        // project table에서 id 가져오기
+        randomIdList = projectService.getIdAll();
+        String randomId = projectIdGenerate();
+
+        List<String> javaFileName = new ArrayList<>();
+        List<String> javaFilePath = new ArrayList<>();
+        List<String> javaFileContent = new ArrayList<>();
+        List<String> javaFileDetail = new ArrayList<>();
+
+        for(int i = 0 ; i < file_nameList.size() ; i++){
+            if((file_nameList.get(i).contains("pom.xml")) ||
+                (file_nameList.get(i).contains(".java") && file_pathList.get(i).contains("src/main/java/")) ||
+                (file_pathList.get(i).contains("src/main/resources/application.properties"))){
+
+                javaFileName.add(file_nameList.get(i));
+                javaFilePath.add(file_pathList.get(i));
+                javaFileContent.add(file_contentList.get(i));
+
+                if((file_nameList.get(i).contains("pom.xml")) ||
+                    (file_pathList.get(i).contains("src/main/resources/application.properties"))){
+                    javaFileDetail.add("etc"); // 기타
+                } else{ // java 파일
+                    if(file_contentList.get(i).contains("@RestController")){
+                        javaFileDetail.add("controller");
+                    } else if(file_contentList.get(i).contains("implements")) {
+                        javaFileDetail.add("Impl");
+                    } else{ // class
+                        javaFileDetail.add("noImpl");
+                    }
+                }
+            }
+        }
+        if(retSearchFiles == 1){ // 파일 리스트 다 뽑아냈으면 전역변수 초기화
+            file_nameList.clear();
+            file_pathList.clear();
+            file_contentList.clear();
+        }
+
+        // project architecture project table에 insert
+        projectService.saveProject(randomId, "Project Architecture", "", architecture, "tree");
+
+        // project table에 .java 파일만 insert
+        for(int i = 0 ; i < javaFileName.size() ; i++){
+            try{
+                projectService.saveProject(randomId, javaFileName.get(i), javaFilePath.get(i), javaFileContent.get(i), javaFileDetail.get(i));
+            } catch (Exception e){
+                System.out.print(javaFileName.get(i)); // 어느 파일이 길이가 긴지 확인
+            }
+        }
+
+        // user table에 insert
+        userService.saveUser(randomId, userName, repositoryName);
+
+        // content data 보냈으므로, 압축풀기한 파일들, 업로드된 zip 파일 모두 삭제
+        deleteCloneFiles(builder);
+
+        // =============== pom.xml에서 필요한 데이터 파싱 =============== //
+        String xmlPath = ""; // test
+        String xmlContent = "";
+        // =============== application.properties에서 필요한 데이터 파싱 =============== //
+        String propertiesPath = ""; // test
+        String propertiesContent = "";
+        // =============== 디렉토리별 파일 구분 =============== //
+        List<String> controllerDir = new ArrayList<>();
+        List<String> dtoDir = new ArrayList<>();
+        List<String> repositoryDir = new ArrayList<>();
+        List<String> daoDir = new ArrayList<>();
+        List<String> daoImplDir = new ArrayList<>();
+        List<String> entityDir = new ArrayList<>();
+        List<String> entityImplDir = new ArrayList<>();
+        List<String> handlerDir = new ArrayList<>();
+        List<String> handlerImplDir = new ArrayList<>();
+        List<String> serviceDir = new ArrayList<>();
+        List<String> serviceImplDir = new ArrayList<>();
+        List<String> etcDir = new ArrayList<>();
+
+        List<ProjectEntity> getProjectTableRow = projectService.getFileContent(randomId);
+        for(int i = 0 ; i < getProjectTableRow.size() ; i++){
+            if(getProjectTableRow.get(i).getFile_path().contains("pom.xml")){
+                xmlPath = getProjectTableRow.get(i).getFile_path();
+                xmlContent = getProjectTableRow.get(i).getFile_content();
+            } else if(getProjectTableRow.get(i).getFile_path().contains("application.properties")){
+                propertiesPath = getProjectTableRow.get(i).getFile_path(); // test
+                propertiesContent = getProjectTableRow.get(i).getFile_content();
+            }
+
+            // 주요 자바 파일들 디렉토리별로 구분하기
+            if(getProjectTableRow.get(i).getFile_path().contains("CONTROLLER".toLowerCase())){
+                controllerDir.add(getProjectTableRow.get(i).getFile_name());
+            } else if(getProjectTableRow.get(i).getFile_path().contains("DTO".toLowerCase())){
+                dtoDir.add(getProjectTableRow.get(i).getFile_name());
+            } else if(getProjectTableRow.get(i).getFile_path().contains("REPOSITORY".toLowerCase())){
+                repositoryDir.add(getProjectTableRow.get(i).getFile_name());
+            } else if(getProjectTableRow.get(i).getFile_path().contains("DAO".toLowerCase())){
+                if(getProjectTableRow.get(i).getDetail().equals("Impl")){
+                    daoImplDir.add(getProjectTableRow.get(i).getFile_name());
+                } else if(getProjectTableRow.get(i).getDetail().equals("noImpl")){
+                    daoDir.add(getProjectTableRow.get(i).getFile_name());
+                }
+            } else if(getProjectTableRow.get(i).getFile_path().contains("ENTITY".toLowerCase())){
+                if(getProjectTableRow.get(i).getDetail().equals("Impl")){
+                    entityImplDir.add(getProjectTableRow.get(i).getFile_name());
+                } else if(getProjectTableRow.get(i).getDetail().equals("noImpl")){
+                    entityDir.add(getProjectTableRow.get(i).getFile_name());
+                }
+            } else if(getProjectTableRow.get(i).getFile_path().contains("HANDLER".toLowerCase())){
+                if(getProjectTableRow.get(i).getDetail().equals("Impl")){
+                    handlerImplDir.add(getProjectTableRow.get(i).getFile_name());
+                } else if(getProjectTableRow.get(i).getDetail().equals("noImpl")){
+                    handlerDir.add(getProjectTableRow.get(i).getFile_name());
+                }
+            } else if(getProjectTableRow.get(i).getFile_path().contains("SERVICE".toLowerCase())){
+                if(getProjectTableRow.get(i).getDetail().equals("Impl")){
+                    serviceImplDir.add(getProjectTableRow.get(i).getFile_name());
+                } else if(getProjectTableRow.get(i).getDetail().equals("noImpl")){
+                    serviceDir.add(getProjectTableRow.get(i).getFile_name());
+                }
+            } else{
+                etcDir.add(getProjectTableRow.get(i).getFile_name());
+            }
+        }
+
+        /* test
+        System.out.println("controllerDir : " + controllerDir);
+        System.out.println("dtoDir : " + dtoDir);
+        System.out.println("repositoryDir : " + repositoryDir);
+        System.out.println("daoDir : " + daoDir);
+        System.out.println("daoImplDir : " + daoImplDir);
+        System.out.println("entityDir : " + entityDir);
+        System.out.println("entityImplDir : " + entityImplDir);
+        System.out.println("handlerDir : " + handlerDir);
+        System.out.println("handlerImplDir : " + handlerImplDir);
+        System.out.println("serviceDir : " + serviceDir);
+        System.out.println("serviceImplDir : " + serviceImplDir);
+        System.out.println("etcDir : " + etcDir);
+         */
+
+        // 공백 제거한 xmlContent - 정규식을 쓰기 위해 줄바꿈 제거
+        String noWhiteSpaceXml = xmlContent.replaceAll("\n", "");
+
+        // 필요한 데이터 : 스프링부트 버전, 패키지명, 자바 jdk 버전, (+ dependency 종류)
+        String springBootVersion = findSpringBootVersion(noWhiteSpaceXml);
+        List<String> packageName = findPackageName(noWhiteSpaceXml);
+        String groupId = packageName.get(0);
+        String artifactId = packageName.get(1);
+        String javaVersion = findJavaVersion(noWhiteSpaceXml);
+        // String dependencies = findDependencies(noWhiteSpaceXml); // 미완
+
+        // 공백 제거한 propertiesContent - 정규식을 쓰기 위해 줄바꿈 제거
+        String noWhiteSpaceProperties = propertiesContent.replaceAll("\n", "");
+
+        // 필요한 데이터 : 사용하는 database명
+        String databaseName = findDatabaseName(noWhiteSpaceProperties);
+
+        //----------- db select in framework table -----------//
+        // about framework table
+        List<String> frameworkNameList = frameworkService.getFrameworkNameList();
+
+        map.put("project_id", randomId); // index(project_id)
+        map.put("frameworkList", frameworkNameList); // templateList(frameworkNameList)
+        map.put("readmeName", "Readme.md"); // Readme.md
+        map.put("springBootVersion", springBootVersion); // springboot 버전
+        map.put("groupId", groupId); // groupId
+        map.put("artifactId", artifactId); // artifactId
+        map.put("javaVersion", javaVersion); // javaVersion
+        map.put("databaseName", databaseName); // db명
+
+        return map;
+    }
 
     public static int searchFiles(String searchDirPath) throws IOException {
         File dirFile = new File(searchDirPath);
         File[] fileList = dirFile.listFiles();
 
-        if(fileList.length == 0){ // 압축풀기가 되지 않은 상태
-            System.out.println("!!! 압축풀기할 파일이 존재하지 않습니다 !!!");
-        } else{
+        if(dirFile.exists()){
             for(int i = 0 ; i < fileList.length; i++) {
                 if(fileList[i].isFile()) {
                     file_pathList.add(fileList[i].getPath());
@@ -498,18 +728,32 @@ public class UnzipController {
                         String str = reader2.nextLine();
                         tempStr = tempStr + str + "\n";
                     }
-                    // System.out.println(fileList[i].getName() + " 파일 내용 :\n" + tempStr);
                     file_contentList.add(tempStr);
                 } else if(fileList[i].isDirectory()) {
                     searchFiles(fileList[i].getPath());  // 재귀함수 호출
                 }
             }
+        } else{
+            System.out.println("!!! 탐색할 파일이 존재하지 않습니다 !!!");
         }
 
         return 1; // 전역변수 초기화하기 위한 리턴값 반환
     }
 
-    public static void deleteUnzipFiles(ProcessBuilder builder) throws IOException {
+    public static void deleteCloneFiles(ProcessBuilder builder) throws IOException { // register2
+        /* mac */
+        builder.command("rm", "-rf", "./unzipFiles/");
+        builder.start();
+
+        /* window
+        builder.command("cmd.exe","/c","rmdir", "unzipFiles");
+        builder.start();
+        */
+
+        System.out.println("clone한 파일들 삭제 완료!!");
+    }
+
+    public static void deleteUnzipFiles(ProcessBuilder builder) throws IOException { // register1
         // upzip한 파일들, zip파일 모두 삭제
         /* mac */
         builder.command("rm", "-rf", "./unzipFiles/");
@@ -534,7 +778,6 @@ public class UnzipController {
         UserDTO userDTO = userService.getUser(project_id);
         String user_name = userDTO.getUser_name();
         String repo_name = userDTO.getRepository_name();
-        System.out.println("user_name : " + user_name);
 
         // framework_id에 따른 content제공
         if(framework_name.equals("Contributor")){
@@ -620,8 +863,6 @@ public class UnzipController {
             List<ProjectEntity> getProjectTableRow = projectService.getFileContent(project_id);
             for (int i = 0; i < getProjectTableRow.size(); i++) {
                 if (getProjectTableRow.get(i).getFile_path().contains("LICENSE")) {
-
-                    System.out.println(getProjectTableRow.get(i).getFile_content() + "test");
                     String str = getProjectTableRow.get(i).getFile_content();
                     String firstLine = str.substring(0, str.indexOf("\n"));
                     firstLine = firstLine.replace("License", "");
