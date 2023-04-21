@@ -648,39 +648,11 @@ public class UnzipController {
             }
         } else if (framework_name.equals("Architecture")) {
             frame_content = frameworkService.findContent("Architecture");
-            frame_content += architecture(project_id);
+            String architecture = projectService.getFileContentByFileName(project_id, "Project Architecture");
+            frame_content += architecture;
         }
 
         return frame_content;
-    }
-
-    public String architecture(String project_id) throws IOException {
-//        String architecture = "\n<!-- Project Architecture -->\n";
-//        architecture += "```bash\n";
-//        ProcessBuilder builder = new ProcessBuilder();
-//
-//        // tree 명령어
-//        builder.command("tree"); // mac
-//        // builder.command("cmd.exe","/c","tree"); // window
-//        var process = builder.start();
-//
-//        // tree 명령어 실행 후, 콘솔에 출력해주기
-//        try (var reader = new BufferedReader(
-//            new InputStreamReader(process.getInputStream()))) {
-//            String commandResult;
-//            while ((commandResult = reader.readLine()) != null) {
-//                architecture += commandResult + "   \n";
-//                // System.out.println(commandResult);
-//            }
-//        }
-//        architecture += "```\n";
-//        // System.out.println(architecture);
-
-        System.out.println("project id : " + project_id);
-        String architecture = projectService.getFileContentByFileName(project_id, "Project Architecture");
-        System.out.println("architecture : " + architecture);
-
-        return architecture;
     }
 
     public String dbTable(String project_id){
