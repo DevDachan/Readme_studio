@@ -619,10 +619,39 @@ public class UnzipController {
                     "THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.";
                 frame_content = frame_content.replace("UserName", user_name);
             }
+        } else if (framework_name.equals("Architecture")) {
+            frame_content = frameworkService.findContent("Architecture");
+            frame_content += architecture(project_id);
         }
 
         return frame_content;
-    } 
+    }
+
+    public String architecture(String project_id) throws IOException {
+        String architecture = "\n<!-- Project Architecture -->\n";
+        architecture += "```bash\n";
+        ProcessBuilder builder = new ProcessBuilder();
+
+        // tree 명령어
+        builder.command("tree"); // mac
+        // builder.command("cmd.exe","/c","tree"); // window
+        var process = builder.start();
+
+        // tree 명령어 실행 후, 콘솔에 출력해주기
+        try (var reader = new BufferedReader(
+            new InputStreamReader(process.getInputStream()))) {
+            String commandResult;
+            while ((commandResult = reader.readLine()) != null) {
+                architecture += commandResult + "   \n";
+                System.out.println(commandResult);
+            }
+        }
+        architecture += "```\n";
+        // System.out.println(architecture);
+
+
+        return architecture;
+    }
 
     public String dbTable(String project_id){
         String dbTable = "\n<!-- DB Table -->\n";
