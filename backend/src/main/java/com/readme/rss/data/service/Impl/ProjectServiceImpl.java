@@ -50,4 +50,9 @@ public class ProjectServiceImpl implements ProjectService {
     public List<ProjectEntity> getFileContent(String id){
         return projectHandler.getFileContent(id);
     }
+
+    @Override
+    public String getFileContentByFileName(String id, String file_name){
+        return projectHandler.getFileContentByFileName(id, file_name);
+    }
 }

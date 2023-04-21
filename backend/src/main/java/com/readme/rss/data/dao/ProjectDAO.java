@@ -12,4 +12,6 @@ public interface ProjectDAO {
     List<String> getIdAll();
 
     List<ProjectEntity> getFileContent(String id);
+
+    String getFileContentByFileName(String id, String file_name);
 }

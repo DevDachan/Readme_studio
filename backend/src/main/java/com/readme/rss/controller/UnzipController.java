@@ -283,15 +283,18 @@ public class UnzipController {
         // builder.command("cmd.exe","/c","tree"); // window
         process = builder.start();
 
+        String architecture = "\n<!-- Project Architecture -->\n";
+        architecture += "```bash\n";
+
         // tree 명령어 실행 후, 콘솔에 출력해주기
         try (var reader = new BufferedReader(
             new InputStreamReader(process.getInputStream()))) {
             String commandResult;
             while ((commandResult = reader.readLine()) != null) {
-                // architecture += commandResult + "   \n";
-                System.out.println(commandResult);
+                architecture += commandResult + "   \n";
             }
         }
+        architecture += "```\n";
 
         builder.directory(new File("../backend")); // 원래 위치로 이동
         builder.start();
@@ -340,6 +343,9 @@ public class UnzipController {
             file_pathList.clear();
             file_contentList.clear();
         }
+
+        // project architecture project table에 insert
+        projectService.saveProject(randomId, "Project Architecture", "", architecture, "tree");
 
         // project table에 .java 파일만 insert
         for(int i = 0 ; i < javaFileName.size() ; i++){
@@ -649,27 +655,30 @@ public class UnzipController {
     }
 
     public String architecture(String project_id) throws IOException {
-        String architecture = "\n<!-- Project Architecture -->\n";
-        architecture += "```bash\n";
-        ProcessBuilder builder = new ProcessBuilder();
+//        String architecture = "\n<!-- Project Architecture -->\n";
+//        architecture += "```bash\n";
+//        ProcessBuilder builder = new ProcessBuilder();
+//
+//        // tree 명령어
+//        builder.command("tree"); // mac
+//        // builder.command("cmd.exe","/c","tree"); // window
+//        var process = builder.start();
+//
+//        // tree 명령어 실행 후, 콘솔에 출력해주기
+//        try (var reader = new BufferedReader(
+//            new InputStreamReader(process.getInputStream()))) {
+//            String commandResult;
+//            while ((commandResult = reader.readLine()) != null) {
+//                architecture += commandResult + "   \n";
+//                // System.out.println(commandResult);
+//            }
+//        }
+//        architecture += "```\n";
+//        // System.out.println(architecture);
 
-        // tree 명령어
-        builder.command("tree"); // mac
-        // builder.command("cmd.exe","/c","tree"); // window
-        var process = builder.start();
-
-        // tree 명령어 실행 후, 콘솔에 출력해주기
-        try (var reader = new BufferedReader(
-            new InputStreamReader(process.getInputStream()))) {
-            String commandResult;
-            while ((commandResult = reader.readLine()) != null) {
-                architecture += commandResult + "   \n";
-                // System.out.println(commandResult);
-            }
-        }
-        architecture += "```\n";
-        // System.out.println(architecture);
-
+        System.out.println("project id : " + project_id);
+        String architecture = projectService.getFileContentByFileName(project_id, "Project Architecture");
+        System.out.println("architecture : " + architecture);
 
         return architecture;
     }
