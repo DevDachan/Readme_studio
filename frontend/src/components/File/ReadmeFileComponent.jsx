@@ -38,9 +38,10 @@ function ReadmeFileComponent(props) {
   const handleOpen = props.handleOpen;
   const title = props.title;
   const list = [""];
-  const [forRelanderng, setForRelandering] = useState("");
 
-  function makeTable(data){
+  //---------------------- Web API table Editor ------------------------------
+  // change HTML table to markdown table
+  function makeTable_webapi(data){
     var count_td = data.split('</tr>')[0].split('<td><p contenteditable="true">').length -1;
     var line = "|---";
     line = line.repeat(count_td);
@@ -59,8 +60,8 @@ function ReadmeFileComponent(props) {
     return temp;
   }
 
-
-  const changeTable = (e) => {
+  // HTML table edit event
+  const changeTable_webapi = (e) => {
     if(e.target.innerText === ""){
       e.target.innerText = " ";
     }
@@ -70,7 +71,7 @@ function ReadmeFileComponent(props) {
     var content = document.getElementById(id).outerHTML;
     content = content.replace(/&lt;\s*/g, "<");
     content = content.replace(/&gt;\s*/g, ">");
-    content = makeTable(content);
+    content = makeTable_webapi(content);
     var tempReadme = JSON.parse(JSON.stringify(readmeList));
     tempReadme.find(e => e.id === currentReadme).content[id.split("table_")[1]] = "### Web API<br><!-- Web API -->\n" + content;
     setContent(tempReadme);
@@ -78,12 +79,12 @@ function ReadmeFileComponent(props) {
   }
 
 
-
-  function parseTable(data, id){
+  // change markdown table to HTML table
+  function parseTable_webapi(data, id){
     data = data.replace(/&nbsp;/g, " ");
     data = data.replace(/<br>/g, "\n");
     var tr_temp = data.split("|\n");
-    const list = [""];
+    const temp_list = [""];
     const tr = [""];
     for(var i = 0; i < tr_temp.length-1; i++){
       const td = [];
@@ -92,17 +93,84 @@ function ReadmeFileComponent(props) {
       for(var w = 1; w < td_temp.length; w++){
         td.push(<td>
                   <p
-                    contentEditable onBlur={(e) => changeTable(e)}>{td_temp[w]}
+                    contentEditable onBlur={(e) => changeTable_webapi(e)}>{td_temp[w]}
                   </p>
                 </td>);
       }
       tr.push( <tr> {td} </tr>);
     }
-    list.push( <table id={"table_"+id} className="webapi-table"> {tr} </table>);
-    return list;
+    temp_list.push( <table id={"table_"+id} className="webapi-table"> {tr} </table>);
+    return temp_list;
   }
 
+  //---------------------- DB table Editor ------------------------------
+  function makeTable_db(data){
+    var count_td = data.split('</tr>')[0].split('<td><p contenteditable="true">').length -1;
 
+    var temp = data.replace(/\n\s*/g, '  <br>');
+    temp = temp.replace(/<table class="db-table">\s*/g,"\n|*Column Name*|\n|-----|\n");
+    temp = temp.replace(/<\/h3>\s*/g," \n");
+    temp = temp.replace(/<h3>\s*/g,"#### ");
+    temp = temp.replace(/<td><p contenteditable="true">\s*/g, '\n');
+    temp = temp.replace(/<\/p><\/td>\s*/g, '|');
+    temp = temp.replace(/<tr>\s*/g, '|');
+    temp = temp.replace(/<\/tr>\s*/g, "\n");
+    temp = temp.replace(/<!-- -->\s*/g, "");
+    temp = temp.replace(/<\/table>\s*/g, "\n");
+    return temp;
+  }
+
+  // HTML table edit event
+  const changeTable_db = (e) => {
+    if(e.target.innerText === ""){
+      e.target.innerText = " ";
+    }
+    e.target.innerText = e.target.innerText.replace(/\n/g, "<br>");
+
+    var id = e.target.parentElement.parentElement.parentElement.parentElement.id;
+    var content = document.getElementById(id).innerHTML;
+    content = content.replace(/&lt;\s*/g, "<");
+    content = content.replace(/&gt;\s*/g, ">");
+    content = makeTable_db(content);
+    var tempReadme = JSON.parse(JSON.stringify(readmeList));
+    tempReadme.find(e => e.id === currentReadme).content[id.split("dbdiv_")[1]] = "<!-- DB Table -->\n" + content;
+    setContent(tempReadme);
+    e.target.innerText = e.target.innerText.replace(/<br>/g, "\n");
+  }
+
+  // change markdown table to HTML table
+  function parseTable_db(data, id){
+    data = data.replace(/&nbsp;/g, " ");
+    data = data.replace(/<br>/g, "\n");
+    var tr_temp = data.split("|\n");
+    const temp_list = [""];
+    const tr = [""];
+    for(var i = 1; i < tr_temp.length-1; i++){
+      const td = [];
+      var td_temp = tr_temp[i].split("|");
+      for(var w = 1; w < td_temp.length; w++){
+        td.push(<td>
+                  <p
+                    contentEditable onBlur={(e) => changeTable_db(e)}>{td_temp[w]}
+                  </p>
+                </td>);
+      }
+      tr.push( <tr> {td} </tr>);
+    }
+    temp_list.push( <table className="db-table"> {tr} </table>);
+    return temp_list;
+  }
+
+  function db_table(data,id){
+    const temp_list = [""];
+    var col_temp = data.split(/\|\*.*?\*\||####/g);
+    var table_count = (col_temp.length - 1) / 2;
+    for(var i = 0; i < table_count; i++){
+      temp_list.push(<h3>{col_temp[2*i+1].replace(/<br>/g, "")} </h3>);
+      temp_list.push(parseTable_db(col_temp[2*i+2],id + "_" + i));
+    }
+    return <div id={"dbdiv_"+id}> {temp_list} </div>;
+  }
 
 
 
@@ -135,9 +203,11 @@ function ReadmeFileComponent(props) {
     }else if(content[i].includes("<!-- All Data -->")){
       cur_content = "<!-- All Data -->";
     }else if(content[i].includes("<!-- DB Table -->")){
-      cur_content = parseTable(content[i].split("<!-- DB Table -->\n")[1]);
+      cur_content = content[i].split("<!-- DB Table -->\n")[1];
+
+      cur_content = db_table(cur_content,i);
     }else if(content[i].includes("<!-- Web API -->")){
-      cur_content = parseTable(content[i].split("<!-- Web API -->\n")[1],i);
+      cur_content = parseTable_webapi(content[i].split("<!-- Web API -->\n")[1],i);
 
     }else if(content[i].includes("https://ifh.cc")){
       cur_content = <div>
