@@ -55,7 +55,6 @@ function Main(props) {
 
     setRepName(document.getElementById("rep-name").value);
     setUserName(document.getElementById("user-name").value);
-    setGithubRepLink(document.getElementById("email").value);
     if(document.getElementById("user-name").value !== userName){
       setUserName(document.getElementById("user-name").value)
     }
@@ -70,9 +69,6 @@ function Main(props) {
     //formData.append('rendering', "1"); // yeji
 
     var readme_list = [];
-    const frameworkList = ["contributor", "header"];
-    const readmeObject = ["A", "B", "C", "D"];
-
     axios({
       method: "post",
       url: 'http://localhost:8090/register',
@@ -107,6 +103,48 @@ function Main(props) {
     });
   }
 
+
+  const linkSubmitReadme = (e) =>{
+
+    const formData = new FormData();
+    formData.append('jsonParam1', document.getElementById("repoLink").value);
+
+    var readme_list = [];
+    console.log(document.getElementById("repoLink").value);
+    axios({
+      method: "post",
+      url: 'http://localhost:8090/register2',
+      data: formData
+    })
+    .then(function (response){
+      //handle success
+      var defaultData = "<!-- empty_textarea -->\n"+
+      "🚪 Stack : Spring boot    \n"+
+      "🌠 Version:  "+ response.data.springBootVersion+"   \n"+
+      "📕 Gruop ID : "+ response.data.groupId+"   \n"+
+      "📘 Artifact ID : "+ response.data.artifactId+"   \n"+
+      "📙 Java Version :"+ response.data.javaVersion+"   \n"+
+      "📚 DB : "+ response.data.databaseName;
+
+      readme_list.push({id: response.data.readmeName, content : [defaultData]});
+
+      navigate('./editor', {
+        state: {
+          project_id: 544931,
+          framework_list: response.data.frameworkList,
+          readmeObject:readme_list,
+          defaultData: defaultData
+        }
+      });
+    })
+    .catch(function(error){
+      //handle error
+    })
+    .then(function(){
+      // always executed
+    });
+  }
+
   return (
       <Wrapper>
         <header id="header">
@@ -117,9 +155,9 @@ function Main(props) {
 
         <div>
           <form id="generate-form-git" method="post" action="#">
-            <input type="text" autocomplete="off" name="email" className="ip-url" id="email"
-            placeholder="Github Repository Link" maxlength="100" />
-            <input type="submit" className="btn-3d blue" value="Generate" />
+            <input type="text" autocomplete="off" name="email" className="ip-url" id="repoLink"
+            placeholder="Github Repository Link" maxLength="100" />
+            <input type="button" className="btn-3d blue" value="Generate" onClick={linkSubmitReadme}/>
           </form>
 
           <form id="generate-form-files">
