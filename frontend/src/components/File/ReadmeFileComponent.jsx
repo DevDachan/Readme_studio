@@ -16,44 +16,6 @@ const Wrapper = styled.div`
 `;
 
 
-function parseTable(data){
-  var tr_temp = data.split("|\n");
-  const list = [""];
-  const tr = [""];
-
-  for(var i = 0; i < tr_temp.length-1; i++){
-    const td = [];
-    var td_temp = tr_temp[i].split("|");
-    if(i == 1) continue;
-    for(var w = 1; w < td_temp.length; w++){
-      td.push(<td> {td_temp[w]}  </td>);
-    }
-    tr.push( <tr> {td} </tr>);
-  }
-
-  list.push( <table className="webapi-table" contenteditable="true"> {tr} </table>);
-
-  return list;
-}
-
-function makeTable(data){
-  var count_td = data.split('</tr>')[0].split('<td>').length -1;
-  var line = "|---";
-  line = line.repeat(count_td);
-  line = "\n"+line + "|\n";
-  var temp = data.replace(/<table class="webapi-table">/g, '');
-  temp = temp.replace(/<\/table>/g, '');
-  temp = temp.replace(/<td>\s*/g, '');
-  temp = temp.replace(/<\/td>/g, '|');
-  temp = temp.replace(/<\/tr>/, line);
-  temp = temp.replace(/<tr>/g, '|');
-  temp = temp.replace(/<\/tr>/g, "\n");
-  temp = temp.replace(/<!-- -->/g, "");
-  return temp;
-}
-
-
-
 function ReadmeFileComponent(props) {
   const navigate = useNavigate();
   //for Header
@@ -62,7 +24,7 @@ function ReadmeFileComponent(props) {
   const currentReadme=props.currentReadme;
   const addReadme=props.addReadme;
   const generateReadme=props.generateReadme;
-
+  const setContent = props.setContent;
 
   // for content
   const position = props.position;
@@ -76,6 +38,73 @@ function ReadmeFileComponent(props) {
   const handleOpen = props.handleOpen;
   const title = props.title;
   const list = [""];
+  const [forRelanderng, setForRelandering] = useState("");
+
+  function makeTable(data){
+    var count_td = data.split('</tr>')[0].split('<td><p contenteditable="true">').length -1;
+    var line = "|---";
+    line = line.repeat(count_td);
+    line = "\n"+line + "|\n";
+
+    var temp = data.replace(/\n\s*/g, '<br>');
+    temp = temp.replace(/<td><p contenteditable="true">\s*/g, '');
+    temp = temp.replace(/<\/p><\/td>\s*/g, '|');
+    temp = temp.replace(/<\/tr>\s*/, line);
+    temp = temp.replace(/<tr>\s*/g, '|');
+    temp = temp.replace(/<\/tr>\s*/g, "\n");
+    temp = temp.replace(/<!-- -->\s*/g, "");
+    temp = temp.replace(/<\/table>\s*/, "");
+
+    temp = temp.split('class="webapi-table">')[1];
+    return temp;
+  }
+
+
+  const changeTable = (e) => {
+    if(e.target.innerText === ""){
+      e.target.innerText = " ";
+    }
+    e.target.innerText = e.target.innerText.replace(/\n/g, "<br>");
+
+    var id = e.target.parentElement.parentElement.parentElement.id;
+    var content = document.getElementById(id).outerHTML;
+    content = content.replace(/&lt;\s*/g, "<");
+    content = content.replace(/&gt;\s*/g, ">");
+    content = makeTable(content);
+    var tempReadme = JSON.parse(JSON.stringify(readmeList));
+    tempReadme.find(e => e.id === currentReadme).content[id.split("table_")[1]] = "### Web API<br><!-- Web API -->\n" + content;
+    setContent(tempReadme);
+    e.target.innerText = e.target.innerText.replace(/<br>/g, "\n");
+  }
+
+
+
+  function parseTable(data, id){
+    data = data.replace(/&nbsp;/g, " ");
+    data = data.replace(/<br>/g, "\n");
+    var tr_temp = data.split("|\n");
+    const list = [""];
+    const tr = [""];
+    for(var i = 0; i < tr_temp.length-1; i++){
+      const td = [];
+      var td_temp = tr_temp[i].split("|");
+      if(i == 1) continue;
+      for(var w = 1; w < td_temp.length; w++){
+        td.push(<td>
+                  <p
+                    contentEditable onBlur={(e) => changeTable(e)}>{td_temp[w]}
+                  </p>
+                </td>);
+      }
+      tr.push( <tr> {td} </tr>);
+    }
+    list.push( <table id={"table_"+id} className="webapi-table"> {tr} </table>);
+    return list;
+  }
+
+
+
+
 
 
   const checkedPosition = (e) => {
@@ -87,14 +116,6 @@ function ReadmeFileComponent(props) {
     id = Number(id.split("_")[2])+1;
     setPosition(id);
   }
-  //initial make content List
-
-
-  const changeWebApi = (e) =>{
-    const inputString = e.outerHTML;
-    // 이때 inputString은 전체 Dom객체를 나타낸다.
-  }
-
 
   for(var i = 0; i< content.length; i++){
     var cur_content = "";
@@ -116,20 +137,7 @@ function ReadmeFileComponent(props) {
     }else if(content[i].includes("<!-- DB Table -->")){
       cur_content = parseTable(content[i].split("<!-- DB Table -->\n")[1]);
     }else if(content[i].includes("<!-- Web API -->")){
-      /*cur_content = <Md_editor
-        height={200}
-        id={"md_editor_"+i}
-        name={i}
-        value={content[i].split("<!-- Web API -->\n")[1]}
-        onChange={ (e,v) => changeTextArea(e,v)}
-        onFocus={ (e) => focusIn(e)}
-        color={"black"}
-        key={"md_editor"+i}
-        highlightEnable={false}
-        contentEditable
-        suppressContentEditableWarning
-        />;*/
-      cur_content = parseTable(content[i].split("<!-- Web API -->\n")[1]);
+      cur_content = parseTable(content[i].split("<!-- Web API -->\n")[1],i);
 
     }else if(content[i].includes("https://ifh.cc")){
       cur_content = <div>
@@ -158,7 +166,7 @@ function ReadmeFileComponent(props) {
 
           </div>
           <div className="readme-footer">
-            <p className="readme-footer-content">{cur_content}</p>
+            <div className="readme-footer-content">{cur_content}</div>
           </div>
           </div>
           <div className="div-readmeComponent">
@@ -179,7 +187,7 @@ function ReadmeFileComponent(props) {
               </div>
             </div>
             <div className="readme-footer">
-              <p className="readme-footer-content">{cur_content}</p>
+              <div className="readme-footer-content">{cur_content}</div>
             </div>
           </div>
           <div className="div-readmeComponent">
