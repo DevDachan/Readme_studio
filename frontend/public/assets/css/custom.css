@@ -482,9 +482,6 @@ select::-ms-expand {
 
 }
 
-.readmeDiv > div > table{
-  contenteditable: "true";
-}
 
 .wmde-markdown {
   margin: 10px 0 0 10px !important;
@@ -558,6 +555,9 @@ td > p {
   white-space: pre-wrap;
 }
 
+th, td, tr{
+  border: 2px solid black !important;
+}
 
 .component-title{
   color: black !important;
