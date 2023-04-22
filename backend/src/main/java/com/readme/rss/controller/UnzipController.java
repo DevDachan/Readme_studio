@@ -179,7 +179,7 @@ public class UnzipController {
         tempStr = tempStr.replaceAll("</dependency>", "\n    </dependency>");
         tempStr = tempStr.replaceAll("</dependencies>", "\n</dependencies>");
 
-        dependencies = "```pom.xml\n" + tempStr + "\n```";
+        dependencies = "```bash\n" + tempStr + "\n```";
 
         List<String> dependencyContents = new ArrayList<>();
         pattern = Pattern.compile("(?<=\\<dependency>)(.*?)(?=<\\/dependency>)");
