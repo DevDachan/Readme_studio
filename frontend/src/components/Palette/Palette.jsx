@@ -42,6 +42,7 @@ function Palette(props) {
     })
       .then(function (response){
         tempReadme.find(e => e.id === currentReadme).content.splice(position,0, response.data);
+        tempReadme.find(e => e.id === currentReadme).type.splice(position,0,e.target.value);
         setContent(tempReadme);
         setPosition(tempReadme.find(e => e.id === currentReadme).content.length);
         setTimeout(function() {
@@ -62,7 +63,7 @@ function Palette(props) {
     var tempReadme = JSON.parse(JSON.stringify(content));
     let emptyText = "<!-- empty_textarea -->\n";
     tempReadme.find(e => e.id === currentReadme).content.splice(position,0, emptyText);
-
+    tempReadme.find(e => e.id === currentReadme).type.splice(position,0,"Text");
     setContent(tempReadme);
     // 렌더링이 되지 않은 상태에서 scroll이 일어날 경우 이동이 안된다.
     setPosition(tempReadme.find(e => e.id === currentReadme).content.length);
@@ -84,6 +85,8 @@ function Palette(props) {
     })
       .then(function (response){
         tempReadme.find(e => e.id === currentReadme).content = ["<!-- All Data -->\n"+response.data];
+        tempReadme.find(e => e.id === currentReadme).type = ["All Data"];
+
         setContent(tempReadme);
         setPosition(tempReadme.find(e => e.id === currentReadme).content.length);
         setTimeout(function() {

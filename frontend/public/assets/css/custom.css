@@ -559,6 +559,11 @@ td > p {
 }
 
 
+.component-title{
+  color: black !important;
+  padding: 20px 0 0 20px;
+}
+
 /*result */
 
 

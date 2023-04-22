@@ -84,7 +84,7 @@ function Main(props) {
       "📙 Java Version :"+ response.data.javaVersion+"   \n"+
       "📚 DB : "+ response.data.databaseName;
 
-      readme_list.push({id: response.data.readmeName, content : [defaultData]});
+      readme_list.push({id: response.data.readmeName, content : [defaultData] , type : ["Default Data"]});
 
       navigate('./editor', {
         state: {
