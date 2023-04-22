@@ -275,6 +275,30 @@ public class UnzipController {
             }
         }
 
+        // project architecture
+        // tree 명령어
+        builder.directory(new File("./unzipFiles")); // 현재 위치 이동
+        builder.start();
+        builder.command("tree"); // mac
+        // builder.command("cmd.exe","/c","tree"); // window
+        process = builder.start();
+
+        String architecture = "\n<!-- Project Architecture -->\n";
+        architecture += "```bash\n";
+
+        // tree 명령어 실행 후, 콘솔에 출력해주기
+        try (var reader = new BufferedReader(
+            new InputStreamReader(process.getInputStream()))) {
+            String commandResult;
+            while ((commandResult = reader.readLine()) != null) {
+                architecture += commandResult + "   \n";
+            }
+        }
+        architecture += "```\n";
+
+        builder.directory(new File("../backend")); // 원래 위치로 이동
+        builder.start();
+
         // 압축 푼 파일들 중에서 원하는 정보 찾기(ex. url 찾기)
         String searchDirPath = "./unzipFiles";
         System.out.println("\n[압축 해제한 폴더 속 파일 리스트]");
@@ -319,6 +343,9 @@ public class UnzipController {
             file_pathList.clear();
             file_contentList.clear();
         }
+
+        // project architecture project table에 insert
+        projectService.saveProject(randomId, "Project Architecture", "", architecture, "tree");
 
         // project table에 .java 파일만 insert
         for(int i = 0 ; i < javaFileName.size() ; i++){
@@ -448,6 +475,8 @@ public class UnzipController {
 
         return map;
     }
+
+    
 
     public static int searchFiles(String searchDirPath) throws IOException {
         File dirFile = new File(searchDirPath);
@@ -619,10 +648,14 @@ public class UnzipController {
                     "THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.";
                 frame_content = frame_content.replace("UserName", user_name);
             }
+        } else if (framework_name.equals("Architecture")) {
+            frame_content = frameworkService.findContent("Architecture");
+            String architecture = projectService.getFileContentByFileName(project_id, "Project Architecture");
+            frame_content += architecture;
         }
 
         return frame_content;
-    } 
+    }
 
     public String dbTable(String project_id){
         String dbTable = "\n<!-- DB Table -->\n";

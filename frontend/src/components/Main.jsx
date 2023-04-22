@@ -88,7 +88,49 @@ function Main(props) {
 
       navigate('./editor', {
         state: {
-          project_id: 201304,
+          project_id: response.data.project_id,
+          framework_list: response.data.frameworkList,
+          readmeObject:readme_list,
+          defaultData: defaultData
+        }
+      });
+    })
+    .catch(function(error){
+      //handle error
+    })
+    .then(function(){
+      // always executed
+    });
+  }
+
+
+  const linkSubmitReadme = (e) =>{
+
+    const formData = new FormData();
+    formData.append('jsonParam1', document.getElementById("repoLink").value);
+
+    var readme_list = [];
+    console.log(document.getElementById("repoLink").value);
+    axios({
+      method: "post",
+      url: 'http://localhost:8090/register2',
+      data: formData
+    })
+    .then(function (response){
+      //handle success
+      var defaultData = "<!-- empty_textarea -->\n"+
+      "🚪 Stack : Spring boot    \n"+
+      "🌠 Version:  "+ response.data.springBootVersion+"   \n"+
+      "📕 Gruop ID : "+ response.data.groupId+"   \n"+
+      "📘 Artifact ID : "+ response.data.artifactId+"   \n"+
+      "📙 Java Version :"+ response.data.javaVersion+"   \n"+
+      "📚 DB : "+ response.data.databaseName;
+
+      readme_list.push({id: response.data.readmeName, content : [defaultData]});
+
+      navigate('./editor', {
+        state: {
+          project_id: response.data.project_id,
           framework_list: response.data.frameworkList,
           readmeObject:readme_list,
           defaultData: defaultData
