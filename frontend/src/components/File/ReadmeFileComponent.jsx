@@ -173,8 +173,6 @@ function ReadmeFileComponent(props) {
   }
 
 
-
-
   const checkedPosition = (e) => {
     setPosition(e.target.value);
   }
@@ -217,6 +215,7 @@ function ReadmeFileComponent(props) {
       </div>;
     }else{
       cur_content = content[i];
+      //cur_content = <h3>{content[i].split("<br>")[0].split("### ")[1]}</h3>;
     }
 
 
@@ -232,7 +231,6 @@ function ReadmeFileComponent(props) {
             <div className="col-sm-4"  style={{"textAlign":"right"}}>
               <button className="delete-readmeComponent" onClick={deleteContent} key={"delete_"+i} value={i}> X </button>
             </div>
-
 
           </div>
           <div className="readme-footer">
