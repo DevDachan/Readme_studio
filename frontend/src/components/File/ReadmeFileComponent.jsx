@@ -31,7 +31,8 @@ function ReadmeFileComponent(props) {
   const setPosition= props.setPosition;
   const deleteReadme = props.deleteReadme;
   const changePosition = props.changePosition;
-  const content = props.content.content;
+  const content = props.curreadme.content;
+  const type = props.curreadme.type;
   const changeTextArea = props.changeTextArea;
   const changePeriod = props.changePeriod;
   const deleteContent = props.deleteContent;
@@ -173,8 +174,6 @@ function ReadmeFileComponent(props) {
   }
 
 
-
-
   const checkedPosition = (e) => {
     setPosition(e.target.value);
   }
@@ -217,8 +216,8 @@ function ReadmeFileComponent(props) {
       </div>;
     }else{
       cur_content = content[i];
+      //cur_content = <h3>{content[i].split("<br>")[0].split("### ")[1]}</h3>;
     }
-
 
     if( Number(i) === Number(position)-1){
       list.push(
@@ -232,8 +231,9 @@ function ReadmeFileComponent(props) {
             <div className="col-sm-4"  style={{"textAlign":"right"}}>
               <button className="delete-readmeComponent" onClick={deleteContent} key={"delete_"+i} value={i}> X </button>
             </div>
-
-
+            <div className="col-sm-12">
+              <h3 className="component-title"> {type[i]}</h3>
+            </div>
           </div>
           <div className="readme-footer">
             <div className="readme-footer-content">{cur_content}</div>
@@ -254,6 +254,9 @@ function ReadmeFileComponent(props) {
               </div>
               <div className="col-sm-4" style={{"textAlign":"right"}}>
                 <button className="delete-readmeComponent" onClick={deleteContent} key={"delete_"+i} value={i}> X </button>
+              </div>
+              <div className="col-sm-12">
+                <h3 className="component-title"> {type[i]}</h3>
               </div>
             </div>
             <div className="readme-footer">

@@ -241,7 +241,7 @@ function Editor(props) {
                     //for content
                     title={currentReadme}
                     project_id={project_id}
-                    content={readmeObject.find(e => e.id === currentReadme)}
+                    curreadme={readmeObject.find(e => e.id === currentReadme)}
                     changePosition={changePosition}
                     forRelanderng={forRelanderng}
                     position={position}
