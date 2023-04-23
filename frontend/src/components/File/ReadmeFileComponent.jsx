@@ -76,14 +76,14 @@ function ReadmeFileComponent(props) {
     var tempReadme = JSON.parse(JSON.stringify(readmeList));
     tempReadme.find(e => e.id === currentReadme).content[id.split("table_")[1]] = "### Web API<br><!-- Web API -->\n" + content;
     setContent(tempReadme);
-    e.target.innerText = e.target.innerText.replace(/<br>/g, "\n");
+    e.target.innerText = e.target.innerText.replace(/<br>\s*/g, "\n");
   }
 
 
   // change markdown table to HTML table
   function parseTable_webapi(data, id){
-    data = data.replace(/&nbsp;/g, " ");
-    data = data.replace(/<br>/g, "\n");
+    data = data.replace(/&nbsp;\s*/g, " ");
+    data = data.replace(/<br>\s*/g, "\n");
     var tr_temp = data.split("|\n");
     const temp_list = [""];
     const tr = [""];
@@ -216,7 +216,6 @@ function ReadmeFileComponent(props) {
       </div>;
     }else{
       cur_content = content[i];
-      //cur_content = <h3>{content[i].split("<br>")[0].split("### ")[1]}</h3>;
     }
 
     if( Number(i) === Number(position)-1){
