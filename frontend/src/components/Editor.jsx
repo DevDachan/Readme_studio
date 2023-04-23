@@ -190,15 +190,17 @@ function Editor(props) {
 
 
   const addReadme = (e) => {
-    setReadmeObject([...readmeObject, {id: "README"+readmeObject.length+".md", content : [project_detail]}]);
+    setReadmeObject([...readmeObject, {id: "README"+readmeObject.length+".md", content : [project_detail] , type : ["Default Data"] }]);
   }
 
 
 
   const deleteReadme = (e) => {
+
     var temp = readmeObject;
+
     if(temp.length == 1 ){
-      temp = [{id: "README.md", content : [project_detail]}];
+      temp = [{id: "README.md", content : [project_detail], type : ["Default Data"] }];
       setReadmeObject(temp);
       setCurrentReadme(temp[0].id);
     }else{
