@@ -43,4 +43,9 @@ public class ProjectDAOImpl implements ProjectDAO {
     public List<ProjectEntity> getFileContent(String id){
         return projectRepository.getFileContent( id);
     }
+
+    @Override
+    public String getFileContentByFileName(String id, String file_name){
+        return projectRepository.getFileContentByFileName(id, file_name);
+    }
 }
