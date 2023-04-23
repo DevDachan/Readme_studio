@@ -61,9 +61,23 @@ function Editor(props) {
       setPosition(position-1);
     }
     tempReadme.find(e => e.id === currentReadme).content.splice(e.target.value ,1);
+    tempReadme.find(e => e.id === currentReadme).type.splice(e.target.value ,1);
+
     setReadmeObject(tempReadme);
     setForRelandering(forRelanderng + "1");
   }
+  //----------------------------------------------------------------------\
+
+  const pasteContent = (e) => {
+    var tempReadme = readmeObject;
+    tempReadme.find(e => e.id === currentReadme).content.splice(e.target.value,0, tempReadme.find(e => e.id === currentReadme).content[e.target.value]);
+    tempReadme.find(e => e.id === currentReadme).type.splice(e.target.value,0, tempReadme.find(e => e.id === currentReadme).type[e.target.value]);
+    setReadmeObject(tempReadme);
+    setPosition(Number(e.target.value)+2);
+    setForRelandering(forRelanderng + "1");
+  }
+
+
   //--------------------------------------------------------------------
   const changePosition = (e) =>{
     var currentIndex = Number(e.target.name);
@@ -191,6 +205,7 @@ function Editor(props) {
 
   const addReadme = (e) => {
     setReadmeObject([...readmeObject, {id: "README"+readmeObject.length+".md", content : [project_detail] , type : ["Default Data"] }]);
+    setCurrentReadme("README"+readmeObject.length+".md");
   }
 
 
@@ -250,6 +265,7 @@ function Editor(props) {
                     setContent={setContent}
                     setPosition={setPosition}
                     deleteContent={deleteContent}
+                    pasteContent={pasteContent}
                     changeTextArea={changeTextArea}
                     changePeriod={changePeriod}
                     handleOpen={handleOpen}

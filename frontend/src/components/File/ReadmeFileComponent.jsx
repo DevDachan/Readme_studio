@@ -36,6 +36,7 @@ function ReadmeFileComponent(props) {
   const changeTextArea = props.changeTextArea;
   const changePeriod = props.changePeriod;
   const deleteContent = props.deleteContent;
+  const pasteContent = props.pasteContent;
   const handleOpen = props.handleOpen;
   const title = props.title;
   const list = [""];
@@ -221,22 +222,33 @@ function ReadmeFileComponent(props) {
     if( Number(i) === Number(position)-1){
       list.push(
         <div>
-        <div className="readme" id={"readme_"+i} key={i}>
-          <div className="readme-header row">
-            <div className="col-sm-8">
-              <button className="bt-up" id={"postionChangeUp"+i} key={"up"+i} name={i} onClick={changePosition} style={{marginRight:"5px"}} />
-              <button className="bt-down" id={"postionChangeDown"+i} key={"down"+i} name={i} onClick={changePosition} />
+          <div className="readme" id={"readme_"+i} key={i}>
+            <div className="readme-header row">
+              <div className="col-sm-12">
+                <button className="bt-up" id={"postionChangeUp"+i} key={"up"+i} name={i} onClick={changePosition} style={{marginRight:"5px"}} />
+                <button className="bt-down" id={"postionChangeDown"+i} key={"down"+i} name={i} onClick={changePosition} />
+              </div>
+              <div className="col-sm-12">
+                <h3 className="component-title"> {type[i]}</h3>
+              </div>
             </div>
-            <div className="col-sm-4"  style={{"textAlign":"right"}}>
-              <button className="delete-readmeComponent" onClick={deleteContent} key={"delete_"+i} value={i}> X </button>
+
+            <div className="readme-content">
+              <div className="readme-content-detail">{cur_content}</div>
             </div>
-            <div className="col-sm-12">
-              <h3 className="component-title"> {type[i]}</h3>
+            <div className="readme-footer row">
+              <div className="col-sm-12 border-line">
+              </div>
+              <div className="col-sm-8">
+              </div>
+              <div className="col-sm-2 ralign">
+                <button className="paste-readmeComponent" onClick={pasteContent} key={"paste_"+i} value={i} / >
+              </div>
+              <div className="col-sm-2 lalign">
+                <button className="delete-readmeComponent" onClick={deleteContent} key={"delete_"+i} value={i} / >
+              </div>
             </div>
-          </div>
-          <div className="readme-footer">
-            <div className="readme-footer-content">{cur_content}</div>
-          </div>
+
           </div>
           <div className="div-readmeComponent">
             <button className="input-readmeComponent-checked" id={"select_"+i} id={"select_"+i} onClick={checkedPosition} key={"input_"+i} value={i+1}> Selected </button>
@@ -247,19 +259,29 @@ function ReadmeFileComponent(props) {
         <div>
           <div className="readme" id={"readme_"+i} key={i}>
             <div className="readme-header row">
-              <div className="col-sm-8">
+              <div className="col-sm-12">
                 <button className="bt-up" id={"postionChangeUp"+i} key={"up"+i} name={i} onClick={changePosition} style={{marginRight:"5px"}} />
                 <button className="bt-down" id={"postionChangeDown"+i} key={"down"+i} name={i} onClick={changePosition} />
-              </div>
-              <div className="col-sm-4" style={{"textAlign":"right"}}>
-                <button className="delete-readmeComponent" onClick={deleteContent} key={"delete_"+i} value={i}> X </button>
               </div>
               <div className="col-sm-12">
                 <h3 className="component-title"> {type[i]}</h3>
               </div>
             </div>
-            <div className="readme-footer">
-              <div className="readme-footer-content">{cur_content}</div>
+            <div className="readme-content">
+              <div className="readme-content-detail">{cur_content}</div>
+            </div>
+            <div className="readme-footer row">
+              <div className="col-sm-12 border-line">
+              </div>
+
+              <div className="col-sm-8">
+              </div>
+              <div className="col-sm-2 ralign">
+                <button className="paste-readmeComponent" onClick={pasteContent} key={"paste_"+i} value={i} / >
+              </div>
+              <div className="col-sm-2 lalign">
+                <button className="delete-readmeComponent" onClick={deleteContent} key={"delete_"+i} value={i} / >
+              </div>
             </div>
           </div>
           <div className="div-readmeComponent">
