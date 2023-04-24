@@ -31,10 +31,12 @@ function ReadmeFileComponent(props) {
   const setPosition= props.setPosition;
   const deleteReadme = props.deleteReadme;
   const changePosition = props.changePosition;
-  const content = props.content.content;
+  const content = props.curreadme.content;
+  const type = props.curreadme.type;
   const changeTextArea = props.changeTextArea;
   const changePeriod = props.changePeriod;
   const deleteContent = props.deleteContent;
+  const pasteContent = props.pasteContent;
   const handleOpen = props.handleOpen;
   const title = props.title;
   const list = [""];
@@ -75,14 +77,14 @@ function ReadmeFileComponent(props) {
     var tempReadme = JSON.parse(JSON.stringify(readmeList));
     tempReadme.find(e => e.id === currentReadme).content[id.split("table_")[1]] = "### Web API<br><!-- Web API -->\n" + content;
     setContent(tempReadme);
-    e.target.innerText = e.target.innerText.replace(/<br>/g, "\n");
+    e.target.innerText = e.target.innerText.replace(/<br>\s*/g, "\n");
   }
 
 
   // change markdown table to HTML table
   function parseTable_webapi(data, id){
-    data = data.replace(/&nbsp;/g, " ");
-    data = data.replace(/<br>/g, "\n");
+    data = data.replace(/&nbsp;\s*/g, " ");
+    data = data.replace(/<br>\s*/g, "\n");
     var tr_temp = data.split("|\n");
     const temp_list = [""];
     const tr = [""];
@@ -193,8 +195,6 @@ function ReadmeFileComponent(props) {
   }
 
 
-
-
   const checkedPosition = (e) => {
     setPosition(e.target.value);
   }
@@ -269,25 +269,36 @@ function ReadmeFileComponent(props) {
       cur_content = content[i];
     }
 
-
     if( Number(i) === Number(position)-1){
       list.push(
         <div>
-        <div className="readme" id={"readme_"+i} key={i}>
-          <div className="readme-header row">
-            <div className="col-sm-8">
-              <button className="bt-up" id={"postionChangeUp"+i} key={"up"+i} name={i} onClick={changePosition} style={{marginRight:"5px"}} />
-              <button className="bt-down" id={"postionChangeDown"+i} key={"down"+i} name={i} onClick={changePosition} />
-            </div>
-            <div className="col-sm-4"  style={{"textAlign":"right"}}>
-              <button className="delete-readmeComponent" onClick={deleteContent} key={"delete_"+i} value={i}> X </button>
+          <div className="readme" id={"readme_"+i} key={i}>
+            <div className="readme-header row">
+              <div className="col-sm-12">
+                <button className="bt-up" id={"postionChangeUp"+i} key={"up"+i} name={i} onClick={changePosition} style={{marginRight:"5px"}} />
+                <button className="bt-down" id={"postionChangeDown"+i} key={"down"+i} name={i} onClick={changePosition} />
+              </div>
+              <div className="col-sm-12">
+                <h3 className="component-title"> {type[i]}</h3>
+              </div>
             </div>
 
+            <div className="readme-content">
+              <div className="readme-content-detail">{cur_content}</div>
+            </div>
+            <div className="readme-footer row">
+              <div className="col-sm-12 border-line">
+              </div>
+              <div className="col-sm-8">
+              </div>
+              <div className="col-sm-2 ralign">
+                <button className="paste-readmeComponent" onClick={pasteContent} key={"paste_"+i} value={i} / >
+              </div>
+              <div className="col-sm-2 lalign">
+                <button className="delete-readmeComponent" onClick={deleteContent} key={"delete_"+i} value={i} / >
+              </div>
+            </div>
 
-          </div>
-          <div className="readme-footer">
-            <div className="readme-footer-content">{cur_content}</div>
-          </div>
           </div>
           <div className="div-readmeComponent">
             <button className="input-readmeComponent-checked" id={"select_"+i} id={"select_"+i} onClick={checkedPosition} key={"input_"+i} value={i+1}> Selected </button>
@@ -298,16 +309,29 @@ function ReadmeFileComponent(props) {
         <div>
           <div className="readme" id={"readme_"+i} key={i}>
             <div className="readme-header row">
-              <div className="col-sm-8">
+              <div className="col-sm-12">
                 <button className="bt-up" id={"postionChangeUp"+i} key={"up"+i} name={i} onClick={changePosition} style={{marginRight:"5px"}} />
                 <button className="bt-down" id={"postionChangeDown"+i} key={"down"+i} name={i} onClick={changePosition} />
               </div>
-              <div className="col-sm-4" style={{"textAlign":"right"}}>
-                <button className="delete-readmeComponent" onClick={deleteContent} key={"delete_"+i} value={i}> X </button>
+              <div className="col-sm-12">
+                <h3 className="component-title"> {type[i]}</h3>
               </div>
             </div>
-            <div className="readme-footer">
-              <div className="readme-footer-content">{cur_content}</div>
+            <div className="readme-content">
+              <div className="readme-content-detail">{cur_content}</div>
+            </div>
+            <div className="readme-footer row">
+              <div className="col-sm-12 border-line">
+              </div>
+
+              <div className="col-sm-8">
+              </div>
+              <div className="col-sm-2 ralign">
+                <button className="paste-readmeComponent" onClick={pasteContent} key={"paste_"+i} value={i} / >
+              </div>
+              <div className="col-sm-2 lalign">
+                <button className="delete-readmeComponent" onClick={deleteContent} key={"delete_"+i} value={i} / >
+              </div>
             </div>
           </div>
           <div className="div-readmeComponent">
