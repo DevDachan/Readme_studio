@@ -31,7 +31,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-@CrossOrigin(origins = "http://localhost:3005")
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 public class UnzipController {
     private ProjectService projectService;
@@ -257,12 +257,12 @@ public class UnzipController {
         ProcessBuilder builder = new ProcessBuilder();
 
         // unzipFiles 폴더 생성 - 압축풀기한 파일들을 저장하는 임시 폴더
-        builder.command("mkdir", "unzipFiles"); // mac
-        // builder.command("cmd.exe","/c","mkdir", "unzipFiles"); // window
+        //builder.command("mkdir", "unzipFiles"); // mac
+        builder.command("cmd.exe","/c","mkdir", "unzipFiles"); // window
         builder.start();
 
         // 파일 압축 풀기
-        builder.command("unzip", "unzipTest.zip", "-d", "./unzipFiles"); // mac
+        //builder.command("unzip", "unzipTest.zip", "-d", "./unzipFiles"); // mac
         // builder.command("cmd.exe","/c","unzip", "unzipTest.zip", "-d", "./unzipFiles"); // window
         var process = builder.start(); // upzip 실행
 
@@ -279,8 +279,8 @@ public class UnzipController {
         // tree 명령어
         builder.directory(new File("./unzipFiles")); // 현재 위치 이동
         builder.start();
-        builder.command("tree"); // mac
-        // builder.command("cmd.exe","/c","tree"); // window
+        //builder.command("tree"); // mac
+        builder.command("cmd.exe","/c","tree"); // window
         process = builder.start();
 
         String architecture = "\n<!-- Project Architecture -->\n";
@@ -511,18 +511,18 @@ public class UnzipController {
 
     public static void deleteUnzipFiles(ProcessBuilder builder) throws IOException {
         // upzip한 파일들, zip파일 모두 삭제
-        /* mac */
+        /* mac
         builder.command("rm", "-rf", "./unzipFiles/");
         builder.start();
         builder.command("rm", "-rf", "./unzipTest.zip");
-        builder.start();
+        builder.start();*/
 
-        /* window
+        /* window*/
         builder.command("cmd.exe","/c","rmdir", "unzipFiles");
         builder.start();
         builder.command("cmd.exe","/c","del", "unzipTest.zip");
         builder.start();
-        */
+
 
         System.out.println("업로드된 zip파일, 압축풀기한 파일들 모두 삭제 완료!!");
     }

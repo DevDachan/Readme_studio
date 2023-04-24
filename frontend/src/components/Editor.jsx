@@ -85,12 +85,17 @@ function Editor(props) {
     if(e.target.id.includes("Down")){
       if(currentIndex < readmeObject.find(e => e.id === currentReadme).content.length-1 ){
         var content = readmeObject.find(e => e.id === currentReadme).content;
+        var type = readmeObject.find(e => e.id === currentReadme).type;
+
         var changeIndex = currentIndex+1;
         //delete currentIndex item and copy
-        var chan_temp = Object.assign(content[changeIndex]);
-        var cur_temp = content.splice(currentIndex,1)[0];
 
-        content.splice(changeIndex, 0, cur_temp);
+        var cur_temp_content = content.splice(currentIndex,1)[0];
+        var cur_temp_type = type.splice(currentIndex,1);
+
+        content.splice(changeIndex, 0, cur_temp_content);
+        type.splice(changeIndex, 0, cur_temp_type);
+
 
         setReadmeObject(readmeObject);
         setForRelandering(forRelanderng + "1");
@@ -98,13 +103,15 @@ function Editor(props) {
     }else{
       if(currentIndex !== 0){
         var content = readmeObject.find(e => e.id === currentReadme).content;
+        var type = readmeObject.find(e => e.id === currentReadme).type;
         var changeIndex = currentIndex-1;
 
         //delete currentIndex item and copy
-        var chan_temp = Object.assign(content[changeIndex]);
-        var cur_temp = content.splice(currentIndex,1)[0];
+        var cur_temp_content = content.splice(currentIndex,1)[0];
+        var cur_temp_type = type.splice(currentIndex,1);
 
-        content.splice(changeIndex, 0, cur_temp);
+        content.splice(changeIndex, 0, cur_temp_content);
+        type.splice(changeIndex, 0, cur_temp_type);
 
         setReadmeObject(readmeObject);
         setForRelandering(forRelanderng + "1");
@@ -119,6 +126,15 @@ function Editor(props) {
     var position_id = i.target.parentElement.parentElement.parentElement.parentElement.id;
     var position = Number(position_id.substr(10,3));
     tempReadme.find(e => e.id === currentReadme).content[position] = "<!-- empty_textarea -->\n" + content;
+    setContent(tempReadme);
+  }
+
+  const changeLicense = (e,i) =>{
+    let tempReadme = readmeObject;
+    var content = e;
+    var position_id = i.target.parentElement.parentElement.parentElement.parentElement.id;
+    var position = Number(position_id.substr(10,3));
+    tempReadme.find(e => e.id === currentReadme).content[position] = "## License\n" + content;
     setContent(tempReadme);
   }
 
@@ -268,6 +284,7 @@ function Editor(props) {
                     pasteContent={pasteContent}
                     changeTextArea={changeTextArea}
                     changePeriod={changePeriod}
+                    changeLicense={changeLicense}
                     handleOpen={handleOpen}
                     deleteReadme={deleteReadme}
                     setContent={setContent}

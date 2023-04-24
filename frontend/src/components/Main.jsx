@@ -126,11 +126,11 @@ function Main(props) {
       "📙 Java Version :"+ response.data.javaVersion+"   \n"+
       "📚 DB : "+ response.data.databaseName;
 
-      readme_list.push({id: response.data.readmeName, content : [defaultData]});
+      readme_list.push({id: response.data.readmeName, content : [defaultData] , type : ["Default Data"]});
 
       navigate('./editor', {
         state: {
-          project_id: 544931,
+          project_id: response.data.project_id,
           framework_list: response.data.frameworkList,
           readmeObject:readme_list,
           defaultData: defaultData
