@@ -34,6 +34,7 @@ function ReadmeFileComponent(props) {
   const content = props.curreadme.content;
   const type = props.curreadme.type;
   const changeTextArea = props.changeTextArea;
+  const changeLicense = props.changeLicense;
   const changePeriod = props.changePeriod;
   const deleteContent = props.deleteContent;
   const pasteContent = props.pasteContent;
@@ -220,6 +221,18 @@ function ReadmeFileComponent(props) {
           key={"md_editor"+i}
           highlightEnable={false}
           />;
+    }else if(type[i] == "License"){
+          cur_content = <Md_editor
+            height={200}
+            id={"md_editor_"+i}
+            name={i}
+            value={content[i].split("## License\n")[1]}
+            onChange={ (e,v) => changeLicense(e,v)}
+            onFocus={ (e) => focusIn(e)}
+            color={"black"}
+            key={"md_editor"+i}
+            highlightEnable={false}
+            />;
     }else if(type[i] == "All Data"){
       cur_content = "<!-- All Data -->";
     }else if(type[i] == "DB Table"){
