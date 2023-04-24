@@ -804,7 +804,6 @@ public class UnzipController {
             String[] social_link = {"instagram", "facebook", "linkedin", "notion", "twitter", "github", "gmail"};
             String[] logo_color = {"E4405F","1877F2","0A66C2","000000","1DA1F2","181717","F06B66" };
             String social_temp =" ";
-            System.out.println(url);
             social_temp = frameworkService.findContent("Social");
 
             Document doc = Jsoup.connect(url).get();
@@ -816,12 +815,12 @@ public class UnzipController {
                     for( int j = 0; j< social_link.length; j++){
                         if(urlparsing[i].contains(social_link[j])){
                             String temp= social_link[j]+"_Link";
-                            System.out.println(temp + urlparsing[i]);
                             String temp_data=" ";
                             temp_data=social_temp.replace("logo_color",logo_color[j]);
                             temp_data=temp_data.replace("social",social_link[j]);
                             temp_data=temp_data.replace(temp, urlparsing[i]);
                             frame_content +=temp_data;
+                            System.out.println(frame_content);
                         }
                     }
                 }
@@ -1007,6 +1006,7 @@ public class UnzipController {
             + "|HTTP|API|URL|Return Type|Parameters|\n"
             + "|----|----|---|---|---|\n";
 
+        System.out.println(result);
         int start_index = 0, end_index = 0;
         String urlTemp, returnType, parameters;
         String[] apiTemp;
@@ -1014,7 +1014,7 @@ public class UnzipController {
 
         for(int i = 0; i < result.size(); i++){
             current_content = result.get(i).getFile_content();
-            mdResult += "||**"+  result.get(i).getFile_name()+"**|\n";
+            mdResult += "|**"+  result.get(i).getFile_name()+"**|\n";
 
             // find post mapping
             while(true){
@@ -1040,7 +1040,7 @@ public class UnzipController {
                     end_index = current_content.indexOf("{", start_index);
                     parameters = current_content.substring(start_index+1,end_index);
                     parameters = parameters.substring(0,parameters.lastIndexOf(")"));
-                    parameters= parameters.replace("," ,"</br>");
+                    parameters= parameters.replace("," ,"<br>");
                     parameters= parameters.replace("\n" ," ");
 
                     mdResult += "| Post |" +
@@ -1073,7 +1073,7 @@ public class UnzipController {
                     end_index = current_content.indexOf("{", start_index);
                     parameters = current_content.substring(start_index+1,end_index);
                     parameters = parameters.substring(0,parameters.lastIndexOf(")"));
-                    parameters= parameters.replace("," ,"</br>");
+                    parameters= parameters.replace("," ,"<br>");
                     parameters= parameters.replace("\n" ," ");
 
                     mdResult += "| Get |" +

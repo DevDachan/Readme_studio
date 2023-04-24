@@ -30,8 +30,8 @@ function Palette(props) {
 
   const addContent = (e) =>{
     const formData = new FormData();
-    let tempReadme = content;
 
+    var tempReadme = JSON.parse(JSON.stringify(content));
     formData.append('project_id', project_id);
     formData.append('framework_name', e.target.value);
 
@@ -42,9 +42,12 @@ function Palette(props) {
     })
       .then(function (response){
         tempReadme.find(e => e.id === currentReadme).content.splice(position,0, response.data);
+        tempReadme.find(e => e.id === currentReadme).type.splice(position,0,e.target.value);
         setContent(tempReadme);
-        document.getElementById("select_"+(position-1)).scrollIntoView(true);
         setPosition(tempReadme.find(e => e.id === currentReadme).content.length);
+        setTimeout(function() {
+           document.getElementById("select_"+(position-1)).scrollIntoView(true);
+         }, 0);
       })
       .catch(function(error){
         //handle error
@@ -57,13 +60,17 @@ function Palette(props) {
 
 
   const emptyText = (e) => {
-    let tempReadme = content;
+    var tempReadme = JSON.parse(JSON.stringify(content));
     let emptyText = "<!-- empty_textarea -->\n";
     tempReadme.find(e => e.id === currentReadme).content.splice(position,0, emptyText);
-
+    tempReadme.find(e => e.id === currentReadme).type.splice(position,0,"Text");
     setContent(tempReadme);
-    document.getElementById("select_"+(position-1)).scrollIntoView(true);
+    // 렌더링이 되지 않은 상태에서 scroll이 일어날 경우 이동이 안된다.
     setPosition(tempReadme.find(e => e.id === currentReadme).content.length);
+    setTimeout(function() {
+       document.getElementById("select_"+(position-1)).scrollIntoView(true);
+     }, 0);
+
   }
 
   const allData = (e) => {
@@ -78,9 +85,13 @@ function Palette(props) {
     })
       .then(function (response){
         tempReadme.find(e => e.id === currentReadme).content = ["<!-- All Data -->\n"+response.data];
+        tempReadme.find(e => e.id === currentReadme).type = ["All Data"];
+
         setContent(tempReadme);
-        document.getElementById("select_"+(position-1)).scrollIntoView(true);
         setPosition(tempReadme.find(e => e.id === currentReadme).content.length);
+        setTimeout(function() {
+           document.getElementById("select_"+(position-1)).scrollIntoView(true);
+         }, 0);
       })
       .catch(function(error){
         //handle error
