@@ -225,23 +225,17 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 }
 
-.readme-content{
+.readme-footer{
   padding: 20px;
   background-color:white;
 }
 
-.readme-content-detail{
+.readme-footer-content{
   background-color: #C5C5C5;
   padding: 20px;
   border-radius: 8px;
 }
 
-
-.readme-footer{
-  padding: 20px;
-  background-color:white;
-  margin: 0px !important;
-}
 
 .input-readmeComponent{
   width: 200px;
@@ -258,66 +252,15 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   color:#ddf4ff !important;
 }
 
-.delete-readmeComponent {
-  position: relative;
-  background: url('/images/delete.png') no-repeat 50% 50%;
-  background-size: 30px;
-  border-radius: 40px;
+
+.delete-readmeComponent{
+  border-radius: 20px;
   margin: 0px !important;
   padding: 10px !important;
-  width: 50%;
+  width: 20%;
   font-size: 1rem !important;
+  background-color: #F37B7B !important;
 }
-
-.delete-readmeComponent:hover {
-  background-color: #dddddd;
-}
-
-.delete-readmeComponent:hover::before {
-  content: "삭제";
-  position: absolute;
-  top: calc(100% + 10px);
-  left: 50%;
-  transform: translateX(-50%);
-  background-color: #a1a1a1;
-  color: #fff;
-  padding: 5px;
-  border-radius: 5px;
-  font-size: 12px;
-  white-space: nowrap;
-}
-
-
-.paste-readmeComponent {
-  position: relative;
-  background: url('/images/paste.png') no-repeat 50% 50%;
-  background-size: 30px;
-  border-radius: 40px;
-  margin: 0px !important;
-  padding: 10px !important;
-  width: 50%;
-  font-size: 1rem !important;
-}
-
-.paste-readmeComponent:hover {
-  background-color: #dddddd;
-}
-
-.paste-readmeComponent:hover::before {
-  content: "복사";
-  position: absolute;
-  top: calc(100% + 10px);
-  left: 50%;
-  transform: translateX(-50%);
-  background-color: #a1a1a1;
-  color: #fff;
-  padding: 5px;
-  border-radius: 5px;
-  font-size: 12px;
-  white-space: nowrap;
-}
-
-
 
 .input-readmeComponent-checked{
   width: 200px;
@@ -338,7 +281,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 .editorDiv{
   display: grid;
-  grid-template-columns: 1fr 3fr;
+  grid-template-columns: 1fr 4fr;
   background-color: white;
   border-radius: 8px;
 }
@@ -500,7 +443,6 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 .border-line{
   border-bottom: 2px solid #D1D5DB;
-  margin-bottom: 10px;
 }
 
 select::-ms-expand {
@@ -540,6 +482,9 @@ select::-ms-expand {
 
 }
 
+.readmeDiv > div > table{
+  contenteditable: "true";
+}
 
 .wmde-markdown {
   margin: 10px 0 0 10px !important;
@@ -613,14 +558,6 @@ td > p {
   white-space: pre-wrap;
 }
 
-th, td, tr{
-  border: 2px solid black !important;
-}
-
-.component-title{
-  color: black !important;
-  padding: 20px 0 0 20px;
-}
 
 /*result */
 
