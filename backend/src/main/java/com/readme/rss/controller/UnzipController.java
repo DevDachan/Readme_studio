@@ -31,7 +31,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "http://localhost:3005")
 @RestController
 public class UnzipController {
     private ProjectService projectService;
@@ -257,12 +257,12 @@ public class UnzipController {
         ProcessBuilder builder = new ProcessBuilder();
 
         // unzipFiles 폴더 생성 - 압축풀기한 파일들을 저장하는 임시 폴더
-        // builder.command("mkdir", "unzipFiles"); // mac
-        builder.command("cmd.exe","/c","mkdir", "unzipFiles"); // window
+        builder.command("mkdir", "unzipFiles"); // mac
+        // builder.command("cmd.exe","/c","mkdir", "unzipFiles"); // window
         builder.start();
 
         // 파일 압축 풀기
-        //builder.command("unzip", "unzipTest.zip", "-d", "./unzipFiles"); // mac
+        builder.command("unzip", "unzipTest.zip", "-d", "./unzipFiles"); // mac
         // builder.command("cmd.exe","/c","unzip", "unzipTest.zip", "-d", "./unzipFiles"); // window
         var process = builder.start(); // upzip 실행
 
@@ -274,6 +274,30 @@ public class UnzipController {
                 System.out.println(commandResult);
             }
         }
+
+        // project architecture
+        // tree 명령어
+        builder.directory(new File("./unzipFiles")); // 현재 위치 이동
+        builder.start();
+        builder.command("tree"); // mac
+        // builder.command("cmd.exe","/c","tree"); // window
+        process = builder.start();
+
+        String architecture = "\n<!-- Project Architecture -->\n";
+        architecture += "```bash\n";
+
+        // tree 명령어 실행 후, 콘솔에 출력해주기
+        try (var reader = new BufferedReader(
+            new InputStreamReader(process.getInputStream()))) {
+            String commandResult;
+            while ((commandResult = reader.readLine()) != null) {
+                architecture += commandResult + "   \n";
+            }
+        }
+        architecture += "```\n";
+
+        builder.directory(new File("../backend")); // 원래 위치로 이동
+        builder.start();
 
         // 압축 푼 파일들 중에서 원하는 정보 찾기(ex. url 찾기)
         String searchDirPath = "./unzipFiles";
@@ -319,6 +343,9 @@ public class UnzipController {
             file_pathList.clear();
             file_contentList.clear();
         }
+
+        // project architecture project table에 insert
+        projectService.saveProject(randomId, "Project Architecture", "", architecture, "tree");
 
         // project table에 .java 파일만 insert
         for(int i = 0 ; i < javaFileName.size() ; i++){
@@ -449,6 +476,8 @@ public class UnzipController {
         return map;
     }
 
+    
+
     public static int searchFiles(String searchDirPath) throws IOException {
         File dirFile = new File(searchDirPath);
         File[] fileList = dirFile.listFiles();
@@ -482,18 +511,18 @@ public class UnzipController {
 
     public static void deleteUnzipFiles(ProcessBuilder builder) throws IOException {
         // upzip한 파일들, zip파일 모두 삭제
-        /* mac
+        /* mac */
         builder.command("rm", "-rf", "./unzipFiles/");
         builder.start();
         builder.command("rm", "-rf", "./unzipTest.zip");
-        builder.start();*/
+        builder.start();
 
-        /* window*/
+        /* window
         builder.command("cmd.exe","/c","rmdir", "unzipFiles");
         builder.start();
         builder.command("cmd.exe","/c","del", "unzipTest.zip");
         builder.start();
-
+        */
 
         System.out.println("업로드된 zip파일, 압축풀기한 파일들 모두 삭제 완료!!");
     }
@@ -584,6 +613,44 @@ public class UnzipController {
         } else if (framework_name.equals("DB Table")) {
             frame_content = frameworkService.findContent("DB Table");
             frame_content += dbTable(project_id);
+        } else if (framework_name.equals("License")) {
+            String License_file = "default";
+            System.out.println("Project id : " + project_id);
+            List<ProjectEntity> getProjectTableRow = projectService.getFileContent(project_id);
+            for (int i = 0; i < getProjectTableRow.size(); i++) {
+                if (getProjectTableRow.get(i).getFile_path().contains("LICENSE")) {
+
+                    System.out.println(getProjectTableRow.get(i).getFile_content() + "test");
+                    String str = getProjectTableRow.get(i).getFile_content();
+                    String firstLine = str.substring(0, str.indexOf("\n"));
+                    firstLine = firstLine.replace("License", "");
+                    firstLine = firstLine.trim();
+                    frame_content = "## License\n" +
+                        "![License: MPL 2.0](https://img.shields.io/badge/License_name-brightgreen.svg)";
+                    frame_content = frame_content.replace("License_name", firstLine);
+                    System.out.println(firstLine);
+                    License_file = "exist";
+                }
+            }
+            if (License_file.equals("default")) {
+                frame_content = "## License\n" +
+                    "The MIT License (MIT)\n" +
+                    "\n" +
+                    "Copyright (c) 2023 UserName\n" +
+                    "\n" +
+                    "Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the \"Software\"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:\n"
+                    +
+                    "\n" +
+                    "The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.\n"
+                    +
+                    "\n" +
+                    "THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.";
+                frame_content = frame_content.replace("UserName", user_name);
+            }
+        } else if (framework_name.equals("Architecture")) {
+            frame_content = frameworkService.findContent("Architecture");
+            String architecture = projectService.getFileContentByFileName(project_id, "Project Architecture");
+            frame_content += architecture;
         }
 
         return frame_content;

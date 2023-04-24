@@ -146,3 +146,156 @@
 |project_id **(PK)**|
 |user_name|
 |repository_name|
+   
+## 8. Task8
+1. Git Repository Link 받아서 파일 다운로드 및 처리   
+2. Project Architecture tree 형식으로 데이터 보내기   
+
+### Project Architecture (Tree Structure)<br>
+<!-- Project Architecture -->
+```bash
+.   
+└── backend   
+    ├── LICENSE   
+    ├── README.md   
+    ├── mvnw   
+    ├── mvnw.cmd   
+    ├── pom.xml   
+    ├── rss.iml   
+    ├── src   
+    │   ├── main   
+    │   │   ├── java   
+    │   │   │   └── com   
+    │   │   │       └── readme   
+    │   │   │           └── rss   
+    │   │   │               ├── RssApplication.java   
+    │   │   │               ├── controller   
+    │   │   │               │   ├── MarkdownController.java   
+    │   │   │               │   └── UnzipController.java   
+    │   │   │               └── data   
+    │   │   │                   ├── dao   
+    │   │   │                   │   ├── FrameworkDAO.java   
+    │   │   │                   │   ├── Impl   
+    │   │   │                   │   │   ├── FrameworkDAOImpl.java   
+    │   │   │                   │   │   ├── ProjectDAOImpl.java   
+    │   │   │                   │   │   ├── TemplateDAOImpl.java   
+    │   │   │                   │   │   └── UserDAOImpl.java   
+    │   │   │                   │   ├── ProjectDAO.java   
+    │   │   │                   │   ├── TemplateDAO.java   
+    │   │   │                   │   └── UserDAO.java   
+    │   │   │                   ├── dto   
+    │   │   │                   │   ├── FrameworkDTO.java   
+    │   │   │                   │   ├── ProjectDTO.java   
+    │   │   │                   │   ├── TemplateDTO.java   
+    │   │   │                   │   └── UserDTO.java   
+    │   │   │                   ├── entity   
+    │   │   │                   │   ├── FrameworkEntity.java   
+    │   │   │                   │   ├── ProjectEntity.java   
+    │   │   │                   │   ├── TemplateEntity.java   
+    │   │   │                   │   ├── UserEntity.java   
+    │   │   │                   │   └── compositeKey   
+    │   │   │                   │       └── ProjectPK.java   
+    │   │   │                   ├── handler   
+    │   │   │                   │   ├── FrameworkHandler.java   
+    │   │   │                   │   ├── Impl   
+    │   │   │                   │   │   ├── FrameworkHandlerImpl.java   
+    │   │   │                   │   │   ├── ProjectHandlerImpl.java   
+    │   │   │                   │   │   ├── TemplateHandlerImpl.java   
+    │   │   │                   │   │   └── UserHandlerImpl.java   
+    │   │   │                   │   ├── ProjectHandler.java   
+    │   │   │                   │   ├── TemplateHandler.java   
+    │   │   │                   │   └── UserHandler.java   
+    │   │   │                   ├── repository   
+    │   │   │                   │   ├── FrameworkRepository.java   
+    │   │   │                   │   ├── ProjectRepository.java   
+    │   │   │                   │   ├── TemplateRepository.java   
+    │   │   │                   │   └── UserRepository.java   
+    │   │   │                   └── service   
+    │   │   │                       ├── FrameworkService.java   
+    │   │   │                       ├── Impl   
+    │   │   │                       │   ├── FrameworkServiceImpl.java   
+    │   │   │                       │   ├── ProjectServiceImpl.java   
+    │   │   │                       │   ├── TemplateServiceImpl.java   
+    │   │   │                       │   └── UserServiceImpl.java   
+    │   │   │                       ├── ProjectService.java   
+    │   │   │                       ├── TemplateService.java   
+    │   │   │                       └── UserService.java   
+    │   │   └── resources   
+    │   │       └── application.properties   
+    │   └── test   
+    │       └── java   
+    │           └── com   
+    │               └── readme   
+    │                   └── rss   
+    │                       └── RssApplicationTests.java   
+    └── target   
+        ├── classes   
+        │   ├── application.properties   
+        │   └── com   
+        │       └── readme   
+        │           └── rss   
+        │               ├── RssApplication.class   
+        │               ├── controller   
+        │               │   ├── MarkdownController.class   
+        │               │   └── UnzipController.class   
+        │               └── data   
+        │                   ├── dao   
+        │                   │   ├── FrameworkDAO.class   
+        │                   │   ├── Impl   
+        │                   │   │   ├── FrameworkDAOImpl.class   
+        │                   │   │   ├── ProjectDAOImpl.class   
+        │                   │   │   ├── TemplateDAOImpl.class   
+        │                   │   │   └── UserDAOImpl.class   
+        │                   │   ├── ProjectDAO.class   
+        │                   │   ├── TemplateDAO.class   
+        │                   │   └── UserDAO.class   
+        │                   ├── dto   
+        │                   │   ├── FrameworkDTO$FrameworkDTOBuilder.class   
+        │                   │   ├── FrameworkDTO.class   
+        │                   │   ├── ProjectDTO$ProjectDTOBuilder.class   
+        │                   │   ├── ProjectDTO.class   
+        │                   │   ├── TemplateDTO$TemplateDTOBuilder.class   
+        │                   │   ├── TemplateDTO.class   
+        │                   │   ├── UserDTO$UserDTOBuilder.class   
+        │                   │   └── UserDTO.class   
+        │                   ├── entity   
+        │                   │   ├── FrameworkEntity$FrameworkEntityBuilder.class   
+        │                   │   ├── FrameworkEntity.class   
+        │                   │   ├── ProjectEntity$ProjectEntityBuilder.class   
+        │                   │   ├── ProjectEntity.class   
+        │                   │   ├── TemplateEntity$TemplateEntityBuilder.class   
+        │                   │   ├── TemplateEntity.class   
+        │                   │   ├── UserEntity$UserEntityBuilder.class   
+        │                   │   ├── UserEntity.class   
+        │                   │   └── compositeKey   
+        │                   │       └── ProjectPK.class   
+        │                   ├── handler   
+        │                   │   ├── FrameworkHandler.class   
+        │                   │   ├── Impl   
+        │                   │   │   ├── FrameworkHandlerImpl.class   
+        │                   │   │   ├── ProjectHandlerImpl.class   
+        │                   │   │   ├── TemplateHandlerImpl.class   
+        │                   │   │   └── UserHandlerImpl.class   
+        │                   │   ├── ProjectHandler.class   
+        │                   │   ├── TemplateHandler.class   
+        │                   │   └── UserHandler.class   
+        │                   ├── repository   
+        │                   │   ├── FrameworkRepository.class   
+        │                   │   ├── ProjectRepository.class   
+        │                   │   ├── TemplateRepository.class   
+        │                   │   └── UserRepository.class   
+        │                   └── service   
+        │                       ├── FrameworkService.class   
+        │                       ├── Impl   
+        │                       │   ├── FrameworkServiceImpl.class   
+        │                       │   ├── ProjectServiceImpl.class   
+        │                       │   ├── TemplateServiceImpl.class   
+        │                       │   └── UserServiceImpl.class   
+        │                       ├── ProjectService.class   
+        │                       ├── TemplateService.class   
+        │                       └── UserService.class   
+        └── generated-sources   
+            └── annotations   
+   
+45 directories, 97 files   
+```

@@ -44,4 +44,9 @@ public class ProjectHandlerImpl implements ProjectHandler {
     public List<ProjectEntity> getFileContent(String id){
         return projectDAO.getFileContent(id);
     }
+
+    @Override
+    public String getFileContentByFileName(String id, String file_name){
+        return projectDAO.getFileContentByFileName(id, file_name);
+    }
 }
