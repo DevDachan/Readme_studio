@@ -32,7 +32,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "http://localhost:3005")
 @RestController
 public class UnzipController {
     private ProjectService projectService;
@@ -826,6 +826,7 @@ public class UnzipController {
                     }
                 }
             }
+            System.out.println("Social framework : " + frame_content);
         } else if (framework_name.equals("Dependency")) {
             String Dependency = "Dependency";
             String xmlContent = "";
