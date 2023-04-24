@@ -202,7 +202,6 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   color: #4f3e3e;
   width: 100%;
   border-radius: 6px;
-  font-weight: bold;
   margin:15px 0px 20px 0px;
   border: 3px solid #E0E0E0;
   word-break: break-all;
@@ -275,7 +274,6 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   width: 100%;
   padding: 1em 2em;
   border-radius: 20px;
-  font-weight: bold;
   min-width: 700px;
 }
 
@@ -372,6 +370,10 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   border: 2px solid #E8E8E8 !important;
 }
 
+.ip-header{
+  background-color: white !important;
+  margin-bottom: 20px;
+}
 
 
 /*   file select  */
@@ -479,7 +481,6 @@ select::-ms-expand {
   min-width: 50vw;
   max-width: 1000px;
   margin: auto;
-
 }
 
 .readmeDiv > div > table{
@@ -547,6 +548,18 @@ textarea:focus {
 }
 
 .webapi-table > tr,td{
+  background-color: white;
+  border: 2px solid black !important;
+  width: 15%;
+  padding: 2px;
+}
+
+.db-table{
+  background-color: white;
+  margin-bottom: 20px;
+}
+
+.db-table > tr,td{
   background-color: white;
   border: 2px solid black !important;
   width: 15%;

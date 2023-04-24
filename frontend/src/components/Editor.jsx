@@ -218,7 +218,7 @@ function Editor(props) {
 
         <section>
           <article>
-              <div className="row">
+              <div className="row" style={{minWidth: "1100px"}}>
                 <div className="col-sm-2 lalign mb-2">
                   <input type="button" className="bt-back" value="" onClick={goMain} />
                 </div>
