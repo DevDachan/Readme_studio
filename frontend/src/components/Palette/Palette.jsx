@@ -13,6 +13,7 @@ const Wrapper = styled.div`
     text-align: center;
     overflow:auto;
     border-right: 2px solid #D1D5DB;
+    min-width: 230px;
 `;
 
 
