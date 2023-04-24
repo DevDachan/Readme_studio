@@ -253,7 +253,7 @@ function ReadmeFileComponent(props) {
         <div className="col-sm-9">
           <input type="text" defaultValue="hi" id={i} className="ip-header" value={header_size} onChange={editHeaderSize} autoComplete="off" />
         </div>
-        <div dangerouslySetInnerHTML = {{__html:  header_tag }}></div>
+        <div className="calign" dangerouslySetInnerHTML = {{__html:  header_tag }}></div>
       </div>;
 
       console.log(cur_content);
