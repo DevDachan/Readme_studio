@@ -481,8 +481,20 @@ public class UnzipController {
     public HashMap<String, Object> getFileData(@RequestParam("jsonParam1") String repoLink)
         throws IOException, InterruptedException {
         HashMap<String,Object> map = new HashMap<String,Object>();
-
         System.out.println("repoLink : " + repoLink);
+
+        /* 예외처리
+        (1) 깃헙 레포지토리 주소 링크 형식이 아닌 경우 - https://github.com/로 시작해야 함
+        (2) 끝에 .git이 없는 경우 붙여주기
+         */
+        if(!repoLink.contains("https://github.com/")){ // (1) 예외처리
+            map.put("error", "LinkFormatError");
+            return map;
+        }
+        if(!repoLink.contains(".git")){ // (2) 예외처리
+            repoLink += ".git";
+        }
+
         String repoLinkInfo = repoLink.substring(19);
         System.out.println("repoLinkInfo : " + repoLinkInfo);
         String userName = repoLinkInfo.split("/")[0];
