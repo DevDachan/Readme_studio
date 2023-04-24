@@ -174,6 +174,26 @@ function ReadmeFileComponent(props) {
     return <div id={"dbdiv_"+id}> {temp_list} </div>;
   }
 
+  const editHeaderText = (e) =>{
+    var data = e.target.value;
+    var id = e.target.id;
+    var tempReadme = JSON.parse(JSON.stringify(readmeList));
+    let modifiedHeader = tempReadme.find(e => e.id === currentReadme).content[id].replace(/text=[^&]*/, `text=${data}`);
+
+    tempReadme.find(e => e.id === currentReadme).content[id] = modifiedHeader;
+    setContent(tempReadme);
+  }
+
+  const editHeaderSize = (e) =>{
+    var data = e.target.value;
+    var id = e.target.id;
+    var tempReadme = JSON.parse(JSON.stringify(readmeList));
+    let modifiedHeader = tempReadme.find(e => e.id === currentReadme).content[id].replace(/fontSize=[^)]*/, `fontSize=${data}`);
+
+    tempReadme.find(e => e.id === currentReadme).content[id] = modifiedHeader;
+    setContent(tempReadme);
+  }
+
 
   const checkedPosition = (e) => {
     setPosition(e.target.value);
@@ -188,7 +208,7 @@ function ReadmeFileComponent(props) {
   for(var i = 0; i< content.length; i++){
     var cur_content = "";
     var temp_num = i;
-    if(content[i].includes("empty_textarea")){
+    if(type[i] == "Text" || type[i] == "Default Data"){
         cur_content = <Md_editor
           height={200}
           id={"md_editor_"+i}
@@ -200,16 +220,46 @@ function ReadmeFileComponent(props) {
           key={"md_editor"+i}
           highlightEnable={false}
           />;
-    }else if(content[i].includes("<!-- All Data -->")){
+    }else if(type[i] == "All Data"){
       cur_content = "<!-- All Data -->";
-    }else if(content[i].includes("<!-- DB Table -->")){
+    }else if(type[i] == "DB Table"){
       cur_content = content[i].split("<!-- DB Table -->\n")[1];
 
       cur_content = db_table(cur_content,i);
-    }else if(content[i].includes("<!-- Web API -->")){
+    }else if(type[i] == "WebAPI"){
       cur_content = parseTable_webapi(content[i].split("<!-- Web API -->\n")[1],i);
 
-    }else if(content[i].includes("https://ifh.cc")){
+    }else if(type[i] == "Contributor"){
+      cur_content = <div dangerouslySetInnerHTML = {{__html: content[i].split("### Contributor<br>")[1]}}>
+        </div>;
+    }else if(type[i] == "Social"){
+      cur_content = <div dangerouslySetInnerHTML = {{__html: content[i].split("### Social<br>")[1]}}>
+        </div>;
+    }else if(type[i] == "Header"){
+      var header_tag = "<img src=\"" + content[i].split("\(")[1].split("\)")[0] + "\" />";
+      var header_text = content[i].split("&section=header&text=")[1].split("&")[0];
+      var header_size = content[i].split("fontSize=")[1].split("\)")[0];
+
+      cur_content = <div className="row">
+        <div className="col-sm-3">
+          <h3> Text </h3>
+        </div>
+        <div className="col-sm-9">
+          <input type="text" defaultValue="hi" id={i} className="ip-header" value={header_text} onChange={editHeaderText} autoComplete="off" />
+        </div>
+        <div className="col-sm-3">
+          <h3> Size </h3>
+        </div>
+        <div className="col-sm-9">
+          <input type="text" defaultValue="hi" id={i} className="ip-header" value={header_size} onChange={editHeaderSize} autoComplete="off" />
+        </div>
+        <div className="calign" dangerouslySetInnerHTML = {{__html:  header_tag }}></div>
+      </div>;
+
+      console.log(cur_content);
+
+
+    }else if(type[i] == "Period"){
       cur_content = <div>
         <div className="dateBox" >Start date : <input type="date" data-placeholder="날짜 선택" id={"period_start" + i} onChange={changePeriod} name={i}></input></div>
         <div className="brCSS"></div>
