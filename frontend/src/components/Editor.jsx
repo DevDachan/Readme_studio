@@ -287,7 +287,6 @@ function Editor(props) {
                     changeLicense={changeLicense}
                     handleOpen={handleOpen}
                     deleteReadme={deleteReadme}
-                    setContent={setContent}
                     //for Header
                     readmeList={readmeObject}
                     setCurrentReadme={setCurrentReadme}

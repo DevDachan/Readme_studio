@@ -32,7 +32,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "http://localhost:3005")
 @RestController
 public class UnzipController {
     private ProjectService projectService;
@@ -481,8 +481,20 @@ public class UnzipController {
     public HashMap<String, Object> getFileData(@RequestParam("jsonParam1") String repoLink)
         throws IOException, InterruptedException {
         HashMap<String,Object> map = new HashMap<String,Object>();
-
         System.out.println("repoLink : " + repoLink);
+
+        /* 예외처리
+        (1) 깃헙 레포지토리 주소 링크 형식이 아닌 경우 - https://github.com/로 시작해야 함
+        (2) 끝에 .git이 없는 경우 붙여주기
+         */
+        if(!repoLink.contains("https://github.com/")){ // (1) 예외처리
+            map.put("error", "LinkFormatError");
+            return map;
+        }
+        if(!repoLink.contains(".git")){ // (2) 예외처리
+            repoLink += ".git";
+        }
+
         String repoLinkInfo = repoLink.substring(19);
         System.out.println("repoLinkInfo : " + repoLinkInfo);
         String userName = repoLinkInfo.split("/")[0];
@@ -826,6 +838,7 @@ public class UnzipController {
                     }
                 }
             }
+            System.out.println("Social framework : " + frame_content);
         } else if (framework_name.equals("Dependency")) {
             String Dependency = "Dependency";
             String xmlContent = "";
