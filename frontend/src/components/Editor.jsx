@@ -61,9 +61,23 @@ function Editor(props) {
       setPosition(position-1);
     }
     tempReadme.find(e => e.id === currentReadme).content.splice(e.target.value ,1);
+    tempReadme.find(e => e.id === currentReadme).type.splice(e.target.value ,1);
+
     setReadmeObject(tempReadme);
     setForRelandering(forRelanderng + "1");
   }
+  //----------------------------------------------------------------------\
+
+  const pasteContent = (e) => {
+    var tempReadme = readmeObject;
+    tempReadme.find(e => e.id === currentReadme).content.splice(e.target.value,0, tempReadme.find(e => e.id === currentReadme).content[e.target.value]);
+    tempReadme.find(e => e.id === currentReadme).type.splice(e.target.value,0, tempReadme.find(e => e.id === currentReadme).type[e.target.value]);
+    setReadmeObject(tempReadme);
+    setPosition(Number(e.target.value)+2);
+    setForRelandering(forRelanderng + "1");
+  }
+
+
   //--------------------------------------------------------------------
   const changePosition = (e) =>{
     var currentIndex = Number(e.target.name);
@@ -206,15 +220,18 @@ function Editor(props) {
 
 
   const addReadme = (e) => {
-    setReadmeObject([...readmeObject, {id: "README"+readmeObject.length+".md", content : [project_detail]}]);
+    setReadmeObject([...readmeObject, {id: "README"+readmeObject.length+".md", content : [project_detail] , type : ["Default Data"] }]);
+    setCurrentReadme("README"+readmeObject.length+".md");
   }
 
 
 
   const deleteReadme = (e) => {
+
     var temp = readmeObject;
+
     if(temp.length == 1 ){
-      temp = [{id: "README.md", content : [project_detail]}];
+      temp = [{id: "README.md", content : [project_detail], type : ["Default Data"] }];
       setReadmeObject(temp);
       setCurrentReadme(temp[0].id);
     }else{
@@ -257,13 +274,14 @@ function Editor(props) {
                     //for content
                     title={currentReadme}
                     project_id={project_id}
-                    content={readmeObject.find(e => e.id === currentReadme)}
+                    curreadme={readmeObject.find(e => e.id === currentReadme)}
                     changePosition={changePosition}
                     forRelanderng={forRelanderng}
                     position={position}
                     setContent={setContent}
                     setPosition={setPosition}
                     deleteContent={deleteContent}
+                    pasteContent={pasteContent}
                     changeTextArea={changeTextArea}
                     changePeriod={changePeriod}
                     changeLicense={changeLicense}
