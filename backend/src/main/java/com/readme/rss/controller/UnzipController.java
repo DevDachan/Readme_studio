@@ -5,6 +5,8 @@ import static java.lang.Thread.sleep;
 import com.readme.rss.data.dto.UserDTO;
 import com.readme.rss.data.entity.ProjectEntity;
 import java.util.Arrays;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -1125,73 +1127,148 @@ public class UnzipController {
     }
 
     @PostMapping("/alldata")
-    public String alldata(@RequestParam("project_id") String project_id) {
+    public Map <String,String[]> allData(@RequestParam("project_id") String project_id) throws IOException {
+        Map<String, String[]> all_data = new LinkedHashMap<>();
         String frame_content = "";
         UserDTO userDTO = userService.getUser(project_id);
         String user_name = userDTO.getUser_name();
         String repo_name = userDTO.getRepository_name();
-
-        frame_content = "Header_check\n" +
-            "\n" +
-            "\n" +
-            "Contributor_check\n" +
-            "<div style=\"font-weight:bold; font-size: 21px;\">Project Period</div>" +
-            "<div><img src='https://ifh.cc/g/LGBnpy.png' width=100%></div>" +
-            "<span style=\"width:20%\"><span/>" +
-            "<span style=\"margin-right: 55%; margin-left: 5%;\">Start Date</span>" +
-            "<span width=20%>End Date</span><br>   " +
-            "\n" +
-            "\n"+
-            "## Table of contents[![](https://raw.githubusercontent.com/aregtech/areg-sdk/master/docs/img/pin.svg)](#table-of-contents)   <br>\n" +
-            "- [Install](#install)\n" +
-            "- [DB](#db)\n" +
-            "- [queryMethod](#querymethod)\n" +
-            "---\n" +
-            "\n" +
-            "## Install[![](https://raw.githubusercontent.com/aregtech/areg-sdk/master/docs/img/pin.svg)](#install)\n" +
-            "<div align=\"right\">[ <a href=\"#table-of-contents\">↑ to top ↑</a> ]</div>\n" +
-            "1. Java 설치\n" +
-            "   - Spring Boot를 사용하려면 Java 8 버전 이상이 필요합니다.<br><br />\n" +
-            "   - [Oracle Java](https://www.oracle.com/technetwork/java/javase/downloads/index.html) .<br><br />\n" +
-            "\n" +
-            "\n" +
-            "```\n" +
-            "sdk install spring boot\n" +
-            "```\n" +
-            "2. Spring Boot CLI 설치\n" +
-            "\n" +
-            "   Spring Boot CLI는 Spring Boot 애플리케이션을 빠르게 만들 수 있는 명령줄 도구입니다.\n" +
-            "```\n" +
-            " spring init --dependencies=web myproject\n" +
-            "```\n" +
-            "## DB[![](https://raw.githubusercontent.com/aregtech/areg-sdk/master/docs/img/pin.svg)](#db)\n" +
-            "<div align=\"right\">[ <a href=\"#table-of-contents\">↑ to top ↑</a> ]</div>\n" +
-            "\n" +
-            "\n" +
-            "## QueryMethod[![](https://raw.githubusercontent.com/aregtech/areg-sdk/master/docs/img/pin.svg)](#querymethod)\n" +
-            "<div align=\"right\">[ <a href=\"#table-of-contents\">↑ to top ↑</a> ]</div>\n" +
-            "\n" +
-            "- 데이터베이스에서 name이 \"John Doe\"이거나 age가 18 이상인 Person 엔티티를 조회하는 쿼리 메소드\n" +
-            "```\n" +
-            " public interface PersonRepository extends JpaRepository<Person, Long> {\n" +
-            "    List<Person> findByNameOrAgeGreaterThanEqual(String name, int age);\n" +
-            "}\n" +
-            "```\n" +
-            "- 데이터베이스에서 age가 18 이상인 Person 엔티티를 age를 기준으로 오름차순으로 조회하는 쿼리 메소드\n" +
-            "```\n" +
-            " public interface PersonRepository extends JpaRepository<Person, Long> {\n" +
-            "    List<Person> findByAgeGreaterThanEqualOrderByAgeAsc(int age);\n" +
-            "}\n" +
-            "```\n";
-
+        String framework_name="";
         List<String> frameworkNameList = frameworkService.getFrameworkNameList();
-        for(int i = 0 ; i < frameworkNameList.size() ; i++){
-            String temp=frameworkNameList.get(i) ;
-            frame_content=frame_content.replace(temp+"_check",frameworkService.findContent(temp));
-        }
-        frame_content= frame_content.replace("userName",user_name);
-        frame_content= frame_content.replace("repositoryName",repo_name);
+        int index=0;
+        // framework 테이블에 있는 framework 다 가져오기
+        //배열선언
+        String[] framework_list= new String[frameworkNameList.size()];
+        String[] content_list= new String[frameworkNameList.size()];
 
-        return frame_content;
+        for(int count=0; count< frameworkNameList.size(); count++){
+            framework_name=frameworkNameList.get(count);
+
+            // framework_id에 따른 content제공
+            if(framework_name.equals("Contributor")){
+                frame_content = frameworkService.findContent(framework_name);
+                frame_content = frame_content.replace("repositoryName", repo_name);
+                frame_content = frame_content.replace("userName", user_name);
+                index = 8;
+            } else if (framework_name.equals("Header")) { /* header 값에 대한 framework*/
+                String Header = "header";
+                frame_content = frameworkService.findContent(Header);
+                frame_content=frame_content.replace("repoName",repo_name);
+                index = 0;
+            } else if (framework_name.equals("Period")) {
+                String Period = "Period";
+                frame_content = frameworkService.findContent(Period);
+                frame_content=frame_content.replace("PeriodImage", "https://ifh.cc/g/2jWwt7.png");
+                frame_content=frame_content.replace("startDate", "Start Date");
+                frame_content=frame_content.replace("endDate", "End Date");
+                index = 1;
+            } else if(framework_name.equals("WebAPI")) {
+                frame_content = frameworkService.findContent("WebAPI");
+                frame_content += webAPI(project_id);
+                index = 3;
+            } else if (framework_name.equals("Social")){
+                frame_content = "### Social<br>";
+                String url = "https://github.com/";
+                url = url + user_name;
+                String[] social_link = {"instagram", "facebook", "linkedin", "notion", "twitter", "github", "gmail"};
+                String[] logo_color = {"E4405F","1877F2","0A66C2","000000","1DA1F2","181717","F06B66" };
+                String social_temp =" ";
+                social_temp = frameworkService.findContent("Social");
+
+                Document doc = Jsoup.connect(url).get();
+                Elements elements = doc.getElementsByClass("vcard-details");
+                for (Element headline : elements) {
+                    String[] urlparsing = headline.text().split(" ");
+                    for (int i = 0; i < urlparsing.length; i++) {
+                        for( int j = 0; j< social_link.length; j++){
+                            if(urlparsing[i].contains(social_link[j])){
+                                String temp= social_link[j]+"_Link";
+                                String temp_data=" ";
+                                temp_data=social_temp.replace("logo_color",logo_color[j]);
+                                temp_data=temp_data.replace("social",social_link[j]);
+                                temp_data=temp_data.replace(temp, urlparsing[i]);
+                                frame_content +=temp_data;
+                            }
+                        }
+                    }
+                }
+                index = 7;
+            } else if (framework_name.equals("Dependency")) {
+                String Dependency = "Dependency";
+                String xmlContent = "";
+                List<ProjectEntity> getProjectTableRow = projectService.getFileContent(project_id);
+                for(int i = 0 ; i < getProjectTableRow.size() ; i++) {
+                    if (getProjectTableRow.get(i).getFile_path().contains("pom.xml")) {
+                        xmlContent = getProjectTableRow.get(i).getFile_content();
+                    }
+                }
+
+                String noWhiteSpaceXml = xmlContent.replaceAll("\n", "");
+                String dependencyTags = "\n" + findDependencies(noWhiteSpaceXml).get(1).toString();
+                List<String> dependencyNameList = (List<String>) findDependencies(noWhiteSpaceXml).get(0);
+                String dependencyName = "\n";
+                String dependencyBtn = "<a href=\"https://mvnrepository.com/\"><img src=\"https://img.shields.io/badge/NUM-DEPENDENCYNAME-9cf\"></a>";
+                for(int i = 0 ; i < dependencyNameList.size() ; i++){
+                    String tempBtn = dependencyBtn;
+                    String dependencyFormat = dependencyNameList.get(i);
+                    dependencyFormat = dependencyFormat.replace("-", "--");
+                    tempBtn = tempBtn.replace("NUM", Integer.toString(i+1));
+                    tempBtn = tempBtn.replace("DEPENDENCYNAME",  dependencyFormat);
+
+                    dependencyName = dependencyName + tempBtn + "   ";
+                }
+                frame_content = frameworkService.findContent(Dependency);
+                frame_content=frame_content.replace("DependencyNames", dependencyName);
+                frame_content=frame_content.replace("DependencyContents", dependencyTags);
+                index = 5;
+            } else if (framework_name.equals("DB Table")) {
+                frame_content = frameworkService.findContent("DB Table");
+                frame_content += dbTable(project_id);
+                index = 4;
+            } else if (framework_name.equals("License")) {
+                String License_file = "default";
+                System.out.println("Project id : " + project_id);
+                List<ProjectEntity> getProjectTableRow = projectService.getFileContent(project_id);
+                for (int i = 0; i < getProjectTableRow.size(); i++) {
+                    if (getProjectTableRow.get(i).getFile_path().contains("LICENSE")) {
+                        String str = getProjectTableRow.get(i).getFile_content();
+                        String firstLine = str.substring(0, str.indexOf("\n"));
+                        firstLine = firstLine.replace("License", "");
+                        firstLine = firstLine.trim();
+                        frame_content = "## License\n" +
+                            "![License: MPL 2.0](https://img.shields.io/badge/License_name-brightgreen.svg)";
+                        frame_content = frame_content.replace("License_name", firstLine);
+                        License_file = "exist";
+                    }
+                }
+                if (License_file.equals("default")) {
+                    frame_content = "## License\n" +
+                        "The MIT License (MIT)\n" +
+                        "\n" +
+                        "Copyright (c) 2023 UserName\n" +
+                        "\n" +
+                        "Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the \"Software\"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:\n"
+                        +
+                        "\n" +
+                        "The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.\n"
+                        +
+                        "\n" +
+                        "THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.";
+                    frame_content = frame_content.replace("UserName", user_name);
+                }
+                index = 6;
+            } else if (framework_name.equals("Architecture")) {
+                frame_content = frameworkService.findContent("Architecture");
+                String architecture = projectService.getFileContentByFileName(project_id, "Project Architecture");
+                frame_content += architecture;
+                index = 2;
+            }
+            framework_list[index]=framework_name;
+            content_list[index]=frame_content;
+        }
+        all_data.put("content",content_list);
+        all_data.put("type",framework_list);
+
+        return all_data;
     }
 }
