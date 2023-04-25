@@ -17,8 +17,13 @@
 }
 
 .col-sm-2 {
-    flex: 0 0 auto;
-    width: 16.66666667% !important;
+  flex: 0 0 auto;
+  width: 16.66666667% !important;
+}
+
+
+table{
+  width: 100%;
 }
 
 

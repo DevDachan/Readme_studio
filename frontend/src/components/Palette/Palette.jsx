@@ -75,14 +75,20 @@ function Palette(props) {
     const formData = new FormData();
 
     formData.append("project_id", project_id);
+
     axios({
       method: "post",
       url: 'http://localhost:8090/alldata',
       data: formData,
     })
       .then(function (response){
-        tempReadme.find(e => e.id === currentReadme).content = ["<!-- All Data -->\n"+response.data];
-        tempReadme.find(e => e.id === currentReadme).type = ["All Data"];
+        tempReadme.find(e => e.id === currentReadme).content = [];
+        tempReadme.find(e => e.id === currentReadme).type = [];
+
+        for(var i = 0; i < response.data.content.length; i++){
+          tempReadme.find(e => e.id === currentReadme).content.push(response.data.content[i]);
+          tempReadme.find(e => e.id === currentReadme).type.push(response.data.type[i]);
+        }
 
         setContent(tempReadme);
         setPosition(tempReadme.find(e => e.id === currentReadme).content.length);
