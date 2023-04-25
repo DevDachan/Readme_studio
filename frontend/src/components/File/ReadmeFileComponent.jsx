@@ -23,7 +23,7 @@ function ReadmeFileComponent(props) {
   const setCurrentReadme=props.setCurrentReadme;
   const currentReadme=props.currentReadme;
   const addReadme=props.addReadme;
-  const generateReadme=props.generateReadme;
+  const goResult=props.goResult;
   const setContent = props.setContent;
 
   // for content
@@ -39,7 +39,7 @@ function ReadmeFileComponent(props) {
   const changePeriod = props.changePeriod;
   const deleteContent = props.deleteContent;
   const pasteContent = props.pasteContent;
-  const handleOpen = props.handleOpen;
+  const previewChange = props.previewChange;
   const title = props.title;
   const list = [""];
 
@@ -261,7 +261,7 @@ function ReadmeFileComponent(props) {
         key={"md_editor"+i}
         highlightEnable={false}
         />;
-      
+
 
 
     }else if(type[i] == "Header"){
@@ -381,7 +381,7 @@ function ReadmeFileComponent(props) {
             </div>
 
             <div className="col-sm-7 ralign mb-3">
-              <input type="button" className="bt-generate ralign" value="👉🏻 Generate MD Files " onClick={generateReadme} />
+              <input type="button" className="bt-generate ralign" value="👉🏻 Generate MD Files " onClick={goResult} />
             </div>
 
           </div>
@@ -391,7 +391,7 @@ function ReadmeFileComponent(props) {
               <h3 className="header-text"> {title} </h3>
             </div>
             <div className="col-sm-12 calign">
-                <button className=" bt-preview" onClick={handleOpen} variant="outline-primary">Preview</button>
+                <button className=" bt-preview" onClick={previewChange} variant="outline-primary">Preview</button>
                 <button className="bt-deleteReadme"  onClick={deleteReadme}>DELETE README</button>
 
             </div>

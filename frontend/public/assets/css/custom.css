@@ -104,6 +104,7 @@ option{
 #rep-name, #user-name{
   color:white;
   font-size: 1rem !important;
+  height: 3em;
 }
 
 
