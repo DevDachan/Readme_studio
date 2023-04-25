@@ -85,7 +85,7 @@ function ReadmeFileComponent(props) {
     content = content.replace(/&gt;\s*/g, ">");
     content = makeTable_webapi(content);
     var tempReadme = JSON.parse(JSON.stringify(readmeList));
-    tempReadme.find(e => e.id === currentReadme).content[id.split("table_")[1]] = "### Web API<br><!-- Web API -->\n" + content;
+    tempReadme.find(e => e.id === currentReadme).content[id.split("table_")[1]] = "## Web API<br><!-- Web API -->\n" + content;
     setContent(tempReadme);
     e.target.innerText = e.target.innerText.replace(/<br>\s*/g, "\n");
   }
@@ -257,11 +257,11 @@ function ReadmeFileComponent(props) {
       cur_content = parseTable_webapi(content[i].split("<!-- Web API -->\n")[1],i);
 
     }else if(type[i] == "Contributor"){
-      cur_content = <div dangerouslySetInnerHTML = {{__html: content[i].split("### Contributor<br>")[1]}}>
+      cur_content = <div dangerouslySetInnerHTML = {{__html: content[i].split("## Contributor<br>")[1]}}>
         </div>;
 
     }else if(type[i] == "Social"){
-      cur_content = <div dangerouslySetInnerHTML = {{__html: content[i].split("### Social<br>")[1]}}>
+      cur_content = <div dangerouslySetInnerHTML = {{__html: content[i].split("## Social<br>")[1]}}>
         </div>;
 
     }else if(type[i] == "Architecture"){

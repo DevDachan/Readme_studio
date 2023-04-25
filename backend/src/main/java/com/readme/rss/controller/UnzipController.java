@@ -812,7 +812,7 @@ public class UnzipController {
             frame_content = frameworkService.findContent("WebAPI");
             frame_content += webAPI(project_id);
         } else if (framework_name.equals("Social")){
-            frame_content = "### Social<br>";
+            frame_content = "## Social<br>";
             String url = "https://github.com/";
             url = url + user_name;
             String[] social_link = {"instagram", "facebook", "linkedin", "notion", "twitter", "github", "gmail"};
@@ -1167,7 +1167,7 @@ public class UnzipController {
                 frame_content += webAPI(project_id);
                 index = 3;
             } else if (framework_name.equals("Social")){
-                frame_content = "### Social<br>";
+                frame_content = "## Social<br>";
                 String url = "https://github.com/";
                 url = url + user_name;
                 String[] social_link = {"instagram", "facebook", "linkedin", "notion", "twitter", "github", "gmail"};
