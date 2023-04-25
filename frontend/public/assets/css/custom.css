@@ -1,9 +1,28 @@
+/* Project */
 .scrollHtml{
   overflow: auto;
   min-width: 1280px;
   height: auto;
 }
 
+.calign{
+  text-align: center !important;
+}
+
+.lalign{
+  text-align: left !important;
+}
+.ralign{
+  text-align: right !important;
+}
+
+.col-sm-2 {
+    flex: 0 0 auto;
+    width: 16.66666667% !important;
+}
+
+
+/*  Main.jsx  */
 .ip-url{
   height : auto !important;
   width: 30em !important;
@@ -14,8 +33,6 @@
   font-weight: 500 !important;
   background: url('/images/url.PNG') no-repeat 5% 50%;
   background-size : 13px;
-
-
 }
 
 .ip-url:focus{
@@ -91,15 +108,6 @@ select {
   -moz-appearance: none;
   appearance: none;
 }
-option{
-  background-color: white !important;
-  color: black !important;
-}
-
-
-
-
-/*main*/
 
 #rep-name, #user-name{
   color:white;
@@ -108,7 +116,25 @@ option{
 }
 
 
-/*editor*/
+
+/*------------------------------------ Editor.jsx ------------------------------------*/
+
+.bt-back{
+  width: 30%;
+  font-size: 30px;
+  background: url('/images/back.png') no-repeat 50% 50%;
+  background-size: 100%;
+  background-color: transparent !important;
+}
+
+
+/* ------------------------------------- ReadmeFileComponent.jsx ------------------------------------*/
+
+option{
+  background-color: white !important;
+  color: black !important;
+}
+
 
 #editor-header{
   text-align: center;
@@ -145,7 +171,6 @@ option{
   font-size: 2rem;3
 }
 
-
 input[type="date"]{
   position: relative;
   padding: 8px 10px 8px 10px;
@@ -165,27 +190,8 @@ input[type="date"]::-webkit-inner-spin-button {
 input[type="date"]::-webkit-calendar-picker-indicator {
     z-index: 1;
 }
-
-.brCSS{
-  height: 10px;
-}
-
 .dateBox{
   width: 300px;
-}
-
-
-.sidebar {
-  position: sticky;
-  top: 20px; /* 원하는 위치로 조절 가능 */
-}
-
-.bt-back{
-  width: 30%;
-  font-size: 30px;
-  background: url('/images/back.png') no-repeat 50% 50%;
-  background-size: 100%;
-  background-color: transparent !important;
 }
 
 .bt-generate{
@@ -197,6 +203,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   color: #D69D0B !important;
   font-size: 1.3rem;
 }
+
 
 .readme{
   background-color: white;
@@ -213,16 +220,12 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   border-left: 5px solid #4285f4;
 }
 
-.div-readmeComponent{
-  text-align: center;
-}
 
 .readme-header{
   background-color: white;
   padding: 20px 0px 30px 0px;
   margin: 0px !important;
   margin-bottom: 20px;
-
 }
 
 .readme-content{
@@ -236,14 +239,13 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   border-radius: 8px;
 }
 
-
 .readme-footer{
   padding: 20px;
   background-color:white;
   margin: 0px !important;
 }
 
-.input-readmeComponent{
+.bt-changePosition{
   width: 200px;
   background-color:white;
   border: 3px solid #C5C5C5;
@@ -251,11 +253,17 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   border-radius: 10px;
 }
 
-.input-readmeComponent:hover{
+.bt-changePosition:hover{
   width: 200px;
   background-color:white;
   border: 3px solid #ddf4ff;
   color:#ddf4ff !important;
+}
+
+.bt-changePosition-checked{
+  width: 200px;
+  border-radius: 10px;
+  background-color: black !important;
 }
 
 .delete-readmeComponent {
@@ -287,7 +295,6 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   white-space: nowrap;
 }
 
-
 .paste-readmeComponent {
   position: relative;
   background: url('/images/paste.png') no-repeat 50% 50%;
@@ -317,14 +324,6 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   white-space: nowrap;
 }
 
-
-
-.input-readmeComponent-checked{
-  width: 200px;
-  border-radius: 10px;
-  background-color: black !important;
-}
-
 .contentDiv{
   background-color: white;
   color: #4f3e3e;
@@ -340,51 +339,6 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   grid-template-columns: 1fr 3fr;
   background-color: white;
   border-radius: 8px;
-}
-
-.palette-div{
-  color: #4f3e3e;
-  width: 100%;
-  padding: 1em;
-  margin-left: 0px !important;
-  margin-bottom: 20px;
-  font-weight: bold;
-  justify-content: center;
-  text-align: center;
-}
-
-.palette-title{
-  margin-bottom: 20px;
-  font-weight: 700;
-  color: black;
-  text-align: left;
-  padding-left: 0px !important;
-  font-size: 1.5rem;
-}
-
-.palette-optionsTitle{
-  color: black;
-  font-size: 2.5rem;
-  text-align: left;
-  margin-bottom: 20px;
-  padding-left: 10px;
-  font-weight: bold;
-}
-
-.calign{
-  text-align: center !important;
-}
-
-.lalign{
-  text-align: left !important;
-}
-.ralign{
-  text-align: right !important;
-}
-
-.col-sm-2 {
-    flex: 0 0 auto;
-    width: 16.66666667% !important;
 }
 
 
@@ -405,7 +359,6 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   padding: 0px !important;
   background: url('/images/plus.PNG') no-repeat 50% 50%;
   background-size: 20px;
-
   border-radius: 20px !important;
   margin-top: 23px;
   background-color: white !important;
@@ -415,49 +368,11 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   font-family: Inter;
 }
 
-.btn-palette{
-  background-color: white !important;
-  color: black !important;
-  border: 2px solid #E8E8E8 !important;
-  text-align: left !important;
-}
-
-.btn-palette:hover{
-  background-color: #E8E8E8 !important;
-  color: #767676 !important;
-  border: 2px solid #E8E8E8 !important;
-}
-
 .ip-header{
   background-color: white !important;
   margin-bottom: 20px;
 }
 
-
-/*   file select  */
-.file-list-item{
-  list-style-type: none;
-}
-.file-list-item:hover{
-  border-bottom-color: transparent;
-  color: #1cb495 !important;
-  text-decoration: none;
-}
-
-.file-list-header{
-  list-style-type: none;
-  border-bottom: 2px solid darkgrey;
-  margin-bottom: 10px;
-  padding-bottom: 10px;
-}
-
-.file-list{
-  background-color: #c7c7c7;
-  padding: 1em;
-  border-radius: 20px;
-  color: white;
-  font-weight: bold;
-}
 
 .bt-up{
   width: 9%;
@@ -472,7 +387,6 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .bt-down{
   width: 9%;
   max-width: 45px;
-
   background: url('/images/down_arrow.PNG') no-repeat 50% 50%;
   background-size: 15px;
   background-color: #C5C5C5;
@@ -485,21 +399,13 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   color: #1cb495 !important;
 }
 
-
-
 .bt-updown:hover > .img-updown{
   filter: opacity(0.8) drop-shadow(0 0 0 black);
-}
-
-.img-updown{
-  border: 0px;
 }
 
 .w-md-editor-text{
   font-weight: 600;
 }
-
-
 
 .border-line{
   border-bottom: 2px solid #D1D5DB;
@@ -510,8 +416,8 @@ select::-ms-expand {
     display: none;
 }
 
-.bt-preview{
 
+.bt-preview{
   padding: 10px 5px !important;
   font-weight: 600 !important;
   margin-right: 10px !important;
@@ -530,61 +436,6 @@ select::-ms-expand {
 }
 
 
-/* for the markdown viewer*/
-.readmeDiv{
-  border:3px solid #dedcdc !important;
-  height: 100%;
-  width: 100%;
-  padding: 2em;
-  border-radius: 10px;
-  min-width: 50vw;
-  max-width: 1000px;
-  margin: auto;
-}
-
-
-.wmde-markdown {
-  margin: 10px 0 0 10px !important;
-}
-
-
-.wmde-markdown table{
-  width: 100% !important;
-  display: table !important;
-	table-layout: fixed;
-}
-
-.bt-close{
-  background-color: #dc3545;
-  border-radius: 3px;
-  width: 10rem;
-}
-
-.wmde-markdown-var  * {
-  color: black !important;
-}
-.wmde-markdown  * {
-  color: black !important;
-}
-
-
-.bt_alldata{
-  background-color: #b1f257 !important;
-}
-
-.modal-lg, .modal-xl{
-  --bs-modal-width: 70vw !important;
-}
-
-.modal-title{
-  font-weight: bold !important;
-  margin-top: 20px !important;
-  margin-left: 20px !important;
-  font-size: 2.5rem !important;
-
-}
-
-
 .header-text{
   margin-top: 20px;
   margin-left: 10px;
@@ -594,10 +445,10 @@ select::-ms-expand {
   text-align: center;
 }
 
+
 textarea:focus {
     outline: none;
 }
-
 
 .webapi-table{
   background-color: white;
@@ -636,13 +487,100 @@ th, td, tr{
   padding: 20px 0 0 20px;
 }
 
-/*result */
-
-
-
-.bt-main{
-  width: 90%;
+/*---------------------------------- Palette.jsx ---------------------------------------*/
+.palette-div{
+  color: #4f3e3e;
+  width: 100%;
+  padding: 1em;
+  margin-left: 0px !important;
+  margin-bottom: 20px;
+  font-weight: bold;
+  justify-content: center;
+  text-align: center;
 }
+
+.palette-title{
+  margin-bottom: 20px;
+  font-weight: 700;
+  color: black;
+  text-align: left;
+  padding-left: 0px !important;
+  font-size: 1.5rem;
+}
+
+.palette-optionsTitle{
+  color: black;
+  font-size: 2.5rem;
+  text-align: left;
+  margin-bottom: 20px;
+  padding-left: 10px;
+  font-weight: bold;
+}
+
+.btn-palette{
+  background-color: white !important;
+  color: black !important;
+  border: 2px solid #E8E8E8 !important;
+  text-align: left !important;
+}
+
+.btn-palette:hover{
+  background-color: #E8E8E8 !important;
+  color: #767676 !important;
+  border: 2px solid #E8E8E8 !important;
+}
+
+
+/*----------------------------------------- ReadmeFileContent -----------------------------------------*/
+.readmeDiv{
+  border:3px solid #dedcdc !important;
+  height: 100%;
+  width: 100%;
+  padding: 2em;
+  border-radius: 10px;
+  min-width: 50vw;
+  max-width: 1000px;
+  margin: auto;
+}
+
+.wmde-markdown {
+  margin: 10px 0 0 10px !important;
+}
+
+
+.wmde-markdown table{
+  width: 100% !important;
+  display: table !important;
+	table-layout: fixed;
+}
+
+.bt-close{
+  background-color: #dc3545;
+  border-radius: 3px;
+  width: 10rem;
+}
+
+.wmde-markdown-var  * {
+  color: black !important;
+}
+.wmde-markdown  * {
+  color: black !important;
+}
+
+.modal-lg, .modal-xl{
+  --bs-modal-width: 70vw !important;
+}
+
+.modal-title{
+  font-weight: bold !important;
+  margin-top: 20px !important;
+  margin-left: 20px !important;
+  font-size: 2.5rem !important;
+}
+
+
+
+/*---------------------------------------- Result.jsx --------------------------------------*/
 
 .resultDiv{
   background-color: white;
@@ -659,4 +597,9 @@ th, td, tr{
   color: black !important;
   font-size: 3rem;
   margin-left: 10px;
+}
+
+.bt-download{
+  background-color: black !important;
+  width: 100%;
 }

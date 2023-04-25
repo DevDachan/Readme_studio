@@ -340,8 +340,8 @@ function ReadmeFileComponent(props) {
             </div>
 
           </div>
-          <div className="div-readmeComponent">
-            <button className="input-readmeComponent-checked" id={"select_"+i} id={"select_"+i} onClick={checkedPosition} key={"input_"+i} value={i+1}> Selected </button>
+          <div className="calign">
+            <button className="bt-changePosition-checked" id={"select_"+i} id={"select_"+i} onClick={checkedPosition} key={"input_"+i} value={i+1}> Selected </button>
           </div>
         </div>);
     }else{
@@ -374,8 +374,8 @@ function ReadmeFileComponent(props) {
               </div>
             </div>
           </div>
-          <div className="div-readmeComponent">
-            <button className="input-readmeComponent" id={"select_"+i} onClick={checkedPosition} key={"input_"+i} value={i+1}> + </button>
+          <div className="calign">
+            <button className="bt-changePosition" id={"select_"+i} onClick={checkedPosition} key={"input_"+i} value={i+1}> + </button>
           </div>
         </div>);
     }

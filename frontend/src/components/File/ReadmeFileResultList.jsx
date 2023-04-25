@@ -66,7 +66,7 @@ function ReadmeFileResultContent(props) {
   return (
       <Wrapper>
         <h3 className="palette-optionsTitle"> Results</h3>
-        <input type="button" className="bt-download" value="Download" onClick={downReadme} />
+        <input type="button" className="bt-download" value="Download MD Files" onClick={downReadme} />
         <div className="palette-div row">
           <h3 className="palette-title"> MD LIST</h3>
           {
