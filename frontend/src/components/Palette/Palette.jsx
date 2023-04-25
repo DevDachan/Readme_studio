@@ -53,9 +53,6 @@ function Palette(props) {
       .catch(function(error){
         //handle error
         console.log(error);
-      })
-      .then(function(){
-        // always executed
       });
   }
 
@@ -71,7 +68,6 @@ function Palette(props) {
     setTimeout(function() {
        document.getElementById("select_"+(position-1)).scrollIntoView(true);
      }, 0);
-
   }
 
   const allData = (e) => {
@@ -100,14 +96,15 @@ function Palette(props) {
       });
   }
 
+  // 기본 All Data와 Text 팔레트 추가
   list.push(<input type="button" className="mb-2 btn-palette" key={"all_data"} value={"All Data"} onClick={allData}/>);
   list.push(<input type="button" className="mb-2 btn-palette" key={"empty_textarea"} value={"Text"} onClick={emptyText}/>);
 
-
-
+  // DB에 저장되어 있는 framework 팔레트 추가
   for(var i = 0; i< paletteList.length; i++){
     list.push(<input type="button" className="mb-2 btn-palette" key={paletteList[i]} value={paletteList[i]} onClick={addContent}/>);
   }
+
   return (
       <Wrapper>
         <h3 className="palette-optionsTitle"> Options</h3>

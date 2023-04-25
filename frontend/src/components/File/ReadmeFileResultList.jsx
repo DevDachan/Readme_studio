@@ -17,12 +17,11 @@ const Wrapper = styled.div`
 
 function ReadmeFileResultContent(props) {
   const navigate = useNavigate();
-
   const item = props.currentReadme;
   const setItem = props.setCurrentReadme;
   const readmeList = props.readmeList;
   const list = [];
-  const submitReadme = props.submitReadme;
+  const downReadme = props.downReadme;
 
 
   const downloadMD = (e, mdID, fileName) =>{
@@ -53,7 +52,6 @@ function ReadmeFileResultContent(props) {
 
       // 다운로드가 끝난 리소스(객체 URL)를 해제
       window.URL.revokeObjectURL(fileObjectUrl);
-
     })
     .catch(function(error){
       //handle error
@@ -65,11 +63,10 @@ function ReadmeFileResultContent(props) {
     setItem(e.target.value);
   }
 
-
   return (
       <Wrapper>
         <h3 className="palette-optionsTitle"> Results</h3>
-        <input type="button" className="bt-download" value="Download" onClick={submitReadme} />
+        <input type="button" className="bt-download" value="Download" onClick={downReadme} />
         <div className="palette-div row">
           <h3 className="palette-title"> MD LIST</h3>
           {
