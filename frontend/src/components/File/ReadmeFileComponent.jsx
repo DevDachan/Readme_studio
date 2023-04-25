@@ -15,35 +15,43 @@ const Wrapper = styled.div`
     justify-content: center;
 `;
 
-
 function ReadmeFileComponent(props) {
   const navigate = useNavigate();
-  //for Header
-  const readmeList= props.readmeList;
-  const setCurrentReadme=props.setCurrentReadme;
-  const currentReadme=props.currentReadme;
-  const addReadme=props.addReadme;
-  const goResult=props.goResult;
-  const setContent = props.setContent;
 
-  // for content
-  const position = props.position;
-  const setPosition= props.setPosition;
-  const deleteReadme = props.deleteReadme;
-  const changePosition = props.changePosition;
+  //for content variable
+  const title = props.title;
   const content = props.curreadme.content;
   const type = props.curreadme.type;
+  const position = props.position;
+
+  // for contents action
+  const setContent = props.setContent;
+  const setPosition= props.setPosition;
+
+  const changePosition = props.changePosition;
   const changeTextArea = props.changeTextArea;
   const changeLicense = props.changeLicense;
   const changeArchitecture = props.changeArchitecture;
   const changePeriod = props.changePeriod;
+
   const deleteContent = props.deleteContent;
   const pasteContent = props.pasteContent;
+  const deleteReadme = props.deleteReadme;
+
+  //for Header variable
+  const readmeList= props.readmeList;
+  const currentReadme=props.currentReadme;
+
+  //for Header action
+  const setCurrentReadme=props.setCurrentReadme;
+  const addReadme=props.addReadme;
+  const goResult=props.goResult;
+
   const previewChange = props.previewChange;
-  const title = props.title;
   const list = [""];
 
-  //---------------------- Web API table Editor ------------------------------
+
+  //---------------------- Web API table function ------------------------------
   // change HTML table to markdown table
   function makeTable_webapi(data){
     var count_td = data.split('</tr>')[0].split('<td><p contenteditable="true">').length -1;
@@ -107,7 +115,7 @@ function ReadmeFileComponent(props) {
     return temp_list;
   }
 
-  //---------------------- DB table Editor ------------------------------
+  //---------------------- DB table component function ------------------------------
   function makeTable_db(data){
     var count_td = data.split('</tr>')[0].split('<td><p contenteditable="true">').length -1;
 
@@ -176,6 +184,7 @@ function ReadmeFileComponent(props) {
     return <div id={"dbdiv_"+id}> {temp_list} </div>;
   }
 
+  //------------------------ Header component function  -----------------------------------
   const editHeaderText = (e) =>{
     var data = e.target.value;
     var id = e.target.id;
@@ -196,6 +205,7 @@ function ReadmeFileComponent(props) {
     setContent(tempReadme);
   }
 
+  // ----------------------------- change position function  --------------------------------------------------------
 
   const checkedPosition = (e) => {
     setPosition(e.target.value);
@@ -207,6 +217,8 @@ function ReadmeFileComponent(props) {
     setPosition(id);
   }
 
+
+  //---------------------------- Make Component content  ----------------------------------------------
   for(var i = 0; i< content.length; i++){
     var cur_content = "";
     var temp_num = i;
@@ -236,19 +248,22 @@ function ReadmeFileComponent(props) {
             />;
     }else if(type[i] == "All Data"){
       cur_content = "<!-- All Data -->";
+
     }else if(type[i] == "DB Table"){
       cur_content = content[i].split("<!-- DB Table -->\n")[1];
-
       cur_content = db_table(cur_content,i);
+
     }else if(type[i] == "WebAPI"){
       cur_content = parseTable_webapi(content[i].split("<!-- Web API -->\n")[1],i);
 
     }else if(type[i] == "Contributor"){
       cur_content = <div dangerouslySetInnerHTML = {{__html: content[i].split("### Contributor<br>")[1]}}>
         </div>;
+
     }else if(type[i] == "Social"){
       cur_content = <div dangerouslySetInnerHTML = {{__html: content[i].split("### Social<br>")[1]}}>
         </div>;
+
     }else if(type[i] == "Architecture"){
       cur_content = <Md_editor
         height={200}
@@ -260,9 +275,7 @@ function ReadmeFileComponent(props) {
         color={"black"}
         key={"md_editor"+i}
         highlightEnable={false}
-        />;
-
-
+      />;
 
     }else if(type[i] == "Header"){
       var header_tag = "<img src=\"" + content[i].split("\(")[1].split("\)")[0] + "\" />";
@@ -285,13 +298,13 @@ function ReadmeFileComponent(props) {
         <div className="calign" dangerouslySetInnerHTML = {{__html:  header_tag }}></div>
       </div>;
 
-
     }else if(type[i] == "Period"){
       cur_content = <div>
         <div className="dateBox" >Start date : <input type="date" data-placeholder="날짜 선택" id={"period_start" + i} onChange={changePeriod} name={i}></input></div>
         <div className="brCSS"></div>
         <div className="dateBox" >End date : <input type="date" data-placeholder="날짜 선택" id={"period_end" + i} name={i} onChange={changePeriod}></input></div>
       </div>;
+
     }else{
       cur_content = content[i];
     }

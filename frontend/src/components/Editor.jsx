@@ -58,7 +58,7 @@ function Editor(props) {
 
   //--------------------------------------------------------------------
   const deleteContent = (e) =>{
-    var tempReadme = readmeObject;
+    var tempReadme = JSON.parse(JSON.stringify(readmeObject));
     if(Number(position) === tempReadme.find(e => e.id === currentReadme).content.length){
       setPosition(position-1);
     }
@@ -71,7 +71,7 @@ function Editor(props) {
   //----------------------------------------------------------------------
 
   const pasteContent = (e) => {
-    var tempReadme = readmeObject;
+    var tempReadme = JSON.parse(JSON.stringify(readmeObject));
     tempReadme.find(e => e.id === currentReadme).content.splice(e.target.value,0, tempReadme.find(e => e.id === currentReadme).content[e.target.value]);
     tempReadme.find(e => e.id === currentReadme).type.splice(e.target.value,0, tempReadme.find(e => e.id === currentReadme).type[e.target.value]);
     setReadmeObject(tempReadme);
@@ -120,7 +120,7 @@ function Editor(props) {
 
   //--------------------------------------------------------------------
   const changeTextArea = (e,i) =>{
-    let tempReadme = readmeObject;
+    var tempReadme = JSON.parse(JSON.stringify(readmeObject));
     var content = e;
     var position_id = i.target.parentElement.parentElement.parentElement.parentElement.id;
     var position = Number(position_id.substr(10,3));
@@ -129,7 +129,7 @@ function Editor(props) {
   }
 
   const changeLicense = (e,i) =>{
-    let tempReadme = readmeObject;
+    var tempReadme = JSON.parse(JSON.stringify(readmeObject));
     var content = e;
     var position_id = i.target.parentElement.parentElement.parentElement.parentElement.id;
     var position = Number(position_id.substr(10,3));
@@ -138,7 +138,7 @@ function Editor(props) {
   }
 
   const changeArchitecture = (e,i) =>{
-    let tempReadme = readmeObject;
+    var tempReadme = JSON.parse(JSON.stringify(readmeObject));
     var content = e;
     var position_id = i.target.parentElement.parentElement.parentElement.parentElement.id;
     var position = Number(position_id.substr(10,3));
@@ -248,7 +248,7 @@ function Editor(props) {
                       currentReadme={currentReadme}
                       content={readmeObject}
                       position={position}
-                      
+
                       setContent={setContent}
                       setPosition={setPosition}
 
@@ -258,7 +258,6 @@ function Editor(props) {
                     <ReadmeFileComponent
                       //for content variable
                       title={currentReadme}
-                      project_id={project_id}
                       curreadme={readmeObject.find(e => e.id === currentReadme)}
                       position={position}
 
