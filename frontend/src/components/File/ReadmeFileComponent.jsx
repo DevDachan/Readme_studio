@@ -76,7 +76,7 @@ function ReadmeFileComponent(props) {
     content = content.replace(/&gt;\s*/g, ">");
     content = makeTable_webapi(content);
     var tempReadme = JSON.parse(JSON.stringify(readmeList));
-    tempReadme.find(e => e.id === currentReadme).content[id.split("table_")[1]] = "### Web API<br><!-- Web API -->\n" + content;
+    tempReadme.find(e => e.id === currentReadme).content[id.split("table_")[1]] = "## Web API<br><!-- Web API -->\n" + content;
     setContent(tempReadme);
     e.target.innerText = e.target.innerText.replace(/<br>\s*/g, "\n");
   }
@@ -113,7 +113,7 @@ function ReadmeFileComponent(props) {
     var temp = data.replace(/\n\s*/g, '  <br>');
     temp = temp.replace(/<table class="db-table">\s*/g,"\n|*Column Name*|\n|-----|\n");
     temp = temp.replace(/<\/h3>\s*/g," \n");
-    temp = temp.replace(/<h3>\s*/g,"#### ");
+    temp = temp.replace(/<h3>\s*/g,"### ");
     temp = temp.replace(/<td><p contenteditable="true">\s*/g, '\n');
     temp = temp.replace(/<\/p><\/td>\s*/g, '|');
     temp = temp.replace(/<tr>\s*/g, '|');
@@ -166,7 +166,7 @@ function ReadmeFileComponent(props) {
 
   function db_table(data,id){
     const temp_list = [""];
-    var col_temp = data.split(/\|\*.*?\*\||####/g);
+    var col_temp = data.split(/\|\*.*?\*\||###/g);
     var table_count = (col_temp.length - 1) / 2;
     for(var i = 0; i < table_count; i++){
       temp_list.push(<h3>{col_temp[2*i+1].replace(/<br>/g, "")} </h3>);
@@ -243,10 +243,10 @@ function ReadmeFileComponent(props) {
       cur_content = parseTable_webapi(content[i].split("<!-- Web API -->\n")[1],i);
 
     }else if(type[i] == "Contributor"){
-      cur_content = <div dangerouslySetInnerHTML = {{__html: content[i].split("### Contributor<br>")[1]}}>
+      cur_content = <div dangerouslySetInnerHTML = {{__html: content[i].split("## Contributor<br>")[1]}}>
         </div>;
     }else if(type[i] == "Social"){
-      cur_content = <div dangerouslySetInnerHTML = {{__html: content[i].split("### Social<br>")[1]}}>
+      cur_content = <div dangerouslySetInnerHTML = {{__html: content[i].split("## Social<br>")[1]}}>
         </div>;
     }else if(type[i] == "Header"){
       var header_tag = "<img src=\"" + content[i].split("\(")[1].split("\)")[0] + "\" />";
