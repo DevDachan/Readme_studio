@@ -15,34 +15,43 @@ const Wrapper = styled.div`
     justify-content: center;
 `;
 
-
 function ReadmeFileComponent(props) {
   const navigate = useNavigate();
-  //for Header
-  const readmeList= props.readmeList;
-  const setCurrentReadme=props.setCurrentReadme;
-  const currentReadme=props.currentReadme;
-  const addReadme=props.addReadme;
-  const generateReadme=props.generateReadme;
-  const setContent = props.setContent;
 
-  // for content
-  const position = props.position;
-  const setPosition= props.setPosition;
-  const deleteReadme = props.deleteReadme;
-  const changePosition = props.changePosition;
+  //for content variable
+  const title = props.title;
   const content = props.curreadme.content;
   const type = props.curreadme.type;
+  const position = props.position;
+
+  // for contents action
+  const setContent = props.setContent;
+  const setPosition= props.setPosition;
+
+  const changePosition = props.changePosition;
   const changeTextArea = props.changeTextArea;
   const changeLicense = props.changeLicense;
+  const changeArchitecture = props.changeArchitecture;
   const changePeriod = props.changePeriod;
+
   const deleteContent = props.deleteContent;
   const pasteContent = props.pasteContent;
-  const handleOpen = props.handleOpen;
-  const title = props.title;
+  const deleteReadme = props.deleteReadme;
+
+  //for Header variable
+  const readmeList= props.readmeList;
+  const currentReadme=props.currentReadme;
+
+  //for Header action
+  const setCurrentReadme=props.setCurrentReadme;
+  const addReadme=props.addReadme;
+  const goResult=props.goResult;
+
+  const previewChange = props.previewChange;
   const list = [""];
 
-  //---------------------- Web API table Editor ------------------------------
+
+  //---------------------- Web API table function ------------------------------
   // change HTML table to markdown table
   function makeTable_webapi(data){
     var count_td = data.split('</tr>')[0].split('<td><p contenteditable="true">').length -1;
@@ -106,7 +115,7 @@ function ReadmeFileComponent(props) {
     return temp_list;
   }
 
-  //---------------------- DB table Editor ------------------------------
+  //---------------------- DB table component function ------------------------------
   function makeTable_db(data){
     var count_td = data.split('</tr>')[0].split('<td><p contenteditable="true">').length -1;
 
@@ -175,6 +184,7 @@ function ReadmeFileComponent(props) {
     return <div id={"dbdiv_"+id}> {temp_list} </div>;
   }
 
+  //------------------------ Header component function  -----------------------------------
   const editHeaderText = (e) =>{
     var data = e.target.value;
     var id = e.target.id;
@@ -195,6 +205,7 @@ function ReadmeFileComponent(props) {
     setContent(tempReadme);
   }
 
+  // ----------------------------- change position function  --------------------------------------------------------
 
   const checkedPosition = (e) => {
     setPosition(e.target.value);
@@ -206,6 +217,8 @@ function ReadmeFileComponent(props) {
     setPosition(id);
   }
 
+
+  //---------------------------- Make Component content  ----------------------------------------------
   for(var i = 0; i< content.length; i++){
     var cur_content = "";
     var temp_num = i;
@@ -235,19 +248,35 @@ function ReadmeFileComponent(props) {
             />;
     }else if(type[i] == "All Data"){
       cur_content = "<!-- All Data -->";
+
     }else if(type[i] == "DB Table"){
       cur_content = content[i].split("<!-- DB Table -->\n")[1];
-
       cur_content = db_table(cur_content,i);
+
     }else if(type[i] == "WebAPI"){
       cur_content = parseTable_webapi(content[i].split("<!-- Web API -->\n")[1],i);
 
     }else if(type[i] == "Contributor"){
       cur_content = <div dangerouslySetInnerHTML = {{__html: content[i].split("### Contributor<br>")[1]}}>
         </div>;
+
     }else if(type[i] == "Social"){
       cur_content = <div dangerouslySetInnerHTML = {{__html: content[i].split("### Social<br>")[1]}}>
         </div>;
+
+    }else if(type[i] == "Architecture"){
+      cur_content = <Md_editor
+        height={200}
+        id={"md_editor_"+i}
+        name={i}
+        value={content[i].split("<!-- Project Architecture -->")[1]}
+        onChange={ (e,v) => changeArchitecture(e,v)}
+        onFocus={ (e) => focusIn(e)}
+        color={"black"}
+        key={"md_editor"+i}
+        highlightEnable={false}
+      />;
+
     }else if(type[i] == "Header"){
       var header_tag = "<img src=\"" + content[i].split("\(")[1].split("\)")[0] + "\" />";
       var header_text = content[i].split("&section=header&text=")[1].split("&")[0];
@@ -269,15 +298,13 @@ function ReadmeFileComponent(props) {
         <div className="calign" dangerouslySetInnerHTML = {{__html:  header_tag }}></div>
       </div>;
 
-      console.log(cur_content);
-
-
     }else if(type[i] == "Period"){
       cur_content = <div>
         <div className="dateBox" >Start date : <input type="date" data-placeholder="날짜 선택" id={"period_start" + i} onChange={changePeriod} name={i}></input></div>
         <div className="brCSS"></div>
         <div className="dateBox" >End date : <input type="date" data-placeholder="날짜 선택" id={"period_end" + i} name={i} onChange={changePeriod}></input></div>
       </div>;
+
     }else{
       cur_content = content[i];
     }
@@ -313,8 +340,8 @@ function ReadmeFileComponent(props) {
             </div>
 
           </div>
-          <div className="div-readmeComponent">
-            <button className="input-readmeComponent-checked" id={"select_"+i} id={"select_"+i} onClick={checkedPosition} key={"input_"+i} value={i+1}> Selected </button>
+          <div className="calign">
+            <button className="bt-changePosition-checked" id={"select_"+i} id={"select_"+i} onClick={checkedPosition} key={"input_"+i} value={i+1}> Selected </button>
           </div>
         </div>);
     }else{
@@ -347,8 +374,8 @@ function ReadmeFileComponent(props) {
               </div>
             </div>
           </div>
-          <div className="div-readmeComponent">
-            <button className="input-readmeComponent" id={"select_"+i} onClick={checkedPosition} key={"input_"+i} value={i+1}> + </button>
+          <div className="calign">
+            <button className="bt-changePosition" id={"select_"+i} onClick={checkedPosition} key={"input_"+i} value={i+1}> + </button>
           </div>
         </div>);
     }
@@ -367,7 +394,7 @@ function ReadmeFileComponent(props) {
             </div>
 
             <div className="col-sm-7 ralign mb-3">
-              <input type="button" className="bt-generate ralign" value="👉🏻 Generate MD Files " onClick={generateReadme} />
+              <input type="button" className="bt-generate ralign" value="👉🏻 Generate MD Files " onClick={goResult} />
             </div>
 
           </div>
@@ -377,7 +404,7 @@ function ReadmeFileComponent(props) {
               <h3 className="header-text"> {title} </h3>
             </div>
             <div className="col-sm-12 calign">
-                <button className=" bt-preview" onClick={handleOpen} variant="outline-primary">Preview</button>
+                <button className=" bt-preview" onClick={previewChange} variant="outline-primary">Preview</button>
                 <button className="bt-deleteReadme"  onClick={deleteReadme}>DELETE README</button>
 
             </div>

@@ -32,7 +32,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-@CrossOrigin(origins = "http://localhost:3005")
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 public class UnzipController {
     private ProjectService projectService;
@@ -505,8 +505,8 @@ public class UnzipController {
         ProcessBuilder builder = new ProcessBuilder();
 
         // clone(file name : unzipFiles)
-        builder.command("git", "clone", repoLink, "unzipFiles"); // mac
-        // builder.command("cmd.exe","/c","git", "clone", repoLink, "unzipFiles"); // window
+        // builder.command("git", "clone", repoLink, "unzipFiles"); // mac
+        builder.command("cmd.exe","/c","git", "clone", repoLink, "unzipFiles"); // window
         var process = builder.start();
 
         try (var reader = new BufferedReader( // clone 완료 후 아래 코드 실행
@@ -522,8 +522,8 @@ public class UnzipController {
         builder.start();
 
         // tree 명령어
-        builder.command("tree"); // mac
-        // builder.command("cmd.exe","/c","tree"); // window
+        // builder.command("tree"); // mac
+        builder.command("cmd.exe","/c","tree"); // window
         process = builder.start();
 
         String architecture = "\n<!-- Project Architecture -->\n";
@@ -753,14 +753,14 @@ public class UnzipController {
     }
 
     public static void deleteCloneFiles(ProcessBuilder builder) throws IOException { // register2
-        /* mac */
+        /* mac
         builder.command("rm", "-rf", "./unzipFiles/");
-        builder.start();
+        builder.start();*/
 
-        /* window
+        /* window*/
         builder.command("cmd.exe","/c","rmdir", "unzipFiles");
         builder.start();
-        */
+
 
         System.out.println("clone한 파일들 삭제 완료!!");
     }
