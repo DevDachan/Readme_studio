@@ -138,6 +138,14 @@ function Editor(props) {
     setContent(tempReadme);
   }
 
+  const changeArchitecture = (e,i) =>{
+    let tempReadme = readmeObject;
+    var content = e;
+    var position_id = i.target.parentElement.parentElement.parentElement.parentElement.id;
+    var position = Number(position_id.substr(10,3));
+    tempReadme.find(e => e.id === currentReadme).content[position] = "### Project Architecture (Tree Structure)<br> <!-- Project Architecture -->" + content;
+    setContent(tempReadme);
+  }
 
   //--------------------------------------------------------------------
   const changePeriod = (e) => {
@@ -285,6 +293,7 @@ function Editor(props) {
                     changeTextArea={changeTextArea}
                     changePeriod={changePeriod}
                     changeLicense={changeLicense}
+                    changeArchitecture={changeArchitecture}
                     handleOpen={handleOpen}
                     deleteReadme={deleteReadme}
                     //for Header

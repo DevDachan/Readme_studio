@@ -35,6 +35,7 @@ function ReadmeFileComponent(props) {
   const type = props.curreadme.type;
   const changeTextArea = props.changeTextArea;
   const changeLicense = props.changeLicense;
+  const changeArchitecture = props.changeArchitecture;
   const changePeriod = props.changePeriod;
   const deleteContent = props.deleteContent;
   const pasteContent = props.pasteContent;
@@ -248,6 +249,21 @@ function ReadmeFileComponent(props) {
     }else if(type[i] == "Social"){
       cur_content = <div dangerouslySetInnerHTML = {{__html: content[i].split("### Social<br>")[1]}}>
         </div>;
+    }else if(type[i] == "Architecture"){
+      cur_content = <Md_editor
+        height={200}
+        id={"md_editor_"+i}
+        name={i}
+        value={content[i].split("<!-- Project Architecture -->")[1]}
+        onChange={ (e,v) => changeArchitecture(e,v)}
+        onFocus={ (e) => focusIn(e)}
+        color={"black"}
+        key={"md_editor"+i}
+        highlightEnable={false}
+        />;
+      
+
+
     }else if(type[i] == "Header"){
       var header_tag = "<img src=\"" + content[i].split("\(")[1].split("\)")[0] + "\" />";
       var header_text = content[i].split("&section=header&text=")[1].split("&")[0];
@@ -268,8 +284,6 @@ function ReadmeFileComponent(props) {
         </div>
         <div className="calign" dangerouslySetInnerHTML = {{__html:  header_tag }}></div>
       </div>;
-
-      console.log(cur_content);
 
 
     }else if(type[i] == "Period"){
