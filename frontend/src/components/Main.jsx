@@ -55,18 +55,18 @@ function Main(props) {
 
     setRepName(document.getElementById("rep-name").value);
     setUserName(document.getElementById("user-name").value);
+    // 혹시 relandering으로 인한 data 손실 우려
     if(document.getElementById("user-name").value !== userName){
-      setUserName(document.getElementById("user-name").value)
+      setUserName(document.getElementById("user-name").value);
     }
     if(document.getElementById("rep-name").value !== repName){
-      setRepName(document.getElementById("rep-name").value)
+      setRepName(document.getElementById("rep-name").value);
     }
 
     const formData = new FormData();
     formData.append('file', file);
     formData.append('jsonParam1', userName);
     formData.append('jsonParam2', repName);
-    //formData.append('rendering', "1"); // yeji
 
     var readme_list = [];
     axios({
@@ -88,7 +88,7 @@ function Main(props) {
 
       navigate('./editor', {
         state: {
-          project_id: response.data.project_id,
+          project_id: 234769,
           framework_list: response.data.frameworkList,
           readmeObject:readme_list,
           defaultData: defaultData
@@ -97,9 +97,6 @@ function Main(props) {
     })
     .catch(function(error){
       //handle error
-    })
-    .then(function(){
-      // always executed
     });
   }
 
@@ -108,9 +105,7 @@ function Main(props) {
 
     const formData = new FormData();
     formData.append('jsonParam1', document.getElementById("repoLink").value);
-
     var readme_list = [];
-    console.log(document.getElementById("repoLink").value);
     axios({
       method: "post",
       url: 'http://localhost:8090/register2',
@@ -141,9 +136,6 @@ function Main(props) {
     })
     .catch(function(error){
       //handle error
-    })
-    .then(function(){
-      // always executed
     });
   }
 
@@ -157,38 +149,41 @@ function Main(props) {
 
         <div>
           <form id="generate-form-git" method="post" action="#">
-            <input type="text" autocomplete="off" name="email" className="ip-url" id="repoLink"
-            placeholder="Github Repository Link" maxLength="100" />
+            <input type="text"
+              id="repoLink"
+              name="email"
+              className="ip-url"
+              autocomplete="off"
+              placeholder="Github Repository Link"
+              maxLength="100"
+            />
             <input type="button" className="btn-3d blue" value="Generate" onClick={linkSubmitReadme}/>
           </form>
 
           <form id="generate-form-files">
             <div className="row">
+
               <div className="col-sm-3">
                 <input type="text" name="userName" id="user-name" defaultValue={userName}
-                  style={{
-                    height: "3em"
-                  }}
                 required placeholder="User Name"/>
               </div>
 
               <div className="col-sm-3">
                 <input type="text" name="repName" id="rep-name"
-                  style={{
-                    height: "3em"
-                  }}
                 defaultValue={repName} required placeholder="Repository Name"/>
               </div>
 
-            <div className="col-sm-3">
-            <input type="file" name="file" id="project-files" accept=".zip" onChange={getFile} style={{"display": "none"}}/>
-            <label htmlFor="project-files" className="btn-inputfile">
-              <div id="file-selector" >{fileName}</div>
-            </label>
-            </div>
-            <div className="col-sm-3">
-              <input type="button" className="btn-inputfile" value="Generate" onClick={submitReadme}/>
-            </div>
+              <div className="col-sm-3">
+                <input type="file" name="file" id="project-files" accept=".zip" onChange={getFile} style={{"display": "none"}}/>
+                <label htmlFor="project-files" className="btn-inputfile">
+                  <div id="file-selector" >{fileName}</div>
+                </label>
+              </div>
+
+              <div className="col-sm-3">
+                <input type="button" className="btn-inputfile" value="Generate" onClick={submitReadme}/>
+              </div>
+
             </div>
           </form>
         </div>

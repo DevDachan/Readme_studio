@@ -53,9 +53,6 @@ function Palette(props) {
       .catch(function(error){
         //handle error
         console.log(error);
-      })
-      .then(function(){
-        // always executed
       });
   }
 
@@ -71,7 +68,6 @@ function Palette(props) {
     setTimeout(function() {
        document.getElementById("select_"+(position-1)).scrollIntoView(true);
      }, 0);
-
   }
 
   const allData = (e) => {
@@ -79,14 +75,20 @@ function Palette(props) {
     const formData = new FormData();
 
     formData.append("project_id", project_id);
+
     axios({
       method: "post",
       url: 'http://localhost:8090/alldata',
       data: formData,
     })
       .then(function (response){
-        tempReadme.find(e => e.id === currentReadme).content = ["<!-- All Data -->\n"+response.data];
-        tempReadme.find(e => e.id === currentReadme).type = ["All Data"];
+        tempReadme.find(e => e.id === currentReadme).content = [];
+        tempReadme.find(e => e.id === currentReadme).type = [];
+
+        for(var i = 0; i < response.data.content.length; i++){
+          tempReadme.find(e => e.id === currentReadme).content.push(response.data.content[i]);
+          tempReadme.find(e => e.id === currentReadme).type.push(response.data.type[i]);
+        }
 
         setContent(tempReadme);
         setPosition(tempReadme.find(e => e.id === currentReadme).content.length);
@@ -100,14 +102,15 @@ function Palette(props) {
       });
   }
 
+  // 기본 All Data와 Text 팔레트 추가
   list.push(<input type="button" className="mb-2 btn-palette" key={"all_data"} value={"All Data"} onClick={allData}/>);
   list.push(<input type="button" className="mb-2 btn-palette" key={"empty_textarea"} value={"Text"} onClick={emptyText}/>);
 
-
-
+  // DB에 저장되어 있는 framework 팔레트 추가
   for(var i = 0; i< paletteList.length; i++){
     list.push(<input type="button" className="mb-2 btn-palette" key={paletteList[i]} value={paletteList[i]} onClick={addContent}/>);
   }
+
   return (
       <Wrapper>
         <h3 className="palette-optionsTitle"> Options</h3>

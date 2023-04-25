@@ -1135,23 +1135,21 @@ public class UnzipController {
     }
 
     @PostMapping("/alldata")
-    public HashMap<String, Object> allData(@RequestParam("project_id") String project_id) throws IOException {
-        // Map<String[],String[]>
-        Map<String[], String[]> all_data = new LinkedHashMap<>();
-        HashMap<String,Object> map = new HashMap<String,Object>();
-
+    public Map <String,String[]> allData(@RequestParam("project_id") String project_id) throws IOException {
+        Map<String, String[]> all_data = new LinkedHashMap<>();
         String frame_content = "";
         UserDTO userDTO = userService.getUser(project_id);
         String user_name = userDTO.getUser_name();
         String repo_name = userDTO.getRepository_name();
         String framework_name="";
         List<String> frameworkNameList = frameworkService.getFrameworkNameList();
+        int index=0;
         // framework 테이블에 있는 framework 다 가져오기
         //배열선언
         String[] framework_list= new String[frameworkNameList.size()];
         String[] content_list= new String[frameworkNameList.size()];
 
-        for(int count=0; count<frameworkNameList.size(); count++){
+        for(int count=0; count< frameworkNameList.size(); count++){
             framework_name=frameworkNameList.get(count);
 
             // framework_id에 따른 content제공
@@ -1159,21 +1157,25 @@ public class UnzipController {
                 frame_content = frameworkService.findContent(framework_name);
                 frame_content = frame_content.replace("repositoryName", repo_name);
                 frame_content = frame_content.replace("userName", user_name);
+                index = 8;
             } else if (framework_name.equals("Header")) { /* header 값에 대한 framework*/
                 String Header = "header";
                 frame_content = frameworkService.findContent(Header);
                 frame_content=frame_content.replace("repoName",repo_name);
+                index = 0;
             } else if (framework_name.equals("Period")) {
                 String Period = "Period";
                 frame_content = frameworkService.findContent(Period);
                 frame_content=frame_content.replace("PeriodImage", "https://ifh.cc/g/2jWwt7.png");
                 frame_content=frame_content.replace("startDate", "Start Date");
                 frame_content=frame_content.replace("endDate", "End Date");
+                index = 1;
             } else if(framework_name.equals("WebAPI")) {
                 frame_content = frameworkService.findContent("WebAPI");
                 frame_content += webAPI(project_id);
+                index = 3;
             } else if (framework_name.equals("Social")){
-                frame_content = "### Social<br>";
+                frame_content = "## Social<br>";
                 String url = "https://github.com/";
                 url = url + user_name;
                 String[] social_link = {"instagram", "facebook", "linkedin", "notion", "twitter", "github", "gmail"};
@@ -1198,6 +1200,7 @@ public class UnzipController {
                         }
                     }
                 }
+                index = 7;
             } else if (framework_name.equals("Dependency")) {
                 String Dependency = "Dependency";
                 String xmlContent = "";
@@ -1213,7 +1216,6 @@ public class UnzipController {
                 List<String> dependencyNameList = (List<String>) findDependencies(noWhiteSpaceXml).get(0);
                 String dependencyName = "\n";
                 String dependencyBtn = "<a href=\"https://mvnrepository.com/\"><img src=\"https://img.shields.io/badge/NUM-DEPENDENCYNAME-9cf\"></a>";
-
                 for(int i = 0 ; i < dependencyNameList.size() ; i++){
                     String tempBtn = dependencyBtn;
                     String dependencyFormat = dependencyNameList.get(i);
@@ -1226,9 +1228,11 @@ public class UnzipController {
                 frame_content = frameworkService.findContent(Dependency);
                 frame_content=frame_content.replace("DependencyNames", dependencyName);
                 frame_content=frame_content.replace("DependencyContents", dependencyTags);
+                index = 5;
             } else if (framework_name.equals("DB Table")) {
                 frame_content = frameworkService.findContent("DB Table");
                 frame_content += dbTable(project_id);
+                index = 4;
             } else if (framework_name.equals("License")) {
                 String License_file = "default";
                 System.out.println("Project id : " + project_id);
@@ -1260,19 +1264,19 @@ public class UnzipController {
                         "THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.";
                     frame_content = frame_content.replace("UserName", user_name);
                 }
+                index = 6;
             } else if (framework_name.equals("Architecture")) {
                 frame_content = frameworkService.findContent("Architecture");
                 String architecture = projectService.getFileContentByFileName(project_id, "Project Architecture");
                 frame_content += architecture;
+                index = 2;
             }
-            framework_list[count]=framework_name;
-            content_list[count]=frame_content;
+            framework_list[index]=framework_name;
+            content_list[index]=frame_content;
         }
-        all_data.put(framework_list,content_list);
-        map.put("framework_list", framework_list);
-        map.put("content_list", content_list);
-        System.out.println(Arrays.toString(framework_list));
-        System.out.println(map);
-        return map;
+        all_data.put("content",content_list);
+        all_data.put("type",framework_list);
+
+        return all_data;
     }
 }
