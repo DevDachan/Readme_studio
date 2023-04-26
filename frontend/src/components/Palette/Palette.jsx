@@ -49,7 +49,7 @@ function Palette(props) {
         setPosition(tempReadme.find(e => e.id === currentReadme).content.length);
         setTimeout(function() {
            document.getElementById("select_"+(position-1)).scrollIntoView(true);
-         }, 0);
+         }, 1);
       })
       .catch(function(error){
         //handle error
