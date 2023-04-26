@@ -26,6 +26,7 @@ function Palette(props) {
   const paletteList = props.paletteList;
   const position = props.position;
   const setPosition = props.setPosition;
+  const defaultData = props.defaultData;
   const list = [];
 
 
@@ -89,6 +90,10 @@ function Palette(props) {
           tempReadme.find(e => e.id === currentReadme).content.push(response.data.content[i]);
           tempReadme.find(e => e.id === currentReadme).type.push(response.data.type[i]);
         }
+
+        tempReadme.find(e => e.id === currentReadme).content.splice(1,0,defaultData);
+        tempReadme.find(e => e.id === currentReadme).type.splice(1,0,"Default Data");
+
 
         setContent(tempReadme);
         setPosition(tempReadme.find(e => e.id === currentReadme).content.length);

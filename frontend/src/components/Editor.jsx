@@ -248,6 +248,7 @@ function Editor(props) {
                       currentReadme={currentReadme}
                       content={readmeObject}
                       position={position}
+                      defaultData={project_detail}
 
                       setContent={setContent}
                       setPosition={setPosition}
