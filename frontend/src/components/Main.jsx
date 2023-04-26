@@ -11,6 +11,7 @@ const Wrapper = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: center;
+    min-height: 700px;
 `;
 
 
@@ -24,6 +25,12 @@ function Main(props) {
   const [githubRepLink, setGithubRepLink] = useState('');
   const [fileName, setFileName] = useState("Upload");
   const [fileSelected, setFileSelected] = useState(false);
+
+
+  const goMain = (e) =>{
+    navigate('./');
+  }
+
 
 
   const getFile = (e) =>{
@@ -141,24 +148,29 @@ function Main(props) {
 
   return (
       <Wrapper>
-        <header id="header">
-          <h1>Readme Generate</h1>
-          <p style={{backgroundColor:"transparent"}}>Project의 내용을 파싱해 자동으로 Readme파일을 작성해주는 서비스 입니다.<br />
-          Github repository link 혹은 Project 파일을 업로드 해주세요</p>
+        <header id="main-header">
+          <img src="/images/logo.png" className="logo-image" onClick={goMain}/>
+          <h1 className="title-text" onClick={goMain} >README STUDIO</h1>
+          <h2 className="subtitle-text">README GENERATION WEB SERVICE</h2>
         </header>
 
         <div>
-          <form id="generate-form-git" method="post" action="#">
-            <input type="text"
-              id="repoLink"
-              name="email"
-              className="ip-url"
-              autocomplete="off"
-              placeholder="Github Repository Link"
-              maxLength="100"
-            />
-            <input type="button" className="btn-3d blue" value="Generate" onClick={linkSubmitReadme}/>
-          </form>
+          <div className="row mb-4">
+            <div className="col-sm-10">
+              <input type="text"
+                id="repoLink"
+                name="email"
+                className="ip-url"
+                autocomplete="off"
+                placeholder="Github Repository Link"
+                maxLength="100"
+              />
+              </div>
+              <div className="col-sm-2">
+                <input type="button" className="btn-generate" value="Generate" onClick={linkSubmitReadme}/>
+              </div>
+          </div>
+
 
           <form id="generate-form-files">
             <div className="row">

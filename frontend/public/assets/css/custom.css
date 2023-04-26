@@ -28,9 +28,17 @@ table{
 
 
 /*  Main.jsx  */
+
+#main-header{
+  text-align: center;
+  margin-bottom: 100px;
+  margin-top: 100px;
+  min-width: 800px;
+}
+
 .ip-url{
-  height : auto !important;
-  width: 30em !important;
+  height: 3rem !important;
+  width: 100% !important;
   border-radius: 22px!important;
   background-color: white !important;
   color: #000000ff !important;
@@ -42,6 +50,12 @@ table{
 
 .ip-url:focus{
   border: 0px !important;
+}
+
+.btn-generate{
+  background-color: #a2a6aa !important;
+  padding: 0 1.8rem !important;
+  height: 3rem !important;
 }
 
 .btn-inputfile{
