@@ -385,7 +385,7 @@ function ReadmeFileComponent(props) {
       <Wrapper>
         <div className="contentDiv mb-2">
           <div className="row border-line" style={{height: "6rem"}}>
-            <div className="col-sm-1 calign mb-3">
+            <div className="col-sm-1 calign mb-3 div-add">
               <input type="button" className="bt-add" value="" onClick={addReadme} />
             </div>
             <div className="col-sm-4 mb-2">
