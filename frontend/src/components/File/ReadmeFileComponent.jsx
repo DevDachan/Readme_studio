@@ -122,7 +122,7 @@ function ReadmeFileComponent(props) {
     var temp = data.replace(/\n\s*/g, '  <br>');
     temp = temp.replace(/<table class="db-table">\s*/g,"\n|*Column Name*|\n|-----|\n");
     temp = temp.replace(/<\/h3>\s*/g," \n");
-    temp = temp.replace(/<h3>\s*/g,"#### ");
+    temp = temp.replace(/<h3>\s*/g,"### ");
     temp = temp.replace(/<td><p contenteditable="true">\s*/g, '\n');
     temp = temp.replace(/<\/p><\/td>\s*/g, '|');
     temp = temp.replace(/<tr>\s*/g, '|');
@@ -175,7 +175,7 @@ function ReadmeFileComponent(props) {
 
   function db_table(data,id){
     const temp_list = [""];
-    var col_temp = data.split(/\|\*.*?\*\||####/g);
+    var col_temp = data.split(/\|\*.*?\*\||###/g);
     var table_count = (col_temp.length - 1) / 2;
     for(var i = 0; i < table_count; i++){
       temp_list.push(<h3>{col_temp[2*i+1].replace(/<br>/g, "")} </h3>);

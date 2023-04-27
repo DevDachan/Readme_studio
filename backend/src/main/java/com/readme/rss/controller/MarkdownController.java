@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "http://localhost:3005")
 @RestController
 // @RequestMapping("/readme")
 public class MarkdownController {
@@ -27,8 +27,9 @@ public class MarkdownController {
         ProcessBuilder builder = new ProcessBuilder();
 
         // mdFiles 폴더 생성 - 생성한 md 파일들을 저장하는 임시 폴더
-        // builder.command("mkdir", "mdFiles"); // mac
-        builder.command("cmd.exe","/c","mkdir","/Q", "mdFiles"); // window
+
+        builder.command("mkdir", "mdFiles"); // mac
+        // builder.command("cmd.exe","/c","mkdir", "mdFiles"); // window
         builder.start();
 
         File mdFile = null;
@@ -61,8 +62,10 @@ public class MarkdownController {
 
         // md 파일들 압축하기
         // builder.directory(new File("./mdFiles")); // mdFiles로 이동
-        //builder.command("zip", "mdZipFiles.zip", "-r", "./mdFiles"); // mac
-        builder.command("cmd.exe", "/c", "zip","/Q", "mdZipFiles.zip", "-r", "./mdFiles"); // window
+        
+        builder.command("zip", "mdZipFiles.zip", "-r", "./mdFiles"); // mac
+        // builder.command("cmd.exe", "/c", "zip", "mdZipFiles.zip", "-r", "./mdFiles"); // window
+
         var process = builder.start(); // zip 실행
 
         // zip 실행 후, 콘솔에 출력해주기
@@ -86,14 +89,15 @@ public class MarkdownController {
         builder.command("mkdir", "./mdFiles"); // 폴더 다시 생성해주기
         builder.start();*/
 
-        /* window*/
-        builder.command("cmd.exe","/c","rmdir","/S","/Q", "./mdFiles");
+
+        /* window
+        builder.command("cmd.exe","/c","del", "./mdFiles");
         builder.start();
         builder.command("cmd.exe","/c","del","/Q", "./mdZipFiles.zip");
         builder.start();
         builder.command("cmd.exe", "/c", "mkdir","/Q", "./mdFiles"); // 폴더 다시 생성해주기
         builder.start();
-
+        */
 
         System.out.println("md zip파일, md 파일들 모두 삭제 완료!!");
 
@@ -108,8 +112,8 @@ public class MarkdownController {
         ProcessBuilder builder = new ProcessBuilder();
 
         // mdFiles 폴더 생성
-        //builder.command("mkdir", "mdFile"); // mac
-        builder.command("cmd.exe","/c","mkdir", "mdFiles"); // window
+        builder.command("mkdir", "mdFile"); // mac
+        // builder.command("cmd.exe","/c","mkdir", "mdFiles"); // window
         builder.start();
 
         File mdFile = null;
@@ -144,12 +148,12 @@ public class MarkdownController {
         builder.command("mkdir", "mdFile"); // 폴더 다시 생성해주기
         builder.start();
 
-        /* window*/
+        /* window
         builder.command("cmd.exe","/c","del", "./mdFile");
         builder.start();
         builder.command("cmd.exe","/c","mkdir", "mdFiles");
         builder.start();
-
+        */
 
         System.out.println("md 파일 삭제 완료!!");
 
