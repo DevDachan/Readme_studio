@@ -184,6 +184,21 @@ function ReadmeFileComponent(props) {
     return <div id={"dbdiv_"+id}> {temp_list} </div>;
   }
 
+  //------------------ Dependency ----------------------------------------
+  function parseTable_dependency(data, id){
+    data = data.replace(/&nbsp;/g, " ");
+    data = data.replace(/<br>/g, "\n");
+    var tr_temp = data.split("|\n");
+    const temp_list = [""];
+    temp_list.push( <div dangerouslySetInnerHTML={{__html:  data.split(/```/)[0]}} /> );
+    temp_list.push( <div dangerouslySetInnerHTML={{__html:data.split(/```bash/)[1].replace(/<dependency>([\s\S]*?)<\/dependency>/g, 'dependency$1').replace(/\n/g, "<br>").replace(/```/g,"") }}/> );
+
+    return temp_list;
+  }
+
+
+
+
   //------------------------ Header component function  -----------------------------------
   const editHeaderText = (e) =>{
     var data = e.target.value;
@@ -252,6 +267,9 @@ function ReadmeFileComponent(props) {
     }else if(type[i] == "DB Table"){
       cur_content = content[i].split("<!-- DB Table -->\n")[1];
       cur_content = db_table(cur_content,i);
+
+    }else if(type[i] == "Dependency"){
+      cur_content = parseTable_dependency(content[i].split("## Dependencies<br>")[1],i);
 
     }else if(type[i] == "WebAPI"){
       cur_content = parseTable_webapi(content[i].split("<!-- Web API -->\n")[1],i);
