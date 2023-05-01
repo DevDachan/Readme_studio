@@ -242,7 +242,11 @@ function ReadmeFileComponent(props) {
   // ----------------------------- change position function  --------------------------------------------------------
 
   const checkedPosition = (e) => {
+    var prev_position = position;
     setPosition(e.target.value);
+    setTimeout(function() {
+      document.getElementById("postionChangeDown"+(e.target.value-1)).focus();
+    }, 1);
   }
 
   const focusIn = (e) =>{
@@ -314,7 +318,6 @@ function ReadmeFileComponent(props) {
       />;
 
     }else if(type[i] == "Header"){
-      console.log(content[i]);
       var header_tag = "<img src=\"" + content[i].split("\(")[1].split("\)")[0] + "\" />";
       var header_text = content[i].split("&section=header&text=")[1].split("&")[0];
       var header_size = content[i].split("fontSize=")[1].split("\)")[0];
@@ -322,7 +325,6 @@ function ReadmeFileComponent(props) {
       var fontColor = content[i].split("fontColor=")[1].split("&")[0];
       var bgColor = content[i].split("color=")[1].split("&")[0];
 
-      console.log(bgColor);
       cur_content = <div className="row">
         <div className="col-sm-4 mb-4">
           <select id="header-select" value={header_type} onChange={(e) => changeHaderType(e,i)}>
