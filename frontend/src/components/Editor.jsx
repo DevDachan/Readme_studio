@@ -146,6 +146,7 @@ function Editor(props) {
     setContent(tempReadme);
   }
 
+
   const changePeriod = (e) => {
     var tempReadme = JSON.parse(JSON.stringify(readmeObject));
     var position = e.target.name;

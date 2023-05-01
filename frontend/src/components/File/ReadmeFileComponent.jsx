@@ -191,12 +191,9 @@ function ReadmeFileComponent(props) {
     var tr_temp = data.split("|\n");
     const temp_list = [""];
     temp_list.push( <div dangerouslySetInnerHTML={{__html:  data.split(/```/)[0]}} /> );
-    temp_list.push( <div dangerouslySetInnerHTML={{__html:data.split(/```bash/)[1].replace(/<dependency>([\s\S]*?)<\/dependency>/g, 'dependency$1').replace(/\n/g, "<br>").replace(/```/g,"") }}/> );
 
     return temp_list;
   }
-
-
 
 
   //------------------------ Header component function  -----------------------------------
@@ -220,19 +217,6 @@ function ReadmeFileComponent(props) {
     setContent(tempReadme);
   }
 
-  // ----------------------------- change position function  --------------------------------------------------------
-
-  const checkedPosition = (e) => {
-    setPosition(e.target.value);
-  }
-
-  const focusIn = (e) =>{
-    var id = e.target.parentElement.parentElement.parentElement.parentElement.id;
-    id = Number(id.split("_")[2])+1;
-    setPosition(id);
-  }
-
-  // ----------------------------- change Header Type ------------------------------------------------
   const changeHaderType = (e, i) =>{
     var tempReadme = JSON.parse(JSON.stringify(readmeList));
     tempReadme.find(e => e.id === currentReadme).content[i-1] = tempReadme.find(e => e.id === currentReadme).content[i-1].replace(/type=[^&]*/,'type='+e.target.value);
@@ -251,6 +235,20 @@ function ReadmeFileComponent(props) {
     var color = e.target.value.split("#")[1];
     tempReadme.find(e => e.id === currentReadme).content[i-1] = tempReadme.find(e => e.id === currentReadme).content[i-1].replace(/fontColor=[^&]*/,'fontColor='+color);
     setContent(tempReadme);
+  }
+
+
+
+  // ----------------------------- change position function  --------------------------------------------------------
+
+  const checkedPosition = (e) => {
+    setPosition(e.target.value);
+  }
+
+  const focusIn = (e) =>{
+    var id = e.target.parentElement.parentElement.parentElement.parentElement.id;
+    id = Number(id.split("_")[2])+1;
+    setPosition(id);
   }
 
   //---------------------------- Make Component content  ----------------------------------------------
