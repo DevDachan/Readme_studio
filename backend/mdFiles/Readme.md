@@ -6,6 +6,7 @@
 📕 Gruop ID : com.readme   
 📘 Artifact ID : rss   
 📙 Java Version :17   
+<<<<<<< HEAD
 📚 DB : mariadb
 
 
@@ -149,6 +150,8 @@
 📕 Gruop ID :    
 📘 Artifact ID :    
 📙 Java Version :   
+=======
+>>>>>>> origin/main
 📚 DB : 
 
 
