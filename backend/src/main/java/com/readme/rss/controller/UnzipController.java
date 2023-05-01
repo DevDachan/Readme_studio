@@ -3,6 +3,8 @@ package com.readme.rss.controller;
 import static java.lang.Thread.sleep;
 import com.readme.rss.data.dto.UserDTO;
 import com.readme.rss.data.entity.ProjectEntity;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -247,21 +249,17 @@ public class UnzipController {
                 break;
             }
         }
-        System.out.println("\n입력받은 zip 파일 명 : " + fileName);
 
         // project table에서 id 가져오기
         randomIdList = projectService.getIdAll();
         String randomId = projectIdGenerate();
         String zipFileName = "./unzipTest_" + randomId + ".zip";
-        System.out.println("zipFileName : " + zipFileName);
         Path savePath = Paths.get(zipFileName); // unzipTest.zip이름으로 저장
         file.transferTo(savePath); // 파일 다운로드
 
         ProcessBuilder builder = new ProcessBuilder();
-
         // unzipFiles 폴더 생성 - 압축풀기한 파일들을 저장하는 임시 폴더
         String unzipFilesName = "unzipFiles_" + randomId;
-        System.out.println("unzipFilesName : " + unzipFilesName);
         builder.command("mkdir", unzipFilesName); // mac
         // builder.command("cmd.exe","/c","mkdir", unzipFilesName); // window
         builder.start();
@@ -271,7 +269,7 @@ public class UnzipController {
         // builder.command("cmd.exe","/c","unzip", zipFileName, "-d", unzipFilesName); // window
         var process = builder.start(); // upzip 실행
 
-        // unzip 실행 후, 콘솔에 출력해주기
+        // unzip 실행
         try (var reader = new BufferedReader(
             new InputStreamReader(process.getInputStream()))) {
             String commandResult;
@@ -290,8 +288,6 @@ public class UnzipController {
 
         String architecture = "\n<!-- Project Architecture -->\n";
         architecture += "```bash\n";
-
-        // tree 명령어 실행 후, 콘솔에 출력해주기
         try (var reader = new BufferedReader(
             new InputStreamReader(process.getInputStream()))) {
             String commandResult;
@@ -306,7 +302,6 @@ public class UnzipController {
 
         // 압축 푼 파일들 중에서 원하는 정보 찾기(ex. url 찾기)
         String searchDirPath = unzipFilesName;
-        System.out.println("\n[압축 해제한 폴더 속 파일 리스트]");
         int retSearchFiles = 0; // 파일 리스트 다 뽑아냈는지 확인할 수 있는 리턴값
         retSearchFiles = searchFiles(searchDirPath);
 
@@ -364,85 +359,18 @@ public class UnzipController {
         deleteUnzipFiles(builder, zipFileName, unzipFilesName);
 
         // =============== pom.xml에서 필요한 데이터 파싱 =============== //
-        String xmlPath = ""; // test
         String xmlContent = "";
         // =============== application.properties에서 필요한 데이터 파싱 =============== //
-        String propertiesPath = ""; // test
         String propertiesContent = "";
-        // =============== 디렉토리별 파일 구분 =============== //
-        List<String> controllerDir = new ArrayList<>();
-        List<String> dtoDir = new ArrayList<>();
-        List<String> repositoryDir = new ArrayList<>();
-        List<String> daoDir = new ArrayList<>();
-        List<String> daoImplDir = new ArrayList<>();
-        List<String> entityDir = new ArrayList<>();
-        List<String> entityImplDir = new ArrayList<>();
-        List<String> handlerDir = new ArrayList<>();
-        List<String> handlerImplDir = new ArrayList<>();
-        List<String> serviceDir = new ArrayList<>();
-        List<String> serviceImplDir = new ArrayList<>();
-        List<String> etcDir = new ArrayList<>();
 
         List<ProjectEntity> getProjectTableRow = projectService.getFileContent(randomId);
         for(int i = 0 ; i < getProjectTableRow.size() ; i++){
             if(getProjectTableRow.get(i).getFile_path().contains("pom.xml")){
-                xmlPath = getProjectTableRow.get(i).getFile_path();
                 xmlContent = getProjectTableRow.get(i).getFile_content();
             } else if(getProjectTableRow.get(i).getFile_path().contains("application.properties")){
-                propertiesPath = getProjectTableRow.get(i).getFile_path(); // test
                 propertiesContent = getProjectTableRow.get(i).getFile_content();
             }
-
-            // 주요 자바 파일들 디렉토리별로 구분하기
-            if(getProjectTableRow.get(i).getFile_path().contains("CONTROLLER".toLowerCase())){
-                controllerDir.add(getProjectTableRow.get(i).getFile_name());
-            } else if(getProjectTableRow.get(i).getFile_path().contains("DTO".toLowerCase())){
-                dtoDir.add(getProjectTableRow.get(i).getFile_name());
-            } else if(getProjectTableRow.get(i).getFile_path().contains("REPOSITORY".toLowerCase())){
-                repositoryDir.add(getProjectTableRow.get(i).getFile_name());
-            } else if(getProjectTableRow.get(i).getFile_path().contains("DAO".toLowerCase())){
-                if(getProjectTableRow.get(i).getDetail().equals("Impl")){
-                    daoImplDir.add(getProjectTableRow.get(i).getFile_name());
-                } else if(getProjectTableRow.get(i).getDetail().equals("noImpl")){
-                    daoDir.add(getProjectTableRow.get(i).getFile_name());
-                }
-            } else if(getProjectTableRow.get(i).getFile_path().contains("ENTITY".toLowerCase())){
-                if(getProjectTableRow.get(i).getDetail().equals("Impl")){
-                    entityImplDir.add(getProjectTableRow.get(i).getFile_name());
-                } else if(getProjectTableRow.get(i).getDetail().equals("noImpl")){
-                    entityDir.add(getProjectTableRow.get(i).getFile_name());
-                }
-            } else if(getProjectTableRow.get(i).getFile_path().contains("HANDLER".toLowerCase())){
-                if(getProjectTableRow.get(i).getDetail().equals("Impl")){
-                    handlerImplDir.add(getProjectTableRow.get(i).getFile_name());
-                } else if(getProjectTableRow.get(i).getDetail().equals("noImpl")){
-                    handlerDir.add(getProjectTableRow.get(i).getFile_name());
-                }
-            } else if(getProjectTableRow.get(i).getFile_path().contains("SERVICE".toLowerCase())){
-                if(getProjectTableRow.get(i).getDetail().equals("Impl")){
-                    serviceImplDir.add(getProjectTableRow.get(i).getFile_name());
-                } else if(getProjectTableRow.get(i).getDetail().equals("noImpl")){
-                    serviceDir.add(getProjectTableRow.get(i).getFile_name());
-                }
-            } else{
-                etcDir.add(getProjectTableRow.get(i).getFile_name());
-            }
         }
-
-        /* test
-        System.out.println("controllerDir : " + controllerDir);
-        System.out.println("dtoDir : " + dtoDir);
-        System.out.println("repositoryDir : " + repositoryDir);
-        System.out.println("daoDir : " + daoDir);
-        System.out.println("daoImplDir : " + daoImplDir);
-        System.out.println("entityDir : " + entityDir);
-        System.out.println("entityImplDir : " + entityImplDir);
-        System.out.println("handlerDir : " + handlerDir);
-        System.out.println("handlerImplDir : " + handlerImplDir);
-        System.out.println("serviceDir : " + serviceDir);
-        System.out.println("serviceImplDir : " + serviceImplDir);
-        System.out.println("etcDir : " + etcDir);
-         */
 
         // 공백 제거한 xmlContent - 정규식을 쓰기 위해 줄바꿈 제거
         String noWhiteSpaceXml = xmlContent.replaceAll("\n", "");
@@ -453,7 +381,6 @@ public class UnzipController {
         String groupId = packageName.get(0);
         String artifactId = packageName.get(1);
         String javaVersion = findJavaVersion(noWhiteSpaceXml);
-        // String dependencies = findDependencies(noWhiteSpaceXml); // 미완
 
         // 공백 제거한 propertiesContent - 정규식을 쓰기 위해 줄바꿈 제거
         String noWhiteSpaceProperties = propertiesContent.replaceAll("\n", "");
@@ -481,8 +408,6 @@ public class UnzipController {
     public HashMap<String, Object> getFileData(@RequestParam("jsonParam1") String repoLink)
         throws IOException, InterruptedException {
         HashMap<String,Object> map = new HashMap<String,Object>();
-
-        System.out.println("repoLink : " + repoLink);
         /* 예외처리
             링크 포맷 : https://github.com/로 시작
             (1) 링크 포맷이 맞지 않는 경우 => LinkFormatError 리턴
@@ -499,27 +424,21 @@ public class UnzipController {
         }
 
         String repoLinkInfo = repoLink.substring(19);
-        System.out.println("repoLinkInfo : " + repoLinkInfo);
         String userName = repoLinkInfo.split("/")[0];
-
         String repositoryName = repoLinkInfo.split("/")[1].substring(0, repoLinkInfo.split("/")[1].indexOf(".git"));
-        System.out.println("userName : " + userName + ", repositoryName : " + repositoryName);
-
         ProcessBuilder builder = new ProcessBuilder();
 
         // project table에서 id 가져오기
         randomIdList = projectService.getIdAll();
         String randomId = projectIdGenerate();
         String unzipFilesName = "unzipFiles_" + randomId;
-        System.out.println("unzipFilesName : " + unzipFilesName);
 
-        // clone(file name : unzipFiles)
+        // clone(file name : unzipFiles_projectId)
         builder.command("git", "clone", repoLink, unzipFilesName); // mac
         // builder.command("cmd.exe","/c","git", "clone", repoLink, unzipFilesName); // window
 
         try{
             var clone_process = builder.start();
-
             try (var reader = new BufferedReader( // clone 완료 후 아래 코드 실행
                 new InputStreamReader(clone_process.getInputStream()))) {
                 String commandResult;
@@ -531,7 +450,6 @@ public class UnzipController {
             builder.start();
         } catch(IOException e){ // (3) 예외처리
             map.put("error", "cloneError");
-            System.out.println("map : " + map);
             return map;
         }
 
@@ -542,8 +460,6 @@ public class UnzipController {
 
         String architecture = "\n<!-- Project Architecture -->\n";
         architecture += "```bash\n";
-
-        // tree 명령어 실행 후, 콘솔에 출력해주기
         try (var reader = new BufferedReader(
             new InputStreamReader(process.getInputStream()))) {
             String commandResult;
@@ -552,18 +468,12 @@ public class UnzipController {
             }
         }
         architecture += "```\n";
-
-        System.out.println("architecture : " + architecture);
-
         builder.directory(new File("../backend")); // 원래 위치로 이동
         builder.start();
 
-        // 압축 푼 파일들 중에서 원하는 정보 찾기(ex. url 찾기)
         String searchDirPath = unzipFilesName;
-        System.out.println("\n[파일 리스트]");
         int retSearchFiles = 0; // 파일 리스트 다 뽑아냈는지 확인할 수 있는 리턴값
         retSearchFiles = searchFiles(searchDirPath);
-        System.out.println("retSearchFiles : " + retSearchFiles);
 
         //------------- db insert 관련 -------------//
         List<String> javaFileName = new ArrayList<>();
@@ -619,85 +529,18 @@ public class UnzipController {
         deleteCloneFiles(builder, unzipFilesName);
 
         // =============== pom.xml에서 필요한 데이터 파싱 =============== //
-        String xmlPath = ""; // test
         String xmlContent = "";
         // =============== application.properties에서 필요한 데이터 파싱 =============== //
-        String propertiesPath = ""; // test
         String propertiesContent = "";
-        // =============== 디렉토리별 파일 구분 =============== //
-        List<String> controllerDir = new ArrayList<>();
-        List<String> dtoDir = new ArrayList<>();
-        List<String> repositoryDir = new ArrayList<>();
-        List<String> daoDir = new ArrayList<>();
-        List<String> daoImplDir = new ArrayList<>();
-        List<String> entityDir = new ArrayList<>();
-        List<String> entityImplDir = new ArrayList<>();
-        List<String> handlerDir = new ArrayList<>();
-        List<String> handlerImplDir = new ArrayList<>();
-        List<String> serviceDir = new ArrayList<>();
-        List<String> serviceImplDir = new ArrayList<>();
-        List<String> etcDir = new ArrayList<>();
 
         List<ProjectEntity> getProjectTableRow = projectService.getFileContent(randomId);
         for(int i = 0 ; i < getProjectTableRow.size() ; i++){
             if(getProjectTableRow.get(i).getFile_path().contains("pom.xml")){
-                xmlPath = getProjectTableRow.get(i).getFile_path();
                 xmlContent = getProjectTableRow.get(i).getFile_content();
             } else if(getProjectTableRow.get(i).getFile_path().contains("application.properties")){
-                propertiesPath = getProjectTableRow.get(i).getFile_path(); // test
                 propertiesContent = getProjectTableRow.get(i).getFile_content();
             }
-
-            // 주요 자바 파일들 디렉토리별로 구분하기
-            if(getProjectTableRow.get(i).getFile_path().contains("CONTROLLER".toLowerCase())){
-                controllerDir.add(getProjectTableRow.get(i).getFile_name());
-            } else if(getProjectTableRow.get(i).getFile_path().contains("DTO".toLowerCase())){
-                dtoDir.add(getProjectTableRow.get(i).getFile_name());
-            } else if(getProjectTableRow.get(i).getFile_path().contains("REPOSITORY".toLowerCase())){
-                repositoryDir.add(getProjectTableRow.get(i).getFile_name());
-            } else if(getProjectTableRow.get(i).getFile_path().contains("DAO".toLowerCase())){
-                if(getProjectTableRow.get(i).getDetail().equals("Impl")){
-                    daoImplDir.add(getProjectTableRow.get(i).getFile_name());
-                } else if(getProjectTableRow.get(i).getDetail().equals("noImpl")){
-                    daoDir.add(getProjectTableRow.get(i).getFile_name());
-                }
-            } else if(getProjectTableRow.get(i).getFile_path().contains("ENTITY".toLowerCase())){
-                if(getProjectTableRow.get(i).getDetail().equals("Impl")){
-                    entityImplDir.add(getProjectTableRow.get(i).getFile_name());
-                } else if(getProjectTableRow.get(i).getDetail().equals("noImpl")){
-                    entityDir.add(getProjectTableRow.get(i).getFile_name());
-                }
-            } else if(getProjectTableRow.get(i).getFile_path().contains("HANDLER".toLowerCase())){
-                if(getProjectTableRow.get(i).getDetail().equals("Impl")){
-                    handlerImplDir.add(getProjectTableRow.get(i).getFile_name());
-                } else if(getProjectTableRow.get(i).getDetail().equals("noImpl")){
-                    handlerDir.add(getProjectTableRow.get(i).getFile_name());
-                }
-            } else if(getProjectTableRow.get(i).getFile_path().contains("SERVICE".toLowerCase())){
-                if(getProjectTableRow.get(i).getDetail().equals("Impl")){
-                    serviceImplDir.add(getProjectTableRow.get(i).getFile_name());
-                } else if(getProjectTableRow.get(i).getDetail().equals("noImpl")){
-                    serviceDir.add(getProjectTableRow.get(i).getFile_name());
-                }
-            } else{
-                etcDir.add(getProjectTableRow.get(i).getFile_name());
-            }
         }
-
-        /* test
-        System.out.println("controllerDir : " + controllerDir);
-        System.out.println("dtoDir : " + dtoDir);
-        System.out.println("repositoryDir : " + repositoryDir);
-        System.out.println("daoDir : " + daoDir);
-        System.out.println("daoImplDir : " + daoImplDir);
-        System.out.println("entityDir : " + entityDir);
-        System.out.println("entityImplDir : " + entityImplDir);
-        System.out.println("handlerDir : " + handlerDir);
-        System.out.println("handlerImplDir : " + handlerImplDir);
-        System.out.println("serviceDir : " + serviceDir);
-        System.out.println("serviceImplDir : " + serviceImplDir);
-        System.out.println("etcDir : " + etcDir);
-         */
 
         // 공백 제거한 xmlContent - 정규식을 쓰기 위해 줄바꿈 제거
         String noWhiteSpaceXml = xmlContent.replaceAll("\n", "");
@@ -708,7 +551,6 @@ public class UnzipController {
         String groupId = packageName.get(0);
         String artifactId = packageName.get(1);
         String javaVersion = findJavaVersion(noWhiteSpaceXml);
-        // String dependencies = findDependencies(noWhiteSpaceXml); // 미완
 
         // 공백 제거한 propertiesContent - 정규식을 쓰기 위해 줄바꿈 제거
         String noWhiteSpaceProperties = propertiesContent.replaceAll("\n", "");
@@ -741,7 +583,6 @@ public class UnzipController {
                 if(fileList[i].isFile()) {
                     file_pathList.add(fileList[i].getPath());
                     file_nameList.add(fileList[i].getName());
-                    System.out.println("\n" + fileList[i].getPath()); // Full Path
 
                     Scanner reader2 = new Scanner(new File(fileList[i].getPath()));
                     // file_content 찾기
@@ -763,34 +604,41 @@ public class UnzipController {
     }
 
     public static void deleteCloneFiles(ProcessBuilder builder, String unzipFilesName) throws IOException { // register2
-        /* mac */
-        builder.command("rm", "-rf", unzipFilesName);
-        builder.start();
+        try{
+            /* mac */
+            builder.command("rm", "-rf", unzipFilesName);
+            builder.start();
 
-        /* window
-        builder.command("cmd.exe","/c","rmdir", unzipFilesName);
-        builder.start();
-        */
+            /* window
+            builder.command("cmd.exe","/c","rmdir", unzipFilesName);
+            builder.start();
+            */
+            System.out.println("clone한 파일들 삭제 완료!!");
+        } catch(IOException e){
+            System.out.println("clone한 파일들 삭제 실패");
+        }
 
-        System.out.println("clone한 파일들 삭제 완료!!");
     }
 
     public static void deleteUnzipFiles(ProcessBuilder builder, String zipFileName, String unzipFilesName) throws IOException { // register1
-        // upzip한 파일들, zip파일 모두 삭제
-        /* mac */
-        builder.command("rm", "-rf", unzipFilesName);
-        builder.start();
-        builder.command("rm", "-rf", zipFileName);
-        builder.start();
+        try{
+            // upzip한 파일들, zip파일 모두 삭제
+            /* mac */
+            builder.command("rm", "-rf", unzipFilesName);
+            builder.start();
+            builder.command("rm", "-rf", zipFileName);
+            builder.start();
 
-        /* window
-        builder.command("cmd.exe","/c","rmdir", "unzipFiles");
-        builder.start();
-        builder.command("cmd.exe","/c","del", "unzipTest.zip");
-        builder.start();
-        */
-
-        System.out.println("업로드된 zip파일, 압축풀기한 파일들 모두 삭제 완료!!");
+            /* window
+            builder.command("cmd.exe","/c","rmdir", "unzipFiles");
+            builder.start();
+            builder.command("cmd.exe","/c","del", "unzipTest.zip");
+            builder.start();
+            */
+            System.out.println("업로드된 zip파일, 압축풀기한 파일들 모두 삭제 완료!!");
+        } catch (IOException e) {
+            System.out.println("업로드된 zip파일, 압축풀기한 파일들 삭제 실패");
+        }
     }
 
     @PostMapping("/framework")
@@ -833,7 +681,6 @@ public class UnzipController {
             for (Element headline : elements) {
                 String[] urlparsing = headline.text().split(" ");
                 for (int i = 0; i < urlparsing.length; i++) {
-                    System.out.println(urlparsing[i]);
                     for( int j = 0; j< social_link.length; j++){
                         if(urlparsing[i].contains(social_link[j])){
                             String temp= social_link[j]+"_Link";
@@ -842,7 +689,6 @@ public class UnzipController {
                             temp_data=temp_data.replace("social",social_link[j]);
                             temp_data=temp_data.replace(temp, urlparsing[i]);
                             frame_content +=temp_data;
-                            System.out.println(frame_content);
                         }
                     }
                 }
@@ -869,7 +715,6 @@ public class UnzipController {
                 dependencyFormat = dependencyFormat.replace("-", "--");
                 tempBtn = tempBtn.replace("NUM", Integer.toString(i+1));
                 tempBtn = tempBtn.replace("DEPENDENCYNAME",  dependencyFormat);
-
                 dependencyName = dependencyName + tempBtn + "   ";
             }
             frame_content = frameworkService.findContent(Dependency);
@@ -880,7 +725,6 @@ public class UnzipController {
             frame_content += dbTable(project_id);
         } else if (framework_name.equals("License")) {
             String License_file = "default";
-            System.out.println("Project id : " + project_id);
             List<ProjectEntity> getProjectTableRow = projectService.getFileContent(project_id);
             for (int i = 0; i < getProjectTableRow.size(); i++) {
                 if (getProjectTableRow.get(i).getFile_path().contains("LICENSE")) {
@@ -891,7 +735,6 @@ public class UnzipController {
                     frame_content = "## License\n" +
                         "![License: MPL 2.0](https://img.shields.io/badge/License_name-brightgreen.svg)";
                     frame_content = frame_content.replace("License_name", firstLine);
-                    System.out.println(firstLine);
                     License_file = "exist";
                 }
             }
@@ -936,22 +779,17 @@ public class UnzipController {
             }
         }
         int tableLen = entityDir.size();
-        System.out.println("Table 개수 : " + tableLen);
-
         for(int i = 0 ; i < tableLen ; i++) {
             String frameworkContent = entityDirContent.get(i);
-            System.out.println("table content : " + frameworkContent);
             // @Table이 없어서 에러 뜨는 경우 - BaseEntity.java의 경우
             // 에러뜨는 경우 pass하도록 예외 처리
             int tableIdx = frameworkContent.indexOf("@Table(");
-            System.out.println("tableIdx : " + tableIdx);
             if(tableIdx == -1){
                 continue;
             }
             String tableNameLine = frameworkContent.substring(frameworkContent.indexOf("@Table("),
                 frameworkContent.indexOf(")") + 1);
             String tableName = tableNameLine.split("\"")[1];
-            System.out.println("table name : " + tableName);
 
             dbTable += "#### 🌱 " + tableName + " Table\n"
                 + "|*Column Name*|\n"
@@ -1036,7 +874,6 @@ public class UnzipController {
             + "|HTTP|API|URL|Return Type|Parameters|\n"
             + "|----|----|---|---|---|\n";
 
-        System.out.println(result);
         int start_index = 0, end_index = 0;
         String urlTemp, returnType, parameters;
         String[] apiTemp;
@@ -1142,73 +979,147 @@ public class UnzipController {
     }
 
     @PostMapping("/alldata")
-    public String alldata(@RequestParam("project_id") String project_id) {
+    public Map <String,String[]> allData(@RequestParam("project_id") String project_id) throws IOException {
+        Map<String, String[]> all_data = new LinkedHashMap<>();
         String frame_content = "";
         UserDTO userDTO = userService.getUser(project_id);
         String user_name = userDTO.getUser_name();
         String repo_name = userDTO.getRepository_name();
-
-        frame_content = "Header_check\n" +
-            "\n" +
-            "\n" +
-            "Contributor_check\n" +
-            "<div style=\"font-weight:bold; font-size: 21px;\">Project Period</div>" +
-            "<div><img src='https://ifh.cc/g/LGBnpy.png' width=100%></div>" +
-            "<span style=\"width:20%\"><span/>" +
-            "<span style=\"margin-right: 55%; margin-left: 5%;\">Start Date</span>" +
-            "<span width=20%>End Date</span></br>   " +
-            "\n" +
-            "\n"+
-            "## Table of contents[![](https://raw.githubusercontent.com/aregtech/areg-sdk/master/docs/img/pin.svg)](#table-of-contents)   </br>\n" +
-            "- [Install](#install)\n" +
-            "- [DB](#db)\n" +
-            "- [queryMethod](#querymethod)\n" +
-            "---\n" +
-            "\n" +
-            "## Install[![](https://raw.githubusercontent.com/aregtech/areg-sdk/master/docs/img/pin.svg)](#install)\n" +
-            "<div align=\"right\">[ <a href=\"#table-of-contents\">↑ to top ↑</a> ]</div>\n" +
-            "1. Java 설치\n" +
-            "   - Spring Boot를 사용하려면 Java 8 버전 이상이 필요합니다.<br><br />\n" +
-            "   - [Oracle Java](https://www.oracle.com/technetwork/java/javase/downloads/index.html) .<br><br />\n" +
-            "\n" +
-            "\n" +
-            "```\n" +
-            "sdk install spring boot\n" +
-            "```\n" +
-            "2. Spring Boot CLI 설치\n" +
-            "\n" +
-            "   Spring Boot CLI는 Spring Boot 애플리케이션을 빠르게 만들 수 있는 명령줄 도구입니다.\n" +
-            "```\n" +
-            " spring init --dependencies=web myproject\n" +
-            "```\n" +
-            "## DB[![](https://raw.githubusercontent.com/aregtech/areg-sdk/master/docs/img/pin.svg)](#db)\n" +
-            "<div align=\"right\">[ <a href=\"#table-of-contents\">↑ to top ↑</a> ]</div>\n" +
-            "\n" +
-            "\n" +
-            "## QueryMethod[![](https://raw.githubusercontent.com/aregtech/areg-sdk/master/docs/img/pin.svg)](#querymethod)\n" +
-            "<div align=\"right\">[ <a href=\"#table-of-contents\">↑ to top ↑</a> ]</div>\n" +
-            "\n" +
-            "- 데이터베이스에서 name이 \"John Doe\"이거나 age가 18 이상인 Person 엔티티를 조회하는 쿼리 메소드\n" +
-            "```\n" +
-            " public interface PersonRepository extends JpaRepository<Person, Long> {\n" +
-            "    List<Person> findByNameOrAgeGreaterThanEqual(String name, int age);\n" +
-            "}\n" +
-            "```\n" +
-            "- 데이터베이스에서 age가 18 이상인 Person 엔티티를 age를 기준으로 오름차순으로 조회하는 쿼리 메소드\n" +
-            "```\n" +
-            " public interface PersonRepository extends JpaRepository<Person, Long> {\n" +
-            "    List<Person> findByAgeGreaterThanEqualOrderByAgeAsc(int age);\n" +
-            "}\n" +
-            "```\n";
-
+        String framework_name="";
         List<String> frameworkNameList = frameworkService.getFrameworkNameList();
-        for(int i = 0 ; i < frameworkNameList.size() ; i++){
-            String temp=frameworkNameList.get(i) ;
-            frame_content=frame_content.replace(temp+"_check",frameworkService.findContent(temp));
-        }
-        frame_content= frame_content.replace("userName",user_name);
-        frame_content= frame_content.replace("repositoryName",repo_name);
+        int index=0;
+        // framework 테이블에 있는 framework 다 가져오기
+        //배열선언
+        String[] framework_list= new String[frameworkNameList.size()];
+        String[] content_list= new String[frameworkNameList.size()];
 
-        return frame_content;
+        for(int count=0; count< frameworkNameList.size(); count++){
+            framework_name=frameworkNameList.get(count);
+
+            // framework_id에 따른 content제공
+            if(framework_name.equals("Contributor")){
+                frame_content = frameworkService.findContent(framework_name);
+                frame_content = frame_content.replace("repositoryName", repo_name);
+                frame_content = frame_content.replace("userName", user_name);
+                index = 8;
+            } else if (framework_name.equals("Header")) { /* header 값에 대한 framework*/
+                String Header = "header";
+                frame_content = frameworkService.findContent(Header);
+                frame_content=frame_content.replace("repoName",repo_name);
+                index = 0;
+            } else if (framework_name.equals("Period")) {
+                String Period = "Period";
+                frame_content = frameworkService.findContent(Period);
+                frame_content=frame_content.replace("PeriodImage", "https://ifh.cc/g/2jWwt7.png");
+                frame_content=frame_content.replace("startDate", "Start Date");
+                frame_content=frame_content.replace("endDate", "End Date");
+                index = 1;
+            } else if(framework_name.equals("WebAPI")) {
+                frame_content = frameworkService.findContent("WebAPI");
+                frame_content += webAPI(project_id);
+                index = 3;
+            } else if (framework_name.equals("Social")){
+                frame_content = "## Social<br>";
+                String url = "https://github.com/";
+                url = url + user_name;
+                String[] social_link = {"instagram", "facebook", "linkedin", "notion", "twitter", "github", "gmail"};
+                String[] logo_color = {"E4405F","1877F2","0A66C2","000000","1DA1F2","181717","F06B66" };
+                String social_temp =" ";
+                social_temp = frameworkService.findContent("Social");
+
+                Document doc = Jsoup.connect(url).get();
+                Elements elements = doc.getElementsByClass("vcard-details");
+                for (Element headline : elements) {
+                    String[] urlparsing = headline.text().split(" ");
+                    for (int i = 0; i < urlparsing.length; i++) {
+                        for( int j = 0; j< social_link.length; j++){
+                            if(urlparsing[i].contains(social_link[j])){
+                                String temp= social_link[j]+"_Link";
+                                String temp_data=" ";
+                                temp_data=social_temp.replace("logo_color",logo_color[j]);
+                                temp_data=temp_data.replace("social",social_link[j]);
+                                temp_data=temp_data.replace(temp, urlparsing[i]);
+                                frame_content +=temp_data;
+                            }
+                        }
+                    }
+                }
+                index = 7;
+            } else if (framework_name.equals("Dependency")) {
+                String Dependency = "Dependency";
+                String xmlContent = "";
+                List<ProjectEntity> getProjectTableRow = projectService.getFileContent(project_id);
+                for(int i = 0 ; i < getProjectTableRow.size() ; i++) {
+                    if (getProjectTableRow.get(i).getFile_path().contains("pom.xml")) {
+                        xmlContent = getProjectTableRow.get(i).getFile_content();
+                    }
+                }
+
+                String noWhiteSpaceXml = xmlContent.replaceAll("\n", "");
+                String dependencyTags = "\n" + findDependencies(noWhiteSpaceXml).get(1).toString();
+                List<String> dependencyNameList = (List<String>) findDependencies(noWhiteSpaceXml).get(0);
+                String dependencyName = "\n";
+                String dependencyBtn = "<a href=\"https://mvnrepository.com/\"><img src=\"https://img.shields.io/badge/NUM-DEPENDENCYNAME-9cf\"></a>";
+                for(int i = 0 ; i < dependencyNameList.size() ; i++){
+                    String tempBtn = dependencyBtn;
+                    String dependencyFormat = dependencyNameList.get(i);
+                    dependencyFormat = dependencyFormat.replace("-", "--");
+                    tempBtn = tempBtn.replace("NUM", Integer.toString(i+1));
+                    tempBtn = tempBtn.replace("DEPENDENCYNAME",  dependencyFormat);
+
+                    dependencyName = dependencyName + tempBtn + "   ";
+                }
+                frame_content = frameworkService.findContent(Dependency);
+                frame_content=frame_content.replace("DependencyNames", dependencyName);
+                frame_content=frame_content.replace("DependencyContents", dependencyTags);
+                index = 5;
+            } else if (framework_name.equals("DB Table")) {
+                frame_content = frameworkService.findContent("DB Table");
+                frame_content += dbTable(project_id);
+                index = 4;
+            } else if (framework_name.equals("License")) {
+                String License_file = "default";
+                List<ProjectEntity> getProjectTableRow = projectService.getFileContent(project_id);
+                for (int i = 0; i < getProjectTableRow.size(); i++) {
+                    if (getProjectTableRow.get(i).getFile_path().contains("LICENSE")) {
+                        String str = getProjectTableRow.get(i).getFile_content();
+                        String firstLine = str.substring(0, str.indexOf("\n"));
+                        firstLine = firstLine.replace("License", "");
+                        firstLine = firstLine.trim();
+                        frame_content = "## License\n" +
+                            "![License: MPL 2.0](https://img.shields.io/badge/License_name-brightgreen.svg)";
+                        frame_content = frame_content.replace("License_name", firstLine);
+                        License_file = "exist";
+                    }
+                }
+                if (License_file.equals("default")) {
+                    frame_content = "## License\n" +
+                        "The MIT License (MIT)\n" +
+                        "\n" +
+                        "Copyright (c) 2023 UserName\n" +
+                        "\n" +
+                        "Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the \"Software\"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:\n"
+                        +
+                        "\n" +
+                        "The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.\n"
+                        +
+                        "\n" +
+                        "THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.";
+                    frame_content = frame_content.replace("UserName", user_name);
+                }
+                index = 6;
+            } else if (framework_name.equals("Architecture")) {
+                frame_content = frameworkService.findContent("Architecture");
+                String architecture = projectService.getFileContentByFileName(project_id, "Project Architecture");
+                frame_content += architecture;
+                index = 2;
+            }
+            framework_list[index]=framework_name;
+            content_list[index]=frame_content;
+        }
+        all_data.put("content",content_list);
+        all_data.put("type",framework_list);
+
+        return all_data;
     }
 }
