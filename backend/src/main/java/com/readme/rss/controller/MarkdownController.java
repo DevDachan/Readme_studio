@@ -22,9 +22,11 @@ public class MarkdownController {
     @PostMapping(value = "/mdZipFile")
     public byte[] makeMDzipFile(@RequestBody List<Map<String, Object>> readme) throws IOException { // 받을 인자: md파일 명,
         System.out.println();
+        System.out.println("readme size : " + readme.size());
         System.out.println("[Make Markdown Files Function]");
 
         ProcessBuilder builder = new ProcessBuilder();
+
 
         // mdFiles 폴더 생성 - 생성한 md 파일들을 저장하는 임시 폴더
         builder.command("mkdir", "mdFiles"); // mac
@@ -32,6 +34,7 @@ public class MarkdownController {
         builder.start();
 
         File mdFile = null;
+
         for (int i = 0; i < readme.size(); i++) {
             String mdName = readme.get(i).get("id").toString(); // md file name
             ArrayList<String> framework = (ArrayList<String>) readme.get(i).get("content"); // md framework content list
@@ -39,7 +42,7 @@ public class MarkdownController {
             for (int j = 0; j < framework.size(); j++) {
                 content = content + framework.get(j) + "\n\n";
             }
-            System.out.println(mdName + " : " + content);
+            System.out.println("test - " + mdName + " : " + content);
 
             String filePath = "./mdFiles/" + mdName; // ex) ./mdFiles/A.md
 
@@ -58,7 +61,7 @@ public class MarkdownController {
         }
 
         // md 파일들 압축하기
-        // builder.directory(new File("./mdFiles")); // mdFiles로 이동
+        builder.directory(new File("./mdFiles")); // mdFiles로 이동
         builder.command("zip", "mdZipFiles.zip", "-r", "./mdFiles"); // mac
         // builder.command("cmd.exe", "/c", "zip", "mdZipFiles.zip", "-r", "./mdFiles"); // window
         var process = builder.start(); // zip 실행
@@ -136,7 +139,6 @@ public class MarkdownController {
 
         // md 파일 지우기
         /* mac */
-
         builder.command("rm", "-rf", "./mdFile"); // 파일 삭제
         builder.start();
         builder.command("mkdir", "mdFile"); // 폴더 다시 생성해주기
