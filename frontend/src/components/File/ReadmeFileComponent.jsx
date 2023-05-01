@@ -217,25 +217,29 @@ function ReadmeFileComponent(props) {
     setContent(tempReadme);
   }
 
-  const changeHaderType = (e, i) =>{
+  const changeHaderType = (e) =>{
+    var i = e.target.id;
     var tempReadme = JSON.parse(JSON.stringify(readmeList));
-    tempReadme.find(e => e.id === currentReadme).content[i-1] = tempReadme.find(e => e.id === currentReadme).content[i-1].replace(/type=[^&]*/,'type='+e.target.value);
+    tempReadme.find(e => e.id === currentReadme).content[i] = tempReadme.find(e => e.id === currentReadme).content[i].replace(/type=[^&]*/,'type='+e.target.value);
     setContent(tempReadme);
   }
 
-  const changeHeaderColor = (e,i) =>{
+  const changeHeaderColor = (e) =>{
+    var i = e.target.id;
     var tempReadme = JSON.parse(JSON.stringify(readmeList));
     var color = e.target.value.split("#")[1];
-    tempReadme.find(e => e.id === currentReadme).content[i-1] = tempReadme.find(e => e.id === currentReadme).content[i-1].replace(/color=[^&]*/,'color='+color);
+    tempReadme.find(e => e.id === currentReadme).content[i] = tempReadme.find(e => e.id === currentReadme).content[i].replace(/color=[^&]*/,'color='+color);
     setContent(tempReadme);
   }
 
-  const changeHeaderFontColor = (e,i) =>{
+  const changeHeaderFontColor = (e) =>{
+    var i = e.target.id;
     var tempReadme = JSON.parse(JSON.stringify(readmeList));
     var color = e.target.value.split("#")[1];
-    tempReadme.find(e => e.id === currentReadme).content[i-1] = tempReadme.find(e => e.id === currentReadme).content[i-1].replace(/fontColor=[^&]*/,'fontColor='+color);
+    tempReadme.find(e => e.id === currentReadme).content[i] = tempReadme.find(e => e.id === currentReadme).content[i].replace(/fontColor=[^&]*/,'fontColor='+color);
     setContent(tempReadme);
   }
+
 
 
 
@@ -327,7 +331,7 @@ function ReadmeFileComponent(props) {
 
       cur_content = <div className="row">
         <div className="col-sm-4 mb-4">
-          <select id="header-select" value={header_type} onChange={(e) => changeHaderType(e,i)}>
+          <select id={i} class="header-select" value={header_type} onChange={changeHaderType}>
             <option className="file-selector-item" value="Wave" > Wave </option>
             <option className="file-selector-item" value="Egg" > Egg </option>
             <option className="file-selector-item" value="Shark" > Shark </option>
@@ -342,13 +346,13 @@ function ReadmeFileComponent(props) {
           <h3 className="ralign"> Font Color </h3>
         </div>
         <div className="col-sm-1">
-          <input type="color" className="ip-header-color" defaultValue={"#"+fontColor} onChange={(e) => changeHeaderFontColor(e,i)}/>
+          <input type="color" id={i} className="ip-header-color" defaultValue={"#"+fontColor} onChange={changeHeaderFontColor}/>
         </div>
         <div className="col-sm-2">
           <h3 className="ralign"> Color </h3>
         </div>
         <div className="col-sm-2">
-          <input type="color" className="ip-header-color" defaultValue={"#"+bgColor} onChange={(e) => changeHeaderColor(e,i)}/>
+          <input type="color" id={i} className="ip-header-color" defaultValue={"#"+bgColor} onChange={changeHeaderColor}/>
         </div>
 
 

@@ -523,7 +523,7 @@ th, td, tr{
   padding: 20px 0 0 20px;
 }
 
-#header-select{
+.header-select{
   background-color: white;
   color: black;
 }
