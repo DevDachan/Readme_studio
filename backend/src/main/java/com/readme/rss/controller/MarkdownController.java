@@ -27,9 +27,7 @@ public class MarkdownController {
 
         ProcessBuilder builder = new ProcessBuilder();
 
-
         // mdFiles 폴더 생성 - 생성한 md 파일들을 저장하는 임시 폴더
-
         builder.command("mkdir", "mdFiles"); // mac
         // builder.command("cmd.exe","/c","mkdir", "mdFiles"); // window
         builder.start();
@@ -43,16 +41,14 @@ public class MarkdownController {
             for (int j = 0; j < framework.size(); j++) {
                 content = content + framework.get(j) + "\n\n";
             }
-            System.out.println("test - " + mdName + " : " + content);
+            System.out.println("test - " + mdName);
 
-            String filePath = "./mdFiles/" + mdName; // ex) ./mdFiles/A.md
+            String filePath = "./mdFiles/" + mdName; // ex) ./mdFiles/Readme.md
             mdFile = new File(filePath);
 
-
             mdFile.createNewFile(); // 파일 새로 생성
-            System.out.println("sd");
-
             BufferedWriter mdWriter = new BufferedWriter(new FileWriter(mdFile, true));
+
             mdWriter.write("<h1>" + mdName + " File</h1>");
             mdWriter.newLine();
             mdWriter.newLine();
@@ -62,9 +58,10 @@ public class MarkdownController {
             mdWriter.flush(); // 버퍼의 남은 데이터를 모두 쓰기
             mdWriter.close();
         }
+        System.out.println("mdFile : " + mdFile);
 
         // md 파일들 압축하기
-        builder.directory(new File("./mdFiles")); // mdFiles로 이동
+        // builder.directory(new File("./mdFiles")); // mdFiles로 이동
         builder.command("zip", "mdZipFiles.zip", "-r", "./mdFiles"); // mac
         // builder.command("cmd.exe", "/c", "zip", "mdZipFiles.zip", "-r", "./mdFiles"); // window
 
@@ -90,7 +87,6 @@ public class MarkdownController {
         builder.start();
         builder.command("mkdir", "./mdFiles"); // 폴더 다시 생성해주기
         builder.start();
-
 
         /* window
         builder.command("cmd.exe","/c","del", "./mdFiles");
