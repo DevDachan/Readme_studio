@@ -488,7 +488,7 @@ public class UnzipController {
             링크 포맷 : https://github.com/로 시작
             (1) 링크 포맷이 맞지 않는 경우 => LinkFormatError 리턴
             (2) .git이 붙어 있지 않는 링크인 경우 => .git 붙여주기
-            (3) 없는 레포지토리 링크(clone이 안되는 경우)일 경우 => LinkFormatError 리턴
+            (3) 없는 레포지토리 링크(clone이 안되는 경우)일 경우 => cloneError 리턴
         */
 
         if(!repoLink.contains("https://github.com/")){ // (1) 예외처리

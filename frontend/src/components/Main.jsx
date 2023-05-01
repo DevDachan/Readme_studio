@@ -91,7 +91,7 @@ function Main(props) {
       "📙 Java Version :"+ response.data.javaVersion+"   \n"+
       "📚 DB : "+ response.data.databaseName;
 
-      readme_list.push({id: response.data.readmeName, content : [defaultData] , type : ["Default Data"]});
+      readme_list.push({projectId : response.data.project_id, id: response.data.readmeName, content : [defaultData] , type : ["Default Data"]});
 
       navigate('./editor', {
         state: {
@@ -130,7 +130,7 @@ function Main(props) {
         "📙 Java Version :"+ response.data.javaVersion+"   \n"+
         "📚 DB : "+ response.data.databaseName;
 
-        readme_list.push({id: response.data.readmeName, content : [defaultData] , type : ["Default Data"]});
+        readme_list.push({projectId : response.data.project_id, id: response.data.readmeName, content : [defaultData] , type : ["Default Data"]});
 
         navigate('./editor', {
           state: {
