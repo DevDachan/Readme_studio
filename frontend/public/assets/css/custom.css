@@ -523,6 +523,17 @@ th, td, tr{
   padding: 20px 0 0 20px;
 }
 
+#header-select{
+  background-color: white;
+  color: black;
+}
+
+.ip-header-color{
+  margin-top: 5px;
+  border: 0px;
+  background: none;
+}
+
 /*---------------------------------- Palette.jsx ---------------------------------------*/
 .palette-div{
   color: #4f3e3e;
