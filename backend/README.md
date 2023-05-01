@@ -32,7 +32,7 @@
 1. DB 연결
 2. 리액트에서 userName, repName, zip 파일 보낸 것을 spring boot에서 받아서 Task2에서 진행한 적절한 처리
 3. userName, repName, zip 파일을 활용하여 markdown 문법 형식으로 string 샘플 data를 만들고 react response로 리턴
-<img width="700" alt="image" src="https://user-images.githubusercontent.com/70511859/225084066-d87cca81-7032-41ef-bbec-4b017b6ea5d9.png">
+   <img width="700" alt="image" src="https://user-images.githubusercontent.com/70511859/225084066-d87cca81-7032-41ef-bbec-4b017b6ea5d9.png">
 
 ## 4. Task4
 1. service에서 sql insert 작업
@@ -41,8 +41,8 @@
 
 (Detail)
 1. project table과 user table의 id는 랜덤한 값으로 설정
-2. Database ERD 구조   
-   
+2. Database ERD 구조
+
 ![image](https://user-images.githubusercontent.com/70511859/225482486-98702a8d-9b9d-4b8e-adbf-980d92448e86.png)
 
 ## 5. Task5
@@ -60,8 +60,8 @@
 
 (Detail)
 1. java 파일들 먼저 찾고 그 파일들 path 구하기
-2. Path 정보 보고 디렉토리별로 구분하기 
-3. content를 보고 파싱 시작 - 구조 찾기 
+2. Path 정보 보고 디렉토리별로 구분하기
+3. content를 보고 파싱 시작 - 구조 찾기
 4. pom.xml, application.properties, src/main/java/경로에 있는 주요 자바 파일들 db에 저장
 5. project 테이블에서 file_content 컬럼 type 변경해주기 : varchar(15000) -> LONGTEXT
 6. project 테이블의 detail 컬럼  
@@ -69,9 +69,9 @@
 7. 스프링부트 버전, 프로젝트의 패키지명에서 groupId랑 artifactId 구분해서 파싱, 자바 jdk 버전, 프로젝트와 연결된 database명 파싱 + map data 수정
 8. pom.xml 파싱해서 dependency명과 버전 추출, <dependencies>태그 코드블럭 형태로 추출
 9. db에 Dependency 행 추가
-![image](https://user-images.githubusercontent.com/70511859/229765078-36da6236-1125-4f25-8fb4-c1416b35ff37.png)
+   ![image](https://user-images.githubusercontent.com/70511859/229765078-36da6236-1125-4f25-8fb4-c1416b35ff37.png)
 
-[dependencies 형식]   
+[dependencies 형식]
 ```pom.xml
 <dependencies>
     <dependency>
@@ -118,7 +118,7 @@
 ```
 
 ## 7. Task7
-1. A받은 framework 구현   
+1. A받은 framework 구현
 
 ### DB Table<br><!-- DB Table -->
 - #### Framework Table
@@ -146,10 +146,13 @@
 |project_id **(PK)**|
 |user_name|
 |repository_name|
-   
+
 ## 8. Task8
 1. Git Repository Link 받아서 파일 다운로드 및 처리   
-2. Project Architecture tree 형식으로 데이터 보내기   
+   https://github.com/YeJi222/RS_FileCloneTest 깃허브 링크로 테스트 중   
+   (+) 다른 스프링부트 프로젝트 링크도 확인 완료
+
+2. Project Architecture tree 형식으로 데이터 보내기
 
 ### Project Architecture (Tree Structure)<br>
 <!-- Project Architecture -->
@@ -299,3 +302,12 @@
    
 45 directories, 97 files   
 ```
+
+## 9. Task9
+1. unzip 파일명에 project id 부여하기
+2. 파일 다운로드 에러 찾기
+3. period 날짜 간격 해결 방안 찾기
+
+
+### Memo
+builder.directory(new File("./mdFiles")); // mdFiles로 이동   
