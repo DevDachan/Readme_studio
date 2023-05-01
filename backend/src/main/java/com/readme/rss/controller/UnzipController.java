@@ -1,10 +1,8 @@
 package com.readme.rss.controller;
 
 import static java.lang.Thread.sleep;
-
 import com.readme.rss.data.dto.UserDTO;
 import com.readme.rss.data.entity.ProjectEntity;
-import java.util.Arrays;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -65,7 +63,6 @@ public class UnzipController {
                 break;
             }
         }
-        System.out.println("randomIdList: " + randomIdList);
         String randomId = Integer.toString(tempRandomId);
 
         return randomId;
@@ -255,21 +252,23 @@ public class UnzipController {
         // project table에서 id 가져오기
         randomIdList = projectService.getIdAll();
         String randomId = projectIdGenerate();
-        String unzipFilePathName = "./unzipTest_" + randomId + ".zip";
-        System.out.println("unzipFilePathName : " + unzipFilePathName);
-        Path savePath = Paths.get("./unzipTest.zip"); // unzipTest.zip이름으로 저장
+        String zipFileName = "./unzipTest_" + randomId + ".zip";
+        System.out.println("zipFileName : " + zipFileName);
+        Path savePath = Paths.get(zipFileName); // unzipTest.zip이름으로 저장
         file.transferTo(savePath); // 파일 다운로드
 
         ProcessBuilder builder = new ProcessBuilder();
 
         // unzipFiles 폴더 생성 - 압축풀기한 파일들을 저장하는 임시 폴더
-        builder.command("mkdir", "unzipFiles"); // mac
-        // builder.command("cmd.exe","/c","mkdir", "unzipFiles"); // window
+        String unzipFilesName = "unzipFiles_" + randomId;
+        System.out.println("unzipFilesName : " + unzipFilesName);
+        builder.command("mkdir", unzipFilesName); // mac
+        // builder.command("cmd.exe","/c","mkdir", unzipFilesName); // window
         builder.start();
 
         // 파일 압축 풀기
-        builder.command("unzip", "unzipTest.zip", "-d", "./unzipFiles"); // mac
-        // builder.command("cmd.exe","/c","unzip", "unzipTest.zip", "-d", "./unzipFiles"); // window
+        builder.command("unzip", zipFileName, "-d", unzipFilesName); // mac
+        // builder.command("cmd.exe","/c","unzip", zipFileName, "-d", unzipFilesName); // window
         var process = builder.start(); // upzip 실행
 
         // unzip 실행 후, 콘솔에 출력해주기
@@ -283,7 +282,7 @@ public class UnzipController {
 
         // project architecture
         // tree 명령어
-        builder.directory(new File("./unzipFiles")); // 현재 위치 이동
+        builder.directory(new File(unzipFilesName)); // 현재 위치 이동
         builder.start();
         builder.command("tree"); // mac
         // builder.command("cmd.exe","/c","tree"); // window
@@ -306,7 +305,7 @@ public class UnzipController {
         builder.start();
 
         // 압축 푼 파일들 중에서 원하는 정보 찾기(ex. url 찾기)
-        String searchDirPath = "./unzipFiles";
+        String searchDirPath = unzipFilesName;
         System.out.println("\n[압축 해제한 폴더 속 파일 리스트]");
         int retSearchFiles = 0; // 파일 리스트 다 뽑아냈는지 확인할 수 있는 리턴값
         retSearchFiles = searchFiles(searchDirPath);
@@ -362,7 +361,7 @@ public class UnzipController {
         userService.saveUser(randomId, userName, repositoryName);
 
         // content data 보냈으므로, 압축풀기한 파일들, 업로드된 zip 파일 모두 삭제
-        deleteUnzipFiles(builder);
+        deleteUnzipFiles(builder, zipFileName, unzipFilesName);
 
         // =============== pom.xml에서 필요한 데이터 파싱 =============== //
         String xmlPath = ""; // test
@@ -776,12 +775,12 @@ public class UnzipController {
         System.out.println("clone한 파일들 삭제 완료!!");
     }
 
-    public static void deleteUnzipFiles(ProcessBuilder builder) throws IOException { // register1
+    public static void deleteUnzipFiles(ProcessBuilder builder, String zipFileName, String unzipFilesName) throws IOException { // register1
         // upzip한 파일들, zip파일 모두 삭제
         /* mac */
-        builder.command("rm", "-rf", "./unzipFiles/");
+        builder.command("rm", "-rf", unzipFilesName);
         builder.start();
-        builder.command("rm", "-rf", "./unzipTest.zip");
+        builder.command("rm", "-rf", zipFileName);
         builder.start();
 
         /* window
