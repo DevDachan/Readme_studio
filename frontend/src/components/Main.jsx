@@ -119,7 +119,8 @@ function Main(props) {
       data: formData
     })
     .then(function (response){
-      if(response.data.error !== "LinkFormatError"){
+      console.log(response.data.error);
+      if(response.data.error !== "LinkFormatError" && response.data.error !== "cloneError"){
         //handle success
         var defaultData = "<!-- empty_textarea -->\n"+
         "🚪 Stack : Spring boot    \n"+
