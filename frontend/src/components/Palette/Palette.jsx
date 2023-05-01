@@ -43,13 +43,23 @@ function Palette(props) {
       data: formData,
     })
       .then(function (response){
-        tempReadme.find(e => e.id === currentReadme).content.splice(position,0, response.data);
-        tempReadme.find(e => e.id === currentReadme).type.splice(position,0,e.target.value);
-        setContent(tempReadme);
-        setPosition(tempReadme.find(e => e.id === currentReadme).content.length);
-        setTimeout(function() {
-           document.getElementById("select_"+(position-1)).scrollIntoView(true);
-         }, 1);
+        if(e.target.value == "Header"){
+          tempReadme.find(e => e.id === currentReadme).content.splice(0,0, response.data);
+          tempReadme.find(e => e.id === currentReadme).type.splice(0,0,e.target.value);
+          setContent(tempReadme);
+          setPosition(1);
+          setTimeout(function() {
+             document.getElementById("postionChangeDown"+(0)).focus();
+           }, 1);
+        }else{
+          tempReadme.find(e => e.id === currentReadme).content.splice(position,0, response.data);
+          tempReadme.find(e => e.id === currentReadme).type.splice(position,0,e.target.value);
+          setContent(tempReadme);
+          setPosition(Number(position)+1);
+          setTimeout(function() {
+             document.getElementById("postionChangeDown"+(position)).focus();
+           }, 1);
+        }
       })
       .catch(function(error){
         //handle error

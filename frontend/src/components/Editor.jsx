@@ -96,8 +96,14 @@ function Editor(props) {
         content.splice(changeIndex, 0, cur_temp_content);
         type.splice(changeIndex, 0, cur_temp_type);
 
+
+        setPosition(changeIndex+1);
         setReadmeObject(readmeObject);
         setForRelandering(forRelanderng + "1");
+        setTimeout(function() {
+           document.getElementById("postionChangeDown"+(changeIndex)).focus();
+           document.getElementById("postionChangeDown"+(currentIndex)).blur();
+         }, 1);
       }
     }else{
       if(currentIndex !== 0){
@@ -111,9 +117,13 @@ function Editor(props) {
 
         content.splice(changeIndex, 0, cur_temp_content);
         type.splice(changeIndex, 0, cur_temp_type);
-
+        setPosition(changeIndex+1);
         setReadmeObject(readmeObject);
         setForRelandering(forRelanderng + "1");
+        setTimeout(function() {
+          document.getElementById("postionChangeDown"+(changeIndex)).focus();
+          document.getElementById("postionChangeDown"+(currentIndex)).blur();
+         }, 1);
       }
     }
   }
@@ -145,6 +155,7 @@ function Editor(props) {
     tempReadme.find(e => e.id === currentReadme).content[position] = "## Project Architecture (Tree Structure)<br> <!-- Project Architecture -->" + content;
     setContent(tempReadme);
   }
+
 
   const changePeriod = (e) => {
     var tempReadme = JSON.parse(JSON.stringify(readmeObject));
