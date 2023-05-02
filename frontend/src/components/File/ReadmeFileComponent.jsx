@@ -203,7 +203,7 @@ function ReadmeFileComponent(props) {
     var tempReadme = JSON.parse(JSON.stringify(readmeList));
     let modifiedHeader = tempReadme.find(e => e.id === currentReadme).content[id].replace(/text=[^&]*/, `text=${data}`);
 
-    tempReadme.find(e => e.id === currentReadme).content[id] = modifiedHeader;
+    tempReadme.find(e => e.id === currentReadme).content[id] = modifiedHeader + "\n";
     setContent(tempReadme);
   }
 
@@ -213,7 +213,7 @@ function ReadmeFileComponent(props) {
     var tempReadme = JSON.parse(JSON.stringify(readmeList));
     let modifiedHeader = tempReadme.find(e => e.id === currentReadme).content[id].replace(/fontSize=[^)]*/, `fontSize=${data}`);
 
-    tempReadme.find(e => e.id === currentReadme).content[id] = modifiedHeader;
+    tempReadme.find(e => e.id === currentReadme).content[id] = modifiedHeader + "\n";
     setContent(tempReadme);
   }
 
