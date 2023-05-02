@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-@CrossOrigin(origins = "http://localhost:3005")
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 public class MarkdownController {
     @PostMapping(value = "/mdZipFile")
@@ -25,8 +25,8 @@ public class MarkdownController {
         // mdFiles 폴더 생성 - 생성한 md 파일들을 저장하는 임시 폴더
         String project_id = readme.get(0).get("projectId").toString();
         String mdFilesName = "mdFiles_" + project_id;
-        builder.command("mkdir", mdFilesName); // mac
-        // builder.command("cmd.exe","/c","mkdir", mdFilesName); // window
+        //builder.command("mkdir", mdFilesName); // mac
+        builder.command("cmd.exe","/c","mkdir", mdFilesName); // window
         builder.start();
 
         File mdFile;
@@ -64,8 +64,8 @@ public class MarkdownController {
 
         // md 파일들 압축하기
         String mdZipFilesName = "mdZipFiles_" + project_id + ".zip";
-        builder.command("zip", mdZipFilesName, "-r", mdFilesName); // mac
-        // builder.command("cmd.exe", "/c", "zip", mdZipFilesName, "-r", mdFilesName); // window
+        //builder.command("zip", mdZipFilesName, "-r", mdFilesName); // mac
+        builder.command("cmd.exe", "/c", "zip", mdZipFilesName, "-r", mdFilesName); // window
 
         var process = builder.start(); // zip 실행
         try (var reader = new BufferedReader( // zip 실행 후, 콘솔에 출력해주기
@@ -81,18 +81,18 @@ public class MarkdownController {
 
         // md 파일들, md zip한 파일 지우기
         try{
-            /* mac */
+            /* mac
             builder.command("rm", "-rf", mdFilesName);
             builder.start();
             builder.command("rm", "-rf", mdZipFilesName);
-            builder.start();
+            builder.start();*/
 
-            /* window
+            /* window*/
             builder.command("cmd.exe","/c","del", mdFilesName);
             builder.start();
             builder.command("cmd.exe","/c","del","/Q", mdZipFilesName);
             builder.start();
-            */
+
             System.out.println("md zip파일, md 파일들 모두 삭제 완료!!");
         } catch (IOException e){
             System.out.println("md zip파일, md 파일들 삭제 실패");
