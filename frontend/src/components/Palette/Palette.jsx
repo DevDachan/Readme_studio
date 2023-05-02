@@ -77,8 +77,8 @@ function Palette(props) {
     // 렌더링이 되지 않은 상태에서 scroll이 일어날 경우 이동이 안된다.
     setPosition(tempReadme.find(e => e.id === currentReadme).content.length);
     setTimeout(function() {
-       document.getElementById("select_"+(position-1)).scrollIntoView(true);
-     }, 0);
+       document.getElementById("postionChangeDown"+(position)).focus();
+     }, 1);
   }
 
   const allData = (e) => {

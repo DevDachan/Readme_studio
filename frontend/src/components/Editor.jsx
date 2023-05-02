@@ -71,12 +71,16 @@ function Editor(props) {
   //----------------------------------------------------------------------
 
   const pasteContent = (e) => {
+    var id = e.target.id;
     var tempReadme = JSON.parse(JSON.stringify(readmeObject));
     tempReadme.find(e => e.id === currentReadme).content.splice(e.target.value,0, tempReadme.find(e => e.id === currentReadme).content[e.target.value]);
     tempReadme.find(e => e.id === currentReadme).type.splice(e.target.value,0, tempReadme.find(e => e.id === currentReadme).type[e.target.value]);
     setReadmeObject(tempReadme);
     setPosition(Number(e.target.value)+2);
     setForRelandering(forRelanderng + "1");
+    setTimeout(function() {
+       document.getElementById("postionChangeDown"+(Number(e.target.id)+1)).focus();
+     }, 2);
   }
 
 
@@ -228,10 +232,12 @@ function Editor(props) {
       tempReadme = [{id: "README.md", content : [project_detail], type : ["Default Data"] }];
       setReadmeObject(tempReadme);
       setCurrentReadme(tempReadme[0].id);
+      setPosition(1);
     }else{
       tempReadme= tempReadme.filter((e) => e.id !== currentReadme);
       setReadmeObject(tempReadme);
       setCurrentReadme(tempReadme[0].id);
+      setPosition(1);
     }
   }
   //--------------------------------------------------------------------

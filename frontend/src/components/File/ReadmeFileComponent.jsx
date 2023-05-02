@@ -203,7 +203,7 @@ function ReadmeFileComponent(props) {
     var tempReadme = JSON.parse(JSON.stringify(readmeList));
     let modifiedHeader = tempReadme.find(e => e.id === currentReadme).content[id].replace(/text=[^&]*/, `text=${data}`);
 
-    tempReadme.find(e => e.id === currentReadme).content[id] = modifiedHeader;
+    tempReadme.find(e => e.id === currentReadme).content[id] = modifiedHeader + "\n";
     setContent(tempReadme);
   }
 
@@ -213,7 +213,7 @@ function ReadmeFileComponent(props) {
     var tempReadme = JSON.parse(JSON.stringify(readmeList));
     let modifiedHeader = tempReadme.find(e => e.id === currentReadme).content[id].replace(/fontSize=[^)]*/, `fontSize=${data}`);
 
-    tempReadme.find(e => e.id === currentReadme).content[id] = modifiedHeader;
+    tempReadme.find(e => e.id === currentReadme).content[id] = modifiedHeader + "\n";
     setContent(tempReadme);
   }
 
@@ -441,7 +441,7 @@ function ReadmeFileComponent(props) {
               <div className="col-sm-8">
               </div>
               <div className="col-sm-2 ralign">
-                <button className="paste-readmeComponent" onClick={pasteContent} key={"paste_"+i} value={i} / >
+                <button className="paste-readmeComponent" onClick={pasteContent} id={i} key={"paste_"+i} value={i} / >
               </div>
               <div className="col-sm-2 lalign">
                 <button className="delete-readmeComponent" onClick={deleteContent} key={"delete_"+i} value={i} / >
