@@ -266,7 +266,7 @@ public class UnzipController {
 
         // 파일 압축 풀기
         //builder.command("unzip", zipFileName, "-d", unzipFilesName); // mac
-        //builder.command("cmd.exe","/c","unzip", zipFileName, "-d", unzipFilesName); // window
+        builder.command("cmd.exe","/c","unzip", zipFileName, "-d", unzipFilesName); // window
         var process = builder.start(); // upzip 실행
 
         // unzip 실행

@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import axios from "axios";
 import 'bootstrap/dist/css/bootstrap.css';
+import Loading from "./Loading";
+
 
 const Wrapper = styled.div`
     padding: 0 2.5em;
@@ -25,7 +27,8 @@ function Main(props) {
   const [githubRepLink, setGithubRepLink] = useState('');
   const [fileName, setFileName] = useState("Upload");
   const [fileSelected, setFileSelected] = useState(false);
-
+  const [loadingCheck, setLoadingCheck] = useState(false);
+  const { cancel, token } = axios.CancelToken.source();
 
   const goMain = (e) =>{
     navigate('./');
@@ -58,6 +61,12 @@ function Main(props) {
     setRepName(e.target.value);
   };
 
+
+  const cancelLoading = e => {
+    setLoadingCheck(false);
+    cancel("cancel");
+  }
+
   const submitReadme = (e) =>{
 
     setRepName(document.getElementById("rep-name").value);
@@ -76,10 +85,12 @@ function Main(props) {
     formData.append('jsonParam2', repName);
 
     var readme_list = [];
+    setLoadingCheck(true);
     axios({
       method: "post",
       url: 'http://localhost:8090/register',
-      data: formData
+      data: formData,
+      cancelToken: token
     })
     .then(function (response){
       //handle success
@@ -103,7 +114,7 @@ function Main(props) {
       });
     })
     .catch(function(error){
-      //handle error
+      cancelLoading();
     });
   }
 
@@ -119,7 +130,6 @@ function Main(props) {
       data: formData
     })
     .then(function (response){
-      console.log(response.data.error);
       if(response.data.error !== "LinkFormatError" && response.data.error !== "cloneError"){
         //handle success
         var defaultData = "<!-- empty_textarea -->\n"+
@@ -143,9 +153,19 @@ function Main(props) {
       }
     })
     .catch(function(error){
-      //handle error
+      cancelLoading();
     });
   }
+
+
+  const html = document.documentElement;
+  const body = document.body;
+
+  const height = Math.max(html.clientHeight, html.scrollHeight, html.offsetHeight,
+                          body.clientHeight, body.scrollHeight, body.offsetHeight);
+
+  const width = Math.max(html.clientWidth, html.scrollWidth, html.offsetWidth,
+                         body.clientWidth, body.scrollWidth, body.offsetWidth);
 
   return (
       <Wrapper>
@@ -172,7 +192,15 @@ function Main(props) {
               </div>
           </div>
 
-
+          {loadingCheck?
+            <div className="loading-container" style={{height: height, width:width}}>
+            <Loading
+              type="spin"
+              message={"프로젝트 정보를 불러오고 있습니다."}
+              cancelLoading={cancelLoading}
+            />
+            </div>
+             : ""}
           <form id="generate-form-files">
             <div className="row">
 
