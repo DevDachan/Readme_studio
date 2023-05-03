@@ -135,12 +135,12 @@ select {
 }
 
 
-.div-loading-cancle{
+.div-loading-cancel{
   text-align: center;
   margin-top: 5rem;
 }
 
-.btn-loading-cancle{
+.btn-loading-cancel{
   background-color: black;
   color:white;
   border-radius: 8px;

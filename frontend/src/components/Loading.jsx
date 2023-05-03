@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactLoading from 'react-loading';
 
-function Loading({type, message,cancle}) {
+function Loading({type, message,cancel}) {
   return (
     <div className="contentWrap">
       <div className="div-loading" >
@@ -14,8 +14,8 @@ function Loading({type, message,cancle}) {
           color:"white"
           }}
           />
-        <div className="div-loading-cancle">
-          <button className="btn-loading-cancle" onClick={cancle}> 취소 </button>
+        <div className="div-loading-cancel">
+          <button className="btn-loading-cancel" onClick={cancel("cancel")}> 취소 </button>
         </div>
       </div>
     </div>

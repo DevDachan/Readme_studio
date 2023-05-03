@@ -28,6 +28,7 @@ function Main(props) {
   const [fileName, setFileName] = useState("Upload");
   const [fileSelected, setFileSelected] = useState(false);
   const [loadingCheck, setLoadingCheck] = useState(false);
+  const { cancel, token } = axios.CancelToken.source();
 
   const goMain = (e) =>{
     navigate('./');
@@ -60,7 +61,7 @@ function Main(props) {
     setRepName(e.target.value);
   };
 
-  const cancleLoading = e => {
+  const cancelLoading = e => {
     setLoadingCheck(false);
   }
 
@@ -86,7 +87,8 @@ function Main(props) {
     axios({
       method: "post",
       url: 'http://localhost:8090/register',
-      data: formData
+      data: formData,
+      cancelToken: token
     })
     .then(function (response){
       //handle success
@@ -154,16 +156,7 @@ function Main(props) {
       //cancleLoading();
     });
   }
-  /*if (loadingCheck) return (
-      <Wrapper>
-        <Loading
-          type="spin"
-          message={"프로젝트 정보를 불러오고 있습니다."}
-          cancle={cancleLoading}
-        />;
 
-      </Wrapper>
-  )*/
 
   const html = document.documentElement;
   const body = document.body;
@@ -204,7 +197,7 @@ function Main(props) {
             <Loading
             type="spin"
             message={"프로젝트 정보를 불러오고 있습니다."}
-            cancle={cancleLoading}
+            cancel={cancel}
             />
             </div>
              : ""}
