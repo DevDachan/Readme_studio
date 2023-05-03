@@ -304,8 +304,8 @@
 ```
 
 ## 9. Task9
-1. unzip 파일명에 project id 부여하기
-2. 파일 다운로드 에러 찾기
+1. unzip 파일명에 project id 부여하기 => OK
+2. 파일 다운로드 에러 찾기 => OK
 3. period 날짜 간격 해결 방안 찾기
 
 

@@ -29,6 +29,10 @@ public class MarkdownController {
         // builder.command("cmd.exe","/c","mkdir", mdFilesName); // window
         builder.start();
 
+        builder.command("mkdir", "./" + mdFilesName + "/mdFiles"); // mac
+        // builder.command("cmd.exe","/c","mkdir", "./" + mdFilesName + "/mdFiles"); // window
+        builder.start();
+
         File mdFile;
         for (int i = 0; i < readme.size(); i++) {
             String mdName = readme.get(i).get("id").toString(); // md file name
@@ -63,7 +67,7 @@ public class MarkdownController {
         }
 
         // md 파일들 압축하기
-        String mdZipFilesName = "mdZipFiles_" + project_id + ".zip";
+        String mdZipFilesName = "./" + mdFilesName + "/mdZipFiles.zip";
         builder.command("zip", mdZipFilesName, "-r", mdFilesName); // mac
         // builder.command("cmd.exe", "/c", "zip", mdZipFilesName, "-r", mdFilesName); // window
 
@@ -80,23 +84,28 @@ public class MarkdownController {
         byte[] zipResult = Files.readAllBytes(mdZipFile.toPath());
 
         // md 파일들, md zip한 파일 지우기
-        try{
-            /* mac */
-            builder.command("rm", "-rf", mdFilesName);
-            builder.start();
-            builder.command("rm", "-rf", mdZipFilesName);
-            builder.start();
+//        builder.command("rm", "-rf", mdFilesName);
+//        builder.start();
+//        builder.command("rm", "-rf", mdZipFilesName);
+//        builder.start();
 
-            /* window
-            builder.command("cmd.exe","/c","del", mdFilesName);
-            builder.start();
-            builder.command("cmd.exe","/c","del","/Q", mdZipFilesName);
-            builder.start();
-            */
-            System.out.println("md zip파일, md 파일들 모두 삭제 완료!!");
-        } catch (IOException e){
-            System.out.println("md zip파일, md 파일들 삭제 실패");
-        }
+//        try{
+//            /* mac */
+//            builder.command("rm", "-rf", mdFilesName);
+//            builder.start();
+//            builder.command("rm", "-rf", mdZipFilesName);
+//            builder.start();
+//
+//            /* window
+//            builder.command("cmd.exe","/c","del", mdFilesName);
+//            builder.start();
+//            builder.command("cmd.exe","/c","del","/Q", mdZipFilesName);
+//            builder.start();
+//            */
+//            System.out.println("md zip파일, md 파일들 모두 삭제 완료!!");
+//        } catch (IOException e){
+//            System.out.println("md zip파일, md 파일들 삭제 실패");
+//        }
 
         return zipResult;
     }
