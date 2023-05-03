@@ -61,8 +61,10 @@ function Main(props) {
     setRepName(e.target.value);
   };
 
+
   const cancelLoading = e => {
     setLoadingCheck(false);
+    cancel("cancel");
   }
 
   const submitReadme = (e) =>{
@@ -112,8 +114,7 @@ function Main(props) {
       });
     })
     .catch(function(error){
-      //handle error
-      //cancleLoading();
+      cancelLoading();
     });
   }
 
@@ -152,8 +153,7 @@ function Main(props) {
       }
     })
     .catch(function(error){
-      //handle error
-      //cancleLoading();
+      cancelLoading();
     });
   }
 
@@ -195,9 +195,9 @@ function Main(props) {
           {loadingCheck?
             <div className="loading-container" style={{height: height, width:width}}>
             <Loading
-            type="spin"
-            message={"프로젝트 정보를 불러오고 있습니다."}
-            cancel={cancel}
+              type="spin"
+              message={"프로젝트 정보를 불러오고 있습니다."}
+              cancelLoading={cancelLoading}
             />
             </div>
              : ""}
