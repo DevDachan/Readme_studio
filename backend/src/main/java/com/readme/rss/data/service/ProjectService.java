@@ -14,12 +14,13 @@ public interface ProjectService {
     List<String> getIdAll();
 
     List<ProjectEntity> getFileContent(String id);
-    String getFileContentByFileName(String id, String file_name);
 
+    /* API */
+    String getArchitecture(String id, String fileName);
     String getWebAPI(String projectId);
-    String getSocial(String social_temp, String user_name) throws IOException;
-    String getContributor(String framework, String repo_name, String user_name);
-    String getHeader(String framework, String repo_name);
+    String getSocial(String socialTemp, String userName) throws IOException;
+    String getContributor(String framework, String repoName, String userName);
+    String getHeader(String framework, String repoName);
     String getPeriod(String framework);
     String getDBTable(String projectId);
     String getLicense(String projectId, String userName);

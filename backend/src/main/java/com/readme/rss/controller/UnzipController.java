@@ -702,7 +702,7 @@ public class UnzipController {
 
         } else if (frameworkName.equals("Architecture")) {
             frameContent =  frameworkService.findContent("Architecture");
-            frameContent += projectService.getFileContentByFileName(projectId, "Project Architecture");
+            frameContent += projectService.getArchitecture(projectId, "Project Architecture");
         }
 
         return frameContent;
@@ -814,7 +814,7 @@ public class UnzipController {
                 index = 6;
             } else if (frameworkName.equals("Architecture")) {
                 frameContent =  frameworkService.findContent("Architecture");
-                frameContent += projectService.getFileContentByFileName(projectId, "Project Architecture");
+                frameContent += projectService.getArchitecture(projectId, "Project Architecture");
                 index = 2;
             }
             frameworkList[index]=frameworkName;

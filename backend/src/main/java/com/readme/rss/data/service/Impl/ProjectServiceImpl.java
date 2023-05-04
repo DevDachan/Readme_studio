@@ -28,10 +28,10 @@ public class ProjectServiceImpl implements ProjectService {
     // Service(Client) <-> Controller : DTO
     // Service <-> DAO(DB) : Entity
     @Override
-    public ProjectDTO saveProject(String id, String file_name, String file_path, String file_content, String detail){
-        ProjectEntity projectEntity = projectHandler.saveProjectEntity(id, file_name, file_path, file_content, detail);
+    public ProjectDTO saveProject(String id, String fileName, String filePath, String fileContent, String detail){
+        ProjectEntity projectEntity = projectHandler.saveProjectEntity(id, fileName, filePath, fileContent, detail);
 
-        ProjectDTO projectDTO = new ProjectDTO(projectEntity.getId(), projectEntity.getFile_name(), projectEntity.getFile_path(),projectEntity.getFile_content(), projectEntity.getDetail());
+        ProjectDTO projectDTO = new ProjectDTO(projectEntity.getId(), projectEntity.getFileName(), projectEntity.getFilePath(),projectEntity.getFileContent(), projectEntity.getDetail());
         return projectDTO;
     }
 
@@ -39,7 +39,7 @@ public class ProjectServiceImpl implements ProjectService {
     public ProjectDTO getProject(String id){
         ProjectEntity projectEntity = projectHandler.getProjectEntity(id);
 
-        ProjectDTO projectDTO = new ProjectDTO(projectEntity.getId(), projectEntity.getFile_name(), projectEntity.getFile_path(), projectEntity.getFile_content(), projectEntity.getDetail());
+        ProjectDTO projectDTO = new ProjectDTO(projectEntity.getId(), projectEntity.getFileName(), projectEntity.getFilePath(), projectEntity.getFileContent(), projectEntity.getDetail());
         return projectDTO;
     }
 
@@ -60,28 +60,28 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public String getFileContentByFileName(String id, String file_name){
-        return projectHandler.getFileContentByFileName(id, file_name);
+    public String getArchitecture(String id, String fileName){
+        return projectHandler.getFileContentByFileName(id, fileName);
     }
 
     @Override
     public String getLicense(String projectId, String userName){
         List<ProjectEntity> getProjectTableRow = projectHandler.getFileContent(projectId);
-        String License_file = "default";
+        String LicenseFile = "default";
         String content = "";
         for (int i = 0; i < getProjectTableRow.size(); i++) {
-            if (getProjectTableRow.get(i).getFile_path().contains("LICENSE")) {
-                String str = getProjectTableRow.get(i).getFile_content();
+            if (getProjectTableRow.get(i).getFilePath().contains("LICENSE")) {
+                String str = getProjectTableRow.get(i).getFileContent();
                 String firstLine = str.substring(0, str.indexOf("\n"));
                 firstLine = firstLine.replace("License", "");
                 firstLine = firstLine.trim();
                 content = "## License\n" +
                     "![License: MPL 2.0](https://img.shields.io/badge/License_name-brightgreen.svg)";
                 content = content.replace("License_name", firstLine);
-                License_file = "exist";
+                LicenseFile = "exist";
             }
         }
-        if (License_file.equals("default")) {
+        if (LicenseFile.equals("default")) {
             content = "## License\n" +
                 "The MIT License (MIT)\n" +
                 "\n" +
@@ -107,10 +107,10 @@ public class ProjectServiceImpl implements ProjectService {
         List<ProjectEntity> getProjectTableRow = projectHandler.getFileContent(projectId);
 
         for(int i = 0 ; i < getProjectTableRow.size() ; i++){
-            if(getProjectTableRow.get(i).getFile_path().contains("ENTITY".toLowerCase())){
+            if(getProjectTableRow.get(i).getFilePath().contains("ENTITY".toLowerCase())){
                 if(getProjectTableRow.get(i).getDetail().equals("noImpl")){
-                    entityDir.add(getProjectTableRow.get(i).getFile_name());
-                    entityDirContent.add(getProjectTableRow.get(i).getFile_content());
+                    entityDir.add(getProjectTableRow.get(i).getFileName());
+                    entityDirContent.add(getProjectTableRow.get(i).getFileContent());
                 }
             }
         }
@@ -213,22 +213,22 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public String getHeader(String framework, String repo_name){
-        return framework.replace("repoName",repo_name);
+    public String getHeader(String framework, String repoName){
+        return framework.replace("repoName",repoName);
     }
 
     @Override
-    public String getContributor(String framework, String repo_name, String user_name){
-        return framework.replace("repositoryName", repo_name).replace("userName", user_name);
+    public String getContributor(String framework, String repoName, String userName){
+        return framework.replace("repositoryName", repoName).replace("userName", userName);
     }
 
     @Override
-    public String getSocial(String social_temp, String user_name) throws IOException {
+    public String getSocial(String socialTemp, String userName) throws IOException {
         String content = "";
         String url = "https://github.com/";
-        url = url + user_name;
-        String[] social_link = {"instagram", "facebook", "linkedin", "notion", "twitter", "github", "gmail"};
-        String[] logo_color = {"E4405F","1877F2","0A66C2","000000","1DA1F2","181717","F06B66" };
+        url = url + userName;
+        String[] socialLink = {"instagram", "facebook", "linkedin", "notion", "twitter", "github", "gmail"};
+        String[] logoColor = {"E4405F","1877F2","0A66C2","000000","1DA1F2","181717","F06B66" };
 
         Document doc = Jsoup.connect(url).get();
 
@@ -236,14 +236,14 @@ public class ProjectServiceImpl implements ProjectService {
         for (Element headline : elements) {
             String[] urlparsing = headline.text().split(" ");
             for (int i = 0; i < urlparsing.length; i++) {
-                for( int j = 0; j< social_link.length; j++){
-                    if(urlparsing[i].contains(social_link[j])){
-                        String temp= social_link[j]+"_Link";
-                        String temp_data=" ";
-                        temp_data=social_temp.replace("logo_color",logo_color[j]);
-                        temp_data=temp_data.replace("social",social_link[j]);
-                        temp_data=temp_data.replace(temp, urlparsing[i]);
-                        content +=temp_data;
+                for( int j = 0; j< socialLink.length; j++){
+                    if(urlparsing[i].contains(socialLink[j])){
+                        String temp= socialLink[j]+"_Link";
+                        String tempData=" ";
+                        tempData=socialTemp.replace("logo_color",logoColor[j])
+                                            .replace("social",socialLink[j])
+                                            .replace(temp, urlparsing[i]);
+                        content +=tempData;
                     }
                 }
             }
@@ -258,38 +258,38 @@ public class ProjectServiceImpl implements ProjectService {
             + "|HTTP|API|URL|Return Type|Parameters|\n"
             + "|----|----|---|---|---|\n";
 
-        int start_index = 0, end_index = 0;
+        int startIndex = 0, endIndex = 0;
         String urlTemp, returnType, parameters;
         String[] apiTemp;
-        String current_content;
+        String currentContent;
 
         for(int i = 0; i < result.size(); i++){
-            current_content = result.get(i).getFile_content();
-            mdResult += "|**"+  result.get(i).getFile_name()+"**|\n";
+            currentContent = result.get(i).getFileContent();
+            mdResult += "|**"+  result.get(i).getFileName()+"**|\n";
 
             // find post mapping
             while(true){
                 // indexOf(String str, int fromIndex)
-                start_index = current_content.indexOf("@PostMapping(", end_index);
-                end_index = current_content.indexOf(")", start_index);
+                startIndex = currentContent.indexOf("@PostMapping(", endIndex);
+                endIndex = currentContent.indexOf(")", startIndex);
 
-                if(start_index < 0){
+                if(startIndex < 0){
                     break;
                 } else{
-                    urlTemp = current_content.substring(start_index,end_index);
+                    urlTemp = currentContent.substring(startIndex,endIndex);
                     urlTemp = urlTemp.split("\"")[1];
 
-                    start_index = current_content.indexOf("public", end_index);
-                    end_index = current_content.indexOf("(", start_index);
-                    apiTemp = current_content.substring(start_index,end_index).split(" ");
+                    startIndex = currentContent.indexOf("public", endIndex);
+                    endIndex = currentContent.indexOf("(", startIndex);
+                    apiTemp = currentContent.substring(startIndex,endIndex).split(" ");
                     returnType = "";
                     for(int k = 1; k < apiTemp.length-1; k++){
                         returnType += apiTemp[k];
                     }
 
-                    start_index = current_content.indexOf("(", end_index);
-                    end_index = current_content.indexOf("{", start_index);
-                    parameters = current_content.substring(start_index+1,end_index);
+                    startIndex = currentContent.indexOf("(", endIndex);
+                    endIndex = currentContent.indexOf("{", startIndex);
+                    parameters = currentContent.substring(startIndex+1,endIndex);
                     parameters = parameters.substring(0,parameters.lastIndexOf(")"));
                     parameters= parameters.replace("," ,"<br>");
                     parameters= parameters.replace("\n" ," ");
@@ -303,26 +303,26 @@ public class ProjectServiceImpl implements ProjectService {
             }
             // find get mapping
             while(true){
-                start_index = current_content.indexOf("@GetMapping(", end_index);
-                end_index = current_content.indexOf(")", start_index);
+                startIndex = currentContent.indexOf("@GetMapping(", endIndex);
+                endIndex = currentContent.indexOf(")", startIndex);
 
-                if(start_index < 0){
+                if(startIndex < 0){
                     break;
                 } else{
-                    urlTemp = current_content.substring(start_index,end_index);
+                    urlTemp = currentContent.substring(startIndex,endIndex);
                     urlTemp = urlTemp.split("\"")[1];
 
-                    start_index = current_content.indexOf("public", end_index);
-                    end_index = current_content.indexOf("(", start_index);
-                    apiTemp = current_content.substring(start_index,end_index).split(" ");
+                    startIndex = currentContent.indexOf("public", endIndex);
+                    endIndex = currentContent.indexOf("(", startIndex);
+                    apiTemp = currentContent.substring(startIndex,endIndex).split(" ");
                     returnType = "";
                     for(int k = 1; k < apiTemp.length-1; k++){
                         returnType += apiTemp[k];
                     }
 
-                    start_index = current_content.indexOf("(", end_index);
-                    end_index = current_content.indexOf("{", start_index);
-                    parameters = current_content.substring(start_index+1,end_index);
+                    startIndex = currentContent.indexOf("(", endIndex);
+                    endIndex = currentContent.indexOf("{", startIndex);
+                    parameters = currentContent.substring(startIndex+1,endIndex);
                     parameters = parameters.substring(0,parameters.lastIndexOf(")"));
                     parameters= parameters.replace("," ,"<br>");
                     parameters= parameters.replace("\n" ," ");
