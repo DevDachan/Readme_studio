@@ -655,11 +655,9 @@ public class UnzipController {
             frame_content = projectService.getHeader(framework, repo_name);
 
         } else if (framework_name.equals("Period")) {
-            String Period = "Period";
-            frame_content = frameworkService.findContent(Period);
-            frame_content=frame_content.replace("PeriodImage", "https://ifh.cc/g/2jWwt7.png");
-            frame_content=frame_content.replace("startDate", "Start Date");
-            frame_content=frame_content.replace("endDate", "End Date");
+            String framework = frameworkService.findContent("Period");
+            frame_content = projectService.getPeriod(framework);
+
         } else if(framework_name.equals("WebAPI")) {
             frame_content = frameworkService.findContent("WebAPI");
             frame_content += projectService.getWebAPI(project_id);
@@ -896,11 +894,8 @@ public class UnzipController {
 
                 index = 0;
             } else if (framework_name.equals("Period")) {
-                String Period = "Period";
-                frame_content = frameworkService.findContent(Period);
-                frame_content=frame_content.replace("PeriodImage", "https://ifh.cc/g/2jWwt7.png");
-                frame_content=frame_content.replace("startDate", "Start Date");
-                frame_content=frame_content.replace("endDate", "End Date");
+                String framework = frameworkService.findContent("Period");
+                frame_content = projectService.getPeriod(framework);
                 index = 1;
             } else if(framework_name.equals("WebAPI")) {
                 frame_content = frameworkService.findContent("WebAPI");

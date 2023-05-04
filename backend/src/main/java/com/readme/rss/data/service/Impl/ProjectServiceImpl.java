@@ -61,6 +61,12 @@ public class ProjectServiceImpl implements ProjectService {
         return projectHandler.getFileContentByFileName(id, file_name);
     }
 
+    @Override
+    public String getPeriod(String framework){
+        return framework.replace("PeriodImage", "https://ifh.cc/g/2jWwt7.png")
+            .replace("startDate", "Start Date")
+            .replace("endDate", "End Date");
+    }
 
     @Override
     public String getHeader(String framework, String repo_name){
