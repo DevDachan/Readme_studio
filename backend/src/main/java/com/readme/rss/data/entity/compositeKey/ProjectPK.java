@@ -4,6 +4,6 @@ import java.io.Serializable;
 
 public class ProjectPK implements Serializable {
     String id;
-    String file_name;
-    String file_path;
+    String fileName;
+    String filePath;
 }

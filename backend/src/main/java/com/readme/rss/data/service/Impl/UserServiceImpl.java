@@ -22,7 +22,7 @@ public class UserServiceImpl implements UserService {
     public UserDTO saveUser(String project_id, String user_name, String repository_name){
         UserEntity userEntity = userHandler.saveUserEntity(project_id, user_name, repository_name);
 
-        UserDTO userDTO = new UserDTO(userEntity.getProject_id(), userEntity.getUser_name(), userEntity.getRepository_name());
+        UserDTO userDTO = new UserDTO(userEntity.getProjectId(), userEntity.getUserName(), userEntity.getRepositoryName());
         return userDTO;
     }
 
@@ -30,7 +30,7 @@ public class UserServiceImpl implements UserService {
     public UserDTO getUser(String project_id){
         UserEntity userEntity = userHandler.getUserEntity(project_id);
 
-        UserDTO userDTO = new UserDTO(userEntity.getProject_id(), userEntity.getUser_name(), userEntity.getRepository_name());
+        UserDTO userDTO = new UserDTO(userEntity.getProjectId(), userEntity.getUserName(), userEntity.getRepositoryName());
         return userDTO;
     }
 }
