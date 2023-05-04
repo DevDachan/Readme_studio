@@ -62,6 +62,15 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
 
+    @Override
+    public String getHeader(String framework, String repo_name){
+        return framework.replace("repoName",repo_name);
+    }
+
+    @Override
+    public String getContributor(String framework, String repo_name, String user_name){
+        return framework.replace("repositoryName", repo_name).replace("userName", user_name);
+    }
 
     @Override
     public String getSocial(String social_temp, String user_name) throws IOException {
@@ -178,4 +187,6 @@ public class ProjectServiceImpl implements ProjectService {
         }
         return mdResult;
     }
+
+
 }

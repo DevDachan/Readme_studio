@@ -647,13 +647,13 @@ public class UnzipController {
 
         // framework_id에 따른 content제공
         if(framework_name.equals("Contributor")){
-            frame_content = frameworkService.findContent(framework_name);
-            frame_content = frame_content.replace("repositoryName", repo_name);
-            frame_content = frame_content.replace("userName", user_name);
+            String framework = frameworkService.findContent(framework_name);
+            frame_content = projectService.getContributor(framework,repo_name,user_name);
+
         } else if (framework_name.equals("Header")) { /* header 값에 대한 framework*/
-            String Header = "header";
-            frame_content = frameworkService.findContent(Header);
-            frame_content=frame_content.replace("repoName",repo_name);
+            String framework = frameworkService.findContent("Header");
+            frame_content = projectService.getHeader(framework, repo_name);
+
         } else if (framework_name.equals("Period")) {
             String Period = "Period";
             frame_content = frameworkService.findContent(Period);
@@ -887,14 +887,13 @@ public class UnzipController {
 
             // framework_id에 따른 content제공
             if(framework_name.equals("Contributor")){
-                frame_content = frameworkService.findContent(framework_name);
-                frame_content = frame_content.replace("repositoryName", repo_name);
-                frame_content = frame_content.replace("userName", user_name);
+                String framework = frameworkService.findContent(framework_name);
+                frame_content = projectService.getContributor(framework,repo_name,user_name);
                 index = 8;
             } else if (framework_name.equals("Header")) { /* header 값에 대한 framework*/
-                String Header = "header";
-                frame_content = frameworkService.findContent(Header);
-                frame_content=frame_content.replace("repoName",repo_name);
+                String framework = frameworkService.findContent("Header");
+                frame_content = projectService.getHeader(framework, repo_name);
+
                 index = 0;
             } else if (framework_name.equals("Period")) {
                 String Period = "Period";
