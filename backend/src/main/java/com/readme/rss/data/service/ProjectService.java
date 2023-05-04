@@ -22,4 +22,5 @@ public interface ProjectService {
     String getHeader(String framework, String repo_name);
     String getPeriod(String framework);
     String getDBTable(String projectId);
+    String getLicense(String projectId, String userName);
 }

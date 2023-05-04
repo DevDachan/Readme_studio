@@ -64,7 +64,39 @@ public class ProjectServiceImpl implements ProjectService {
         return projectHandler.getFileContentByFileName(id, file_name);
     }
 
-
+    @Override
+    public String getLicense(String projectId, String userName){
+        List<ProjectEntity> getProjectTableRow = projectHandler.getFileContent(projectId);
+        String License_file = "default";
+        String content = "";
+        for (int i = 0; i < getProjectTableRow.size(); i++) {
+            if (getProjectTableRow.get(i).getFile_path().contains("LICENSE")) {
+                String str = getProjectTableRow.get(i).getFile_content();
+                String firstLine = str.substring(0, str.indexOf("\n"));
+                firstLine = firstLine.replace("License", "");
+                firstLine = firstLine.trim();
+                content = "## License\n" +
+                    "![License: MPL 2.0](https://img.shields.io/badge/License_name-brightgreen.svg)";
+                content = content.replace("License_name", firstLine);
+                License_file = "exist";
+            }
+        }
+        if (License_file.equals("default")) {
+            content = "## License\n" +
+                "The MIT License (MIT)\n" +
+                "\n" +
+                "Copyright (c) 2023 "+ userName +"\n" +
+                "\n" +
+                "Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the \"Software\"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:\n"
+                +
+                "\n" +
+                "The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.\n"
+                +
+                "\n" +
+                "THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.";
+        }
+        return content;
+    }
     @Override
     public String getDBTable(String projectId){
         String dbTable = "\n<!-- DB Table -->\n";
