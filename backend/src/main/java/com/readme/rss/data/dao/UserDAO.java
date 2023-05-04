@@ -4,5 +4,5 @@ import com.readme.rss.data.entity.UserEntity;
 
 public interface UserDAO {
     UserEntity saveUser(UserEntity userEntity);
-    UserEntity getUser (String project_id);
+    UserEntity getUser (String projectId);
 }

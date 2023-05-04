@@ -361,10 +361,10 @@ public class UnzipController {
 
         List<ProjectEntity> getProjectTableRow = projectService.getFileContent(randomId);
         for(int i = 0 ; i < getProjectTableRow.size() ; i++){
-            if(getProjectTableRow.get(i).getFile_path().contains("pom.xml")){
-                xmlContent = getProjectTableRow.get(i).getFile_content();
-            } else if(getProjectTableRow.get(i).getFile_path().contains("application.properties")){
-                propertiesContent = getProjectTableRow.get(i).getFile_content();
+            if(getProjectTableRow.get(i).getFilePath().contains("pom.xml")){
+                xmlContent = getProjectTableRow.get(i).getFileContent();
+            } else if(getProjectTableRow.get(i).getFilePath().contains("application.properties")){
+                propertiesContent = getProjectTableRow.get(i).getFileContent();
             }
         }
 
@@ -434,9 +434,9 @@ public class UnzipController {
         builder.command("cmd.exe","/c","git", "clone", repoLink, unzipFilesName); // window
 
         try{
-            var clone_process = builder.start();
+            var cloneProcess = builder.start();
             try (var reader = new BufferedReader( // clone 완료 후 아래 코드 실행
-                new InputStreamReader(clone_process.getInputStream()))) {
+                new InputStreamReader(cloneProcess.getInputStream()))) {
                 String commandResult;
                 while ((commandResult = reader.readLine()) != null) {
                     System.out.println(commandResult);
@@ -531,10 +531,10 @@ public class UnzipController {
 
         List<ProjectEntity> getProjectTableRow = projectService.getFileContent(randomId);
         for(int i = 0 ; i < getProjectTableRow.size() ; i++){
-            if(getProjectTableRow.get(i).getFile_path().contains("pom.xml")){
-                xmlContent = getProjectTableRow.get(i).getFile_content();
-            } else if(getProjectTableRow.get(i).getFile_path().contains("application.properties")){
-                propertiesContent = getProjectTableRow.get(i).getFile_content();
+            if(getProjectTableRow.get(i).getFilePath().contains("pom.xml")){
+                xmlContent = getProjectTableRow.get(i).getFileContent();
+            } else if(getProjectTableRow.get(i).getFilePath().contains("application.properties")){
+                propertiesContent = getProjectTableRow.get(i).getFileContent();
             }
         }
 
@@ -638,41 +638,41 @@ public class UnzipController {
     }
 
     @PostMapping("/framework")
-    public String saveData(@RequestParam("project_id") String project_id,
-        @RequestParam("framework_name") String framework_name) throws IOException {
-        String frame_content = "";
-        UserDTO userDTO = userService.getUser(project_id);
-        String user_name = userDTO.getUser_name();
-        String repo_name = userDTO.getRepository_name();
+    public String saveData(@RequestParam("project_id") String projectId,
+        @RequestParam("framework_name") String frameworkName) throws IOException {
+        String frameContent = "";
+        UserDTO userDTO = userService.getUser(projectId);
+        String userName = userDTO.getUserName();
+        String repoName = userDTO.getRepositoryName();
 
         // framework_id에 따른 content제공
-        if(framework_name.equals("Contributor")){
-            String framework = frameworkService.findContent(framework_name);
-            frame_content = projectService.getContributor(framework,repo_name,user_name);
+        if(frameworkName.equals("Contributor")){
+            String framework = frameworkService.findContent(frameworkName);
+            frameContent = projectService.getContributor(framework,repoName,userName);
 
-        } else if (framework_name.equals("Header")) { /* header 값에 대한 framework*/
+        } else if (frameworkName.equals("Header")) { /* header 값에 대한 framework*/
             String framework = frameworkService.findContent("Header");
-            frame_content = projectService.getHeader(framework, repo_name);
+            frameContent = projectService.getHeader(framework, repoName);
 
-        } else if (framework_name.equals("Period")) {
+        } else if (frameworkName.equals("Period")) {
             String framework = frameworkService.findContent("Period");
-            frame_content = projectService.getPeriod(framework);
+            frameContent = projectService.getPeriod(framework);
 
-        } else if(framework_name.equals("WebAPI")) {
-            frame_content = frameworkService.findContent("WebAPI");
-            frame_content += projectService.getWebAPI(project_id);
-        } else if (framework_name.equals("Social")){
-            frame_content = "## Social<br>";
-            String social_temp = frameworkService.findContent("Social");
-            frame_content += projectService.getSocial(social_temp, user_name);
+        } else if(frameworkName.equals("WebAPI")) {
+            frameContent = frameworkService.findContent("WebAPI");
+            frameContent += projectService.getWebAPI(projectId);
+        } else if (frameworkName.equals("Social")){
+            frameContent = "## Social<br>";
+            String framework = frameworkService.findContent("Social");
+            frameContent += projectService.getSocial(framework, userName);
 
-        }else if (framework_name.equals("Dependency")) {
+        }else if (frameworkName.equals("Dependency")) {
             String Dependency = "Dependency";
             String xmlContent = "";
-            List<ProjectEntity> getProjectTableRow = projectService.getFileContent(project_id);
+            List<ProjectEntity> getProjectTableRow = projectService.getFileContent(projectId);
             for(int i = 0 ; i < getProjectTableRow.size() ; i++) {
-                if (getProjectTableRow.get(i).getFile_path().contains("pom.xml")) {
-                    xmlContent = getProjectTableRow.get(i).getFile_content();
+                if (getProjectTableRow.get(i).getFilePath().contains("pom.xml")) {
+                    xmlContent = getProjectTableRow.get(i).getFileContent();
                 }
             }
 
@@ -690,97 +690,97 @@ public class UnzipController {
                 tempBtn = tempBtn.replace("DEPENDENCYNAME",  dependencyFormat);
                 dependencyName = dependencyName + tempBtn + "   ";
             }
-            frame_content = frameworkService.findContent(Dependency);
-            frame_content=frame_content.replace("DependencyNames", dependencyName);
-            frame_content=frame_content.replace("DependencyContents", dependencyTags);
-        } else if (framework_name.equals("DB Table")) {
-            frame_content = frameworkService.findContent("DB Table");
-            frame_content += projectService.getDBTable(project_id);
-        } else if (framework_name.equals("License")) {
-            frame_content = projectService.getLicense(project_id, user_name);
+            frameContent = frameworkService.findContent(Dependency);
+            frameContent=frameContent.replace("DependencyNames", dependencyName);
+            frameContent=frameContent.replace("DependencyContents", dependencyTags);
+        } else if (frameworkName.equals("DB Table")) {
+            frameContent = frameworkService.findContent("DB Table");
+            frameContent += projectService.getDBTable(projectId);
 
-        } else if (framework_name.equals("Architecture")) {
-            frame_content = frameworkService.findContent("Architecture");
-            String architecture = projectService.getFileContentByFileName(project_id, "Project Architecture");
-            frame_content += architecture;
+        } else if (frameworkName.equals("License")) {
+            frameContent = projectService.getLicense(projectId, userName);
+
+        } else if (frameworkName.equals("Architecture")) {
+            frameContent =  frameworkService.findContent("Architecture");
+            frameContent += projectService.getFileContentByFileName(projectId, "Project Architecture");
         }
 
-        return frame_content;
+        return frameContent;
     }
 
     @PostMapping("/editPeriod")
     public String editPeriodImage(
-        @RequestParam("start_date") String start_date,
-        @RequestParam("end_date") String end_date) {
-        String frame_content = frameworkService.findContent("Period");
+        @RequestParam("start_date") String startDate,
+        @RequestParam("end_date") String endDate) {
+        String frameContent = frameworkService.findContent("Period");
 
-        if(start_date.equals("no")){
-            frame_content=frame_content.replace("PeriodImage", "https://ifh.cc/g/2jWwt7.png"); // ing
-            frame_content=frame_content.replace("startDate", "Start Date");
-            frame_content=frame_content.replace("endDate", "End Date");
+        if(startDate.equals("no")){
+            frameContent =frameContent.replace("PeriodImage", "https://ifh.cc/g/2jWwt7.png")
+                            .replace("startDate", "Start Date")
+                            .replace("endDate", "End Date");
         }
-        else if(end_date.equals("no")) { // end 입력이 안되면
-            frame_content=frame_content.replace("PeriodImage", "https://ifh.cc/g/2jWwt7.png"); // ing
-            frame_content=frame_content.replace("startDate", start_date);
-            frame_content=frame_content.replace("endDate", "End Date");
+        else if(endDate.equals("no")) { // end 입력이 안되면
+            frameContent= frameContent.replace("PeriodImage", "https://ifh.cc/g/2jWwt7.png")
+                            .replace("startDate", startDate)
+                            .replace("endDate", "End Date");
         } else{ // start date와 end date 모두 입력되었을 때
-            frame_content=frame_content.replace("PeriodImage", "https://ifh.cc/g/LGBnpy.png"); // finished
-            frame_content=frame_content.replace("startDate", start_date);
-            frame_content=frame_content.replace("endDate", end_date);
+            frameContent=frameContent.replace("PeriodImage", "https://ifh.cc/g/LGBnpy.png")
+                            .replace("startDate", startDate)
+                            .replace("endDate", endDate);
         }
 
-        return frame_content;
+        return frameContent;
     }
 
     @PostMapping("/alldata")
-    public Map <String,String[]> allData(@RequestParam("project_id") String project_id) throws IOException {
-        Map<String, String[]> all_data = new LinkedHashMap<>();
-        String frame_content = "";
-        UserDTO userDTO = userService.getUser(project_id);
-        String user_name = userDTO.getUser_name();
-        String repo_name = userDTO.getRepository_name();
-        String framework_name="";
+    public Map <String,String[]> allData(@RequestParam("project_id") String projectId) throws IOException {
+        Map<String, String[]> allData = new LinkedHashMap<>();
+        String frameContent = "";
+        UserDTO userDTO = userService.getUser(projectId);
+        String userName = userDTO.getUserName();
+        String repoName = userDTO.getRepositoryName();
+        String frameworkName="";
         List<String> frameworkNameList = frameworkService.getFrameworkNameList();
         int index=0;
         // framework 테이블에 있는 framework 다 가져오기
         //배열선언
-        String[] framework_list= new String[frameworkNameList.size()];
-        String[] content_list= new String[frameworkNameList.size()];
+        String[] frameworkList= new String[frameworkNameList.size()];
+        String[] contentList= new String[frameworkNameList.size()];
 
         for(int count=0; count< frameworkNameList.size(); count++){
-            framework_name=frameworkNameList.get(count);
+            frameworkName=frameworkNameList.get(count);
 
             // framework_id에 따른 content제공
-            if(framework_name.equals("Contributor")){
-                String framework = frameworkService.findContent(framework_name);
-                frame_content = projectService.getContributor(framework,repo_name,user_name);
+            if(frameworkName.equals("Contributor")){
+                String framework = frameworkService.findContent(frameworkName);
+                frameContent = projectService.getContributor(framework,repoName,userName);
                 index = 8;
-            } else if (framework_name.equals("Header")) { /* header 값에 대한 framework*/
+            } else if (frameworkName.equals("Header")) { /* header 값에 대한 framework*/
                 String framework = frameworkService.findContent("Header");
-                frame_content = projectService.getHeader(framework, repo_name);
+                frameContent = projectService.getHeader(framework, repoName);
 
                 index = 0;
-            } else if (framework_name.equals("Period")) {
+            } else if (frameworkName.equals("Period")) {
                 String framework = frameworkService.findContent("Period");
-                frame_content = projectService.getPeriod(framework);
+                frameContent = projectService.getPeriod(framework);
                 index = 1;
-            } else if(framework_name.equals("WebAPI")) {
-                frame_content = frameworkService.findContent("WebAPI");
-                frame_content += projectService.getWebAPI(project_id);
+            } else if(frameworkName.equals("WebAPI")) {
+                frameContent = frameworkService.findContent("WebAPI");
+                frameContent += projectService.getWebAPI(projectId);
                 index = 3;
-            } else if (framework_name.equals("Social")){
-                frame_content = "## Social<br>";
-                String social_temp = frameworkService.findContent("Social");
-                frame_content += projectService.getSocial(social_temp, user_name);
+            } else if (frameworkName.equals("Social")){
+                frameContent = "## Social<br>";
+                String framework = frameworkService.findContent("Social");
+                frameContent += projectService.getSocial(framework, userName);
 
                 index = 7;
-            } else if (framework_name.equals("Dependency")) {
+            } else if (frameworkName.equals("Dependency")) {
                 String Dependency = "Dependency";
                 String xmlContent = "";
-                List<ProjectEntity> getProjectTableRow = projectService.getFileContent(project_id);
+                List<ProjectEntity> getProjectTableRow = projectService.getFileContent(projectId);
                 for(int i = 0 ; i < getProjectTableRow.size() ; i++) {
-                    if (getProjectTableRow.get(i).getFile_path().contains("pom.xml")) {
-                        xmlContent = getProjectTableRow.get(i).getFile_content();
+                    if (getProjectTableRow.get(i).getFilePath().contains("pom.xml")) {
+                        xmlContent = getProjectTableRow.get(i).getFileContent();
                     }
                 }
 
@@ -800,30 +800,29 @@ public class UnzipController {
                 }
 
 
-                frame_content = frameworkService.findContent(Dependency);
-                frame_content=frame_content.replace("DependencyNames", dependencyName);
-                frame_content=frame_content.replace("DependencyContents", dependencyTags);
+                frameContent = frameworkService.findContent(Dependency);
+                frameContent=frameContent.replace("DependencyNames", dependencyName);
+                frameContent=frameContent.replace("DependencyContents", dependencyTags);
                 index = 5;
-            } else if (framework_name.equals("DB Table")) {
-                frame_content = frameworkService.findContent("DB Table");
-                frame_content += projectService.getDBTable(project_id);
+            } else if (frameworkName.equals("DB Table")) {
+                frameContent = frameworkService.findContent("DB Table");
+                frameContent += projectService.getDBTable(projectId);
                 index = 4;
-            } else if (framework_name.equals("License")) {
-                frame_content = projectService.getLicense(project_id, user_name);
+            } else if (frameworkName.equals("License")) {
+                frameContent = projectService.getLicense(projectId, userName);
 
                 index = 6;
-            } else if (framework_name.equals("Architecture")) {
-                frame_content = frameworkService.findContent("Architecture");
-                String architecture = projectService.getFileContentByFileName(project_id, "Project Architecture");
-                frame_content += architecture;
+            } else if (frameworkName.equals("Architecture")) {
+                frameContent =  frameworkService.findContent("Architecture");
+                frameContent += projectService.getFileContentByFileName(projectId, "Project Architecture");
                 index = 2;
             }
-            framework_list[index]=framework_name;
-            content_list[index]=frame_content;
+            frameworkList[index]=frameworkName;
+            contentList[index]=frameContent;
         }
-        all_data.put("content",content_list);
-        all_data.put("type",framework_list);
+        allData.put("content",contentList);
+        allData.put("type",frameworkList);
 
-        return all_data;
+        return allData;
     }
 }
