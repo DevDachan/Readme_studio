@@ -20,6 +20,6 @@ public interface ProjectService {
     String getSocial(String social_temp, String user_name) throws IOException;
     String getContributor(String framework, String repo_name, String user_name);
     String getHeader(String framework, String repo_name);
-
     String getPeriod(String framework);
+    String getDBTable(String projectId);
 }
