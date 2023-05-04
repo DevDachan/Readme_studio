@@ -21,18 +21,17 @@ public class ProjectEntity {
     @Id
     String id;
     @Id
-    String file_name;
+    String fileName;
     @Id
-    String file_path;
-    String file_content;
+    String filePath;
+    String fileContent;
     String detail;
     public ProjectDTO toDto(){
         return ProjectDTO.builder()
             .id(id)
-            .file_name(file_name)
-            .file_path(file_path)
-            .file_content(file_content)
-            .file_content(file_content)
+            .fileName(fileName)
+            .filePath(filePath)
+            .fileContent(fileContent)
             .build();
     }
 }

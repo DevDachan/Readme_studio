@@ -2,6 +2,7 @@ package com.readme.rss.data.service;
 
 import com.readme.rss.data.dto.ProjectDTO;
 import com.readme.rss.data.entity.ProjectEntity;
+import java.io.IOException;
 import java.util.List;
 
 public interface ProjectService {
@@ -13,5 +14,14 @@ public interface ProjectService {
     List<String> getIdAll();
 
     List<ProjectEntity> getFileContent(String id);
-    String getFileContentByFileName(String id, String file_name);
+
+    /* API */
+    String getArchitecture(String id, String fileName);
+    String getWebAPI(String projectId);
+    String getSocial(String socialTemp, String userName) throws IOException;
+    String getContributor(String framework, String repoName, String userName);
+    String getHeader(String framework, String repoName);
+    String getPeriod(String framework);
+    String getDBTable(String projectId);
+    String getLicense(String projectId, String userName);
 }

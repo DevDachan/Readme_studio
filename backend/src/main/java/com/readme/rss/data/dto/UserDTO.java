@@ -15,16 +15,16 @@ import lombok.ToString;
 @Builder
 public class UserDTO {
     @NotNull
-    private String project_id;
+    private String projectId;
     @NotNull
-    private String user_name;
-    private String repository_name;
+    private String userName;
+    private String repositoryName;
 
     public UserEntity toEntity(){
         return UserEntity.builder()
-            .project_id(project_id)
-            .user_name(user_name)
-            .repository_name(repository_name)
+            .projectId(projectId)
+            .userName(userName)
+            .repositoryName(repositoryName)
             .build();
     }
 }
