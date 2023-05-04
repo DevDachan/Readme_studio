@@ -13,4 +13,5 @@ public interface FrameworkService {
     List<String> getFrameworkNameList();
 
     String findContent(String name);
+
 }

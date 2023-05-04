@@ -5,10 +5,6 @@ import com.readme.rss.data.dto.UserDTO;
 import com.readme.rss.data.entity.ProjectEntity;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 import com.readme.rss.data.service.FrameworkService;
 import com.readme.rss.data.service.ProjectService;
 import com.readme.rss.data.service.UserService;
@@ -666,34 +662,13 @@ public class UnzipController {
             frame_content=frame_content.replace("endDate", "End Date");
         } else if(framework_name.equals("WebAPI")) {
             frame_content = frameworkService.findContent("WebAPI");
-            frame_content += webAPI(project_id);
+            frame_content += projectService.getWebAPI(project_id);
         } else if (framework_name.equals("Social")){
-            frame_content = "### Social<br>";
-            String url = "https://github.com/";
-            url = url + user_name;
-            String[] social_link = {"instagram", "facebook", "linkedin", "notion", "twitter", "github", "gmail"};
-            String[] logo_color = {"E4405F","1877F2","0A66C2","000000","1DA1F2","181717","F06B66" };
-            String social_temp =" ";
-            social_temp = frameworkService.findContent("Social");
+            frame_content = "## Social<br>";
+            String social_temp = frameworkService.findContent("Social");
+            frame_content += projectService.getSocial(social_temp, user_name);
 
-            Document doc = Jsoup.connect(url).get();
-            Elements elements = doc.getElementsByClass("vcard-details");
-            for (Element headline : elements) {
-                String[] urlparsing = headline.text().split(" ");
-                for (int i = 0; i < urlparsing.length; i++) {
-                    for( int j = 0; j< social_link.length; j++){
-                        if(urlparsing[i].contains(social_link[j])){
-                            String temp= social_link[j]+"_Link";
-                            String temp_data=" ";
-                            temp_data=social_temp.replace("logo_color",logo_color[j]);
-                            temp_data=temp_data.replace("social",social_link[j]);
-                            temp_data=temp_data.replace(temp, urlparsing[i]);
-                            frame_content +=temp_data;
-                        }
-                    }
-                }
-            }
-        } else if (framework_name.equals("Dependency")) {
+        }else if (framework_name.equals("Dependency")) {
             String Dependency = "Dependency";
             String xmlContent = "";
             List<ProjectEntity> getProjectTableRow = projectService.getFileContent(project_id);
@@ -868,92 +843,6 @@ public class UnzipController {
         return dbTable;
     }
 
-    public String webAPI(String projectId){
-        List<ProjectEntity> result = projectService.getController(projectId);
-        String mdResult = "<!-- Web API -->\n"
-            + "|HTTP|API|URL|Return Type|Parameters|\n"
-            + "|----|----|---|---|---|\n";
-
-        int start_index = 0, end_index = 0;
-        String urlTemp, returnType, parameters;
-        String[] apiTemp;
-        String current_content;
-
-        for(int i = 0; i < result.size(); i++){
-            current_content = result.get(i).getFile_content();
-            mdResult += "|**"+  result.get(i).getFile_name()+"**|\n";
-
-            // find post mapping
-            while(true){
-                // indexOf(String str, int fromIndex)
-                start_index = current_content.indexOf("@PostMapping(", end_index);
-                end_index = current_content.indexOf(")", start_index);
-
-                if(start_index < 0){
-                    break;
-                } else{
-                    urlTemp = current_content.substring(start_index,end_index);
-                    urlTemp = urlTemp.split("\"")[1];
-
-                    start_index = current_content.indexOf("public", end_index);
-                    end_index = current_content.indexOf("(", start_index);
-                    apiTemp = current_content.substring(start_index,end_index).split(" ");
-                    returnType = "";
-                    for(int k = 1; k < apiTemp.length-1; k++){
-                        returnType += apiTemp[k];
-                    }
-
-                    start_index = current_content.indexOf("(", end_index);
-                    end_index = current_content.indexOf("{", start_index);
-                    parameters = current_content.substring(start_index+1,end_index);
-                    parameters = parameters.substring(0,parameters.lastIndexOf(")"));
-                    parameters= parameters.replace("," ,"<br>");
-                    parameters= parameters.replace("\n" ," ");
-
-                    mdResult += "| Post |" +
-                        apiTemp[apiTemp.length-1]+"()" + "|" +
-                        urlTemp + "|"+
-                        returnType +"|"+
-                        parameters +"|\n";
-                }
-            }
-            // find get mapping
-            while(true){
-                start_index = current_content.indexOf("@GetMapping(", end_index);
-                end_index = current_content.indexOf(")", start_index);
-
-                if(start_index < 0){
-                    break;
-                } else{
-                    urlTemp = current_content.substring(start_index,end_index);
-                    urlTemp = urlTemp.split("\"")[1];
-
-                    start_index = current_content.indexOf("public", end_index);
-                    end_index = current_content.indexOf("(", start_index);
-                    apiTemp = current_content.substring(start_index,end_index).split(" ");
-                    returnType = "";
-                    for(int k = 1; k < apiTemp.length-1; k++){
-                        returnType += apiTemp[k];
-                    }
-
-                    start_index = current_content.indexOf("(", end_index);
-                    end_index = current_content.indexOf("{", start_index);
-                    parameters = current_content.substring(start_index+1,end_index);
-                    parameters = parameters.substring(0,parameters.lastIndexOf(")"));
-                    parameters= parameters.replace("," ,"<br>");
-                    parameters= parameters.replace("\n" ," ");
-
-                    mdResult += "| Get |" +
-                        apiTemp[apiTemp.length-1]+"()" + "|" +
-                        urlTemp + "|"+
-                        returnType +"|"+
-                        parameters +"|\n";
-                }
-            }
-        }
-        return mdResult;
-    }
-
     @PostMapping("/editPeriod")
     public String editPeriodImage(
         @RequestParam("start_date") String start_date,
@@ -1016,34 +905,14 @@ public class UnzipController {
                 index = 1;
             } else if(framework_name.equals("WebAPI")) {
                 frame_content = frameworkService.findContent("WebAPI");
-                frame_content += webAPI(project_id);
+                frame_content += projectService.getWebAPI(project_id);
                 index = 3;
             } else if (framework_name.equals("Social")){
-                frame_content = "## Social<br>";
-                String url = "https://github.com/";
-                url = url + user_name;
-                String[] social_link = {"instagram", "facebook", "linkedin", "notion", "twitter", "github", "gmail"};
-                String[] logo_color = {"E4405F","1877F2","0A66C2","000000","1DA1F2","181717","F06B66" };
-                String social_temp =" ";
-                social_temp = frameworkService.findContent("Social");
 
-                Document doc = Jsoup.connect(url).get();
-                Elements elements = doc.getElementsByClass("vcard-details");
-                for (Element headline : elements) {
-                    String[] urlparsing = headline.text().split(" ");
-                    for (int i = 0; i < urlparsing.length; i++) {
-                        for( int j = 0; j< social_link.length; j++){
-                            if(urlparsing[i].contains(social_link[j])){
-                                String temp= social_link[j]+"_Link";
-                                String temp_data=" ";
-                                temp_data=social_temp.replace("logo_color",logo_color[j]);
-                                temp_data=temp_data.replace("social",social_link[j]);
-                                temp_data=temp_data.replace(temp, urlparsing[i]);
-                                frame_content +=temp_data;
-                            }
-                        }
-                    }
-                }
+                frame_content = "## Social<br>";
+                String social_temp = frameworkService.findContent("Social");
+                frame_content += projectService.getSocial(social_temp, user_name);
+
                 index = 7;
             } else if (framework_name.equals("Dependency")) {
                 String Dependency = "Dependency";
