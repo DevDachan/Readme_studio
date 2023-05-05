@@ -44,7 +44,7 @@ table{
   color: #000000ff !important;
   padding: 1px 50px !important;
   font-weight: 500 !important;
-  background: url('/images/url.PNG') no-repeat 5% 50%;
+  background: url('/images/url.PNG') no-repeat 2% 50%;
   background-size : 13px;
 }
 
@@ -53,9 +53,14 @@ table{
 }
 
 .btn-generate{
-  background-color: #a2a6aa !important;
+  background-color: #474747 !important;
   padding: 0 1.8rem !important;
   height: 3rem !important;
+}
+
+.btn-generate:hover{
+  background-color: white !important;
+  color: black;
 }
 
 .btn-inputfile{
@@ -128,11 +133,24 @@ select {
   appearance: none;
 }
 
+
 #rep-name, #user-name{
-  color:white;
   font-size: 1rem !important;
+  font-weight: 600;
   height: 3em;
+  background-color: transparent;
 }
+
+#rep-name:not(:placeholder-shown), #user-name:not(:placeholder-shown){
+  color:black;
+  background-color: white;
+}
+
+#rep-name:focus, #user-name:focus{
+  color:black;
+  background-color: white;
+}
+
 
 
 .div-loading-cancel{
@@ -174,6 +192,20 @@ select {
   justify-content: center;
 }
 
+.p-alert {
+  color: red;
+  font-weight: bold;
+  background-color: #e4d2d2;
+  text-align: center;
+  padding: 2px 0px;
+  border-radius: 8px;
+  opacity: 0;
+  transition: opacity 1s;
+}
+
+.p-alert-show {
+  opacity: 1;
+}
 /*------------------------------------ Editor.jsx ------------------------------------*/
 
 .bt-back{
