@@ -54,13 +54,18 @@ function Main(props) {
   }
 
   const changeUserName = e =>{
+    document.getElementById("alertUserName").classList.remove( "p-alert-show");
     setUserName(e.target.value);
   };
 
   const changeRepName = e =>{
+    document.getElementById("alertRepName").classList.remove( "p-alert-show");
     setRepName(e.target.value);
   };
 
+  const changeLink = e =>{
+    document.getElementById("alertLink").classList.remove( "p-alert-show");
+  }
 
   const cancelLoading = e => {
     setLoadingCheck(false);
@@ -68,16 +73,14 @@ function Main(props) {
   }
 
   const submitReadme = (e) =>{
+    if(userName == undefined ||  userName == ""){
+      document.getElementById("alertUserName").classList.add( "p-alert-show");
+      return;
+    }else if(repName == undefined || repName == ""){
+      document.getElementById("alertRepName").classList.add( "p-alert-show");
+      return;
+    }
 
-    setRepName(document.getElementById("rep-name").value);
-    setUserName(document.getElementById("user-name").value);
-    // 혹시 relandering으로 인한 data 손실 우려
-    if(document.getElementById("user-name").value !== userName){
-      setUserName(document.getElementById("user-name").value);
-    }
-    if(document.getElementById("rep-name").value !== repName){
-      setRepName(document.getElementById("rep-name").value);
-    }
 
     const formData = new FormData();
     formData.append('file', file);
@@ -120,6 +123,15 @@ function Main(props) {
 
 
   const linkSubmitReadme = (e) =>{
+    const githubPattern = /^https:\/\/github\.com\//;
+
+    if(document.getElementById("repoLink").value == ""){
+      document.getElementById("alertLink").classList.add( "p-alert-show");
+      return;
+    }else if (!githubPattern.test(document.getElementById("repoLink").value)) {
+      document.getElementById("alertLink").classList.add( "p-alert-show");
+      return;
+    }
 
     const formData = new FormData();
     formData.append('jsonParam1', document.getElementById("repoLink").value);
@@ -185,10 +197,14 @@ function Main(props) {
                 autocomplete="off"
                 placeholder="Github Repository Link"
                 maxLength="100"
+                onChange={changeLink}
               />
               </div>
               <div className="col-sm-2">
                 <input type="button" className="btn-generate" value="Generate" onClick={linkSubmitReadme}/>
+              </div>
+              <div className="col-sm-10 mt-3">
+                <p id="alertLink" className="p-alert"> Please enter a Github Link </p>
               </div>
           </div>
 
@@ -201,17 +217,19 @@ function Main(props) {
             />
             </div>
              : ""}
+
+
           <form id="generate-form-files">
             <div className="row">
 
               <div className="col-sm-3">
                 <input type="text" name="userName" id="user-name" defaultValue={userName}
-                required placeholder="User Name"/>
+                required onChange={changeUserName} placeholder="User Name"/>
               </div>
 
               <div className="col-sm-3">
-                <input type="text" name="repName" id="rep-name"
-                defaultValue={repName} required placeholder="Repository Name"/>
+                <input type="text" name="repName" id="rep-name" defaultValue={repName}
+                required  onChange={changeRepName}  placeholder="Repository Name"/>
               </div>
 
               <div className="col-sm-3">
@@ -224,7 +242,12 @@ function Main(props) {
               <div className="col-sm-3">
                 <input type="button" className="btn-inputfile" value="Generate" onClick={submitReadme}/>
               </div>
-
+              <div className="col-sm-3">
+                <p id="alertUserName" className="p-alert"> Please enter a user</p>
+              </div>
+              <div className="col-sm-3">
+                <p id="alertRepName" className="p-alert"> Please enter a Rep </p>
+              </div>
             </div>
           </form>
         </div>
