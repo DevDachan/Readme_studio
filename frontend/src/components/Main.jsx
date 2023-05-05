@@ -243,10 +243,10 @@ function Main(props) {
                 <input type="button" className="btn-inputfile" value="Generate" onClick={submitReadme}/>
               </div>
               <div className="col-sm-3">
-                <p id="alertUserName" className="p-alert"> Please enter a user</p>
+                <p id="alertUserName" className="p-alert"> Enter a UserName!</p>
               </div>
               <div className="col-sm-3">
-                <p id="alertRepName" className="p-alert"> Please enter a Rep </p>
+                <p id="alertRepName" className="p-alert"> Enter a RepName! </p>
               </div>
             </div>
           </form>

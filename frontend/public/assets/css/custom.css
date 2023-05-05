@@ -53,9 +53,14 @@ table{
 }
 
 .btn-generate{
-  background-color: #a2a6aa !important;
+  background-color: #474747 !important;
   padding: 0 1.8rem !important;
   height: 3rem !important;
+}
+
+.btn-generate:hover{
+  background-color: white !important;
+  color: black;
 }
 
 .btn-inputfile{
