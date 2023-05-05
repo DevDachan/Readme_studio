@@ -133,11 +133,24 @@ select {
   appearance: none;
 }
 
+
 #rep-name, #user-name{
-  color:white;
   font-size: 1rem !important;
+  font-weight: 600;
   height: 3em;
+  background-color: transparent;
 }
+
+#rep-name:not(:placeholder-shown), #user-name:not(:placeholder-shown){
+  color:black;
+  background-color: white;
+}
+
+#rep-name:focus, #user-name:focus{
+  color:black;
+  background-color: white;
+}
+
 
 
 .div-loading-cancel{
