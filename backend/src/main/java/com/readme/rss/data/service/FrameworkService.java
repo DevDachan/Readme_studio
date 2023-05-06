@@ -14,4 +14,6 @@ public interface FrameworkService {
 
     String findContent(String name);
 
+    String changePeriod(String startDate, String endDate);
+
 }

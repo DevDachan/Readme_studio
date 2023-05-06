@@ -610,26 +610,10 @@ public class UnzipController {
 
     @PostMapping("/editPeriod")
     public String editPeriodImage(
-        @RequestParam("start_date") String startDate,
-        @RequestParam("end_date") String endDate) {
-        String frameContent = frameworkService.findContent("Period");
-
-        if(startDate.equals("no")){
-            frameContent =frameContent.replace("PeriodImage", "https://ifh.cc/g/2jWwt7.png")
-                            .replace("startDate", "Start Date")
-                            .replace("endDate", "End Date");
-        }
-        else if(endDate.equals("no")) { // end 입력이 안되면
-            frameContent= frameContent.replace("PeriodImage", "https://ifh.cc/g/2jWwt7.png")
-                            .replace("startDate", startDate)
-                            .replace("endDate", "End Date");
-        } else{ // start date와 end date 모두 입력되었을 때
-            frameContent=frameContent.replace("PeriodImage", "https://ifh.cc/g/LGBnpy.png")
-                            .replace("startDate", startDate)
-                            .replace("endDate", endDate);
-        }
-
-        return frameContent;
+            @RequestParam("start_date") String startDate,
+            @RequestParam("end_date") String endDate) {
+        
+        return frameworkService.changePeriod(startDate,endDate);
     }
 
     @PostMapping("/alldata")

@@ -51,4 +51,25 @@ public class FrameworkServiceImpl implements FrameworkService {
         return frameworkHandeler.findContent(name);
     }
 
+    @Override
+    public String changePeriod(String startDate, String endDate){
+        String framework = frameworkHandeler.findContent("Period");
+
+        if(startDate.equals("no")){
+            framework =framework.replace("PeriodImage", "https://ifh.cc/g/2jWwt7.png")
+                .replace("startDate", "Start Date")
+                .replace("endDate", "End Date");
+        }
+        else if(endDate.equals("no")) { // end 입력이 안되면
+            framework= framework.replace("PeriodImage", "https://ifh.cc/g/2jWwt7.png")
+                .replace("startDate", startDate)
+                .replace("endDate", "End Date");
+        } else{ // start date와 end date 모두 입력되었을 때
+            framework=framework.replace("PeriodImage", "https://ifh.cc/g/LGBnpy.png")
+                .replace("startDate", startDate)
+                .replace("endDate", endDate);
+        }
+        return framework;
+    }
+
 }
