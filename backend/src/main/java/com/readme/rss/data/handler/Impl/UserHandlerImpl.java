@@ -4,6 +4,7 @@ import com.readme.rss.data.dao.UserDAO;
 import com.readme.rss.data.entity.UserEntity;
 import com.readme.rss.data.handler.UserHandler;
 import jakarta.transaction.Transactional;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +22,10 @@ public class UserHandlerImpl implements UserHandler {
     public UserEntity saveUserEntity(String project_id, String user_name, String repository_name){
         UserEntity userEntity = new UserEntity(project_id, user_name, repository_name);
         return userDAO.saveUser(userEntity);
+    }
+    @Override
+    public List<String> getIdAll(){
+        return userDAO.getIdAll();
     }
 
     @Override

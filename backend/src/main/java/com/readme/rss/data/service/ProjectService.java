@@ -11,7 +11,6 @@ public interface ProjectService {
 
     List<ProjectEntity> getController(String projectId);
 
-    List<String> getIdAll();
 
     List<ProjectEntity> getFileContent(String id);
 
@@ -24,4 +23,7 @@ public interface ProjectService {
     String getPeriod(String framework);
     String getDBTable(String projectId);
     String getLicense(String projectId, String userName);
+
+    String getDependency(String projectId, String userName);
+
 }

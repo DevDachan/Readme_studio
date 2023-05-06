@@ -3,6 +3,7 @@ package com.readme.rss.data.dao.Impl;
 import com.readme.rss.data.dao.UserDAO;
 import com.readme.rss.data.entity.UserEntity;
 import com.readme.rss.data.repository.UserRepository;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +21,12 @@ public class UserDAOImpl implements UserDAO {
         userRepository.save(userEntity);
         return userEntity;
     }
+
+    @Override
+    public List<String> getIdAll(){
+        return userRepository.getIdAll();
+    }
+
 
     @Override
     public UserEntity getUser(String project_id){
