@@ -155,63 +155,6 @@ public class UnzipController {
         return javaVersion;
     }
 
-    // dependencies 구하는 함수
-    public static List<Object> findDependencies(String xmlContent) {
-        String dependencies = "";
-        String tempStr = "";
-        Pattern pattern = Pattern.compile("(<dependencies>)(.*?)(</dependencies>)");
-        Matcher matcher = pattern.matcher(xmlContent);
-        if (matcher.find()) {
-            tempStr = matcher.group();
-            tempStr = tempStr.replaceAll("\\s+", ""); // 연속된 공백 제거
-        }
-
-        tempStr = tempStr.replaceAll("<dependency>", "\n    <dependency>\n        ");
-        tempStr = tempStr.replaceAll("<artifactId>", "\n        <artifactId>");
-        tempStr = tempStr.replaceAll("<optional>", "\n        <optional>");
-        tempStr = tempStr.replaceAll("<scope>", "\n        <scope>");
-        tempStr = tempStr.replaceAll("<version>", "\n        <version>");
-        tempStr = tempStr.replaceAll("</dependency>", "\n    </dependency>");
-        tempStr = tempStr.replaceAll("</dependencies>", "\n</dependencies>");
-
-        dependencies = "```bash\n" + tempStr + "\n```";
-
-        List<String> dependencyContents = new ArrayList<>();
-        pattern = Pattern.compile("(?<=\\<dependency>)(.*?)(?=<\\/dependency>)");
-        matcher = pattern.matcher(xmlContent);
-        while (matcher.find()) {
-            dependencyContents.add(matcher.group());
-        }
-
-        List<String> dependencyName = new ArrayList<>();
-        String artifactId = "";
-        for(int i = 0 ; i < dependencyContents.size() ; i++){
-            Pattern pattern2 = Pattern.compile("(?<=\\<artifactId>)(.*?)(?=<\\/artifactId>)");
-            Matcher matcher2 = pattern2.matcher(dependencyContents.get(i));
-            if(dependencyContents.get(i).contains("<version>")){
-                if(matcher2.find()){
-                    String tempArtifactId = matcher2.group();
-                    Pattern pattern3 = Pattern.compile("(?<=\\<version>)(.*?)(?=<\\/version>)");
-                    Matcher matcher3 = pattern3.matcher(dependencyContents.get(i));
-                    if(matcher3.find()){
-                        String version = matcher3.group();
-                        artifactId = tempArtifactId + " (version: " + version + ")";
-                    }
-                }
-            } else{
-                if(matcher2.find()){
-                    artifactId = matcher2.group();
-                }
-            }
-            dependencyName.add(artifactId);
-        }
-        List<Object> retDependency = new ArrayList<>();
-        retDependency.add(dependencyName);
-        retDependency.add(dependencies);
-
-        return retDependency;
-    }
-
     public static String findDatabaseName(String propertiesContent) {
         String databaseName = "";
 
@@ -667,32 +610,9 @@ public class UnzipController {
             frameContent += projectService.getSocial(framework, userName);
 
         }else if (frameworkName.equals("Dependency")) {
-            String Dependency = "Dependency";
-            String xmlContent = "";
-            List<ProjectEntity> getProjectTableRow = projectService.getFileContent(projectId);
-            for(int i = 0 ; i < getProjectTableRow.size() ; i++) {
-                if (getProjectTableRow.get(i).getFilePath().contains("pom.xml")) {
-                    xmlContent = getProjectTableRow.get(i).getFileContent();
-                }
-            }
+            String framework = frameworkService.findContent("Dependency");
+            frameContent = projectService.getDependency(projectId,framework);
 
-            String noWhiteSpaceXml = xmlContent.replaceAll("\n", "");
-            String dependencyTags = "\n" + findDependencies(noWhiteSpaceXml).get(1).toString();
-            List<String> dependencyNameList = (List<String>) findDependencies(noWhiteSpaceXml).get(0);
-            String dependencyName = "\n";
-            String dependencyBtn = "<a href=\"https://mvnrepository.com/\"><img src=\"https://img.shields.io/badge/NUM-DEPENDENCYNAME-9cf\"></a>";
-
-            for(int i = 0 ; i < dependencyNameList.size() ; i++){
-                String tempBtn = dependencyBtn;
-                String dependencyFormat = dependencyNameList.get(i);
-                dependencyFormat = dependencyFormat.replace("-", "--");
-                tempBtn = tempBtn.replace("NUM", Integer.toString(i+1));
-                tempBtn = tempBtn.replace("DEPENDENCYNAME",  dependencyFormat);
-                dependencyName = dependencyName + tempBtn + "   ";
-            }
-            frameContent = frameworkService.findContent(Dependency);
-            frameContent=frameContent.replace("DependencyNames", dependencyName);
-            frameContent=frameContent.replace("DependencyContents", dependencyTags);
         } else if (frameworkName.equals("DB Table")) {
             frameContent = frameworkService.findContent("DB Table");
             frameContent += projectService.getDBTable(projectId);
@@ -775,34 +695,9 @@ public class UnzipController {
 
                 index = 7;
             } else if (frameworkName.equals("Dependency")) {
-                String Dependency = "Dependency";
-                String xmlContent = "";
-                List<ProjectEntity> getProjectTableRow = projectService.getFileContent(projectId);
-                for(int i = 0 ; i < getProjectTableRow.size() ; i++) {
-                    if (getProjectTableRow.get(i).getFilePath().contains("pom.xml")) {
-                        xmlContent = getProjectTableRow.get(i).getFileContent();
-                    }
-                }
+                String framework = frameworkService.findContent("Dependency");
+                frameContent = projectService.getDependency(projectId,framework);
 
-                String noWhiteSpaceXml = xmlContent.replaceAll("\n", "");
-                String dependencyTags = "\n" + findDependencies(noWhiteSpaceXml).get(1).toString();
-                List<String> dependencyNameList = (List<String>) findDependencies(noWhiteSpaceXml).get(0);
-                String dependencyName = "\n";
-                String dependencyBtn = "<a href=\"https://mvnrepository.com/\"><img src=\"https://img.shields.io/badge/NUM-DEPENDENCYNAME-9cf\"></a>";
-                for(int i = 0 ; i < dependencyNameList.size() ; i++){
-                    String tempBtn = dependencyBtn;
-                    String dependencyFormat = dependencyNameList.get(i);
-                    dependencyFormat = dependencyFormat.replace("-", "--");
-                    tempBtn = tempBtn.replace("NUM", Integer.toString(i+1));
-                    tempBtn = tempBtn.replace("DEPENDENCYNAME",  dependencyFormat);
-
-                    dependencyName = dependencyName + tempBtn + "   ";
-                }
-
-
-                frameContent = frameworkService.findContent(Dependency);
-                frameContent=frameContent.replace("DependencyNames", dependencyName);
-                frameContent=frameContent.replace("DependencyContents", dependencyTags);
                 index = 5;
             } else if (frameworkName.equals("DB Table")) {
                 frameContent = frameworkService.findContent("DB Table");
