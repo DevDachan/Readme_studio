@@ -50,12 +50,13 @@ public class ProjectServiceImpl implements ProjectService {
         return result;
     }
 
-
     @Override
     public List<ProjectEntity> getFileContent(String id){
         return projectHandler.getFileContent(id);
     }
 
+
+    /*   API get   */
     @Override
     public String getArchitecture(String id, String fileName){
         return projectHandler.getFileContentByFileName(id, fileName);

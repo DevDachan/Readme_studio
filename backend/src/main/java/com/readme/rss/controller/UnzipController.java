@@ -153,6 +153,7 @@ public class UnzipController {
     public HashMap<String, Object> getFileData(@RequestParam("jsonParam1") String jsonParam1,
         @RequestParam("jsonParam2") String jsonParam2, @RequestParam("file") MultipartFile file)
         throws IOException, InterruptedException {
+
         HashMap<String,Object> map = new HashMap<String,Object>();
 
         String fileName = file.getOriginalFilename();
@@ -612,7 +613,7 @@ public class UnzipController {
     public String editPeriodImage(
             @RequestParam("start_date") String startDate,
             @RequestParam("end_date") String endDate) {
-        
+
         return frameworkService.changePeriod(startDate,endDate);
     }
 
