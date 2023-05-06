@@ -11,7 +11,6 @@ public interface ProjectService {
 
     List<ProjectEntity> getController(String projectId);
 
-    List<String> getIdAll();
 
     List<ProjectEntity> getFileContent(String id);
 

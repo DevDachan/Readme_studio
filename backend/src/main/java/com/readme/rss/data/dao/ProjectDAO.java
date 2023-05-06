@@ -9,7 +9,6 @@ public interface ProjectDAO {
 
     List<ProjectEntity> getController(String projectId);
 
-    List<String> getIdAll();
 
     List<ProjectEntity> getFileContent(String id);
 

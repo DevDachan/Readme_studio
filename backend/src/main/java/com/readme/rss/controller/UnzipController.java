@@ -43,28 +43,9 @@ public class UnzipController {
     }
 
     // global variable
-    static List<String> randomIdList = new ArrayList<>();
     static List<String> file_pathList = new ArrayList<>();
     static List<String> file_nameList = new ArrayList<>();
     static List<String> file_contentList = new ArrayList<>();
-
-    public static String projectIdGenerate(){ // random한 projectId 생성하는 함수
-        int tempRandomId = 0;
-        int min = 100000, max = 999999;
-        Random random = new Random();
-        random.setSeed(System.nanoTime());
-
-        for(int i = 0 ; ; i++){
-            tempRandomId = random.nextInt((max - min) + min);
-            if(randomIdList.indexOf(tempRandomId) == -1){ // idList에 없는 랜덤 id가 결정되면
-                randomIdList.add(String.valueOf(tempRandomId));
-                break;
-            }
-        }
-        String randomId = Integer.toString(tempRandomId);
-
-        return randomId;
-    }
 
     public static String findSpringBootVersion(String xmlContent) {
         String springBootVersion = "";
@@ -189,9 +170,9 @@ public class UnzipController {
             }
         }
 
-        // project table에서 id 가져오기
-        randomIdList = projectService.getIdAll();
-        String randomId = projectIdGenerate();
+        // project id 생성
+        String randomId = userService.createProjectId();
+
         String zipFileName = "./unzipTest_" + randomId + ".zip";
         Path savePath = Paths.get(zipFileName); // unzipTest.zip이름으로 저장
         file.transferTo(savePath); // 파일 다운로드
@@ -368,8 +349,7 @@ public class UnzipController {
         ProcessBuilder builder = new ProcessBuilder();
 
         // project table에서 id 가져오기
-        randomIdList = projectService.getIdAll();
-        String randomId = projectIdGenerate();
+        String randomId = userService.createProjectId();
         String unzipFilesName = "unzipFiles_" + randomId;
 
         //clone(file name : unzipFiles_projectId)
@@ -509,7 +489,7 @@ public class UnzipController {
         map.put("artifactId", artifactId); // artifactId
         map.put("javaVersion", javaVersion); // javaVersion
         map.put("databaseName", databaseName); // db명
-
+        System.out.println(randomId);
         return map;
     }
 

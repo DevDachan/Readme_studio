@@ -7,6 +7,7 @@ import com.readme.rss.data.service.ProjectService;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.jsoup.Jsoup;
@@ -49,10 +50,6 @@ public class ProjectServiceImpl implements ProjectService {
         return result;
     }
 
-    @Override
-    public List<String> getIdAll(){
-        return projectHandler.getIdAll();
-    }
 
     @Override
     public List<ProjectEntity> getFileContent(String id){
@@ -425,5 +422,4 @@ public class ProjectServiceImpl implements ProjectService {
 
         return retDependency;
     }
-
 }
