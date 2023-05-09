@@ -7,8 +7,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 public interface ProjectRepository extends JpaRepository<ProjectEntity, String> {
-    @Query(value = "SELECT DISTINCT id FROM project", nativeQuery = true)
-    List<String> getIdAll();
 
     @Query(value = "SELECT * FROM project WHERE id = :id_value", nativeQuery = true)
     List<ProjectEntity> getFileContent(@Param("id_value")String idValue);

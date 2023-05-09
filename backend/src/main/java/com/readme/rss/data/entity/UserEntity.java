@@ -22,20 +22,16 @@ import lombok.ToString;
 @ToString
 @Table(name = "User")
 public class UserEntity {
-//    @Id
-//    @JoinColumn(name = "project_id", referencedColumnName = "id") // fk 설정할 때 사용
-//    ProjectEntity project_id;
-
     @Id
-    String project_id;
-    String user_name;
-    String repository_name;
+    String projectId;
+    String userName;
+    String repositoryName;
 
     public UserDTO toDto(){
         return UserDTO.builder()
-            .project_id(project_id)
-            .user_name(user_name)
-            .repository_name(repository_name)
+            .projectId(projectId)
+            .userName(userName)
+            .repositoryName(repositoryName)
             .build();
     }
 }

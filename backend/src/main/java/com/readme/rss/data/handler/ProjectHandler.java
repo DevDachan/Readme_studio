@@ -9,9 +9,9 @@ public interface ProjectHandler {
 
     List<ProjectEntity> getController(String projectId);
 
-    List<String> getIdAll();
 
     List<ProjectEntity> getFileContent(String id);
 
     String getFileContentByFileName(String id, String file_name);
+
 }

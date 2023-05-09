@@ -10,17 +10,17 @@ import lombok.*;
 @Builder
 public class ProjectDTO {
     String id;
-    String file_name;
-    String file_path;
-    String file_content;
+    String fileName;
+    String filePath;
+    String fileContent;
     String detail;
 
     public ProjectEntity toEntity(){
         return ProjectEntity.builder()
             .id(id)
-            .file_name(file_name)
-            .file_path(file_path)
-            .file_content(file_content)
+            .fileName(fileName)
+            .filePath(filePath)
+            .fileContent(fileContent)
             .detail(detail)
             .build();
     }

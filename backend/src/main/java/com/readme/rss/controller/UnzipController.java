@@ -5,10 +5,6 @@ import com.readme.rss.data.dto.UserDTO;
 import com.readme.rss.data.entity.ProjectEntity;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 import com.readme.rss.data.service.FrameworkService;
 import com.readme.rss.data.service.ProjectService;
 import com.readme.rss.data.service.UserService;
@@ -32,7 +28,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-@CrossOrigin(origins = "http://localhost:3005")
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 public class UnzipController {
     private ProjectService projectService;
@@ -47,28 +43,9 @@ public class UnzipController {
     }
 
     // global variable
-    static List<String> randomIdList = new ArrayList<>();
     static List<String> file_pathList = new ArrayList<>();
     static List<String> file_nameList = new ArrayList<>();
     static List<String> file_contentList = new ArrayList<>();
-
-    public static String projectIdGenerate(){ // random한 projectId 생성하는 함수
-        int tempRandomId = 0;
-        int min = 100000, max = 999999;
-        Random random = new Random();
-        random.setSeed(System.nanoTime());
-
-        for(int i = 0 ; ; i++){
-            tempRandomId = random.nextInt((max - min) + min);
-            if(randomIdList.indexOf(tempRandomId) == -1){ // idList에 없는 랜덤 id가 결정되면
-                randomIdList.add(String.valueOf(tempRandomId));
-                break;
-            }
-        }
-        String randomId = Integer.toString(tempRandomId);
-
-        return randomId;
-    }
 
     public static String findSpringBootVersion(String xmlContent) {
         String springBootVersion = "";
@@ -159,63 +136,6 @@ public class UnzipController {
         return javaVersion;
     }
 
-    // dependencies 구하는 함수
-    public static List<Object> findDependencies(String xmlContent) {
-        String dependencies = "";
-        String tempStr = "";
-        Pattern pattern = Pattern.compile("(<dependencies>)(.*?)(</dependencies>)");
-        Matcher matcher = pattern.matcher(xmlContent);
-        if (matcher.find()) {
-            tempStr = matcher.group();
-            tempStr = tempStr.replaceAll("\\s+", ""); // 연속된 공백 제거
-        }
-
-        tempStr = tempStr.replaceAll("<dependency>", "\n    <dependency>\n        ");
-        tempStr = tempStr.replaceAll("<artifactId>", "\n        <artifactId>");
-        tempStr = tempStr.replaceAll("<optional>", "\n        <optional>");
-        tempStr = tempStr.replaceAll("<scope>", "\n        <scope>");
-        tempStr = tempStr.replaceAll("<version>", "\n        <version>");
-        tempStr = tempStr.replaceAll("</dependency>", "\n    </dependency>");
-        tempStr = tempStr.replaceAll("</dependencies>", "\n</dependencies>");
-
-        dependencies = "```bash\n" + tempStr + "\n```";
-
-        List<String> dependencyContents = new ArrayList<>();
-        pattern = Pattern.compile("(?<=\\<dependency>)(.*?)(?=<\\/dependency>)");
-        matcher = pattern.matcher(xmlContent);
-        while (matcher.find()) {
-            dependencyContents.add(matcher.group());
-        }
-
-        List<String> dependencyName = new ArrayList<>();
-        String artifactId = "";
-        for(int i = 0 ; i < dependencyContents.size() ; i++){
-            Pattern pattern2 = Pattern.compile("(?<=\\<artifactId>)(.*?)(?=<\\/artifactId>)");
-            Matcher matcher2 = pattern2.matcher(dependencyContents.get(i));
-            if(dependencyContents.get(i).contains("<version>")){
-                if(matcher2.find()){
-                    String tempArtifactId = matcher2.group();
-                    Pattern pattern3 = Pattern.compile("(?<=\\<version>)(.*?)(?=<\\/version>)");
-                    Matcher matcher3 = pattern3.matcher(dependencyContents.get(i));
-                    if(matcher3.find()){
-                        String version = matcher3.group();
-                        artifactId = tempArtifactId + " (version: " + version + ")";
-                    }
-                }
-            } else{
-                if(matcher2.find()){
-                    artifactId = matcher2.group();
-                }
-            }
-            dependencyName.add(artifactId);
-        }
-        List<Object> retDependency = new ArrayList<>();
-        retDependency.add(dependencyName);
-        retDependency.add(dependencies);
-
-        return retDependency;
-    }
-
     public static String findDatabaseName(String propertiesContent) {
         String databaseName = "";
 
@@ -233,6 +153,7 @@ public class UnzipController {
     public HashMap<String, Object> getFileData(@RequestParam("jsonParam1") String jsonParam1,
         @RequestParam("jsonParam2") String jsonParam2, @RequestParam("file") MultipartFile file)
         throws IOException, InterruptedException {
+
         HashMap<String,Object> map = new HashMap<String,Object>();
 
         String fileName = file.getOriginalFilename();
@@ -250,9 +171,9 @@ public class UnzipController {
             }
         }
 
-        // project table에서 id 가져오기
-        randomIdList = projectService.getIdAll();
-        String randomId = projectIdGenerate();
+        // project id 생성
+        String randomId = userService.createProjectId();
+
         String zipFileName = "./unzipTest_" + randomId + ".zip";
         Path savePath = Paths.get(zipFileName); // unzipTest.zip이름으로 저장
         file.transferTo(savePath); // 파일 다운로드
@@ -260,13 +181,13 @@ public class UnzipController {
         ProcessBuilder builder = new ProcessBuilder();
         // unzipFiles 폴더 생성 - 압축풀기한 파일들을 저장하는 임시 폴더
         String unzipFilesName = "unzipFiles_" + randomId;
-        builder.command("mkdir", unzipFilesName); // mac
-        // builder.command("cmd.exe","/c","mkdir", unzipFilesName); // window
+        //builder.command("mkdir", unzipFilesName); // mac
+        builder.command("cmd.exe","/c","mkdir", unzipFilesName); // window
         builder.start();
 
         // 파일 압축 풀기
-        builder.command("unzip", zipFileName, "-d", unzipFilesName); // mac
-        // builder.command("cmd.exe","/c","unzip", zipFileName, "-d", unzipFilesName); // window
+        //builder.command("unzip", zipFileName, "-d", unzipFilesName); // mac
+        builder.command("cmd.exe","/c","unzip", zipFileName, "-d", unzipFilesName); // window
         var process = builder.start(); // upzip 실행
 
         // unzip 실행
@@ -282,8 +203,8 @@ public class UnzipController {
         // tree 명령어
         builder.directory(new File(unzipFilesName)); // 현재 위치 이동
         builder.start();
-        builder.command("tree"); // mac
-        // builder.command("cmd.exe","/c","tree"); // window
+        //builder.command("tree"); // mac
+        builder.command("cmd.exe","/c","tree"); // window
         process = builder.start();
 
         String architecture = "\n<!-- Project Architecture -->\n";
@@ -365,10 +286,10 @@ public class UnzipController {
 
         List<ProjectEntity> getProjectTableRow = projectService.getFileContent(randomId);
         for(int i = 0 ; i < getProjectTableRow.size() ; i++){
-            if(getProjectTableRow.get(i).getFile_path().contains("pom.xml")){
-                xmlContent = getProjectTableRow.get(i).getFile_content();
-            } else if(getProjectTableRow.get(i).getFile_path().contains("application.properties")){
-                propertiesContent = getProjectTableRow.get(i).getFile_content();
+            if(getProjectTableRow.get(i).getFilePath().contains("pom.xml")){
+                xmlContent = getProjectTableRow.get(i).getFileContent();
+            } else if(getProjectTableRow.get(i).getFilePath().contains("application.properties")){
+                propertiesContent = getProjectTableRow.get(i).getFileContent();
             }
         }
 
@@ -429,18 +350,17 @@ public class UnzipController {
         ProcessBuilder builder = new ProcessBuilder();
 
         // project table에서 id 가져오기
-        randomIdList = projectService.getIdAll();
-        String randomId = projectIdGenerate();
+        String randomId = userService.createProjectId();
         String unzipFilesName = "unzipFiles_" + randomId;
 
         // clone(file name : unzipFiles_projectId)
-        builder.command("git", "clone", "--depth", "1", repoLink, unzipFilesName); // mac
+        builder.command("git", "clone", repoLink, unzipFilesName); // mac
         // builder.command("cmd.exe","/c","git", "clone", repoLink, unzipFilesName); // window
 
         try{
-            var clone_process = builder.start();
+            var cloneProcess = builder.start();
             try (var reader = new BufferedReader( // clone 완료 후 아래 코드 실행
-                new InputStreamReader(clone_process.getInputStream()))) {
+                new InputStreamReader(cloneProcess.getInputStream()))) {
                 String commandResult;
                 while ((commandResult = reader.readLine()) != null) {
                     System.out.println(commandResult);
@@ -454,8 +374,8 @@ public class UnzipController {
         }
 
         // project architecture
-        builder.command("tree"); // mac
-        // builder.command("cmd.exe","/c","tree"); // window
+        //builder.command("tree"); // mac
+        builder.command("cmd.exe","/c","tree"); // window
         var process = builder.start();
 
         String architecture = "\n<!-- Project Architecture -->\n";
@@ -535,10 +455,10 @@ public class UnzipController {
 
         List<ProjectEntity> getProjectTableRow = projectService.getFileContent(randomId);
         for(int i = 0 ; i < getProjectTableRow.size() ; i++){
-            if(getProjectTableRow.get(i).getFile_path().contains("pom.xml")){
-                xmlContent = getProjectTableRow.get(i).getFile_content();
-            } else if(getProjectTableRow.get(i).getFile_path().contains("application.properties")){
-                propertiesContent = getProjectTableRow.get(i).getFile_content();
+            if(getProjectTableRow.get(i).getFilePath().contains("pom.xml")){
+                xmlContent = getProjectTableRow.get(i).getFileContent();
+            } else if(getProjectTableRow.get(i).getFilePath().contains("application.properties")){
+                propertiesContent = getProjectTableRow.get(i).getFileContent();
             }
         }
 
@@ -570,7 +490,7 @@ public class UnzipController {
         map.put("artifactId", artifactId); // artifactId
         map.put("javaVersion", javaVersion); // javaVersion
         map.put("databaseName", databaseName); // db명
-
+        System.out.println(randomId);
         return map;
     }
 
@@ -605,14 +525,14 @@ public class UnzipController {
 
     public static void deleteCloneFiles(ProcessBuilder builder, String unzipFilesName) throws IOException { // register2
         try{
-            /* mac */
+            /* mac
             builder.command("rm", "-rf", unzipFilesName);
-            builder.start();
+            builder.start();*/
 
-            /* window
+            /* window*/
             builder.command("cmd.exe","/c","rmdir", unzipFilesName);
             builder.start();
-            */
+
             System.out.println("clone한 파일들 삭제 완료!!");
         } catch(IOException e){
             System.out.println("clone한 파일들 삭제 실패");
@@ -623,18 +543,18 @@ public class UnzipController {
     public static void deleteUnzipFiles(ProcessBuilder builder, String zipFileName, String unzipFilesName) throws IOException { // register1
         try{
             // upzip한 파일들, zip파일 모두 삭제
-            /* mac */
+            /* mac
             builder.command("rm", "-rf", unzipFilesName);
             builder.start();
             builder.command("rm", "-rf", zipFileName);
-            builder.start();
+            builder.start();*/
 
-            /* window
+            /* window*/
             builder.command("cmd.exe","/c","rmdir", "unzipFiles");
             builder.start();
             builder.command("cmd.exe","/c","del", "unzipTest.zip");
             builder.start();
-            */
+
             System.out.println("업로드된 zip파일, 압축풀기한 파일들 모두 삭제 완료!!");
         } catch (IOException e) {
             System.out.println("업로드된 zip파일, 압축풀기한 파일들 삭제 실패");
@@ -642,484 +562,127 @@ public class UnzipController {
     }
 
     @PostMapping("/framework")
-    public String saveData(@RequestParam("project_id") String project_id,
-        @RequestParam("framework_name") String framework_name) throws IOException {
-        String frame_content = "";
-        UserDTO userDTO = userService.getUser(project_id);
-        String user_name = userDTO.getUser_name();
-        String repo_name = userDTO.getRepository_name();
+    public String saveData(@RequestParam("project_id") String projectId,
+        @RequestParam("framework_name") String frameworkName) throws IOException {
+        String frameContent = "";
+        UserDTO userDTO = userService.getUser(projectId);
+        String userName = userDTO.getUserName();
+        String repoName = userDTO.getRepositoryName();
 
         // framework_id에 따른 content제공
-        if(framework_name.equals("Contributor")){
-            frame_content = frameworkService.findContent(framework_name);
-            frame_content = frame_content.replace("repositoryName", repo_name);
-            frame_content = frame_content.replace("userName", user_name);
-        } else if (framework_name.equals("Header")) { /* header 값에 대한 framework*/
-            String Header = "header";
-            frame_content = frameworkService.findContent(Header);
-            frame_content=frame_content.replace("repoName",repo_name);
-        } else if (framework_name.equals("Period")) {
-            String Period = "Period";
-            frame_content = frameworkService.findContent(Period);
-            frame_content=frame_content.replace("PeriodImage", "https://ifh.cc/g/2jWwt7.png");
-            frame_content=frame_content.replace("startDate", "Start Date");
-            frame_content=frame_content.replace("endDate", "End Date");
-        } else if(framework_name.equals("WebAPI")) {
-            frame_content = frameworkService.findContent("WebAPI");
-            frame_content += webAPI(project_id);
-        } else if (framework_name.equals("Social")){
-            frame_content = "### Social<br>";
-            String url = "https://github.com/";
-            url = url + user_name;
-            String[] social_link = {"instagram", "facebook", "linkedin", "notion", "twitter", "github", "gmail"};
-            String[] logo_color = {"E4405F","1877F2","0A66C2","000000","1DA1F2","181717","F06B66" };
-            String social_temp =" ";
-            social_temp = frameworkService.findContent("Social");
+        if(frameworkName.equals("Contributor")){
+            String framework = frameworkService.findContent(frameworkName);
+            frameContent = projectService.getContributor(framework,repoName,userName);
 
-            Document doc = Jsoup.connect(url).get();
-            Elements elements = doc.getElementsByClass("vcard-details");
-            for (Element headline : elements) {
-                String[] urlparsing = headline.text().split(" ");
-                for (int i = 0; i < urlparsing.length; i++) {
-                    for( int j = 0; j< social_link.length; j++){
-                        if(urlparsing[i].contains(social_link[j])){
-                            String temp= social_link[j]+"_Link";
-                            String temp_data=" ";
-                            temp_data=social_temp.replace("logo_color",logo_color[j]);
-                            temp_data=temp_data.replace("social",social_link[j]);
-                            temp_data=temp_data.replace(temp, urlparsing[i]);
-                            frame_content +=temp_data;
-                        }
-                    }
-                }
-            }
-        } else if (framework_name.equals("Dependency")) {
-            String Dependency = "Dependency";
-            String xmlContent = "";
-            List<ProjectEntity> getProjectTableRow = projectService.getFileContent(project_id);
-            for(int i = 0 ; i < getProjectTableRow.size() ; i++) {
-                if (getProjectTableRow.get(i).getFile_path().contains("pom.xml")) {
-                    xmlContent = getProjectTableRow.get(i).getFile_content();
-                }
-            }
+        } else if (frameworkName.equals("Header")) { /* header 값에 대한 framework*/
+            String framework = frameworkService.findContent("Header");
+            frameContent = projectService.getHeader(framework, repoName);
 
-            String noWhiteSpaceXml = xmlContent.replaceAll("\n", "");
-            String dependencyTags = "\n" + findDependencies(noWhiteSpaceXml).get(1).toString();
-            List<String> dependencyNameList = (List<String>) findDependencies(noWhiteSpaceXml).get(0);
-            String dependencyName = "\n";
-            String dependencyBtn = "<a href=\"https://mvnrepository.com/\"><img src=\"https://img.shields.io/badge/NUM-DEPENDENCYNAME-9cf\"></a>";
+        } else if (frameworkName.equals("Period")) {
+            String framework = frameworkService.findContent("Period");
+            frameContent = projectService.getPeriod(framework);
 
-            for(int i = 0 ; i < dependencyNameList.size() ; i++){
-                String tempBtn = dependencyBtn;
-                String dependencyFormat = dependencyNameList.get(i);
-                dependencyFormat = dependencyFormat.replace("-", "--");
-                tempBtn = tempBtn.replace("NUM", Integer.toString(i+1));
-                tempBtn = tempBtn.replace("DEPENDENCYNAME",  dependencyFormat);
-                dependencyName = dependencyName + tempBtn + "   ";
-            }
-            frame_content = frameworkService.findContent(Dependency);
-            frame_content=frame_content.replace("DependencyNames", dependencyName);
-            frame_content=frame_content.replace("DependencyContents", dependencyTags);
-        } else if (framework_name.equals("DB Table")) {
-            frame_content = frameworkService.findContent("DB Table");
-            frame_content += dbTable(project_id);
-        } else if (framework_name.equals("License")) {
-            String License_file = "default";
-            List<ProjectEntity> getProjectTableRow = projectService.getFileContent(project_id);
-            for (int i = 0; i < getProjectTableRow.size(); i++) {
-                if (getProjectTableRow.get(i).getFile_path().contains("LICENSE")) {
-                    String str = getProjectTableRow.get(i).getFile_content();
-                    String firstLine = str.substring(0, str.indexOf("\n"));
-                    firstLine = firstLine.replace("License", "");
-                    firstLine = firstLine.trim();
-                    frame_content = "## License\n" +
-                        "![License: MPL 2.0](https://img.shields.io/badge/License_name-brightgreen.svg)";
-                    frame_content = frame_content.replace("License_name", firstLine);
-                    License_file = "exist";
-                }
-            }
-            if (License_file.equals("default")) {
-                frame_content = "## License\n" +
-                    "The MIT License (MIT)\n" +
-                    "\n" +
-                    "Copyright (c) 2023 UserName\n" +
-                    "\n" +
-                    "Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the \"Software\"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:\n"
-                    +
-                    "\n" +
-                    "The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.\n"
-                    +
-                    "\n" +
-                    "THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.";
-                frame_content = frame_content.replace("UserName", user_name);
-            }
-        } else if (framework_name.equals("Architecture")) {
-            frame_content = frameworkService.findContent("Architecture");
-            String architecture = projectService.getFileContentByFileName(project_id, "Project Architecture");
-            frame_content += architecture;
+        } else if(frameworkName.equals("WebAPI")) {
+            frameContent = frameworkService.findContent("WebAPI");
+            frameContent += projectService.getWebAPI(projectId);
+        } else if (frameworkName.equals("Social")){
+            frameContent = "## Social<br>";
+            String framework = frameworkService.findContent("Social");
+            frameContent += projectService.getSocial(framework, userName);
+
+        }else if (frameworkName.equals("Dependency")) {
+            String framework = frameworkService.findContent("Dependency");
+            frameContent = projectService.getDependency(projectId,framework);
+
+        } else if (frameworkName.equals("DB Table")) {
+            frameContent = frameworkService.findContent("DB Table");
+            frameContent += projectService.getDBTable(projectId);
+
+        } else if (frameworkName.equals("License")) {
+            frameContent = projectService.getLicense(projectId, userName);
+
+        } else if (frameworkName.equals("Architecture")) {
+            frameContent =  frameworkService.findContent("Architecture");
+            frameContent += projectService.getArchitecture(projectId, "Project Architecture");
         }
 
-        return frame_content;
-    }
-
-    public String dbTable(String project_id){
-        String dbTable = "\n<!-- DB Table -->\n";
-
-        // entity parsing 하기 위해 entity 파일 찾기
-        List<String> entityDir = new ArrayList<>();
-        List<String> entityDirContent = new ArrayList<>();
-        List<ProjectEntity> getProjectTableRow = projectService.getFileContent(project_id);
-
-        for(int i = 0 ; i < getProjectTableRow.size() ; i++){
-            if(getProjectTableRow.get(i).getFile_path().contains("ENTITY".toLowerCase())){
-                if(getProjectTableRow.get(i).getDetail().equals("noImpl")){
-                    entityDir.add(getProjectTableRow.get(i).getFile_name());
-                    entityDirContent.add(getProjectTableRow.get(i).getFile_content());
-                }
-            }
-        }
-        int tableLen = entityDir.size();
-        for(int i = 0 ; i < tableLen ; i++) {
-            String frameworkContent = entityDirContent.get(i);
-            // @Table이 없어서 에러 뜨는 경우 - BaseEntity.java의 경우
-            // 에러뜨는 경우 pass하도록 예외 처리
-            int tableIdx = frameworkContent.indexOf("@Table(");
-            if(tableIdx == -1){
-                continue;
-            }
-            String tableNameLine = frameworkContent.substring(frameworkContent.indexOf("@Table("),
-                frameworkContent.indexOf(")") + 1);
-            String tableName = tableNameLine.split("\"")[1];
-
-            dbTable += "#### 🌱 " + tableName + " Table\n"
-                + "|*Column Name*|\n"
-                + "|----|\n";
-
-            // 주석처리 라인 지우기
-            int startIdx = 0, endIdx = 0;
-            List<String> commentLineList = new ArrayList<>();
-            String commentLine = "";
-            while(true) {
-                // indexOf(String str, int fromIndex)
-                startIdx = frameworkContent.indexOf("//", endIdx);
-                endIdx = frameworkContent.indexOf("\n", startIdx);
-
-                if (startIdx < 0) { // 주석처리 없는 경우 스킵
-                    break;
-                } else { // 주석처리 있는 경우 그 라인 리스트에 담기
-                    commentLine = frameworkContent.substring(startIdx, endIdx);
-                    commentLineList.add(commentLine);
-                }
-            }
-
-            for(int k = 0 ; k < commentLineList.size() ; k++){ // 주석 라인들 다 지우기
-                frameworkContent = frameworkContent.replace(commentLineList.get(k), "");
-            }
-
-            // 공백 제거한 xmlContent - 정규식을 쓰기 위해 줄바꿈 제거
-            String noWhiteSpaceContent = frameworkContent.replaceAll("\n", " ");
-
-            // class { 이후 내용만 get
-            Pattern pattern4 = Pattern.compile("(class )(.*?)(\\{)");
-            Matcher matcher4 = pattern4.matcher(noWhiteSpaceContent);
-            while (matcher4.find()) {
-                int afterBraceIdx = noWhiteSpaceContent.indexOf(matcher4.group(3).trim());
-                noWhiteSpaceContent = noWhiteSpaceContent.substring(afterBraceIdx); // afterBrace
-            }
-
-            // column name parsing
-            String[] dataType = {"String", "int", "long", "boolean", "char", "byte", "short", "float", "double"};
-
-            for(int j = 0 ; j < dataType.length ; j++){
-                String type = dataType[j];
-                String pkColumn = "";
-
-                if (noWhiteSpaceContent.contains(type)) {
-                    Pattern pattern = Pattern.compile("(@Id )(.*?)(;)"); // find PK
-                    Matcher matcher = pattern.matcher(noWhiteSpaceContent);
-
-                    while (matcher.find()) {
-                        pkColumn = matcher.group(2).trim() + matcher.group(3).trim();
-
-                        // pk인 컬럼 추가
-                        Pattern pattern2 = Pattern.compile("(" + type + " )(.*?)(;)");
-                        Matcher matcher2 = pattern2.matcher(pkColumn);
-                        while (matcher2.find()) {
-                            String columnName = matcher2.group(2).trim() + " **(PK)**";
-                            dbTable += "|" + columnName + "|\n";
-
-                            // pkColumn 제거
-                            noWhiteSpaceContent = noWhiteSpaceContent.replaceAll("@Id", "");
-                            noWhiteSpaceContent = noWhiteSpaceContent.replaceAll(matcher2.group(), "");
-                        }
-                    }
-
-                    // pk 아닌 컬럼 테이블에 추가
-                    Pattern pattern3 = Pattern.compile("(" + type + " )(.*?)(;)");
-                    Matcher matcher3 = pattern3.matcher(noWhiteSpaceContent);
-                    while (matcher3.find()) {
-                        String columnName = matcher3.group(2).trim();
-                        dbTable += "|" + columnName + "|\n";
-                    }
-                }
-            }
-        }
-
-        return dbTable;
-    }
-
-    public String webAPI(String projectId){
-        List<ProjectEntity> result = projectService.getController(projectId);
-        String mdResult = "<!-- Web API -->\n"
-            + "|HTTP|API|URL|Return Type|Parameters|\n"
-            + "|----|----|---|---|---|\n";
-
-        int start_index = 0, end_index = 0;
-        String urlTemp, returnType, parameters;
-        String[] apiTemp;
-        String current_content;
-
-        for(int i = 0; i < result.size(); i++){
-            current_content = result.get(i).getFile_content();
-            mdResult += "|**"+  result.get(i).getFile_name()+"**|\n";
-
-            // find post mapping
-            while(true){
-                // indexOf(String str, int fromIndex)
-                start_index = current_content.indexOf("@PostMapping(", end_index);
-                end_index = current_content.indexOf(")", start_index);
-
-                if(start_index < 0){
-                    break;
-                } else{
-                    urlTemp = current_content.substring(start_index,end_index);
-                    urlTemp = urlTemp.split("\"")[1];
-
-                    start_index = current_content.indexOf("public", end_index);
-                    end_index = current_content.indexOf("(", start_index);
-                    apiTemp = current_content.substring(start_index,end_index).split(" ");
-                    returnType = "";
-                    for(int k = 1; k < apiTemp.length-1; k++){
-                        returnType += apiTemp[k];
-                    }
-
-                    start_index = current_content.indexOf("(", end_index);
-                    end_index = current_content.indexOf("{", start_index);
-                    parameters = current_content.substring(start_index+1,end_index);
-                    parameters = parameters.substring(0,parameters.lastIndexOf(")"));
-                    parameters= parameters.replace("," ,"<br>");
-                    parameters= parameters.replace("\n" ," ");
-
-                    mdResult += "| Post |" +
-                        apiTemp[apiTemp.length-1]+"()" + "|" +
-                        urlTemp + "|"+
-                        returnType +"|"+
-                        parameters +"|\n";
-                }
-            }
-            // find get mapping
-            while(true){
-                start_index = current_content.indexOf("@GetMapping(", end_index);
-                end_index = current_content.indexOf(")", start_index);
-
-                if(start_index < 0){
-                    break;
-                } else{
-                    urlTemp = current_content.substring(start_index,end_index);
-                    urlTemp = urlTemp.split("\"")[1];
-
-                    start_index = current_content.indexOf("public", end_index);
-                    end_index = current_content.indexOf("(", start_index);
-                    apiTemp = current_content.substring(start_index,end_index).split(" ");
-                    returnType = "";
-                    for(int k = 1; k < apiTemp.length-1; k++){
-                        returnType += apiTemp[k];
-                    }
-
-                    start_index = current_content.indexOf("(", end_index);
-                    end_index = current_content.indexOf("{", start_index);
-                    parameters = current_content.substring(start_index+1,end_index);
-                    parameters = parameters.substring(0,parameters.lastIndexOf(")"));
-                    parameters= parameters.replace("," ,"<br>");
-                    parameters= parameters.replace("\n" ," ");
-
-                    mdResult += "| Get |" +
-                        apiTemp[apiTemp.length-1]+"()" + "|" +
-                        urlTemp + "|"+
-                        returnType +"|"+
-                        parameters +"|\n";
-                }
-            }
-        }
-        return mdResult;
+        return frameContent;
     }
 
     @PostMapping("/editPeriod")
     public String editPeriodImage(
-        @RequestParam("start_date") String start_date,
-        @RequestParam("end_date") String end_date) {
-        String frame_content = frameworkService.findContent("Period");
+            @RequestParam("start_date") String startDate,
+            @RequestParam("end_date") String endDate) {
 
-        if(start_date.equals("no")){
-            frame_content=frame_content.replace("PeriodImage", "https://ifh.cc/g/2jWwt7.png"); // ing
-            frame_content=frame_content.replace("startDate", "Start Date");
-            frame_content=frame_content.replace("endDate", "End Date");
-        }
-        else if(end_date.equals("no")) { // end 입력이 안되면
-            frame_content=frame_content.replace("PeriodImage", "https://ifh.cc/g/2jWwt7.png"); // ing
-            frame_content=frame_content.replace("startDate", start_date);
-            frame_content=frame_content.replace("endDate", "End Date");
-        } else{ // start date와 end date 모두 입력되었을 때
-            frame_content=frame_content.replace("PeriodImage", "https://ifh.cc/g/LGBnpy.png"); // finished
-            frame_content=frame_content.replace("startDate", start_date);
-            frame_content=frame_content.replace("endDate", end_date);
-        }
-
-        return frame_content;
+        return frameworkService.changePeriod(startDate,endDate);
     }
 
     @PostMapping("/alldata")
-    public Map <String,String[]> allData(@RequestParam("project_id") String project_id) throws IOException {
-        Map<String, String[]> all_data = new LinkedHashMap<>();
-        String frame_content = "";
-        UserDTO userDTO = userService.getUser(project_id);
-        String user_name = userDTO.getUser_name();
-        String repo_name = userDTO.getRepository_name();
-        String framework_name="";
+    public Map <String,String[]> allData(@RequestParam("project_id") String projectId) throws IOException {
+        Map<String, String[]> allData = new LinkedHashMap<>();
+        String frameContent = "";
+        UserDTO userDTO = userService.getUser(projectId);
+        String userName = userDTO.getUserName();
+        String repoName = userDTO.getRepositoryName();
+        String frameworkName="";
         List<String> frameworkNameList = frameworkService.getFrameworkNameList();
         int index=0;
         // framework 테이블에 있는 framework 다 가져오기
         //배열선언
-        String[] framework_list= new String[frameworkNameList.size()];
-        String[] content_list= new String[frameworkNameList.size()];
+        String[] frameworkList= new String[frameworkNameList.size()];
+        String[] contentList= new String[frameworkNameList.size()];
 
         for(int count=0; count< frameworkNameList.size(); count++){
-            framework_name=frameworkNameList.get(count);
+            frameworkName=frameworkNameList.get(count);
 
             // framework_id에 따른 content제공
-            if(framework_name.equals("Contributor")){
-                frame_content = frameworkService.findContent(framework_name);
-                frame_content = frame_content.replace("repositoryName", repo_name);
-                frame_content = frame_content.replace("userName", user_name);
+            if(frameworkName.equals("Contributor")){
+                String framework = frameworkService.findContent(frameworkName);
+                frameContent = projectService.getContributor(framework,repoName,userName);
                 index = 8;
-            } else if (framework_name.equals("Header")) { /* header 값에 대한 framework*/
-                String Header = "header";
-                frame_content = frameworkService.findContent(Header);
-                frame_content=frame_content.replace("repoName",repo_name);
+            } else if (frameworkName.equals("Header")) { /* header 값에 대한 framework*/
+                String framework = frameworkService.findContent("Header");
+                frameContent = projectService.getHeader(framework, repoName);
+
                 index = 0;
-            } else if (framework_name.equals("Period")) {
-                String Period = "Period";
-                frame_content = frameworkService.findContent(Period);
-                frame_content=frame_content.replace("PeriodImage", "https://ifh.cc/g/2jWwt7.png");
-                frame_content=frame_content.replace("startDate", "Start Date");
-                frame_content=frame_content.replace("endDate", "End Date");
+            } else if (frameworkName.equals("Period")) {
+                String framework = frameworkService.findContent("Period");
+                frameContent = projectService.getPeriod(framework);
                 index = 1;
-            } else if(framework_name.equals("WebAPI")) {
-                frame_content = frameworkService.findContent("WebAPI");
-                frame_content += webAPI(project_id);
+            } else if(frameworkName.equals("WebAPI")) {
+                frameContent = frameworkService.findContent("WebAPI");
+                frameContent += projectService.getWebAPI(projectId);
                 index = 3;
-            } else if (framework_name.equals("Social")){
-                frame_content = "## Social<br>";
-                String url = "https://github.com/";
-                url = url + user_name;
-                String[] social_link = {"instagram", "facebook", "linkedin", "notion", "twitter", "github", "gmail"};
-                String[] logo_color = {"E4405F","1877F2","0A66C2","000000","1DA1F2","181717","F06B66" };
-                String social_temp =" ";
-                social_temp = frameworkService.findContent("Social");
+            } else if (frameworkName.equals("Social")){
+                frameContent = "## Social<br>";
+                String framework = frameworkService.findContent("Social");
+                frameContent += projectService.getSocial(framework, userName);
 
-                Document doc = Jsoup.connect(url).get();
-                Elements elements = doc.getElementsByClass("vcard-details");
-                for (Element headline : elements) {
-                    String[] urlparsing = headline.text().split(" ");
-                    for (int i = 0; i < urlparsing.length; i++) {
-                        for( int j = 0; j< social_link.length; j++){
-                            if(urlparsing[i].contains(social_link[j])){
-                                String temp= social_link[j]+"_Link";
-                                String temp_data=" ";
-                                temp_data=social_temp.replace("logo_color",logo_color[j]);
-                                temp_data=temp_data.replace("social",social_link[j]);
-                                temp_data=temp_data.replace(temp, urlparsing[i]);
-                                frame_content +=temp_data;
-                            }
-                        }
-                    }
-                }
                 index = 7;
-            } else if (framework_name.equals("Dependency")) {
-                String Dependency = "Dependency";
-                String xmlContent = "";
-                List<ProjectEntity> getProjectTableRow = projectService.getFileContent(project_id);
-                for(int i = 0 ; i < getProjectTableRow.size() ; i++) {
-                    if (getProjectTableRow.get(i).getFile_path().contains("pom.xml")) {
-                        xmlContent = getProjectTableRow.get(i).getFile_content();
-                    }
-                }
+            } else if (frameworkName.equals("Dependency")) {
+                String framework = frameworkService.findContent("Dependency");
+                frameContent = projectService.getDependency(projectId,framework);
 
-                String noWhiteSpaceXml = xmlContent.replaceAll("\n", "");
-                String dependencyTags = "\n" + findDependencies(noWhiteSpaceXml).get(1).toString();
-                List<String> dependencyNameList = (List<String>) findDependencies(noWhiteSpaceXml).get(0);
-                String dependencyName = "\n";
-                String dependencyBtn = "<a href=\"https://mvnrepository.com/\"><img src=\"https://img.shields.io/badge/NUM-DEPENDENCYNAME-9cf\"></a>";
-                for(int i = 0 ; i < dependencyNameList.size() ; i++){
-                    String tempBtn = dependencyBtn;
-                    String dependencyFormat = dependencyNameList.get(i);
-                    dependencyFormat = dependencyFormat.replace("-", "--");
-                    tempBtn = tempBtn.replace("NUM", Integer.toString(i+1));
-                    tempBtn = tempBtn.replace("DEPENDENCYNAME",  dependencyFormat);
-
-                    dependencyName = dependencyName + tempBtn + "   ";
-                }
-                frame_content = frameworkService.findContent(Dependency);
-                frame_content=frame_content.replace("DependencyNames", dependencyName);
-                frame_content=frame_content.replace("DependencyContents", dependencyTags);
                 index = 5;
-            } else if (framework_name.equals("DB Table")) {
-                frame_content = frameworkService.findContent("DB Table");
-                frame_content += dbTable(project_id);
+            } else if (frameworkName.equals("DB Table")) {
+                frameContent = frameworkService.findContent("DB Table");
+                frameContent += projectService.getDBTable(projectId);
                 index = 4;
-            } else if (framework_name.equals("License")) {
-                String License_file = "default";
-                List<ProjectEntity> getProjectTableRow = projectService.getFileContent(project_id);
-                for (int i = 0; i < getProjectTableRow.size(); i++) {
-                    if (getProjectTableRow.get(i).getFile_path().contains("LICENSE")) {
-                        String str = getProjectTableRow.get(i).getFile_content();
-                        String firstLine = str.substring(0, str.indexOf("\n"));
-                        firstLine = firstLine.replace("License", "");
-                        firstLine = firstLine.trim();
-                        frame_content = "## License\n" +
-                            "![License: MPL 2.0](https://img.shields.io/badge/License_name-brightgreen.svg)";
-                        frame_content = frame_content.replace("License_name", firstLine);
-                        License_file = "exist";
-                    }
-                }
-                if (License_file.equals("default")) {
-                    frame_content = "## License\n" +
-                        "The MIT License (MIT)\n" +
-                        "\n" +
-                        "Copyright (c) 2023 UserName\n" +
-                        "\n" +
-                        "Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the \"Software\"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:\n"
-                        +
-                        "\n" +
-                        "The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.\n"
-                        +
-                        "\n" +
-                        "THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.";
-                    frame_content = frame_content.replace("UserName", user_name);
-                }
+            } else if (frameworkName.equals("License")) {
+                frameContent = projectService.getLicense(projectId, userName);
+
                 index = 6;
-            } else if (framework_name.equals("Architecture")) {
-                frame_content = frameworkService.findContent("Architecture");
-                String architecture = projectService.getFileContentByFileName(project_id, "Project Architecture");
-                frame_content += architecture;
+            } else if (frameworkName.equals("Architecture")) {
+                frameContent =  frameworkService.findContent("Architecture");
+                frameContent += projectService.getArchitecture(projectId, "Project Architecture");
                 index = 2;
             }
-            framework_list[index]=framework_name;
-            content_list[index]=frame_content;
+            frameworkList[index]=frameworkName;
+            contentList[index]=frameContent;
         }
-        all_data.put("content",content_list);
-        all_data.put("type",framework_list);
+        allData.put("content",contentList);
+        allData.put("type",frameworkList);
 
-        return all_data;
+        return allData;
     }
 }

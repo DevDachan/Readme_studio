@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import axios from "axios";
 import 'bootstrap/dist/css/bootstrap.css';
+import Loading from "./Loading";
+
 
 const Wrapper = styled.div`
     padding: 0 2.5em;
@@ -25,7 +27,8 @@ function Main(props) {
   const [githubRepLink, setGithubRepLink] = useState('');
   const [fileName, setFileName] = useState("Upload");
   const [fileSelected, setFileSelected] = useState(false);
-
+  const [loadingCheck, setLoadingCheck] = useState(false);
+  const { cancel, token } = axios.CancelToken.source();
 
   const goMain = (e) =>{
     navigate('./');
@@ -51,24 +54,33 @@ function Main(props) {
   }
 
   const changeUserName = e =>{
+    document.getElementById("alertUserName").classList.remove( "p-alert-show");
     setUserName(e.target.value);
   };
 
   const changeRepName = e =>{
+    document.getElementById("alertRepName").classList.remove( "p-alert-show");
     setRepName(e.target.value);
   };
 
-  const submitReadme = (e) =>{
+  const changeLink = e =>{
+    document.getElementById("alertLink").classList.remove( "p-alert-show");
+  }
 
-    setRepName(document.getElementById("rep-name").value);
-    setUserName(document.getElementById("user-name").value);
-    // 혹시 relandering으로 인한 data 손실 우려
-    if(document.getElementById("user-name").value !== userName){
-      setUserName(document.getElementById("user-name").value);
+  const cancelLoading = e => {
+    setLoadingCheck(false);
+    cancel("cancel");
+  }
+
+  const submitReadme = (e) =>{
+    if(userName == undefined ||  userName == ""){
+      document.getElementById("alertUserName").classList.add( "p-alert-show");
+      return;
+    }else if(repName == undefined || repName == ""){
+      document.getElementById("alertRepName").classList.add( "p-alert-show");
+      return;
     }
-    if(document.getElementById("rep-name").value !== repName){
-      setRepName(document.getElementById("rep-name").value);
-    }
+
 
     const formData = new FormData();
     formData.append('file', file);
@@ -76,10 +88,12 @@ function Main(props) {
     formData.append('jsonParam2', repName);
 
     var readme_list = [];
+    setLoadingCheck(true);
     axios({
       method: "post",
       url: 'http://localhost:8090/register',
-      data: formData
+      data: formData,
+      cancelToken: token
     })
     .then(function (response){
       //handle success
@@ -91,11 +105,11 @@ function Main(props) {
       "📙 Java Version :"+ response.data.javaVersion+"   \n"+
       "📚 DB : "+ response.data.databaseName;
 
-      readme_list.push({projectId : response.data.project_id, id: response.data.readmeName, content : [defaultData] , type : ["Default Data"]});
+      readme_list.push({projectId : response.data.project_id, id: "README.md", content : [defaultData] , type : ["Default Data"]});
 
       navigate('./editor', {
         state: {
-          project_id: response.data.project_id,
+          project_id: 234769,
           framework_list: response.data.frameworkList,
           readmeObject:readme_list,
           defaultData: defaultData
@@ -103,12 +117,21 @@ function Main(props) {
       });
     })
     .catch(function(error){
-      //handle error
+      cancelLoading();
     });
   }
 
 
   const linkSubmitReadme = (e) =>{
+    const githubPattern = /^https:\/\/github\.com\//;
+
+    if(document.getElementById("repoLink").value == ""){
+      document.getElementById("alertLink").classList.add( "p-alert-show");
+      return;
+    }else if (!githubPattern.test(document.getElementById("repoLink").value)) {
+      document.getElementById("alertLink").classList.add( "p-alert-show");
+      return;
+    }
 
     const formData = new FormData();
     formData.append('jsonParam1', document.getElementById("repoLink").value);
@@ -119,7 +142,6 @@ function Main(props) {
       data: formData
     })
     .then(function (response){
-      console.log(response.data.error);
       if(response.data.error !== "LinkFormatError" && response.data.error !== "cloneError"){
         //handle success
         var defaultData = "<!-- empty_textarea -->\n"+
@@ -130,7 +152,7 @@ function Main(props) {
         "📙 Java Version :"+ response.data.javaVersion+"   \n"+
         "📚 DB : "+ response.data.databaseName;
 
-        readme_list.push({projectId : response.data.project_id, id: response.data.readmeName, content : [defaultData] , type : ["Default Data"]});
+        readme_list.push({projectId : response.data.project_id, id: "README.md", content : [defaultData] , type : ["Default Data"]});
 
         navigate('./editor', {
           state: {
@@ -143,9 +165,19 @@ function Main(props) {
       }
     })
     .catch(function(error){
-      //handle error
+      cancelLoading();
     });
   }
+
+
+  const html = document.documentElement;
+  const body = document.body;
+
+  const height = Math.max(html.clientHeight, html.scrollHeight, html.offsetHeight,
+                          body.clientHeight, body.scrollHeight, body.offsetHeight);
+
+  const width = Math.max(html.clientWidth, html.scrollWidth, html.offsetWidth,
+                         body.clientWidth, body.scrollWidth, body.offsetWidth);
 
   return (
       <Wrapper>
@@ -165,12 +197,26 @@ function Main(props) {
                 autocomplete="off"
                 placeholder="Github Repository Link"
                 maxLength="100"
+                onChange={changeLink}
               />
               </div>
               <div className="col-sm-2">
                 <input type="button" className="btn-generate" value="Generate" onClick={linkSubmitReadme}/>
               </div>
+              <div className="col-sm-10 mt-3">
+                <p id="alertLink" className="p-alert"> Please enter a Github Link </p>
+              </div>
           </div>
+
+          {loadingCheck?
+            <div className="loading-container" style={{height: height, width:width}}>
+            <Loading
+              type="spin"
+              message={"프로젝트 정보를 불러오고 있습니다."}
+              cancelLoading={cancelLoading}
+            />
+            </div>
+             : ""}
 
 
           <form id="generate-form-files">
@@ -178,12 +224,12 @@ function Main(props) {
 
               <div className="col-sm-3">
                 <input type="text" name="userName" id="user-name" defaultValue={userName}
-                required placeholder="User Name"/>
+                required onChange={changeUserName} placeholder="User Name"/>
               </div>
 
               <div className="col-sm-3">
-                <input type="text" name="repName" id="rep-name"
-                defaultValue={repName} required placeholder="Repository Name"/>
+                <input type="text" name="repName" id="rep-name" defaultValue={repName}
+                required  onChange={changeRepName}  placeholder="Repository Name"/>
               </div>
 
               <div className="col-sm-3">
@@ -196,7 +242,12 @@ function Main(props) {
               <div className="col-sm-3">
                 <input type="button" className="btn-inputfile" value="Generate" onClick={submitReadme}/>
               </div>
-
+              <div className="col-sm-3">
+                <p id="alertUserName" className="p-alert"> Enter a UserName!</p>
+              </div>
+              <div className="col-sm-3">
+                <p id="alertRepName" className="p-alert"> Enter a RepName! </p>
+              </div>
             </div>
           </form>
         </div>
