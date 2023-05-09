@@ -1,8 +1,6 @@
 package com.readme.rss.data.service.Impl;
 
 import static java.lang.Thread.sleep;
-
-import com.readme.rss.data.entity.ProjectEntity;
 import com.readme.rss.data.service.RegisterService;
 import java.io.BufferedReader;
 import java.io.File;
@@ -302,60 +300,14 @@ public class RegisterServiceImpl implements RegisterService {
       file_pathList.clear();
       file_contentList.clear();
     }
-
-    // project architecture project table에 insert
-    projectService.saveProject(projectId, "Project Architecture", "", architecture, "tree");
-
-    // project table에 .java 파일만 insert
-    for(int i = 0 ; i < javaFileName.size() ; i++){
-      try{
-        projectService.saveProject(projectId, javaFileName.get(i), javaFilePath.get(i), javaFileContent.get(i), javaFileDetail.get(i));
-      } catch (Exception e){
-        System.out.print(javaFileName.get(i)); // 어느 파일이 길이가 긴지 확인
-      }
-    }
+    map.put("Architecture", architecture);
+    map.put("javaFileName", javaFileName);
+    map.put("javaFilePath", javaFilePath);
+    map.put("javaFileContent", javaFileContent);
+    map.put("javaFileDetail", javaFileDetail);
 
     // content data 보냈으므로, 압축풀기한 파일들, 업로드된 zip 파일 모두 삭제
-    deleteUnzipFiles(builder, zipFileName, unzipFilesName);
-
-    // =============== pom.xml에서 필요한 데이터 파싱 =============== //
-    String xmlContent = "";
-    // =============== application.properties에서 필요한 데이터 파싱 =============== //
-    String propertiesContent = "";
-
-    List<ProjectEntity> getProjectTableRow = projectService.getFileContent(projectId);
-    for(int i = 0 ; i < getProjectTableRow.size() ; i++){
-      if(getProjectTableRow.get(i).getFilePath().contains("pom.xml")){
-        xmlContent = getProjectTableRow.get(i).getFileContent();
-      } else if(getProjectTableRow.get(i).getFilePath().contains("application.properties")){
-        propertiesContent = getProjectTableRow.get(i).getFileContent();
-      }
-    }
-
-    // 공백 제거한 xmlContent - 정규식을 쓰기 위해 줄바꿈 제거
-    String noWhiteSpaceXml = xmlContent.replaceAll("\n", "");
-
-    // 필요한 데이터 : 스프링부트 버전, 패키지명, 자바 jdk 버전, (+ dependency 종류)
-    String springBootVersion = findSpringBootVersion(noWhiteSpaceXml);
-    List<String> packageName = findPackageName(noWhiteSpaceXml);
-    String groupId = packageName.get(0);
-    String artifactId = packageName.get(1);
-    String javaVersion = findJavaVersion(noWhiteSpaceXml);
-
-    // 공백 제거한 propertiesContent - 정규식을 쓰기 위해 줄바꿈 제거
-    String noWhiteSpaceProperties = propertiesContent.replaceAll("\n", "");
-
-    // 필요한 데이터 : 사용하는 database명
-    String databaseName = findDatabaseName(noWhiteSpaceProperties);
-
-
-    map.put("project_id", projectId); // index(project_id)
-    map.put("springBootVersion", springBootVersion); // springboot 버전
-    map.put("groupId", groupId); // groupId
-    map.put("artifactId", artifactId); // artifactId
-    map.put("javaVersion", javaVersion); // javaVersion
-    map.put("databaseName", databaseName); // db명
-
+    deleteCloneFiles(builder, unzipFilesName);
     return map;
   }
 
