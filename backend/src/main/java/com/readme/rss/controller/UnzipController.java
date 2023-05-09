@@ -434,7 +434,7 @@ public class UnzipController {
         String unzipFilesName = "unzipFiles_" + randomId;
 
         // clone(file name : unzipFiles_projectId)
-        builder.command("git", "clone", repoLink, unzipFilesName); // mac
+        builder.command("git", "clone", "--depth", "1", repoLink, unzipFilesName); // mac
         // builder.command("cmd.exe","/c","git", "clone", repoLink, unzipFilesName); // window
 
         try{
