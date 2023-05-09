@@ -4,6 +4,7 @@ import com.readme.rss.data.dto.UserDTO;
 import com.readme.rss.data.entity.UserEntity;
 import com.readme.rss.data.handler.UserHandler;
 import com.readme.rss.data.service.UserService;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,23 +19,36 @@ public class UserServiceImpl implements UserService {
         this.userHandler = userHandler;
     }
 
-    // Service(Client) <-> Controller : DTO
-    // Service <-> DAO(DB) : Entity
-    @Override
-    public UserDTO saveUser(String project_id, String user_name, String repository_name){
-        UserEntity userEntity = userHandler.saveUserEntity(project_id, user_name, repository_name);
-
-        UserDTO userDTO = new UserDTO(userEntity.getProjectId(), userEntity.getUserName(), userEntity.getRepositoryName());
-        return userDTO;
-    }
-
     @Override
     public UserDTO getUser(String project_id){
-        UserEntity userEntity = userHandler.getUserEntity(project_id);
-
-        UserDTO userDTO = new UserDTO(userEntity.getProjectId(), userEntity.getUserName(), userEntity.getRepositoryName());
-        return userDTO;
+      return userHandler.getUserEntity(project_id);
     }
+
+    @Override
+    public UserDTO registerUser(String userName, String repositoryName){
+      String randomId = this.createProjectId();
+      return userHandler.saveUserEntity(randomId,userName,repositoryName);
+    }
+
+  @Override
+  public UserDTO registerUserLink(String repoLink){
+    UserDTO data = new UserDTO();
+    if(!repoLink.contains("https://github.com/")){ // (1) 예외처리
+      return new UserDTO();
+    }
+    if(!repoLink.contains(".git")){ // (2) 예외처리
+      repoLink += ".git";
+    }
+
+    String randomId = this.createProjectId();
+
+    String repoLinkInfo = repoLink.substring(19);
+    String userName = repoLinkInfo.split("/")[0];
+    String repositoryName = repoLinkInfo.split("/")[1].substring(0, repoLinkInfo.split("/")[1].indexOf(".git"));
+
+    return userHandler.saveUserEntity(randomId,userName,repositoryName);
+  }
+
 
     @Override
     public String createProjectId(){ // random한 projectId 생성하는 함수

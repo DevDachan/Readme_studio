@@ -21,12 +21,40 @@ import org.springframework.web.multipart.MultipartFile;
 @Service
 public class RegisterServiceImpl implements RegisterService {
 
-  static List<String> file_pathList = new ArrayList<>();
-  static List<String> file_nameList = new ArrayList<>();
-  static List<String> file_contentList = new ArrayList<>();
+  private List<String> file_pathList = new ArrayList<>();
+  private List<String> file_nameList = new ArrayList<>();
+  private List<String> file_contentList = new ArrayList<>();
 
 
-  public static int searchFiles(String searchDirPath) throws IOException {
+  public String findSpringBootVersion(String xmlContent) {
+    String springBootVersion = "";
+
+    if (xmlContent.contains("<parent>")) {
+            /* 정규 표현식을 통해 특정 단어 사이의 단어 추출 가능
+                '/b' : 단어의 경계를 의미
+                () 괄호 묶음 : 하나의 그룹을 의미 -> 두 번째 그룹이 원하는 파싱 값이므로 group(2)를 trim()
+                (?<=\<parent>) : <parent>를 기준으로 그 뒤 문자열 탐색
+                (.*?) : 최소 패턴 일치, 뒤에 오는 문자열을 만날 때까지
+                (?=<\/parent>) : </parent>를 기준으로 그 앞 문자열 탐색
+                .는 개행 문자는 포함하지 않기 때문에 주의!!
+            */
+      Pattern pattern = Pattern.compile("(?<=\\<parent>)(.*?)(?=<\\/parent>)");
+      Matcher matcher = pattern.matcher(xmlContent);
+      if (matcher.find()) {
+        springBootVersion = matcher.group();
+      }
+      pattern = Pattern.compile("(?<=\\<version>)(.*?)(?=<\\/version>)");
+      matcher = pattern.matcher(springBootVersion);
+      if (matcher.find()) {
+        springBootVersion = matcher.group();
+      }
+    }
+
+    return springBootVersion;
+  }
+
+
+  public int searchFiles(String searchDirPath) throws IOException {
     File dirFile = new File(searchDirPath);
     File[] fileList = dirFile.listFiles();
 
@@ -55,7 +83,7 @@ public class RegisterServiceImpl implements RegisterService {
     return 1; // 전역변수 초기화하기 위한 리턴값 반환
   }
 
-  public static void deleteCloneFiles(ProcessBuilder builder, String unzipFilesName) throws IOException { // register2
+  public void deleteCloneFiles(ProcessBuilder builder, String unzipFilesName) throws IOException { // register2
     try{
             /* mac
             builder.command("rm", "-rf", unzipFilesName);
@@ -72,7 +100,7 @@ public class RegisterServiceImpl implements RegisterService {
 
   }
 
-  public static void deleteUnzipFiles(ProcessBuilder builder, String zipFileName, String unzipFilesName) throws IOException { // register1
+  public void deleteUnzipFiles(ProcessBuilder builder, String zipFileName, String unzipFilesName) throws IOException { // register1
     try{
       // upzip한 파일들, zip파일 모두 삭제
             /* mac
@@ -94,34 +122,7 @@ public class RegisterServiceImpl implements RegisterService {
   }
 
 
-  public static String findSpringBootVersion(String xmlContent) {
-    String springBootVersion = "";
-
-    if (xmlContent.contains("<parent>")) {
-            /* 정규 표현식을 통해 특정 단어 사이의 단어 추출 가능
-                '/b' : 단어의 경계를 의미
-                () 괄호 묶음 : 하나의 그룹을 의미 -> 두 번째 그룹이 원하는 파싱 값이므로 group(2)를 trim()
-                (?<=\<parent>) : <parent>를 기준으로 그 뒤 문자열 탐색
-                (.*?) : 최소 패턴 일치, 뒤에 오는 문자열을 만날 때까지
-                (?=<\/parent>) : </parent>를 기준으로 그 앞 문자열 탐색
-                .는 개행 문자는 포함하지 않기 때문에 주의!!
-            */
-      Pattern pattern = Pattern.compile("(?<=\\<parent>)(.*?)(?=<\\/parent>)");
-      Matcher matcher = pattern.matcher(xmlContent);
-      if (matcher.find()) {
-        springBootVersion = matcher.group();
-      }
-      pattern = Pattern.compile("(?<=\\<version>)(.*?)(?=<\\/version>)");
-      matcher = pattern.matcher(springBootVersion);
-      if (matcher.find()) {
-        springBootVersion = matcher.group();
-      }
-    }
-
-    return springBootVersion;
-  }
-
-  public static List<String> findPackageName(String xmlContent) {
+  public List<String> findPackageName(String xmlContent) {
     List<String> packageName = new ArrayList<>();
     String tempStr = "";
 
@@ -172,7 +173,7 @@ public class RegisterServiceImpl implements RegisterService {
     return packageName;
   }
 
-  public static String findJavaVersion(String xmlContent) {
+  public String findJavaVersion(String xmlContent) {
     String javaVersion = "";
     Pattern pattern = Pattern.compile("(?<=\\<java.version>)(.*?)(?=<\\/java.version>)");
     Matcher matcher = pattern.matcher(xmlContent);
@@ -183,7 +184,7 @@ public class RegisterServiceImpl implements RegisterService {
     return javaVersion;
   }
 
-  public static String findDatabaseName(String propertiesContent) {
+  public String findDatabaseName(String propertiesContent) {
     String databaseName = "";
 
     // Pattern pattern = Pattern.compile("(jdbc:)(.*?)(://)"); // 전후 문자열 포함한 문자열 추출
@@ -198,7 +199,7 @@ public class RegisterServiceImpl implements RegisterService {
 
 
   public HashMap<String, Object> register(String userName,String repositoryName ,
-      MultipartFile file){
+      MultipartFile file , String projectId) throws IOException, InterruptedException {
     HashMap<String, Object> map = new HashMap<>();
 
     String fileName = file.getOriginalFilename();
@@ -214,16 +215,14 @@ public class RegisterServiceImpl implements RegisterService {
       }
     }
 
-    // project id 생성
-    String randomId = userService.createProjectId();
 
-    String zipFileName = "./unzipTest_" + randomId + ".zip";
+    String zipFileName = "./unzipTest_" + projectId + ".zip";
     Path savePath = Paths.get(zipFileName); // unzipTest.zip이름으로 저장
     file.transferTo(savePath); // 파일 다운로드
 
     ProcessBuilder builder = new ProcessBuilder();
     // unzipFiles 폴더 생성 - 압축풀기한 파일들을 저장하는 임시 폴더
-    String unzipFilesName = "unzipFiles_" + randomId;
+    String unzipFilesName = "unzipFiles_" + projectId;
     //builder.command("mkdir", unzipFilesName); // mac
     builder.command("cmd.exe","/c","mkdir", unzipFilesName); // window
     builder.start();
@@ -305,19 +304,16 @@ public class RegisterServiceImpl implements RegisterService {
     }
 
     // project architecture project table에 insert
-    projectService.saveProject(randomId, "Project Architecture", "", architecture, "tree");
+    projectService.saveProject(projectId, "Project Architecture", "", architecture, "tree");
 
     // project table에 .java 파일만 insert
     for(int i = 0 ; i < javaFileName.size() ; i++){
       try{
-        projectService.saveProject(randomId, javaFileName.get(i), javaFilePath.get(i), javaFileContent.get(i), javaFileDetail.get(i));
+        projectService.saveProject(projectId, javaFileName.get(i), javaFilePath.get(i), javaFileContent.get(i), javaFileDetail.get(i));
       } catch (Exception e){
         System.out.print(javaFileName.get(i)); // 어느 파일이 길이가 긴지 확인
       }
     }
-
-    // user table에 insert
-    userService.saveUser(randomId, userName, repositoryName);
 
     // content data 보냈으므로, 압축풀기한 파일들, 업로드된 zip 파일 모두 삭제
     deleteUnzipFiles(builder, zipFileName, unzipFilesName);
@@ -327,7 +323,7 @@ public class RegisterServiceImpl implements RegisterService {
     // =============== application.properties에서 필요한 데이터 파싱 =============== //
     String propertiesContent = "";
 
-    List<ProjectEntity> getProjectTableRow = projectService.getFileContent(randomId);
+    List<ProjectEntity> getProjectTableRow = projectService.getFileContent(projectId);
     for(int i = 0 ; i < getProjectTableRow.size() ; i++){
       if(getProjectTableRow.get(i).getFilePath().contains("pom.xml")){
         xmlContent = getProjectTableRow.get(i).getFileContent();
@@ -352,25 +348,20 @@ public class RegisterServiceImpl implements RegisterService {
     // 필요한 데이터 : 사용하는 database명
     String databaseName = findDatabaseName(noWhiteSpaceProperties);
 
-    //----------- db select in framework table -----------//
-    // about framework table
-    List<String> frameworkNameList = frameworkService.getFrameworkNameList();
 
-    map.put("project_id", randomId); // index(project_id)
-    map.put("frameworkList", frameworkNameList); // templateList(frameworkNameList)
-    map.put("readmeName", "Readme.md"); // Readme.md
+    map.put("project_id", projectId); // index(project_id)
     map.put("springBootVersion", springBootVersion); // springboot 버전
     map.put("groupId", groupId); // groupId
     map.put("artifactId", artifactId); // artifactId
     map.put("javaVersion", javaVersion); // javaVersion
     map.put("databaseName", databaseName); // db명
 
-
     return map;
   }
 
 
-  public HashMap<String, Object> registerLink(String repoLink){
+  public HashMap<String, Object> registerLink(String repoLink, String projectId)
+      throws IOException {
     HashMap<String,Object> map = new HashMap<>();
         /* 예외처리
             링크 포맷 : https://github.com/로 시작
@@ -379,22 +370,9 @@ public class RegisterServiceImpl implements RegisterService {
             (3) 없는 레포지토리 링크(clone이 안되는 경우)일 경우 => cloneError 리턴
         */
 
-    if(!repoLink.contains("https://github.com/")){ // (1) 예외처리
-      map.put("error", "LinkFormatError");
-      return map;
-    }
-    if(!repoLink.contains(".git")){ // (2) 예외처리
-      repoLink += ".git";
-    }
-
-    String repoLinkInfo = repoLink.substring(19);
-    String userName = repoLinkInfo.split("/")[0];
-    String repositoryName = repoLinkInfo.split("/")[1].substring(0, repoLinkInfo.split("/")[1].indexOf(".git"));
     ProcessBuilder builder = new ProcessBuilder();
 
-    // project table에서 id 가져오기
-    String randomId = userService.createProjectId();
-    String unzipFilesName = "unzipFiles_" + randomId;
+    String unzipFilesName = "unzipFiles_" + projectId;
 
     //clone(file name : unzipFiles_projectId)
     //builder.command("git", "clone", repoLink, unzipFilesName); // mac
@@ -473,40 +451,21 @@ public class RegisterServiceImpl implements RegisterService {
       file_contentList.clear();
     }
 
-    // project architecture project table에 insert
-    projectService.saveProject(randomId, "Project Architecture", "", architecture, "tree");
-
-    // project table에 .java 파일만 insert
-    for(int i = 0 ; i < javaFileName.size() ; i++){
-      try{
-        projectService.saveProject(randomId, javaFileName.get(i), javaFilePath.get(i), javaFileContent.get(i), javaFileDetail.get(i));
-      } catch (Exception e){
-        System.out.print(javaFileName.get(i)); // 어느 파일이 길이가 긴지 확인
-      }
-    }
-
-    // user table에 insert
-    userService.saveUser(randomId, userName, repositoryName);
+    map.put("Architecture", architecture);
+    map.put("javaFileName", javaFileName);
+    map.put("javaFilePath", javaFilePath);
+    map.put("javaFileContent", javaFileContent);
+    map.put("javaFileDetail", javaFileDetail);
 
     // content data 보냈으므로, 압축풀기한 파일들, 업로드된 zip 파일 모두 삭제
     deleteCloneFiles(builder, unzipFilesName);
+    return map;
+  }
 
-    // =============== pom.xml에서 필요한 데이터 파싱 =============== //
-    String xmlContent = "";
-    // =============== application.properties에서 필요한 데이터 파싱 =============== //
-    String propertiesContent = "";
 
-    List<ProjectEntity> getProjectTableRow = projectService.getFileContent(randomId);
-    for(int i = 0 ; i < getProjectTableRow.size() ; i++){
-      if(getProjectTableRow.get(i).getFilePath().contains("pom.xml")){
-        xmlContent = getProjectTableRow.get(i).getFileContent();
-      } else if(getProjectTableRow.get(i).getFilePath().contains("application.properties")){
-        propertiesContent = getProjectTableRow.get(i).getFileContent();
-      }
-    }
-
-    // 공백 제거한 xmlContent - 정규식을 쓰기 위해 줄바꿈 제거
-    String noWhiteSpaceXml = xmlContent.replaceAll("\n", "");
+  @Override
+  public HashMap<String, Object> parseData(String noWhiteSpaceXml, String propertiesContent){
+    HashMap<String, Object> map = new HashMap<String, Object>();
 
     // 필요한 데이터 : 스프링부트 버전, 패키지명, 자바 jdk 버전, (+ dependency 종류)
     String springBootVersion = findSpringBootVersion(noWhiteSpaceXml);
@@ -521,18 +480,12 @@ public class RegisterServiceImpl implements RegisterService {
     // 필요한 데이터 : 사용하는 database명
     String databaseName = findDatabaseName(noWhiteSpaceProperties);
 
-    //----------- db select in framework table -----------//
-    // about framework table
-    List<String> frameworkNameList = frameworkService.getFrameworkNameList();
-
-    map.put("project_id", randomId); // index(project_id)
-    map.put("frameworkList", frameworkNameList); // templateList(frameworkNameList)
-    map.put("readmeName", "Readme.md"); // Readme.md
-    map.put("springBootVersion", springBootVersion); // springboot 버전
-    map.put("groupId", groupId); // groupId
-    map.put("artifactId", artifactId); // artifactId
-    map.put("javaVersion", javaVersion); // javaVersion
-    map.put("databaseName", databaseName); // db명
+    map.put("springBootVersion", springBootVersion);
+    map.put("packageName", packageName);
+    map.put("groupId", groupId);
+    map.put("artifactId", artifactId);
+    map.put("javaVersion", javaVersion);
+    map.put("databaseName", databaseName);
 
     return map;
   }

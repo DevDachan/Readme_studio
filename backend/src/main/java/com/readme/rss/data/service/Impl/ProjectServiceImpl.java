@@ -6,6 +6,7 @@ import com.readme.rss.data.handler.ProjectHandler;
 import com.readme.rss.data.service.ProjectService;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 import java.util.regex.Matcher;
@@ -26,8 +27,6 @@ public class ProjectServiceImpl implements ProjectService {
         this.projectHandler = projectHandler;
     }
 
-    // Service(Client) <-> Controller : DTO
-    // Service <-> DAO(DB) : Entity
     @Override
     public ProjectDTO saveProject(String id, String fileName, String filePath, String fileContent, String detail){
         ProjectEntity projectEntity = projectHandler.saveProjectEntity(id, fileName, filePath, fileContent, detail);
@@ -35,6 +34,45 @@ public class ProjectServiceImpl implements ProjectService {
         ProjectDTO projectDTO = new ProjectDTO(projectEntity.getId(), projectEntity.getFileName(), projectEntity.getFilePath(),projectEntity.getFileContent(), projectEntity.getDetail());
         return projectDTO;
     }
+
+    @Override
+    public void saveData(String id, List<String> javaFileName,
+        List<String> javaFilePath, List<String> javaFileContent,
+        List<String> javaFileDetail
+        ){
+      // project table에 .java 파일만 insert
+      for(int i = 0 ; i < javaFileName.size() ; i++){
+        try{
+          this.saveProject(id, javaFileName.get(i), javaFilePath.get(i), javaFileContent.get(i), javaFileDetail.get(i));
+        } catch (Exception e){
+          System.out.print(javaFileName.get(i)); // 어느 파일이 길이가 긴지 확인
+        }
+      }
+    }
+
+    @Override
+    public HashMap<String, String> getProjectDetail(String id){
+      HashMap<String, String> map = new HashMap<>();
+      // =============== pom.xml에서 필요한 데이터 파싱 =============== //
+      String xmlContent = "";
+      // =============== application.properties에서 필요한 데이터 파싱 =============== //
+      String propertiesContent = "";
+
+      List<ProjectEntity> getProjectTableRow = this.getFileContent(id);
+      for(int i = 0 ; i < getProjectTableRow.size() ; i++){
+        if(getProjectTableRow.get(i).getFilePath().contains("pom.xml")){
+          xmlContent = getProjectTableRow.get(i).getFileContent();
+        } else if(getProjectTableRow.get(i).getFilePath().contains("application.properties")){
+          propertiesContent = getProjectTableRow.get(i).getFileContent();
+        }
+      }
+      // 공백 제거한 xmlContent - 정규식을 쓰기 위해 줄바꿈 제거
+      String noWhiteSpaceXml = xmlContent.replaceAll("\n", "");
+      map.put("noWhiteSpaceXml", noWhiteSpaceXml);
+      map.put("propertiesContent", propertiesContent);
+      return map;
+    }
+
 
     @Override
     public ProjectDTO getProject(String id){

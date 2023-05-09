@@ -1,6 +1,7 @@
 package com.readme.rss.controller;
 
 import com.readme.rss.data.dto.UserDTO;
+import com.readme.rss.data.entity.ProjectEntity;
 import com.readme.rss.data.service.RegisterService;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -38,14 +39,72 @@ public class UnzipController {
     public HashMap<String, Object> getFileData(@RequestParam("jsonParam1") String jsonParam1,
         @RequestParam("jsonParam2") String jsonParam2, @RequestParam("file") MultipartFile file)
         throws IOException, InterruptedException {
-      return registerService.register(jsonParam1, jsonParam2, file);
+      UserDTO userInfo = userService.registerUser(jsonParam1,jsonParam2);
+
+      String userName = userInfo.getUserName();
+      String repositoryName = userInfo.getRepositoryName();
+      String id = userInfo.getProjectId();
+
+      HashMap<String, Object> map = registerService.register(userName,repositoryName , file ,id);
+
+      // project architecture project table에 insert
+      projectService.saveProject(id, "Project Architecture", "", (String) map.get("Architecture"), "tree");
+
+      projectService.saveData(id, (List<String>) map.get("javaFileName"), (List<String>) map.get("javaFilePath"),
+          (List<String>) map.get("javaFileContent"),(List<String>) map.get("javaFileDetail"));
+
+
+      HashMap<String,String> projectDetail = projectService.getProjectDetail(id);
+      HashMap<String,Object> data2 = registerService.parseData(projectDetail.get("noWhiteSpaceXml"), projectDetail.get("propertiesContent"));
+      List<String> frameworkNameList = frameworkService.getFrameworkNameList();
+
+
+      map.put("frameworkList",frameworkNameList);
+      map.put("readmeName", "Readme.md"); // Readme.md
+      map.put("springBootVersion", data2.get("springBootVersion")); // springboot 버전
+      map.put("groupId", data2.get("groupId")); // groupId
+      map.put("artifactId", data2.get("artifactId")); // artifactId
+      map.put("javaVersion", data2.get("javaVersion")); // javaVersion
+      map.put("databaseName", data2.get("databaseName")); // db명
+      map.put("project_id", id); // index(project_id)
+
+      return map;
     }
 
     @PostMapping(value = "/register2")
     public HashMap<String, Object> getFileData(@RequestParam("jsonParam1") String repoLink)
         throws IOException, InterruptedException {
+      UserDTO userInfo = userService.registerUserLink(repoLink);
 
-      return registerService.registerLink(repoLink);
+      String userName = userInfo.getUserName();
+      String repositoryName = userInfo.getRepositoryName();
+      String id = userInfo.getProjectId();
+
+      HashMap<String, Object> map = registerService.registerLink(repoLink,id);
+
+
+      // project architecture project table에 insert
+      projectService.saveProject(id, "Project Architecture", "", (String) map.get("Architecture"), "tree");
+
+      projectService.saveData(id, (List<String>) map.get("javaFileName"), (List<String>) map.get("javaFilePath"),
+          (List<String>) map.get("javaFileContent"),(List<String>) map.get("javaFileDetail"));
+
+
+      HashMap<String,String> projectDetail = projectService.getProjectDetail(id);
+      HashMap<String,Object> data2 = registerService.parseData(projectDetail.get("noWhiteSpaceXml"), projectDetail.get("propertiesContent"));
+      List<String> frameworkNameList = frameworkService.getFrameworkNameList();
+
+
+      map.put("frameworkList",frameworkNameList);
+      map.put("readmeName", "Readme.md"); // Readme.md
+      map.put("springBootVersion", data2.get("springBootVersion")); // springboot 버전
+      map.put("groupId", data2.get("groupId")); // groupId
+      map.put("artifactId", data2.get("artifactId")); // artifactId
+      map.put("javaVersion", data2.get("javaVersion")); // javaVersion
+      map.put("databaseName", data2.get("databaseName")); // db명
+      map.put("project_id", id); // index(project_id)
+
+      return map;
     }
 
     @PostMapping("/framework")
