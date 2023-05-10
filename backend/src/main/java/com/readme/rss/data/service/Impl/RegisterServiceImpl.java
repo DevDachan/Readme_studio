@@ -83,13 +83,14 @@ public class RegisterServiceImpl implements RegisterService {
 
   public void deleteCloneFiles(ProcessBuilder builder, String unzipFilesName) throws IOException { // register2
     try{
-            /* mac
-            builder.command("rm", "-rf", unzipFilesName);
-            builder.start();*/
+      /* mac */
+      builder.command("rm", "-rf", unzipFilesName);
+      builder.start();
 
-      /* window*/
+      /* window
       builder.command("cmd.exe","/c","rmdir", unzipFilesName);
       builder.start();
+       */
 
       System.out.println("clone한 파일들 삭제 완료!!");
     } catch(IOException e){
@@ -101,17 +102,18 @@ public class RegisterServiceImpl implements RegisterService {
   public void deleteUnzipFiles(ProcessBuilder builder, String zipFileName, String unzipFilesName) throws IOException { // register1
     try{
       // upzip한 파일들, zip파일 모두 삭제
-            /* mac
-            builder.command("rm", "-rf", unzipFilesName);
-            builder.start();
-            builder.command("rm", "-rf", zipFileName);
-            builder.start();*/
+      /* mac */
+      builder.command("rm", "-rf", unzipFilesName);
+      builder.start();
+      builder.command("rm", "-rf", zipFileName);
+      builder.start();
 
-      /* window*/
+      /* window
       builder.command("cmd.exe","/c","rmdir", "unzipFiles");
       builder.start();
       builder.command("cmd.exe","/c","del", "unzipTest.zip");
       builder.start();
+       */
 
       System.out.println("업로드된 zip파일, 압축풀기한 파일들 모두 삭제 완료!!");
     } catch (IOException e) {
@@ -221,13 +223,13 @@ public class RegisterServiceImpl implements RegisterService {
     ProcessBuilder builder = new ProcessBuilder();
     // unzipFiles 폴더 생성 - 압축풀기한 파일들을 저장하는 임시 폴더
     String unzipFilesName = "unzipFiles_" + projectId;
-    //builder.command("mkdir", unzipFilesName); // mac
-    builder.command("cmd.exe","/c","mkdir", unzipFilesName); // window
+    builder.command("mkdir", unzipFilesName); // mac
+    // builder.command("cmd.exe","/c","mkdir", unzipFilesName); // window
     builder.start();
 
     // 파일 압축 풀기
-    //builder.command("unzip", zipFileName, "-d", unzipFilesName); // mac
-    builder.command("cmd.exe","/c","unzip", zipFileName, "-d", unzipFilesName); // window
+    builder.command("unzip", zipFileName, "-d", unzipFilesName); // mac
+    // builder.command("cmd.exe","/c","unzip", zipFileName, "-d", unzipFilesName); // window
     var process = builder.start(); // upzip 실행
 
     // unzip 실행
@@ -243,8 +245,8 @@ public class RegisterServiceImpl implements RegisterService {
     // tree 명령어
     builder.directory(new File(unzipFilesName)); // 현재 위치 이동
     builder.start();
-    //builder.command("tree"); // mac
-    builder.command("cmd.exe","/c","tree"); // window
+    builder.command("tree"); // mac
+    // builder.command("cmd.exe","/c","tree"); // window
     process = builder.start();
 
     String architecture = "\n<!-- Project Architecture -->\n";
@@ -312,8 +314,7 @@ public class RegisterServiceImpl implements RegisterService {
   }
 
 
-  public HashMap<String, Object> registerLink(String repoLink, String projectId)
-      throws IOException {
+  public HashMap<String, Object> registerLink(String repoLink, String projectId) throws IOException {
     HashMap<String,Object> map = new HashMap<>();
         /* 예외처리
             링크 포맷 : https://github.com/로 시작
@@ -327,8 +328,8 @@ public class RegisterServiceImpl implements RegisterService {
     String unzipFilesName = "unzipFiles_" + projectId;
 
     //clone(file name : unzipFiles_projectId)
-    //builder.command("git", "clone", repoLink, unzipFilesName); // mac
-    builder.command("cmd.exe","/c","git", "clone", repoLink, unzipFilesName); // window
+    builder.command("git", "clone", repoLink, unzipFilesName); // mac
+    // builder.command("cmd.exe","/c","git", "clone", repoLink, unzipFilesName); // window
 
     try{
       var cloneProcess = builder.start();
@@ -347,8 +348,8 @@ public class RegisterServiceImpl implements RegisterService {
     }
 
     // project architecture
-    //builder.command("tree"); // mac
-    builder.command("cmd.exe","/c","tree"); // window
+    builder.command("tree"); // mac
+    // builder.command("cmd.exe","/c","tree"); // window
     var process = builder.start();
 
     String architecture = "\n<!-- Project Architecture -->\n";

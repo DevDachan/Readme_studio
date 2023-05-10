@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "http://localhost:3005")
 @RestController
 public class UnzipController {
     private ProjectService projectService;
@@ -76,19 +76,20 @@ public class UnzipController {
         UserDTO userInfo = userService.registerUserLink(repoLink);
         String id = userInfo.getProjectId();
 
-        HashMap<String, Object> map = registerService.registerLink(repoLink,id);
+        HashMap<String, Object> clone = registerService.registerLink(repoLink,id);
 
         // project architecture project table에 insert
-        projectService.saveProject(id, "Project Architecture", "", (String) map.get("Architecture"), "tree");
+        projectService.saveProject(id, "Project Architecture", "", (String) clone.get("Architecture"), "tree");
 
-        projectService.saveData(id, (List<String>) map.get("javaFileName"), (List<String>) map.get("javaFilePath"),
-            (List<String>) map.get("javaFileContent"),(List<String>) map.get("javaFileDetail"));
+        projectService.saveData(id, (List<String>) clone.get("javaFileName"), (List<String>) clone.get("javaFilePath"),
+            (List<String>) clone.get("javaFileContent"),(List<String>) clone.get("javaFileDetail"));
 
 
         HashMap<String,String> projectScript = projectService.getProjectDetail(id);
         HashMap<String,Object> proectDetail = registerService.parseData(projectScript.get("noWhiteSpaceXml"), projectScript.get("propertiesContent"));
         List<String> frameworkNameList = frameworkService.getFrameworkNameList();
 
+        HashMap<String, Object> map = new HashMap<>();
 
         map.put("frameworkList",frameworkNameList);
         map.put("readmeName", "Readme.md"); // Readme.md
