@@ -1,6 +1,7 @@
 package com.readme.rss.data.handler.Impl;
 
 import com.readme.rss.data.dao.FrameworkDAO;
+import com.readme.rss.data.dto.FrameworkDTO;
 import com.readme.rss.data.entity.FrameworkEntity;
 import com.readme.rss.data.handler.FrameworkHandler;
 import jakarta.transaction.Transactional;
@@ -19,14 +20,16 @@ public class FrameworkHandlerImpl implements FrameworkHandler {
     }
 
     @Override
-    public FrameworkEntity saveFrameworkEntity(String type, String name, String content){
-        FrameworkEntity frameworkEntity = new FrameworkEntity(type, name, content);
-        return frameworkDAO.saveFramework(frameworkEntity);
+    public void saveFramework(String type, String name, String content){
+      FrameworkEntity frameworkEntity = new FrameworkEntity(type, name, content);
+      frameworkDAO.saveFramework(frameworkEntity);
     }
 
     @Override
-    public FrameworkEntity getFrameworkEntity(String name){
-        return frameworkDAO.getFramework(name);
+    public FrameworkDTO getFramework(String name){
+      FrameworkEntity result = frameworkDAO.getFramework(name);
+      FrameworkDTO frameworkDTO = new FrameworkDTO(result.getType(), result.getName(), result.getContent());
+      return frameworkDTO;
     }
 
 
