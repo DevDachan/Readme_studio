@@ -1,7 +1,6 @@
 package com.readme.rss.data.service.Impl;
 
 import com.readme.rss.data.dto.ProjectDTO;
-import com.readme.rss.data.entity.ProjectEntity;
 import com.readme.rss.data.handler.ProjectHandler;
 import com.readme.rss.data.service.ProjectService;
 import java.io.IOException;
@@ -28,11 +27,8 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public ProjectDTO saveProject(String id, String fileName, String filePath, String fileContent, String detail){
-        ProjectEntity projectEntity = projectHandler.saveProjectEntity(id, fileName, filePath, fileContent, detail);
-
-        ProjectDTO projectDTO = new ProjectDTO(projectEntity.getId(), projectEntity.getFileName(), projectEntity.getFilePath(),projectEntity.getFileContent(), projectEntity.getDetail());
-        return projectDTO;
+    public void saveProject(String id, String fileName, String filePath, String fileContent, String detail){
+        projectHandler.saveProject(id, fileName, filePath, fileContent, detail);
     }
 
     @Override
@@ -58,7 +54,7 @@ public class ProjectServiceImpl implements ProjectService {
       // =============== application.properties에서 필요한 데이터 파싱 =============== //
       String propertiesContent = "";
 
-      List<ProjectEntity> getProjectTableRow = this.getFileContent(id);
+      List<ProjectDTO> getProjectTableRow = this.getFileContent(id);
       for(int i = 0 ; i < getProjectTableRow.size() ; i++){
         if(getProjectTableRow.get(i).getFilePath().contains("pom.xml")){
           xmlContent = getProjectTableRow.get(i).getFileContent();
@@ -76,20 +72,17 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public ProjectDTO getProject(String id){
-        ProjectEntity projectEntity = projectHandler.getProjectEntity(id);
-
-        ProjectDTO projectDTO = new ProjectDTO(projectEntity.getId(), projectEntity.getFileName(), projectEntity.getFilePath(), projectEntity.getFileContent(), projectEntity.getDetail());
-        return projectDTO;
+        return projectHandler.getProject(id);
     }
 
     @Override
-    public List<ProjectEntity>  getController(String projectId){
-        List<ProjectEntity> result = projectHandler.getController(projectId);
+    public List<ProjectDTO>  getController(String projectId){
+        List<ProjectDTO> result = projectHandler.getController(projectId);
         return result;
     }
 
     @Override
-    public List<ProjectEntity> getFileContent(String id){
+    public List<ProjectDTO> getFileContent(String id){
         return projectHandler.getFileContent(id);
     }
 
@@ -102,7 +95,7 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public String getLicense(String projectId, String userName){
-        List<ProjectEntity> getProjectTableRow = projectHandler.getFileContent(projectId);
+        List<ProjectDTO> getProjectTableRow = projectHandler.getFileContent(projectId);
         String LicenseFile = "default";
         String content = "";
         for (int i = 0; i < getProjectTableRow.size(); i++) {
@@ -140,7 +133,7 @@ public class ProjectServiceImpl implements ProjectService {
         // entity parsing 하기 위해 entity 파일 찾기
         List<String> entityDir = new ArrayList<>();
         List<String> entityDirContent = new ArrayList<>();
-        List<ProjectEntity> getProjectTableRow = projectHandler.getFileContent(projectId);
+        List<ProjectDTO> getProjectTableRow = projectHandler.getFileContent(projectId);
 
         for(int i = 0 ; i < getProjectTableRow.size() ; i++){
             if(getProjectTableRow.get(i).getFilePath().contains("ENTITY".toLowerCase())){
@@ -288,7 +281,7 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public String getWebAPI(String projectId){
-        List<ProjectEntity> result = projectHandler.getController(projectId);
+        List<ProjectDTO> result = projectHandler.getController(projectId);
         String mdResult = "<!-- Web API -->\n"
             + "|HTTP|API|URL|Return Type|Parameters|\n"
             + "|----|----|---|---|---|\n";
@@ -377,7 +370,7 @@ public class ProjectServiceImpl implements ProjectService {
     public String getDependency(String projectId, String framework){
         String Dependency = "Dependency";
         String xmlContent = "";
-        List<ProjectEntity> getProjectTableRow = projectHandler.getFileContent(projectId);
+        List<ProjectDTO> getProjectTableRow = projectHandler.getFileContent(projectId);
         for(int i = 0 ; i < getProjectTableRow.size() ; i++) {
             if (getProjectTableRow.get(i).getFilePath().contains("pom.xml")) {
                 xmlContent = getProjectTableRow.get(i).getFileContent();

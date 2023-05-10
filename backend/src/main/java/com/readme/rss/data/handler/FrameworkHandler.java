@@ -4,13 +4,13 @@
 
 package com.readme.rss.data.handler;
 
-import com.readme.rss.data.entity.FrameworkEntity;
+import com.readme.rss.data.dto.FrameworkDTO;
 import java.util.List;
 
 public interface FrameworkHandler {
-    FrameworkEntity saveFrameworkEntity(String type, String name, String content);
+    void saveFramework(String type, String name, String content);
 
-    FrameworkEntity getFrameworkEntity(String name);
+    FrameworkDTO getFramework(String name);
 
     List<String> getFrameworkNameList();
 

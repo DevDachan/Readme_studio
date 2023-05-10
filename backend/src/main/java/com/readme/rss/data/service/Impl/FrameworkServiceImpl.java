@@ -4,8 +4,6 @@
 package com.readme.rss.data.service.Impl;
 
 import com.readme.rss.data.dto.FrameworkDTO;
-import com.readme.rss.data.entity.FrameworkEntity;
-import com.readme.rss.data.entity.ProjectEntity;
 import com.readme.rss.data.handler.FrameworkHandler;
 import com.readme.rss.data.service.FrameworkService;
 import java.util.List;
@@ -24,19 +22,13 @@ public class FrameworkServiceImpl implements FrameworkService {
     // Service(Client) <-> Controller : DTO
     // Service <-> DAO(DB) : Entity
     @Override
-    public FrameworkDTO saveFramework(String type, String name, String content){
-        FrameworkEntity frameworkEntity = frameworkHandeler.saveFrameworkEntity(type, name, content);
-
-        FrameworkDTO frameworkDTO = new FrameworkDTO(frameworkEntity.getType(), frameworkEntity.getName(), frameworkEntity.getContent());
-        return frameworkDTO;
+    public void saveFramework(String type, String name, String content){
+        frameworkHandeler.saveFramework(type, name, content);
     }
 
     @Override
     public FrameworkDTO getFramework(String name){
-        FrameworkEntity frameworkEntity = frameworkHandeler.getFrameworkEntity(name);
-
-        FrameworkDTO frameworkDTO = new FrameworkDTO(frameworkEntity.getType(), frameworkEntity.getName(), frameworkEntity.getContent());
-        return frameworkDTO;
+      return frameworkHandeler.getFramework(name);
     }
 
     @Override

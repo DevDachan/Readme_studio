@@ -17,9 +17,8 @@ public class ProjectDAOImpl implements ProjectDAO {
     }
 
     @Override
-    public ProjectEntity saveProject(ProjectEntity projectEntity){
+    public void saveProject(ProjectEntity projectEntity){
         projectRepository.save(projectEntity);
-        return projectEntity;
     }
 
     @Override
