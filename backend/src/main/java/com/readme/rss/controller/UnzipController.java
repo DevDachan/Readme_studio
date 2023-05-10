@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "http://localhost:3005")
 @RestController
 public class UnzipController {
     private ProjectService projectService;
@@ -38,68 +38,68 @@ public class UnzipController {
     public HashMap<String, Object> getFileData(@RequestParam("jsonParam1") String jsonParam1,
         @RequestParam("jsonParam2") String jsonParam2, @RequestParam("file") MultipartFile file)
         throws IOException, InterruptedException {
-      UserDTO userInfo = userService.registerUser(jsonParam1,jsonParam2);
+        UserDTO userInfo = userService.registerUser(jsonParam1,jsonParam2);
 
-      String userName = userInfo.getUserName();
-      String repositoryName = userInfo.getRepositoryName();
-      String id = userInfo.getProjectId();
+        String userName = userInfo.getUserName();
+        String repositoryName = userInfo.getRepositoryName();
+        String id = userInfo.getProjectId();
 
-      HashMap<String, Object> zipContent = registerService.register(userName,repositoryName , file ,id);
+        HashMap<String, Object> zipContent = registerService.register(userName,repositoryName , file ,id);
 
-      // project architecture project table에 insert
-      projectService.saveProject(id, "Project Architecture", "", (String) zipContent.get("Architecture"), "tree");
+        // project architecture project table에 insert
+        projectService.saveProject(id, "Project Architecture", "", (String) zipContent.get("Architecture"), "tree");
 
-      projectService.saveData(id, (List<String>) zipContent.get("javaFileName"), (List<String>) zipContent.get("javaFilePath"),
-          (List<String>) zipContent.get("javaFileContent"),(List<String>) zipContent.get("javaFileDetail"));
+        projectService.saveData(id, (List<String>) zipContent.get("javaFileName"), (List<String>) zipContent.get("javaFilePath"),
+            (List<String>) zipContent.get("javaFileContent"),(List<String>) zipContent.get("javaFileDetail"));
 
 
-      HashMap<String,String> projectScript = projectService.getProjectDetail(id);
-      HashMap<String,Object> proectDetail = registerService.parseData(projectScript.get("noWhiteSpaceXml"), projectScript.get("propertiesContent"));
-      List<String> frameworkNameList = frameworkService.getFrameworkNameList();
+        HashMap<String,String> projectScript = projectService.getProjectDetail(id);
+        HashMap<String,Object> proectDetail = registerService.parseData(projectScript.get("noWhiteSpaceXml"), projectScript.get("propertiesContent"));
+        List<String> frameworkNameList = frameworkService.getFrameworkNameList();
 
-      HashMap<String, Object> map = new HashMap<>();
-      map.put("frameworkList",frameworkNameList);
-      map.put("readmeName", "Readme.md"); // Readme.md
-      map.put("springBootVersion", proectDetail.get("springBootVersion")); // springboot 버전
-      map.put("groupId", proectDetail.get("groupId")); // groupId
-      map.put("artifactId", proectDetail.get("artifactId")); // artifactId
-      map.put("javaVersion", proectDetail.get("javaVersion")); // javaVersion
-      map.put("databaseName", proectDetail.get("databaseName")); // db명
-      map.put("project_id", id); // index(project_id)
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("frameworkList",frameworkNameList);
+        map.put("readmeName", "Readme.md"); // Readme.md
+        map.put("springBootVersion", proectDetail.get("springBootVersion")); // springboot 버전
+        map.put("groupId", proectDetail.get("groupId")); // groupId
+        map.put("artifactId", proectDetail.get("artifactId")); // artifactId
+        map.put("javaVersion", proectDetail.get("javaVersion")); // javaVersion
+        map.put("databaseName", proectDetail.get("databaseName")); // db명
+        map.put("project_id", id); // index(project_id)
 
-      return map;
+        return map;
     }
 
     @PostMapping(value = "/register2")
     public HashMap<String, Object> getFileData(@RequestParam("jsonParam1") String repoLink)
         throws IOException, InterruptedException {
-      UserDTO userInfo = userService.registerUserLink(repoLink);
-      String id = userInfo.getProjectId();
+        UserDTO userInfo = userService.registerUserLink(repoLink);
+        String id = userInfo.getProjectId();
 
-      HashMap<String, Object> clone = registerService.registerLink(repoLink,id);
+        HashMap<String, Object> clone = registerService.registerLink(repoLink,id);
 
-      // project architecture project table에 insert
-      projectService.saveProject(id, "Project Architecture", "", (String) clone.get("Architecture"), "tree");
+        // project architecture project table에 insert
+        projectService.saveProject(id, "Project Architecture", "", (String) clone.get("Architecture"), "tree");
 
-      projectService.saveData(id, (List<String>) clone.get("javaFileName"), (List<String>) clone.get("javaFilePath"),
-          (List<String>) clone.get("javaFileContent"),(List<String>) clone.get("javaFileDetail"));
+        projectService.saveData(id, (List<String>) clone.get("javaFileName"), (List<String>) clone.get("javaFilePath"),
+            (List<String>) clone.get("javaFileContent"),(List<String>) clone.get("javaFileDetail"));
 
 
-      HashMap<String,String> projectScript = projectService.getProjectDetail(id);
-      HashMap<String,Object> proectDetail = registerService.parseData(projectScript.get("noWhiteSpaceXml"), projectScript.get("propertiesContent"));
-      List<String> frameworkNameList = frameworkService.getFrameworkNameList();
+        HashMap<String,String> projectScript = projectService.getProjectDetail(id);
+        HashMap<String,Object> proectDetail = registerService.parseData(projectScript.get("noWhiteSpaceXml"), projectScript.get("propertiesContent"));
+        List<String> frameworkNameList = frameworkService.getFrameworkNameList();
 
-      HashMap<String, Object> map = new HashMap<>();
-      map.put("frameworkList",frameworkNameList);
-      map.put("readmeName", "Readme.md"); // Readme.md
-      map.put("springBootVersion", proectDetail.get("springBootVersion")); // springboot 버전
-      map.put("groupId", proectDetail.get("groupId")); // groupId
-      map.put("artifactId", proectDetail.get("artifactId")); // artifactId
-      map.put("javaVersion", proectDetail.get("javaVersion")); // javaVersion
-      map.put("databaseName", proectDetail.get("databaseName")); // db명
-      map.put("project_id", id); // index(project_id)
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("frameworkList",frameworkNameList);
+        map.put("readmeName", "Readme.md"); // Readme.md
+        map.put("springBootVersion", proectDetail.get("springBootVersion")); // springboot 버전
+        map.put("groupId", proectDetail.get("groupId")); // groupId
+        map.put("artifactId", proectDetail.get("artifactId")); // artifactId
+        map.put("javaVersion", proectDetail.get("javaVersion")); // javaVersion
+        map.put("databaseName", proectDetail.get("databaseName")); // db명
+        map.put("project_id", id); // index(project_id)
 
-      return map;
+        return map;
     }
 
     @PostMapping("/framework")
@@ -152,8 +152,8 @@ public class UnzipController {
 
     @PostMapping("/editPeriod")
     public String editPeriodImage(
-            @RequestParam("start_date") String startDate,
-            @RequestParam("end_date") String endDate) {
+        @RequestParam("start_date") String startDate,
+        @RequestParam("end_date") String endDate) {
 
         return frameworkService.changePeriod(startDate,endDate);
     }
