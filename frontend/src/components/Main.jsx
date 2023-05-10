@@ -136,6 +136,8 @@ function Main(props) {
     const formData = new FormData();
     formData.append('jsonParam1', document.getElementById("repoLink").value);
     var readme_list = [];
+
+    setLoadingCheck(true);
     axios({
       method: "post",
       url: 'http://localhost:8090/register2',

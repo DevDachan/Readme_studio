@@ -4,7 +4,7 @@ import com.readme.rss.data.entity.ProjectEntity;
 import java.util.List;
 
 public interface ProjectDAO {
-    ProjectEntity saveProject(ProjectEntity projectEntity);
+    void saveProject(ProjectEntity projectEntity);
     ProjectEntity getProject(String id);
 
     List<ProjectEntity> getController(String projectId);

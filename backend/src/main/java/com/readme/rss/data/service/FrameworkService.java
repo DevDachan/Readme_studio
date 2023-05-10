@@ -7,7 +7,7 @@ import com.readme.rss.data.dto.FrameworkDTO;
 import java.util.List;
 
 public interface FrameworkService {
-    FrameworkDTO saveFramework(String type, String name, String content);
+    void saveFramework(String type, String name, String content);
 
     FrameworkDTO getFramework(String name);
     List<String> getFrameworkNameList();
