@@ -220,7 +220,7 @@ function Editor(props) {
 
 
   const addReadme = (e) => {
-    setReadmeObject([...readmeObject, {id: "README"+readmeObject.length+".md", content : [project_detail] , type : ["Default Data"] }]);
+    setReadmeObject([...readmeObject, {projectId:project_id,id: "README"+readmeObject.length+".md", content : [project_detail] , type : ["Default Data"] }]);
     setCurrentReadme("README"+readmeObject.length+".md");
   }
 
@@ -229,7 +229,7 @@ function Editor(props) {
   const deleteReadme = (e) => {
     var tempReadme = JSON.parse(JSON.stringify(readmeObject));
     if(tempReadme.length == 1 ){
-      tempReadme = [{id: "README.md", content : [project_detail], type : ["Default Data"] }];
+      tempReadme = [{projectId:project_id ,id: "README.md", content : [project_detail], type : ["Default Data"] }];
       setReadmeObject(tempReadme);
       setCurrentReadme(tempReadme[0].id);
       setPosition(1);
