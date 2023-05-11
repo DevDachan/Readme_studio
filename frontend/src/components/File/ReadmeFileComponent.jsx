@@ -199,8 +199,10 @@ function ReadmeFileComponent(props) {
   //------------------------ Header component function  -----------------------------------
   const editHeaderText = (e) =>{
     var data = e.target.value;
+    data = data.replace(/ /g, "_");
     var id = e.target.id;
     var tempReadme = JSON.parse(JSON.stringify(readmeList));
+
     let modifiedHeader = tempReadme.find(e => e.id === currentReadme).content[id].replace(/text=[^&]*/, `text=${data}`);
 
     tempReadme.find(e => e.id === currentReadme).content[id] = modifiedHeader + "\n";
