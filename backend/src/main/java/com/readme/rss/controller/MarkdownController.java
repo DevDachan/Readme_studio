@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-@CrossOrigin(origins = "http://localhost:3005")
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 public class MarkdownController {
     private MdDownloadService mdDownloadService;
@@ -21,21 +21,21 @@ public class MarkdownController {
     }
     @PostMapping(value = "/mdZipFile")
     public byte[] makeMDzipFile(@RequestBody List<Map<String, Object>> readme) throws IOException {
-        String projectId = readme.get(0).get("projectId").toString();
-        String mdFilesName = "mdFiles_" + projectId;
+      String projectId = readme.get(0).get("projectId").toString();
+      String mdFilesName = "mdFiles_" + projectId;
 
-        // md 파일들 생성하여 담을 디렉토리 생성
-        mdDownloadService.makeMdDirectory(projectId, mdFilesName, readme);
+      // md 파일들 생성하여 담을 디렉토리 생성
+      mdDownloadService.makeMdDirectory(projectId, mdFilesName, readme);
 
-        // md 파일들 생성 및 내용 작성
-        mdDownloadService.writeMdContents(mdFilesName, readme);
+      // md 파일들 생성 및 내용 작성
+      mdDownloadService.writeMdContents(mdFilesName, readme);
 
-        // md 파일들 압축
-        byte[] zipResult = mdDownloadService.zipMdFiles(mdFilesName);
+      // md 파일들 압축
+      byte[] zipResult = mdDownloadService.zipMdFiles(mdFilesName);
 
-        // md 디렉토리 삭제
-        mdDownloadService.deleteMdDirectory(mdFilesName);
+      // md 디렉토리 삭제
+      mdDownloadService.deleteMdDirectory(mdFilesName);
 
-        return zipResult;
+      return zipResult;
     }
 }
