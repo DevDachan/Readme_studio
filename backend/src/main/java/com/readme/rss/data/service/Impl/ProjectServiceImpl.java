@@ -269,6 +269,7 @@ public class ProjectServiceImpl implements ProjectService {
                                             .replace("social",socialLink[j])
                                             .replace(temp, urlparsing[i]);
                         content +=tempData;
+                        content += "<br>";
                     }
                 }
             }
