@@ -14,6 +14,9 @@ public interface ProjectRepository extends JpaRepository<ProjectEntity, String> 
     @Query(value = "SELECT file_content FROM project WHERE id = :id_value AND file_name = :name_value", nativeQuery = true)
     String getFileContentByFileName(@Param("id_value")String idValue, @Param("name_value")String nameValue);
 
+    @Query(value = "SELECT * FROM project WHERE id = :projectId AND detail = 'entity'", nativeQuery = true)
+    List<ProjectEntity> getEntityContent(@Param("projectId") String projectId);
+
     @Query(value = "SELECT * FROM project WHERE id=:projectId AND detail = 'controller'", nativeQuery = true)
     List<ProjectEntity> getController(@Param("projectId")String projectId);
 
