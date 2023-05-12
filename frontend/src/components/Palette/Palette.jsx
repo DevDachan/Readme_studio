@@ -66,7 +66,17 @@ function Palette(props) {
         console.log(error);
       });
   }
-
+  const addDefaultData = (e) =>{
+    var tempReadme = JSON.parse(JSON.stringify(content));
+    tempReadme.find(e => e.id === currentReadme).content.splice(position,0, defaultData);
+    tempReadme.find(e => e.id === currentReadme).type.splice(position,0,"Default Data");
+    setContent(tempReadme);
+    // 렌더링이 되지 않은 상태에서 scroll이 일어날 경우 이동이 안된다.
+    setPosition(tempReadme.find(e => e.id === currentReadme).content.length);
+    setTimeout(function() {
+       document.getElementById("postionChangeDown"+(position)).focus();
+     }, 1);
+  }
 
   const emptyText = (e) => {
     var tempReadme = JSON.parse(JSON.stringify(content));
@@ -120,6 +130,7 @@ function Palette(props) {
   // 기본 All Data와 Text 팔레트 추가
   list.push(<input type="button" className="mb-2 btn-palette" key={"all_data"} value={"All Data"} onClick={allData}/>);
   list.push(<input type="button" className="mb-2 btn-palette" key={"empty_textarea"} value={"Text"} onClick={emptyText}/>);
+  list.push(<input type="button" className="mb-2 btn-palette" key={"default_data"} value={"Default Data"} onClick={addDefaultData}/>);
 
   // DB에 저장되어 있는 framework 팔레트 추가
   for(var i = 0; i< paletteList.length; i++){
