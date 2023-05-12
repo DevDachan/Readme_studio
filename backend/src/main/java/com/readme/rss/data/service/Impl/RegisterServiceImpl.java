@@ -277,7 +277,9 @@ public class RegisterServiceImpl implements RegisterService {
     for(int i = 0 ; i < file_nameList.size() ; i++){
       if((file_nameList.get(i).contains("pom.xml")) ||
           (file_nameList.get(i).contains(".java") && file_pathList.get(i).contains("src/main/java/")) ||
-          (file_pathList.get(i).contains("src/main/resources/application.properties"))){
+          (file_pathList.get(i).contains("src/main/resources/application.properties"))||
+          (file_nameList.get(i).contains("License"))
+      ){
 
         javaFileName.add(file_nameList.get(i));
         javaFilePath.add(file_pathList.get(i));
@@ -286,7 +288,9 @@ public class RegisterServiceImpl implements RegisterService {
         if((file_nameList.get(i).contains("pom.xml")) ||
             (file_pathList.get(i).contains("src/main/resources/application.properties"))){
           javaFileDetail.add("etc"); // 기타
-        } else{ // java 파일
+        }else if(file_nameList.get(i).contains("LICENSE")){
+          javaFileDetail.add("license"); // 기타
+        }else{ // java 파일
           if(file_contentList.get(i).contains("@RestController")
               || file_contentList.get(i).contains("@Controller")
           ){
@@ -394,7 +398,9 @@ public class RegisterServiceImpl implements RegisterService {
     for(int i = 0 ; i < file_nameList.size() ; i++){
       if((file_nameList.get(i).contains("pom.xml")) ||
           (file_nameList.get(i).contains(".java") && file_pathList.get(i).contains("src/main/java/")) ||
-          (file_pathList.get(i).contains("src/main/resources/application.properties"))){
+          (file_pathList.get(i).contains("src/main/resources/application.properties"))||
+          (file_nameList.get(i).contains("License"))
+      ){
 
         javaFileName.add(file_nameList.get(i));
         javaFilePath.add(file_pathList.get(i));
@@ -403,7 +409,9 @@ public class RegisterServiceImpl implements RegisterService {
         if((file_nameList.get(i).contains("pom.xml")) ||
             (file_pathList.get(i).contains("src/main/resources/application.properties"))){
           javaFileDetail.add("etc"); // 기타
-        } else{ // java 파일
+        }else if(file_nameList.get(i).contains("LICENSE")){
+          javaFileDetail.add("license"); // 기타
+        }else{ // java 파일
           if(file_contentList.get(i).contains("@RestController")
               || file_contentList.get(i).contains("@Controller")
           ){
