@@ -246,7 +246,7 @@ public class RegisterServiceImpl implements RegisterService {
     builder.directory(new File(unzipFilesName)); // 현재 위치 이동
     builder.start();
     // builder.command("tree"); // mac
-    builder.command("cmd.exe","/c","tree"); // window
+    builder.command("cmd.exe", "/c", "cmd", "/c", "tree"); // window
     process = builder.start();
 
     String architecture = "\n<!-- Project Architecture -->\n";
@@ -368,8 +368,8 @@ public class RegisterServiceImpl implements RegisterService {
     }
 
     // project architecture
-    builder.command("tree"); // mac
-    // builder.command("cmd.exe","/c","tree"); // window
+    // builder.command("tree"); // mac
+    builder.command("cmd.exe","/c","tree"); // window
     var process = builder.start();
 
     String architecture = "\n<!-- Project Architecture -->\n";
