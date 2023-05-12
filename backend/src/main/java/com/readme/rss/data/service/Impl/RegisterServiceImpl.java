@@ -287,9 +287,25 @@ public class RegisterServiceImpl implements RegisterService {
             (file_pathList.get(i).contains("src/main/resources/application.properties"))){
           javaFileDetail.add("etc"); // 기타
         } else{ // java 파일
-          if(file_contentList.get(i).contains("@RestController")){
+          if(file_contentList.get(i).contains("@RestController")
+              || file_contentList.get(i).contains("@Controller")
+          ){
             javaFileDetail.add("controller");
-          } else if(file_contentList.get(i).contains("implements")) {
+          }else if(file_contentList.get(i).contains("@Service")
+          ) {
+            javaFileDetail.add("service");
+          }else if(file_contentList.get(i).contains("@Repository")
+            ||file_contentList.get(i).contains("extends JpaRepository")
+            ||file_nameList.get(i).toLowerCase().contains("repository")
+          ){
+            javaFileDetail.add("repository");
+          }else if(file_contentList.get(i).contains("@Entity")) {
+            javaFileDetail.add("entity");
+          }else if(file_contentList.get(i).contains("@Data")
+              ||file_nameList.get(i).toLowerCase().contains("dto")
+          ){
+            javaFileDetail.add("dto");
+          }else if(file_contentList.get(i).contains("implements")) {
             javaFileDetail.add("Impl");
           } else{ // class
             javaFileDetail.add("noImpl");
@@ -388,9 +404,25 @@ public class RegisterServiceImpl implements RegisterService {
             (file_pathList.get(i).contains("src/main/resources/application.properties"))){
           javaFileDetail.add("etc"); // 기타
         } else{ // java 파일
-          if(file_contentList.get(i).contains("@RestController")){
+          if(file_contentList.get(i).contains("@RestController")
+              || file_contentList.get(i).contains("@Controller")
+          ){
             javaFileDetail.add("controller");
-          } else if(file_contentList.get(i).contains("implements")) {
+          }else if(file_contentList.get(i).contains("@Service")
+          ) {
+            javaFileDetail.add("service");
+          }else if(file_contentList.get(i).contains("@Repository")
+              ||file_contentList.get(i).contains("extends JpaRepository")
+              ||file_nameList.get(i).toLowerCase().contains("repository")
+          ){
+            javaFileDetail.add("repository");
+          }else if(file_contentList.get(i).contains("@Entity")) {
+            javaFileDetail.add("entity");
+          }else if(file_contentList.get(i).contains("@Data")
+              ||file_nameList.get(i).toLowerCase().contains("dto")
+          ){
+            javaFileDetail.add("dto");
+          }else if(file_contentList.get(i).contains("implements")) {
             javaFileDetail.add("Impl");
           } else{ // class
             javaFileDetail.add("noImpl");

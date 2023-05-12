@@ -55,7 +55,6 @@ function Result(props) {
   }
 
   const downReadme = (e) =>{
-    console.log(readmeObject);
     axios({
       method: "post",
       url: 'http://localhost:8090/mdZipFile',
@@ -66,7 +65,6 @@ function Result(props) {
       }
     })
     .then(function (response){
-      console.log(response.data);
       const blob = new Blob([response.data], {type: "application/zip"});
       // blob 사용하여 객체 URL 생성
       const fileObjectUrl = window.URL.createObjectURL(blob);
