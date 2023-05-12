@@ -133,16 +133,13 @@ public class ProjectServiceImpl implements ProjectService {
         // entity parsing 하기 위해 entity 파일 찾기
         List<String> entityDir = new ArrayList<>();
         List<String> entityDirContent = new ArrayList<>();
-        List<ProjectDTO> getProjectTableRow = projectHandler.getFileContent(projectId);
 
+        List<ProjectDTO> getProjectTableRow = projectHandler.getEntity(projectId);
         for(int i = 0 ; i < getProjectTableRow.size() ; i++){
-            if(getProjectTableRow.get(i).getFilePath().contains("ENTITY".toLowerCase())){
-                if(getProjectTableRow.get(i).getDetail().equals("noImpl")){
-                    entityDir.add(getProjectTableRow.get(i).getFileName());
-                    entityDirContent.add(getProjectTableRow.get(i).getFileContent());
-                }
-            }
+          entityDir.add(getProjectTableRow.get(i).getFileName());
+          entityDirContent.add(getProjectTableRow.get(i).getFileContent());
         }
+
         int tableLen = entityDir.size();
         for(int i = 0 ; i < tableLen ; i++) {
             String frameworkContent = entityDirContent.get(i);

@@ -10,7 +10,7 @@ public interface ProjectHandler {
 
     List<ProjectDTO> getController(String projectId);
 
-
+    List<ProjectDTO> getEntity(String projectId);
     List<ProjectDTO> getFileContent(String id);
 
     String getFileContentByFileName(String id, String file_name);

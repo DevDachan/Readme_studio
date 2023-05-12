@@ -61,6 +61,19 @@ public class ProjectHandlerImpl implements ProjectHandler {
     }
 
     @Override
+    public List<ProjectDTO> getEntity(String projectId){
+      List<ProjectEntity> result = projectDAO.getEntityContent(projectId);
+      List<ProjectDTO> projectEntityList = new ArrayList<>();
+
+      for(ProjectEntity temp : result){
+        ProjectDTO projectDTO = new ProjectDTO(temp.getId(), temp.getFileName(), temp.getFilePath(), temp.getFileContent(), temp.getDetail());
+        projectEntityList.add(projectDTO);
+      }
+
+      return projectEntityList;
+    }
+
+    @Override
     public String getFileContentByFileName(String id, String file_name){
         return projectDAO.getFileContentByFileName(id, file_name);
     }
