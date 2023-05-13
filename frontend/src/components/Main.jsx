@@ -109,7 +109,7 @@ function Main(props) {
 
       navigate('./editor', {
         state: {
-          project_id: 234769,
+          project_id: response.data.project_id,
           framework_list: response.data.frameworkList,
           readmeObject:readme_list,
           defaultData: defaultData
@@ -152,7 +152,7 @@ function Main(props) {
         "📕 Gruop ID : "+ response.data.groupId+"   \n"+
         "📘 Artifact ID : "+ response.data.artifactId+"   \n"+
         "📙 Java Version :"+ response.data.javaVersion+"   \n"+
-        "📚 DB : "+ response.data.databaseName;
+        "📚 DB : "+ "MariaDB";
 
         readme_list.push({projectId : response.data.project_id, id: "README.md", content : [defaultData] , type : ["Default Data"]});
 
@@ -220,7 +220,11 @@ function Main(props) {
             </div>
              : ""}
 
-
+             </div>
+           </Wrapper>
+       );
+     }
+/*
           <form id="generate-form-files">
             <div className="row">
 
@@ -255,6 +259,6 @@ function Main(props) {
         </div>
       </Wrapper>
   );
-}
+}*/
 
 export default Main;
