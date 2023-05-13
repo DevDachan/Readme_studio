@@ -26,13 +26,13 @@ public class MarkdownController {
 
       // md 파일들 생성하여 담을 디렉토리 생성
       mdDownloadService.makeMdDirectory(projectId, mdFilesName, readme);
-
+      System.out.println("hi");
       // md 파일들 생성 및 내용 작성
       mdDownloadService.writeMdContents(mdFilesName, readme);
-
+      System.out.println("bi");
       // md 파일들 압축
       byte[] zipResult = mdDownloadService.zipMdFiles(mdFilesName);
-
+      System.out.println("ki");
       // md 디렉토리 삭제
       mdDownloadService.deleteMdDirectory(mdFilesName);
 

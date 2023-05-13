@@ -65,11 +65,11 @@ public class MdDownloadServiceImpl implements MdDownloadService {
 
     public byte[] zipMdFiles(String mdFilesName) throws IOException {
         ProcessBuilder builder = new ProcessBuilder();
-        builder.command("pwd");
-        builder.start();
+        //builder.command("pwd");
+        //builder.start();
 
-        builder.directory(new File(mdFilesName)); // 현재 위치 이동
-        builder.start();
+        /*builder.directory(new File(mdFilesName)); // 현재 위치 이동
+        builder.start();*/
 
         String mdZipFilesName = "./mdZipFiles.zip";
         // builder.command("zip", mdZipFilesName, "-r", "mdFiles"); // mac

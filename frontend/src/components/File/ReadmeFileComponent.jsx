@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
-import Md_editor from "@uiw/react-md-editor";
+import MDEditor from "@uiw/react-md-editor";
 import ReadmeFileSelect from "./ReadmeFileSelect";
 import Markdown from "@uiw/react-markdown-preview";
 import ReactDOMServer from 'react-dom/server';
@@ -53,10 +53,10 @@ function ReadmeFileComponent(props) {
 
   //---------------------- Web API table function ------------------------------
   // change HTML table to markdown table
-  function makeTable_webapi(data){
-    var count_td = data.split('</tr>')[0].split('<td><p contenteditable="true">').length -1;
+  function makeTableWebapi(data){
+    var countTd = data.split('</tr>')[0].split('<td><p contenteditable="true">').length -1;
     var line = "|---";
-    line = line.repeat(count_td);
+    line = line.repeat(countTd);
     line = "\n"+line + "|\n";
 
     var temp = data.replace(/\n\s*/g, '<br>');
@@ -73,7 +73,7 @@ function ReadmeFileComponent(props) {
   }
 
   // HTML table edit event
-  const changeTable_webapi = (e) => {
+  const changeTableWebapi = (e) => {
     if(e.target.innerText === ""){
       e.target.innerText = " ";
     }
@@ -83,7 +83,7 @@ function ReadmeFileComponent(props) {
     var content = document.getElementById(id).outerHTML;
     content = content.replace(/&lt;\s*/g, "<");
     content = content.replace(/&gt;\s*/g, ">");
-    content = makeTable_webapi(content);
+    content = makeTableWebapi(content);
     var tempReadme = JSON.parse(JSON.stringify(readmeList));
     tempReadme.find(e => e.id === currentReadme).content[id.split("table_")[1]] = "## Web API<br><!-- Web API -->\n" + content;
     setContent(tempReadme);
@@ -92,32 +92,32 @@ function ReadmeFileComponent(props) {
 
 
   // change markdown table to HTML table
-  function parseTable_webapi(data, id){
+  function parseTableWebapi(data, id){
     data = data.replace(/&nbsp;\s*/g, " ");
     data = data.replace(/<br>\s*/g, "\n");
-    var tr_temp = data.split("|\n");
-    const temp_list = [""];
+    var trTemp = data.split("|\n");
+    const tempList = [""];
     const tr = [""];
-    for(var i = 0; i < tr_temp.length-1; i++){
+    for(var i = 0; i < trTemp.length-1; i++){
       const td = [];
-      var td_temp = tr_temp[i].split("|");
+      var tdTemp = trTemp[i].split("|");
       if(i == 1) continue;
-      for(var w = 1; w < td_temp.length; w++){
+      for(var w = 1; w < tdTemp.length; w++){
         td.push(<td>
                   <p
-                    contentEditable onBlur={(e) => changeTable_webapi(e)}>{td_temp[w]}
+                    contentEditable onBlur={(e) => changeTableWebapi(e)}>{tdTemp[w]}
                   </p>
                 </td>);
       }
       tr.push( <tr> {td} </tr>);
     }
-    temp_list.push( <table id={"table_"+id} className="webapi-table"> {tr} </table>);
-    return temp_list;
+    tempList.push( <table id={"table_"+id} className="webapi-table"> {tr} </table>);
+    return tempList;
   }
 
   //---------------------- DB table component function ------------------------------
-  function makeTable_db(data){
-    var count_td = data.split('</tr>')[0].split('<td><p contenteditable="true">').length -1;
+  function makeTableDb(data){
+    var countTd = data.split('</tr>')[0].split('<td><p contenteditable="true">').length -1;
 
     var temp = data.replace(/\n\s*/g, '  <br>');
     temp = temp.replace(/<table class="db-table">\s*/g,"\n|*Column Name*|\n|-----|\n");
@@ -133,7 +133,7 @@ function ReadmeFileComponent(props) {
   }
 
   // HTML table edit event
-  const changeTable_db = (e) => {
+  const changeTableDb = (e) => {
     if(e.target.innerText === ""){
       e.target.innerText = " ";
     }
@@ -143,7 +143,7 @@ function ReadmeFileComponent(props) {
     var content = document.getElementById(id).innerHTML;
     content = content.replace(/&lt;\s*/g, "<");
     content = content.replace(/&gt;\s*/g, ">");
-    content = makeTable_db(content);
+    content = makeTableDb(content);
     var tempReadme = JSON.parse(JSON.stringify(readmeList));
     tempReadme.find(e => e.id === currentReadme).content[id.split("dbdiv_")[1]] = "<!-- DB Table -->\n" + content;
     setContent(tempReadme);
@@ -151,48 +151,48 @@ function ReadmeFileComponent(props) {
   }
 
   // change markdown table to HTML table
-  function parseTable_db(data, id){
+  function parseTableDb(data, id){
     data = data.replace(/&nbsp;/g, " ");
     data = data.replace(/<br>/g, "\n");
-    var tr_temp = data.split("|\n");
-    const temp_list = [""];
+    var trTemp = data.split("|\n");
+    const tempList = [""];
     const tr = [""];
-    for(var i = 1; i < tr_temp.length-1; i++){
+    for(var i = 1; i < trTemp.length-1; i++){
       const td = [];
-      var td_temp = tr_temp[i].split("|");
-      for(var w = 1; w < td_temp.length; w++){
+      var tdTemp = trTemp[i].split("|");
+      for(var w = 1; w < tdTemp.length; w++){
         td.push(<td>
                   <p
-                    contentEditable onBlur={(e) => changeTable_db(e)}>{td_temp[w]}
+                    contentEditable onBlur={(e) => changeTableDb(e)}>{tdTemp[w]}
                   </p>
                 </td>);
       }
       tr.push( <tr> {td} </tr>);
     }
-    temp_list.push( <table className="db-table"> {tr} </table>);
-    return temp_list;
+    tempList.push( <table className="db-table"> {tr} </table>);
+    return tempList;
   }
 
-  function db_table(data,id){
-    const temp_list = [""];
-    var col_temp = data.split(/\|\*.*?\*\||####/g);
-    var table_count = (col_temp.length - 1) / 2;
-    for(var i = 0; i < table_count; i++){
-      temp_list.push(<h3>{col_temp[2*i+1].replace(/<br>/g, "")} </h3>);
-      temp_list.push(parseTable_db(col_temp[2*i+2],id + "_" + i));
+  function dbTable(data,id){
+    const tempList = [""];
+    var colTemp = data.split(/\|\*.*?\*\||####/g);
+    var tableCount = (colTemp.length - 1) / 2;
+    for(var i = 0; i < tableCount; i++){
+      tempList.push(<h3>{colTemp[2*i+1].replace(/<br>/g, "")} </h3>);
+      tempList.push(parseTableDb(colTemp[2*i+2],id + "_" + i));
     }
-    return <div id={"dbdiv_"+id}> {temp_list} </div>;
+    return <div id={"dbdiv_"+id}> {tempList} </div>;
   }
 
   //------------------ Dependency ----------------------------------------
-  function parseTable_dependency(data, id){
+  function parseTableDependency(data, id){
     data = data.replace(/&nbsp;/g, " ");
     data = data.replace(/<br>/g, "\n");
-    var tr_temp = data.split("|\n");
-    const temp_list = [""];
-    temp_list.push( <div dangerouslySetInnerHTML={{__html:  data.split(/```/)[0]}} /> );
+    var trTemp = data.split("|\n");
+    const tempList = [""];
+    tempList.push( <div dangerouslySetInnerHTML={{__html:  data.split(/```/)[0]}} /> );
 
-    return temp_list;
+    return tempList;
   }
 
 
@@ -248,7 +248,7 @@ function ReadmeFileComponent(props) {
   // ----------------------------- change position function  --------------------------------------------------------
 
   const checkedPosition = (e) => {
-    var prev_position = position;
+    var prevPosition = position;
     setPosition(e.target.value);
     setTimeout(function() {
       document.getElementById("postionChangeDown"+(e.target.value-1)).focus();
@@ -263,10 +263,10 @@ function ReadmeFileComponent(props) {
 
   //---------------------------- Make Component content  ----------------------------------------------
   for(var i = 0; i< content.length; i++){
-    var cur_content = "";
-    var temp_num = i;
+    var curContent = "";
+    var tempNum = i;
     if(type[i] == "Text" || type[i] == "Default Data"){
-        cur_content = <Md_editor
+        curContent = <MDEditor
           height={200}
           id={"md_editor_"+i}
           name={i}
@@ -278,7 +278,7 @@ function ReadmeFileComponent(props) {
           highlightEnable={false}
           />;
     }else if(type[i] == "License"){
-          cur_content = <Md_editor
+          curContent = <MDEditor
             height={200}
             id={"md_editor_"+i}
             name={i}
@@ -290,28 +290,28 @@ function ReadmeFileComponent(props) {
             highlightEnable={false}
             />;
     }else if(type[i] == "All Data"){
-      cur_content = "<!-- All Data -->";
+      curContent = "<!-- All Data -->";
 
     }else if(type[i] == "DB Table"){
-      cur_content = content[i].split("<!-- DB Table -->\n")[1];
-      cur_content = db_table(cur_content,i);
+      curContent = content[i].split("<!-- DB Table -->\n")[1];
+      curContent = dbTable(curContent,i);
 
     }else if(type[i] == "Dependency"){
-      cur_content = parseTable_dependency(content[i].split("## Dependencies<br>")[1],i);
+      curContent = parseTableDependency(content[i].split("## Dependencies<br>")[1],i);
 
     }else if(type[i] == "WebAPI"){
-      cur_content = parseTable_webapi(content[i].split("<!-- Web API -->\n")[1],i);
+      curContent = parseTableWebapi(content[i].split("<!-- Web API -->\n")[1],i);
 
     }else if(type[i] == "Contributor"){
-      cur_content = <div dangerouslySetInnerHTML = {{__html: content[i].split("## Contributor<br>")[1]}}>
+      curContent = <div dangerouslySetInnerHTML = {{__html: content[i].split("## Contributor<br>")[1]}}>
         </div>;
 
     }else if(type[i] == "Social"){
-      cur_content = <div dangerouslySetInnerHTML = {{__html: content[i].split("## Social<br>")[1]}}>
+      curContent = <div dangerouslySetInnerHTML = {{__html: content[i].split("## Social<br>")[1]}}>
         </div>;
 
     }else if(type[i] == "Architecture"){
-      cur_content = <Md_editor
+      curContent = <MDEditor
         height={200}
         id={"md_editor_"+i}
         name={i}
@@ -324,16 +324,16 @@ function ReadmeFileComponent(props) {
       />;
 
     }else if(type[i] == "Header"){
-      var header_tag = "<img src=\"" + content[i].split("\(")[1].split("\)")[0] + "\" />";
-      var header_text = content[i].split("&section=header&text=")[1].split("&")[0];
-      var header_size = content[i].split("fontSize=")[1].split("\)")[0];
-      var header_type = content[i].split("?type=")[1].split("&")[0];
+      var headerTag = "<img src=\"" + content[i].split("\(")[1].split("\)")[0] + "\" />";
+      var headerText = content[i].split("&section=header&text=")[1].split("&")[0];
+      var headerSize = content[i].split("fontSize=")[1].split("\)")[0];
+      var headerType = content[i].split("?type=")[1].split("&")[0];
       var fontColor = content[i].split("fontColor=")[1].split("&")[0];
       var bgColor = content[i].split("color=")[1].split("&")[0];
 
-      cur_content = <div className="row">
+      curContent = <div className="row">
         <div className="col-sm-4 mb-4">
-          <select id={i} class="header-select" value={header_type} onChange={changeHaderType}>
+          <select id={i} class="header-select" value={headerType} onChange={changeHaderType}>
             <option className="file-selector-item" value="Wave" > Wave </option>
             <option className="file-selector-item" value="Egg" > Egg </option>
             <option className="file-selector-item" value="Shark" > Shark </option>
@@ -362,27 +362,27 @@ function ReadmeFileComponent(props) {
           <h3> Text </h3>
         </div>
         <div className="col-sm-10">
-          <input type="text" defaultValue="hi" id={i} className="ip-header" value={header_text} onChange={editHeaderText} autoComplete="off" />
+          <input type="text" defaultValue="hi" id={i} className="ip-header" value={headerText} onChange={editHeaderText} autoComplete="off" />
         </div>
         <div className="col-sm-2">
           <h3> Size </h3>
         </div>
         <div className="col-sm-10">
-          <input type="text" defaultValue="hi" id={i} className="ip-header" value={header_size} onChange={editHeaderSize} autoComplete="off" />
+          <input type="text" defaultValue="hi" id={i} className="ip-header" value={headerSize} onChange={editHeaderSize} autoComplete="off" />
         </div>
 
-        <div className="calign" dangerouslySetInnerHTML = {{__html:  header_tag }}></div>
+        <div className="calign" dangerouslySetInnerHTML = {{__html:  headerTag }}></div>
       </div>;
 
     }else if(type[i] == "Period"){
-      cur_content = <div>
+      curContent = <div>
         <div className="dateBox" >Start date : <input type="date" data-placeholder="날짜 선택" id={"period_start" + i} onChange={changePeriod} name={i}></input></div>
         <div className="brCSS"></div>
         <div className="dateBox" >End date : <input type="date" data-placeholder="날짜 선택" id={"period_end" + i} name={i} onChange={changePeriod}></input></div>
       </div>;
 
     }else{
-      cur_content = content[i];
+      curContent = content[i];
     }
 
     if( Number(i) === Number(position)-1){
@@ -400,7 +400,7 @@ function ReadmeFileComponent(props) {
             </div>
 
             <div className="readme-content">
-              <div className="readme-content-detail">{cur_content}</div>
+              <div className="readme-content-detail">{curContent}</div>
             </div>
             <div className="readme-footer row">
               <div className="col-sm-12 border-line">
@@ -434,7 +434,7 @@ function ReadmeFileComponent(props) {
               </div>
             </div>
             <div className="readme-content">
-              <div className="readme-content-detail">{cur_content}</div>
+              <div className="readme-content-detail">{curContent}</div>
             </div>
             <div className="readme-footer row">
               <div className="col-sm-12 border-line">

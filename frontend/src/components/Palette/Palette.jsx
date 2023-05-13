@@ -19,7 +19,7 @@ const Wrapper = styled.div`
 
 function Palette(props) {
   const navigate = useNavigate();
-  const project_id = props.project_id;
+  const projectId = props.projectId;
   const setContent = props.setContent;
   const content = props.content;
   const currentReadme = props.currentReadme;
@@ -34,8 +34,8 @@ function Palette(props) {
     const formData = new FormData();
 
     var tempReadme = JSON.parse(JSON.stringify(content));
-    formData.append('project_id', project_id);
-    formData.append('framework_name', e.target.value);
+    formData.append('projectId', projectId);
+    formData.append('frameworkName', e.target.value);
 
     axios({
       method: "post",
@@ -95,7 +95,7 @@ function Palette(props) {
     let tempReadme = content;
     const formData = new FormData();
 
-    formData.append("project_id", project_id);
+    formData.append("projectId", projectId);
 
     axios({
       method: "post",

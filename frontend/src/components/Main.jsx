@@ -87,7 +87,7 @@ function Main(props) {
     formData.append('jsonParam1', userName);
     formData.append('jsonParam2', repName);
 
-    var readme_list = [];
+    var readmeList = [];
     setLoadingCheck(true);
     axios({
       method: "post",
@@ -105,13 +105,13 @@ function Main(props) {
       "📙 Java Version :"+ response.data.javaVersion+"   \n"+
       "📚 DB : "+ response.data.databaseName;
 
-      readme_list.push({projectId : response.data.project_id, id: "README.md", content : [defaultData] , type : ["Default Data"]});
+      readmeList.push({projectId : response.data.projectId, id: "README.md", content : [defaultData] , type : ["Default Data"]});
 
       navigate('./editor', {
         state: {
-          project_id: 234769,
-          framework_list: response.data.frameworkList,
-          readmeObject:readme_list,
+          projectId: response.data.projectId,
+          frameworkList: response.data.frameworkList,
+          readmeObject:readmeList,
           defaultData: defaultData
         }
       });
@@ -135,7 +135,7 @@ function Main(props) {
 
     const formData = new FormData();
     formData.append('jsonParam1', document.getElementById("repoLink").value);
-    var readme_list = [];
+    var readmeList = [];
 
     setLoadingCheck(true);
     axios({
@@ -152,15 +152,15 @@ function Main(props) {
         "📕 Gruop ID : "+ response.data.groupId+"   \n"+
         "📘 Artifact ID : "+ response.data.artifactId+"   \n"+
         "📙 Java Version :"+ response.data.javaVersion+"   \n"+
-        "📚 DB : "+ response.data.databaseName;
+        "📚 DB : "+ "MariaDB";
 
-        readme_list.push({projectId : response.data.project_id, id: "README.md", content : [defaultData] , type : ["Default Data"]});
+        readmeList.push({projectId : response.data.projectId, id: "README.md", content : [defaultData] , type : ["Default Data"]});
 
         navigate('./editor', {
           state: {
-            project_id: response.data.project_id,
-            framework_list: response.data.frameworkList,
-            readmeObject:readme_list,
+            projectId: response.data.projectId,
+            frameworkList: response.data.frameworkList,
+            readmeObject:readmeList,
             defaultData: defaultData
           }
         });
@@ -220,41 +220,9 @@ function Main(props) {
             </div>
              : ""}
 
-
-          <form id="generate-form-files">
-            <div className="row">
-
-              <div className="col-sm-3">
-                <input type="text" name="userName" id="user-name" defaultValue={userName}
-                required onChange={changeUserName} placeholder="User Name"/>
-              </div>
-
-              <div className="col-sm-3">
-                <input type="text" name="repName" id="rep-name" defaultValue={repName}
-                required  onChange={changeRepName}  placeholder="Repository Name"/>
-              </div>
-
-              <div className="col-sm-3">
-                <input type="file" name="file" id="project-files" accept=".zip" onChange={getFile} style={{"display": "none"}}/>
-                <label htmlFor="project-files" className="btn-inputfile">
-                  <div id="file-selector" >{fileName}</div>
-                </label>
-              </div>
-
-              <div className="col-sm-3">
-                <input type="button" className="btn-inputfile" value="Generate" onClick={submitReadme}/>
-              </div>
-              <div className="col-sm-3">
-                <p id="alertUserName" className="p-alert"> Enter a UserName!</p>
-              </div>
-              <div className="col-sm-3">
-                <p id="alertRepName" className="p-alert"> Enter a RepName! </p>
-              </div>
-            </div>
-          </form>
-        </div>
-      </Wrapper>
-  );
-}
+             </div>
+           </Wrapper>
+       );
+     }
 
 export default Main;
