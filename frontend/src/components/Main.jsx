@@ -224,41 +224,5 @@ function Main(props) {
            </Wrapper>
        );
      }
-/*
-          <form id="generate-form-files">
-            <div className="row">
-
-              <div className="col-sm-3">
-                <input type="text" name="userName" id="user-name" defaultValue={userName}
-                required onChange={changeUserName} placeholder="User Name"/>
-              </div>
-
-              <div className="col-sm-3">
-                <input type="text" name="repName" id="rep-name" defaultValue={repName}
-                required  onChange={changeRepName}  placeholder="Repository Name"/>
-              </div>
-
-              <div className="col-sm-3">
-                <input type="file" name="file" id="project-files" accept=".zip" onChange={getFile} style={{"display": "none"}}/>
-                <label htmlFor="project-files" className="btn-inputfile">
-                  <div id="file-selector" >{fileName}</div>
-                </label>
-              </div>
-
-              <div className="col-sm-3">
-                <input type="button" className="btn-inputfile" value="Generate" onClick={submitReadme}/>
-              </div>
-              <div className="col-sm-3">
-                <p id="alertUserName" className="p-alert"> Enter a UserName!</p>
-              </div>
-              <div className="col-sm-3">
-                <p id="alertRepName" className="p-alert"> Enter a RepName! </p>
-              </div>
-            </div>
-          </form>
-        </div>
-      </Wrapper>
-  );
-}*/
 
 export default Main;

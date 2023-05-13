@@ -24,15 +24,15 @@ function Result(props) {
   const [readmeObject, setReadmeObject] = useState(location.state.result);
   const [currentReadme, setCurrentReadme] = useState(readmeObject[0].id);
   const [forRelanderng, setForRelandering] = useState("");
-  const project_id = location.state.project_id;
+  const projectId = location.state.projectId;
 
   const goBack = (e) =>{
     navigate('../editor', {
       state: {
-        project_id: project_id,
-        framework_list: location.state.paletteList,
+        projectId: projectId,
+        frameworkList: location.state.paletteList,
         readmeObject:readmeObject,
-        defaultData: location.state.project_detail
+        defaultData: location.state.projectDetail
       }
     });
   }
