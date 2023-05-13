@@ -65,7 +65,7 @@ public class UnzipController {
         map.put("artifactId", proectDetail.get("artifactId")); // artifactId
         map.put("javaVersion", proectDetail.get("javaVersion")); // javaVersion
         map.put("databaseName", proectDetail.get("databaseName")); // db명
-        map.put("project_id", id); // index(project_id)
+        map.put("projectId", id); // index(project_id)
 
         return map;
     }
@@ -97,14 +97,14 @@ public class UnzipController {
         map.put("artifactId", proectDetail.get("artifactId")); // artifactId
         map.put("javaVersion", proectDetail.get("javaVersion")); // javaVersion
         map.put("databaseName", proectDetail.get("databaseName")); // db명
-        map.put("project_id", id); // index(project_id)
+        map.put("projectId", id); // index(project_id)
 
         return map;
     }
 
     @PostMapping("/framework")
-    public String saveData(@RequestParam("project_id") String projectId,
-        @RequestParam("framework_name") String frameworkName) throws IOException {
+    public String saveData(@RequestParam("projectId") String projectId,
+        @RequestParam("frameworkName") String frameworkName) throws IOException {
         String frameContent = "";
         UserDTO userDTO = userService.getUser(projectId);
         String userName = userDTO.getUserName();
@@ -159,7 +159,7 @@ public class UnzipController {
     }
 
     @PostMapping("/alldata")
-    public Map <String,String[]> allData(@RequestParam("project_id") String projectId) throws IOException {
+    public Map <String,String[]> allData(@RequestParam("projectId") String projectId) throws IOException {
         Map<String, String[]> allData = new LinkedHashMap<>();
         String frameContent = "";
         UserDTO userDTO = userService.getUser(projectId);

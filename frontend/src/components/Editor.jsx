@@ -26,9 +26,9 @@ function Editor(props) {
   const [currentReadme, setCurrentReadme] = useState(readmeObject[0].id);
   const [forRelanderng, setForRelandering] = useState("");
   const [position, setPosition] = useState(1);
-  const project_id = location.state.project_id;
-  const paletteList = location.state.framework_list;
-  const project_detail = location.state.defaultData;
+  const projectId = location.state.projectId;
+  const paletteList = location.state.frameworkList;
+  const projectDetail = location.state.defaultData;
 
   const [show, setShow] = useState(false);
 
@@ -44,9 +44,9 @@ function Editor(props) {
     navigate('../result', {
       state: {
         result: readmeObject,
-        project_id: project_id,
+        projectId: projectId,
         paletteList:paletteList,
-        project_detail:project_detail
+        projectDetail:projectDetail
       }
     });
   }
@@ -94,11 +94,11 @@ function Editor(props) {
         var type = readmeObject.find(e => e.id === currentReadme).type;
 
         var changeIndex = currentIndex+1;
-        var cur_temp_content = content.splice(currentIndex,1)[0];
-        var cur_temp_type = type.splice(currentIndex,1);
+        var curTempContent = content.splice(currentIndex,1)[0];
+        var curTempType = type.splice(currentIndex,1);
 
-        content.splice(changeIndex, 0, cur_temp_content);
-        type.splice(changeIndex, 0, cur_temp_type);
+        content.splice(changeIndex, 0, curTempContent);
+        type.splice(changeIndex, 0, curTempType);
 
 
         setPosition(changeIndex+1);
@@ -116,11 +116,11 @@ function Editor(props) {
         var changeIndex = currentIndex-1;
 
         //delete currentIndex item and copy
-        var cur_temp_content = content.splice(currentIndex,1)[0];
-        var cur_temp_type = type.splice(currentIndex,1);
+        var curTempContent = content.splice(currentIndex,1)[0];
+        var curTempType = type.splice(currentIndex,1);
 
-        content.splice(changeIndex, 0, cur_temp_content);
-        type.splice(changeIndex, 0, cur_temp_type);
+        content.splice(changeIndex, 0, curTempContent);
+        type.splice(changeIndex, 0, curTempType);
         setPosition(changeIndex+1);
         setReadmeObject(readmeObject);
         setForRelandering(forRelanderng + "1");
@@ -136,8 +136,8 @@ function Editor(props) {
   const changeTextArea = (e,i) =>{
     var tempReadme = JSON.parse(JSON.stringify(readmeObject));
     var content = e;
-    var position_id = i.target.parentElement.parentElement.parentElement.parentElement.id;
-    var position = Number(position_id.substr(10,3));
+    var positionId = i.target.parentElement.parentElement.parentElement.parentElement.id;
+    var position = Number(positionId.substr(10,3));
     tempReadme.find(e => e.id === currentReadme).content[position] = "<!-- empty_textarea -->\n" + content;
     setContent(tempReadme);
   }
@@ -145,8 +145,8 @@ function Editor(props) {
   const changeLicense = (e,i) =>{
     var tempReadme = JSON.parse(JSON.stringify(readmeObject));
     var content = e;
-    var position_id = i.target.parentElement.parentElement.parentElement.parentElement.id;
-    var position = Number(position_id.substr(10,3));
+    var positionId = i.target.parentElement.parentElement.parentElement.parentElement.id;
+    var position = Number(positionId.substr(10,3));
     tempReadme.find(e => e.id === currentReadme).content[position] = "## License\n" + content;
     setContent(tempReadme);
   }
@@ -154,8 +154,8 @@ function Editor(props) {
   const changeArchitecture = (e,i) =>{
     var tempReadme = JSON.parse(JSON.stringify(readmeObject));
     var content = e;
-    var position_id = i.target.parentElement.parentElement.parentElement.parentElement.id;
-    var position = Number(position_id.substr(10,3));
+    var positionId = i.target.parentElement.parentElement.parentElement.parentElement.id;
+    var position = Number(positionId.substr(10,3));
     tempReadme.find(e => e.id === currentReadme).content[position] = "## Project Architecture (Tree Structure)<br> <!-- Project Architecture -->" + content;
     setContent(tempReadme);
   }
@@ -220,7 +220,7 @@ function Editor(props) {
 
 
   const addReadme = (e) => {
-    setReadmeObject([...readmeObject, {projectId:project_id,id: "README"+readmeObject.length+".md", content : [project_detail] , type : ["Default Data"] }]);
+    setReadmeObject([...readmeObject, {projectId:projectId,id: "README"+readmeObject.length+".md", content : [projectDetail] , type : ["Default Data"] }]);
     setCurrentReadme("README"+readmeObject.length+".md");
   }
 
@@ -229,7 +229,7 @@ function Editor(props) {
   const deleteReadme = (e) => {
     var tempReadme = JSON.parse(JSON.stringify(readmeObject));
     if(tempReadme.length == 1 ){
-      tempReadme = [{projectId:project_id ,id: "README.md", content : [project_detail], type : ["Default Data"] }];
+      tempReadme = [{projectId:projectId ,id: "README.md", content : [projectDetail], type : ["Default Data"] }];
       setReadmeObject(tempReadme);
       setCurrentReadme(tempReadme[0].id);
       setPosition(1);
@@ -261,11 +261,11 @@ function Editor(props) {
                   <div className="editorDiv">
                     <Palette
                       paletteList={paletteList}
-                      project_id={project_id}
+                      projectId={projectId}
                       currentReadme={currentReadme}
                       content={readmeObject}
                       position={position}
-                      defaultData={project_detail}
+                      defaultData={projectDetail}
 
                       setContent={setContent}
                       setPosition={setPosition}

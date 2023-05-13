@@ -87,7 +87,7 @@ function Main(props) {
     formData.append('jsonParam1', userName);
     formData.append('jsonParam2', repName);
 
-    var readme_list = [];
+    var readmeList = [];
     setLoadingCheck(true);
     axios({
       method: "post",
@@ -105,13 +105,13 @@ function Main(props) {
       "📙 Java Version :"+ response.data.javaVersion+"   \n"+
       "📚 DB : "+ response.data.databaseName;
 
-      readme_list.push({projectId : response.data.project_id, id: "README.md", content : [defaultData] , type : ["Default Data"]});
+      readmeList.push({projectId : response.data.projectId, id: "README.md", content : [defaultData] , type : ["Default Data"]});
 
       navigate('./editor', {
         state: {
-          project_id: response.data.project_id,
-          framework_list: response.data.frameworkList,
-          readmeObject:readme_list,
+          projectId: response.data.projectId,
+          frameworkList: response.data.frameworkList,
+          readmeObject:readmeList,
           defaultData: defaultData
         }
       });
@@ -135,7 +135,7 @@ function Main(props) {
 
     const formData = new FormData();
     formData.append('jsonParam1', document.getElementById("repoLink").value);
-    var readme_list = [];
+    var readmeList = [];
 
     setLoadingCheck(true);
     axios({
@@ -154,13 +154,13 @@ function Main(props) {
         "📙 Java Version :"+ response.data.javaVersion+"   \n"+
         "📚 DB : "+ "MariaDB";
 
-        readme_list.push({projectId : response.data.project_id, id: "README.md", content : [defaultData] , type : ["Default Data"]});
+        readmeList.push({projectId : response.data.projectId, id: "README.md", content : [defaultData] , type : ["Default Data"]});
 
         navigate('./editor', {
           state: {
-            project_id: response.data.project_id,
-            framework_list: response.data.frameworkList,
-            readmeObject:readme_list,
+            projectId: response.data.projectId,
+            frameworkList: response.data.frameworkList,
+            readmeObject:readmeList,
             defaultData: defaultData
           }
         });
