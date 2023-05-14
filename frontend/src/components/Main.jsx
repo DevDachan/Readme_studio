@@ -37,7 +37,6 @@ function Main(props) {
 
 
   const getFile = (e) =>{
-    //e.preventDefault(); //prevent reload page
     if(e.target.files){
       const uploadFile = e.target.files[0];
       setFile(uploadFile);
@@ -201,27 +200,29 @@ function Main(props) {
                 maxLength="100"
                 onChange={changeLink}
               />
-              </div>
-              <div className="col-sm-2">
-                <input type="button" className="btn-generate" value="Generate" onClick={linkSubmitReadme}/>
-              </div>
-              <div className="col-sm-10 mt-3">
-                <p id="alertLink" className="p-alert"> Please enter a Github Link </p>
-              </div>
+            </div>
+            <div className="col-sm-2">
+              <input type="button" className="btn-generate" value="Generate" onClick={linkSubmitReadme}/>
+            </div>
+            <div className="col-sm-10 mt-3">
+              <p id="alertLink" className="p-alert"> Please enter a Github Link </p>
+            </div>
           </div>
 
-          {loadingCheck?
-            <div className="loading-container" style={{height: height, width:width}}>
-            <Loading
-              type="spin"
-              message={"프로젝트 정보를 불러오고 있습니다."}
-              cancelLoading={cancelLoading}
-            />
-            </div>
-             : ""}
+          {
+            loadingCheck ?
+              <div className="loading-container" style={{height: height, width:width}}>
+              <Loading
+                type="spin"
+                message={"프로젝트 정보를 불러오고 있습니다."}
+                cancelLoading={cancelLoading}
+              />
+              </div>
+             :
+             ""}
 
-             </div>
-           </Wrapper>
+        </div>
+      </Wrapper>
        );
      }
 

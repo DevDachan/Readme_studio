@@ -17,6 +17,7 @@ const Wrapper = styled.div`
     justify-content: center;
 `;
 
+
 function Result(props) {
   const navigate = useNavigate();
   const location = useLocation();
@@ -93,54 +94,50 @@ function Result(props) {
 
   //--------------------------------------------------------------------
   return (
-      <Wrapper>
-        <header id="editor-header">
-          <img src="/images/logo.png" className="logo-image" onClick={goMain}/>
-          <h1 className="title-text" onClick={goMain} >README STUDIO</h1>
-          <h2 className="subtitle-text">README GENERATION WEB SERVICE</h2>
-        </header>
+    <Wrapper>
+      <header id="editor-header">
+        <img src="/images/logo.png" className="logo-image" onClick={goMain}/>
+        <h1 className="title-text" onClick={goMain} >README STUDIO</h1>
+        <h2 className="subtitle-text">README GENERATION WEB SERVICE</h2>
+      </header>
 
-        <section>
-          <article>
-            <div className="row">
+      <section>
+        <article>
+          <div className="row">
+            <div className="col-sm-10 ralign mb-2" />
 
-              <div className="col-sm-10 ralign mb-2">
-              </div>
-
-              <div className="col-sm-2 ralign mb-2">
+            <div className="col-sm-2 ralign mb-2">
                 <input type="button" className="btn-3d red bt-back" value="" onClick={goBack} />
-              </div>
+            </div>
 
-              <div className="col-sm-12 mb-4">
-                <div className="editorDiv">
+            <div className="col-sm-12 mb-4">
+              <div className="editorDiv">
+                <ReadmeFileResultList
+                  currentReadme={currentReadme}
+                  setCurrentReadme={setCurrentReadme}
+                  readmeList={readmeObject}
+                  downReadme={downReadme}
+                />
 
-                  <ReadmeFileResultList
-                    currentReadme={currentReadme}
-                    setCurrentReadme={setCurrentReadme}
-                    readmeList={readmeObject}
-                    downReadme={downReadme}
-                  />
-
-                  <div className="resultDiv">
-                    <div className="row">
-                      <div className="col-sm-12 mt-2 mb-4 lalign">
-                        <h3 className="result-readmeName"> {currentReadme} </h3>
-                      </div>
-                      <div className="col-sm-12">
-                        <ReadmeFileContent
-                          content={readmeObject.find(e => e.id === currentReadme)}
-                        />
-                      </div>
+                <div className="resultDiv">
+                  <div className="row">
+                    <div className="col-sm-12 mt-2 mb-4 lalign">
+                      <h3 className="result-readmeName"> {currentReadme} </h3>
+                    </div>
+                    <div className="col-sm-12">
+                      <ReadmeFileContent
+                        content={readmeObject.find(e => e.id === currentReadme)}
+                      />
                     </div>
                   </div>
                 </div>
-
               </div>
             </div>
+          </div>
 
-          </article>
-        </section>
-      </Wrapper>
+        </article>
+      </section>
+    </Wrapper>
   );
 }
 
