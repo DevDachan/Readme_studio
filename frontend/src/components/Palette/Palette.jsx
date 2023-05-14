@@ -29,6 +29,7 @@ function Palette(props) {
   const defaultData = props.defaultData;
   const list = [];
 
+  //--------------------------------------Add function--------------------------------------------------
 
   const addContent = (e) =>{
     const formData = new FormData();
@@ -66,6 +67,10 @@ function Palette(props) {
         console.log(error);
       });
   }
+
+
+  //****************************************************************************************
+
   const addDefaultData = (e) =>{
     var tempReadme = JSON.parse(JSON.stringify(content));
     tempReadme.find(e => e.id === currentReadme).content.splice(position,0, defaultData);
@@ -77,8 +82,8 @@ function Palette(props) {
        document.getElementById("postionChangeDown"+(position)).focus();
      }, 1);
   }
-
-  const emptyText = (e) => {
+  //****************************************************************************************
+  const addText = (e) => {
     var tempReadme = JSON.parse(JSON.stringify(content));
     let emptyText = "<!-- empty_textarea -->\n";
     tempReadme.find(e => e.id === currentReadme).content.splice(position,0, emptyText);
@@ -91,6 +96,8 @@ function Palette(props) {
      }, 1);
   }
 
+
+  //****************************************************************************************
   const allData = (e) => {
     let tempReadme = content;
     const formData = new FormData();
@@ -129,7 +136,7 @@ function Palette(props) {
 
   // 기본 All Data와 Text 팔레트 추가
   list.push(<input type="button" className="mb-2 btn-palette" key={"all_data"} value={"All Data"} onClick={allData}/>);
-  list.push(<input type="button" className="mb-2 btn-palette" key={"empty_textarea"} value={"Text"} onClick={emptyText}/>);
+  list.push(<input type="button" className="mb-2 btn-palette" key={"empty_textarea"} value={"Text"} onClick={addText}/>);
   list.push(<input type="button" className="mb-2 btn-palette" key={"default_data"} value={"Default Data"} onClick={addDefaultData}/>);
 
   // DB에 저장되어 있는 framework 팔레트 추가
@@ -138,13 +145,13 @@ function Palette(props) {
   }
 
   return (
-      <Wrapper>
-        <h3 className="palette-optionsTitle"> Options</h3>
-        <div className="palette-div row">
-          <h3 className="palette-title"> Palette</h3>
-          {list}
-        </div>
-      </Wrapper>
+    <Wrapper>
+      <h3 className="palette-optionsTitle"> Options</h3>
+      <div className="palette-div row">
+        <h3 className="palette-title"> Palette</h3>
+        {list}
+      </div>
+    </Wrapper>
   );
 }
 

@@ -181,49 +181,48 @@ function Main(props) {
                          body.clientWidth, body.scrollWidth, body.offsetWidth);
 
   return (
-      <Wrapper>
-        <header id="main-header">
-          <img src="/images/logo.png" className="logo-image" onClick={goMain}/>
-          <h1 className="title-text" onClick={goMain} >README STUDIO</h1>
-          <h2 className="subtitle-text">README GENERATION WEB SERVICE</h2>
-        </header>
+    <Wrapper>
+      <header id="main-header">
+        <img src="/images/logo.png" className="logo-image" onClick={goMain}/>
+        <h1 className="title-text" onClick={goMain} >README STUDIO</h1>
+        <h2 className="subtitle-text">README GENERATION WEB SERVICE</h2>
+      </header>
 
-        <div>
-          <div className="row mb-4">
-            <div className="col-sm-10">
-              <input type="text"
-                id="repoLink"
-                name="email"
-                className="ip-url"
-                autocomplete="off"
-                placeholder="Github Repository Link"
-                maxLength="100"
-                onChange={changeLink}
-              />
-            </div>
-            <div className="col-sm-2">
-              <input type="button" className="btn-generate" value="Generate" onClick={linkSubmitReadme}/>
-            </div>
-            <div className="col-sm-10 mt-3">
-              <p id="alertLink" className="p-alert"> Please enter a Github Link </p>
-            </div>
+      <div>
+        <div className="row mb-4">
+          <div className="col-sm-10">
+            <input type="text"
+              id="repoLink"
+              name="email"
+              className="ip-url"
+              autocomplete="off"
+              placeholder="Github Repository Link"
+              maxLength="100"
+              onChange={changeLink}
+            />
           </div>
-
-          {
-            loadingCheck ?
-              <div className="loading-container" style={{height: height, width:width}}>
-              <Loading
-                type="spin"
-                message={"프로젝트 정보를 불러오고 있습니다."}
-                cancelLoading={cancelLoading}
-              />
-              </div>
-             :
-             ""}
-
+          <div className="col-sm-2">
+            <input type="button" className="btn-generate" value="Generate" onClick={linkSubmitReadme}/>
+          </div>
+          <div className="col-sm-10 mt-3">
+            <p id="alertLink" className="p-alert"> Please enter a Github Link </p>
+          </div>
         </div>
-      </Wrapper>
-       );
-     }
+
+        {
+          loadingCheck ?
+            <div className="loading-container" style={{height: height, width:width}}>
+            <Loading
+              type="spin"
+              message={"프로젝트 정보를 불러오고 있습니다."}
+              cancelLoading={cancelLoading}
+            />
+            </div>
+           :
+           ""}
+      </div>
+    </Wrapper>
+  );
+}
 
 export default Main;
