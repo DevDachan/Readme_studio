@@ -72,6 +72,7 @@ function ReadmeFileComponent(props) {
     return temp;
   }
 
+  //****************************************************************************************
   // HTML table edit event
   const changeTableWebapi = (e) => {
     if(e.target.innerText === ""){
@@ -90,7 +91,7 @@ function ReadmeFileComponent(props) {
     e.target.innerText = e.target.innerText.replace(/<br>\s*/g, "\n");
   }
 
-
+  //****************************************************************************************
   // change markdown table to HTML table
   function parseTableWebapi(data, id){
     data = data.replace(/&nbsp;\s*/g, " ");
@@ -116,9 +117,9 @@ function ReadmeFileComponent(props) {
   }
 
   //---------------------- DB table component function ------------------------------
+  // HTML table -> Markdown Table
   function makeTableDb(data){
     var countTd = data.split('</tr>')[0].split('<td><p contenteditable="true">').length -1;
-
     var temp = data.replace(/\n\s*/g, '  <br>');
     temp = temp.replace(/<table class="db-table">\s*/g,"\n|*Column Name*|\n|-----|\n");
     temp = temp.replace(/<\/h3>\s*/g," \n");
@@ -132,6 +133,7 @@ function ReadmeFileComponent(props) {
     return temp;
   }
 
+  //****************************************************************************************
   // HTML table edit event
   const changeTableDb = (e) => {
     if(e.target.innerText === ""){
@@ -150,7 +152,8 @@ function ReadmeFileComponent(props) {
     e.target.innerText = e.target.innerText.replace(/<br>/g, "\n");
   }
 
-  // change markdown table to HTML table
+  //****************************************************************************************
+  // Markdown table -> HTML Table
   function parseTableDb(data, id){
     data = data.replace(/&nbsp;/g, " ");
     data = data.replace(/<br>/g, "\n");
@@ -162,9 +165,7 @@ function ReadmeFileComponent(props) {
       var tdTemp = trTemp[i].split("|");
       for(var w = 1; w < tdTemp.length; w++){
         td.push(<td>
-                  <p
-                    contentEditable onBlur={(e) => changeTableDb(e)}>{tdTemp[w]}
-                  </p>
+                  <p contentEditable onBlur={(e) => changeTableDb(e)}> {tdTemp[w]} </p>
                 </td>);
       }
       tr.push( <tr> {td} </tr>);
@@ -173,6 +174,9 @@ function ReadmeFileComponent(props) {
     return tempList;
   }
 
+
+  //****************************************************************************************
+  // Rendering step using parseTabledb Function
   function dbTable(data,id){
     const tempList = [""];
     var colTemp = data.split(/\|\*.*?\*\||####/g);
@@ -184,6 +188,7 @@ function ReadmeFileComponent(props) {
     return <div id={"dbdiv_"+id}> {tempList} </div>;
   }
 
+
   //------------------ Dependency ----------------------------------------
   function parseTableDependency(data, id){
     data = data.replace(/&nbsp;/g, " ");
@@ -191,7 +196,6 @@ function ReadmeFileComponent(props) {
     var trTemp = data.split("|\n");
     const tempList = [""];
     tempList.push( <div dangerouslySetInnerHTML={{__html:  data.split(/```/)[0]}} /> );
-
     return tempList;
   }
 
@@ -202,13 +206,13 @@ function ReadmeFileComponent(props) {
     data = data.replace(/ /g, "_");
     var id = e.target.id;
     var tempReadme = JSON.parse(JSON.stringify(readmeList));
-
     let modifiedHeader = tempReadme.find(e => e.id === currentReadme).content[id].replace(/text=[^&]*/, `text=${data}`);
 
     tempReadme.find(e => e.id === currentReadme).content[id] = modifiedHeader + "\n";
     setContent(tempReadme);
   }
 
+  //****************************************************************************************
   const editHeaderSize = (e) =>{
     var data = e.target.value;
     var id = e.target.id;
@@ -219,6 +223,7 @@ function ReadmeFileComponent(props) {
     setContent(tempReadme);
   }
 
+  //****************************************************************************************
   const changeHaderType = (e) =>{
     var i = e.target.id;
     var tempReadme = JSON.parse(JSON.stringify(readmeList));
@@ -226,6 +231,7 @@ function ReadmeFileComponent(props) {
     setContent(tempReadme);
   }
 
+  //****************************************************************************************
   const changeHeaderColor = (e) =>{
     var i = e.target.id;
     var tempReadme = JSON.parse(JSON.stringify(readmeList));
@@ -234,6 +240,7 @@ function ReadmeFileComponent(props) {
     setContent(tempReadme);
   }
 
+  //****************************************************************************************
   const changeHeaderFontColor = (e) =>{
     var i = e.target.id;
     var tempReadme = JSON.parse(JSON.stringify(readmeList));
@@ -243,10 +250,7 @@ function ReadmeFileComponent(props) {
   }
 
 
-
-
   // ----------------------------- change position function  --------------------------------------------------------
-
   const checkedPosition = (e) => {
     var prevPosition = position;
     setPosition(e.target.value);
@@ -255,11 +259,13 @@ function ReadmeFileComponent(props) {
     }, 1);
   }
 
+  //****************************************************************************************
   const focusIn = (e) =>{
     var id = e.target.parentElement.parentElement.parentElement.parentElement.id;
     id = Number(id.split("_")[2])+1;
     setPosition(id);
   }
+
 
   //---------------------------- Make Component content  ----------------------------------------------
   for(var i = 0; i< content.length; i++){
@@ -458,36 +464,38 @@ function ReadmeFileComponent(props) {
   }
 
   return (
-      <Wrapper>
-        <div className="contentDiv mb-2">
-          <div className="row border-line" style={{height: "6rem"}}>
-            <div className="col-sm-1 calign mb-3 div-add">
-              <input type="button" className="bt-add" value="" onClick={addReadme} />
-            </div>
-            <div className="col-sm-4 mb-2">
-              <br/>
-              <ReadmeFileSelect readmeList={readmeList} currentReadme={currentReadme} setCurrentReadme={setCurrentReadme}/>
-            </div>
+    <Wrapper>
+      <div className="contentDiv mb-2">
+        <div className="row border-line" style={{height: "6rem"}}>
 
-            <div className="col-sm-7 ralign mb-3">
-              <input type="button" className="bt-generate ralign" value="👉🏻 Generate MD Files " onClick={goResult} />
-            </div>
-
+          <div className="col-sm-1 calign mb-3 div-add">
+            <input type="button" className="bt-add" value="" onClick={addReadme} />
           </div>
 
-          <div className="row div-component-header">
-            <div className="col-sm-12">
-              <h3 className="header-text"> {title} </h3>
-            </div>
-            <div className="col-sm-12 calign">
-                <button className=" bt-preview" onClick={previewChange} variant="outline-primary">Preview</button>
-                <button className="bt-deleteReadme"  onClick={deleteReadme}>DELETE README</button>
-
-            </div>
+          <div className="col-sm-4 mb-2">
+            <br/>
+            <ReadmeFileSelect readmeList={readmeList} currentReadme={currentReadme} setCurrentReadme={setCurrentReadme}/>
           </div>
-          {list}
+
+          <div className="col-sm-7 ralign mb-3">
+            <input type="button" className="bt-generate ralign" value="👉🏻 Generate MD Files " onClick={goResult} />
+          </div>
         </div>
-      </Wrapper>
+
+        <div className="row div-component-header">
+          <div className="col-sm-12">
+            <h3 className="header-text"> {title} </h3>
+          </div>
+
+          <div className="col-sm-12 calign">
+              <button className=" bt-preview" onClick={previewChange} variant="outline-primary">Preview</button>
+              <button className="bt-deleteReadme"  onClick={deleteReadme}>DELETE README</button>
+
+          </div>
+        </div>
+        {list}
+      </div>
+    </Wrapper>
   );
 }
 

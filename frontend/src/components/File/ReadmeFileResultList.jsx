@@ -15,7 +15,7 @@ const Wrapper = styled.div`
   border-right: 2px solid #D1D5DB;
 `;
 
-function ReadmeFileResultContent(props) {
+function ReadmeFileResultList(props) {
   const navigate = useNavigate();
   const item = props.currentReadme;
   const setItem = props.setCurrentReadme;
@@ -64,19 +64,19 @@ function ReadmeFileResultContent(props) {
   }
 
   return (
-      <Wrapper>
-        <h3 className="palette-optionsTitle"> Results</h3>
-        <input type="button" className="bt-download" value="Download MD Files" onClick={downReadme} />
-        <div className="palette-div row">
-          <h3 className="palette-title"> MD LIST</h3>
-          {
-            readmeList.map((it, idx) => (
-              <input type="button" className="mb-2 btn-palette" key={it.id} onClick={(e) => {chageMd(e, idx)}} value={it.id}/>
-            ))
-          }
-        </div>
-      </Wrapper>
+    <Wrapper>
+      <h3 className="palette-optionsTitle"> Results</h3>
+      <input type="button" className="bt-download" value="Download MD Files" onClick={downReadme} />
+      <div className="palette-div row">
+        <h3 className="palette-title"> MD LIST</h3>
+        {
+          readmeList.map((it, idx) => (
+            <input type="button" className="mb-2 btn-palette" key={it.id} onClick={(e) => {chageMd(e, idx)}} value={it.id}/>
+          ))
+        }
+      </div>
+    </Wrapper>
   );
 }
 
-export default ReadmeFileResultContent;
+export default ReadmeFileResultList;
