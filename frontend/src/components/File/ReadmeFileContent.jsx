@@ -16,7 +16,6 @@ const Wrapper = styled.div`
 function ReadmeFileContent(props) {
   const navigate = useNavigate();
   const content = props.content.content;
-
   let temp = "";
 
   for(var i = 0; i< content.length; i++){
@@ -24,19 +23,19 @@ function ReadmeFileContent(props) {
   }
 
   return (
-      <Wrapper>
-        <div className="readmeDiv">
-          <Markdown
-        		style={{
-              padding: "30px",
-              backgroundColor: "white",
-              borderRadius: "20px",
-              color: "black"
-            }}
-            source={temp}
-          />
-        </div>
-      </Wrapper>
+    <Wrapper>
+      <div className="readmeDiv">
+        <Markdown
+      		style={{
+            padding: "30px",
+            backgroundColor: "white",
+            borderRadius: "20px",
+            color: "black"
+          }}
+          source={temp}
+        />
+      </div>
+    </Wrapper>
   );
 }
 

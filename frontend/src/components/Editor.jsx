@@ -55,8 +55,7 @@ function Editor(props) {
     setReadmeObject(e);
     setForRelandering(forRelanderng + "1");
   }
-
-  //--------------------------------------------------------------------
+  //****************************************************************************************
   const deleteContent = (e) =>{
     var tempReadme = JSON.parse(JSON.stringify(readmeObject));
     if(Number(position) === tempReadme.find(e => e.id === currentReadme).content.length){
@@ -68,7 +67,7 @@ function Editor(props) {
     setReadmeObject(tempReadme);
     setForRelandering(forRelanderng + "1");
   }
-  //----------------------------------------------------------------------
+  //****************************************************************************************
 
   const pasteContent = (e) => {
     var id = e.target.id;
@@ -84,7 +83,7 @@ function Editor(props) {
   }
 
 
-  //---------------------------------------------------------------------------------
+  //-----------------------------------position change----------------------------------------------
   const changePosition = (e) =>{
     var currentIndex = Number(e.target.name);
 
@@ -132,7 +131,7 @@ function Editor(props) {
     }
   }
 
-  //--------------------------------------------------------------------
+  //------------------------change component function--------------------------------------------
   const changeTextArea = (e,i) =>{
     var tempReadme = JSON.parse(JSON.stringify(readmeObject));
     var content = e;
@@ -142,6 +141,7 @@ function Editor(props) {
     setContent(tempReadme);
   }
 
+  //****************************************************************************************
   const changeLicense = (e,i) =>{
     var tempReadme = JSON.parse(JSON.stringify(readmeObject));
     var content = e;
@@ -151,6 +151,7 @@ function Editor(props) {
     setContent(tempReadme);
   }
 
+  //****************************************************************************************
   const changeArchitecture = (e,i) =>{
     var tempReadme = JSON.parse(JSON.stringify(readmeObject));
     var content = e;
@@ -160,12 +161,11 @@ function Editor(props) {
     setContent(tempReadme);
   }
 
-
+  //****************************************************************************************
   const changePeriod = (e) => {
     var tempReadme = JSON.parse(JSON.stringify(readmeObject));
     var position = e.target.name;
     const valueData = e.target.value;
-
     const formData = new FormData();
     var temp = tempReadme.find(e => e.id === currentReadme).content[position];
 
@@ -216,16 +216,14 @@ function Editor(props) {
     });
   }
 
-  //--------------------------------------------------------------------------------------
-
+  //---------------------------Create Delete Readme----------------------------------------
 
   const addReadme = (e) => {
     setReadmeObject([...readmeObject, {projectId:projectId,id: "README"+readmeObject.length+".md", content : [projectDetail] , type : ["Default Data"] }]);
     setCurrentReadme("README"+readmeObject.length+".md");
   }
 
-
-
+  //****************************************************************************************
   const deleteReadme = (e) => {
     var tempReadme = JSON.parse(JSON.stringify(readmeObject));
     if(tempReadme.length == 1 ){
@@ -240,93 +238,94 @@ function Editor(props) {
       setPosition(1);
     }
   }
+
   //--------------------------------------------------------------------
   return (
-      <Wrapper>
-        <header id="editor-header">
-          <img src="/images/logo.png" className="logo-image" onClick={goMain}/>
-          <h1 className="title-text" onClick={goMain} >README STUDIO</h1>
-          <h2 className="subtitle-text">README GENERATION WEB SERVICE</h2>
-        </header>
+    <Wrapper>
+      <header id="editor-header">
+        <img src="/images/logo.png" className="logo-image" onClick={goMain}/>
+        <h1 className="title-text" onClick={goMain} >README STUDIO</h1>
+        <h2 className="subtitle-text">README GENERATION WEB SERVICE</h2>
+      </header>
 
-        <section>
-          <article>
-              <div className="row" style={{minWidth: "1100px"}}>
-                <div className="col-sm-2 lalign mb-2">
-                  <input type="button" className="bt-back" value="" onClick={goMain} />
-                </div>
-                <div className="col-sm-10 ralign mb-2">
-                </div>
-                <div className="col-sm-12 mb-4">
-                  <div className="editorDiv">
-                    <Palette
-                      paletteList={paletteList}
-                      projectId={projectId}
-                      currentReadme={currentReadme}
-                      content={readmeObject}
-                      position={position}
-                      defaultData={projectDetail}
+      <section>
+        <article>
+          <div className="row" style={{minWidth: "1100px"}}>
+            <div className="col-sm-2 lalign mb-2">
+              <input type="button" className="bt-back" value="" onClick={goMain} />
+            </div>
 
-                      setContent={setContent}
-                      setPosition={setPosition}
+            <div className="col-sm-10 ralign mb-2" />
 
-                      forRelanderng={forRelanderng}
+            <div className="col-sm-12 mb-4">
+              <div className="editorDiv">
+                <Palette
+                  paletteList={paletteList}
+                  projectId={projectId}
+                  currentReadme={currentReadme}
+                  content={readmeObject}
+                  position={position}
+                  defaultData={projectDetail}
+                  setContent={setContent}
+                  setPosition={setPosition}
+                  forRelanderng={forRelanderng}
+                />
+
+                <ReadmeFileComponent
+                  //for content variable
+                  title={currentReadme}
+                  curreadme={readmeObject.find(e => e.id === currentReadme)}
+                  position={position}
+
+                    // for contents action
+                  setContent={setContent}
+                  setPosition={setPosition}
+
+                  changePosition={changePosition}
+                  changeTextArea={changeTextArea}
+                  changePeriod={changePeriod}
+                  changeLicense={changeLicense}
+                  changeArchitecture={changeArchitecture}
+
+                  deleteContent={deleteContent}
+                  pasteContent={pasteContent}
+                  deleteReadme={deleteReadme}
+
+                  //for Header variable
+                  currentReadme={currentReadme}
+                  readmeList={readmeObject}
+
+                  //for Header action
+                  setCurrentReadme={setCurrentReadme}
+                  addReadme={addReadme}
+
+                  goResult={goResult}
+                  previewChange={previewChange}
+                  forRelanderng={forRelanderng}
+                />
+
+                <Modal className="modal-lg" show={show} onHide={previewChange}>
+                  <Modal.Header>
+                    <Modal.Title>README Preview</Modal.Title>
+                  </Modal.Header>
+
+                  <Modal.Body>
+                    <ReadmeFileContent
+                      content={readmeObject.find(e => e.id === currentReadme)}
                     />
+                  </Modal.Body>
 
-                    <ReadmeFileComponent
-                      //for content variable
-                      title={currentReadme}
-                      curreadme={readmeObject.find(e => e.id === currentReadme)}
-                      position={position}
+                  <Modal.Footer>
+                    <button className="bt-close" onClick={previewChange}>Close</button>
+                  </Modal.Footer>
+                </Modal>
 
-                      // for contents action
-                      setContent={setContent}
-                      setPosition={setPosition}
-
-                      changePosition={changePosition}
-                      changeTextArea={changeTextArea}
-                      changePeriod={changePeriod}
-                      changeLicense={changeLicense}
-                      changeArchitecture={changeArchitecture}
-
-                      deleteContent={deleteContent}
-                      pasteContent={pasteContent}
-                      deleteReadme={deleteReadme}
-
-                      //for Header variable
-                      currentReadme={currentReadme}
-                      readmeList={readmeObject}
-
-                      //for Header action
-                      setCurrentReadme={setCurrentReadme}
-                      addReadme={addReadme}
-
-                      goResult={goResult}
-                      previewChange={previewChange}
-
-                      forRelanderng={forRelanderng}
-                    />
-                  <Modal className="modal-lg" show={show} onHide={previewChange}>
-                    <Modal.Header>
-                      <Modal.Title>README Preview</Modal.Title>
-                    </Modal.Header>
-
-                    <Modal.Body>
-                      <ReadmeFileContent
-                        content={readmeObject.find(e => e.id === currentReadme)}
-                      />
-                    </Modal.Body>
-
-                    <Modal.Footer>
-                      <button className="bt-close" onClick={previewChange}>Close</button>
-                    </Modal.Footer>
-                  </Modal>
-                </div>
               </div>
+            </div>
           </div>
         </article>
       </section>
-      </Wrapper>
+    </Wrapper>
   );
 }
 

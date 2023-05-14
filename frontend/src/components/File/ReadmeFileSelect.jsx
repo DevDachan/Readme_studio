@@ -12,7 +12,7 @@ const Wrapper = styled.div`
 `;
 
 
-function ReadmeFileContent(props) {
+function ReadmeFileSelect(props) {
   const navigate = useNavigate();
 
   const item = props.currentReadme;
@@ -24,16 +24,16 @@ function ReadmeFileContent(props) {
   }
 
   return (
-      <Wrapper>
-        <select id="file-selector" value={item} onChange={selectList}>
-          {
-            readmeList.map((it) => (
-              <option className="file-selector-item" key={it.id} value={it.id} > {it.id} </option>
-            ))
-          }
-        </select>
-      </Wrapper>
+    <Wrapper>
+      <select id="file-selector" value={item} onChange={selectList}>
+        {
+          readmeList.map((it) => (
+            <option className="file-selector-item" key={it.id} value={it.id} > {it.id} </option>
+          ))
+        }
+      </select>
+    </Wrapper>
   );
 }
 
-export default ReadmeFileContent;
+export default ReadmeFileSelect;

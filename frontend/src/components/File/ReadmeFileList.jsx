@@ -14,7 +14,6 @@ const Wrapper = styled.div`
 
 function ReadmeFileContent(props) {
   const navigate = useNavigate();
-
   const item = props.currentReadme;
   const setItem = props.setCurrentReadme;
 
@@ -24,15 +23,15 @@ function ReadmeFileContent(props) {
   }
 
   return (
-      <Wrapper>
-        <ul className="file-list">
-          <li className="file-list-header"> README List </li>
-          <li className="file-list-item"  value="A" > A </li>
-          <li className="file-list-item"  value="B" > B </li>
-          <li className="file-list-item"  value="C" > C </li>
-          <li className="file-list-item"  value="D" > D </li>
-        </ul>
-      </Wrapper>
+    <Wrapper>
+      <ul className="file-list">
+        <li className="file-list-header"> README List </li>
+        <li className="file-list-item"  value="A" > A </li>
+        <li className="file-list-item"  value="B" > B </li>
+        <li className="file-list-item"  value="C" > C </li>
+        <li className="file-list-item"  value="D" > D </li>
+      </ul>
+    </Wrapper>
   );
 }
 
