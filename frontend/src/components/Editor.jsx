@@ -205,7 +205,7 @@ function Editor(props) {
 
     axios({
       method: "post",
-      url: 'http://localhost:8090/editPeriod',
+      url: 'http://handongapp.cafe24.com:8090/editPeriod',
       data: formData
     })
     .then(function (response){
