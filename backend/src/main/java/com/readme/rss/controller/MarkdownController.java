@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-@CrossOrigin(origins = "http://localhost:3005")
+@CrossOrigin(origins = "http://handongapp.cafe24.com")
 @RestController
 public class MarkdownController {
     private MdDownloadService mdDownloadService;
@@ -26,13 +26,13 @@ public class MarkdownController {
 
       // md 파일들 생성하여 담을 디렉토리 생성
       mdDownloadService.makeMdDirectory(projectId, mdFilesName, readme);
-      System.out.println("hi");
+
       // md 파일들 생성 및 내용 작성
       mdDownloadService.writeMdContents(mdFilesName, readme);
-      System.out.println("bi");
+
       // md 파일들 압축
       byte[] zipResult = mdDownloadService.zipMdFiles(mdFilesName);
-      System.out.println("ki");
+
       // md 디렉토리 삭제
       mdDownloadService.deleteMdDirectory(mdFilesName);
 
