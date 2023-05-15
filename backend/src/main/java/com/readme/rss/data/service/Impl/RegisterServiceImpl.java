@@ -99,29 +99,6 @@ public class RegisterServiceImpl implements RegisterService {
 
   }
 
-  public void deleteUnzipFiles(ProcessBuilder builder, String zipFileName, String unzipFilesName) throws IOException { // register1
-    try{
-      // upzip한 파일들, zip파일 모두 삭제
-      /* mac
-      builder.command("rm", "-rf", unzipFilesName);
-      builder.start();
-      builder.command("rm", "-rf", zipFileName);
-      builder.start();*/
-
-      /* window*/
-      builder.command("cmd.exe","/c","rmdir", "unzipFiles");
-      builder.start();
-      builder.command("cmd.exe","/c","del", "unzipTest.zip");
-      builder.start();
-
-
-      System.out.println("업로드된 zip파일, 압축풀기한 파일들 모두 삭제 완료!!");
-    } catch (IOException e) {
-      System.out.println("업로드된 zip파일, 압축풀기한 파일들 삭제 실패");
-    }
-  }
-
-
   public List<String> findPackageName(String xmlContent) {
     List<String> packageName = new ArrayList<>();
     String tempStr = "";
@@ -197,143 +174,6 @@ public class RegisterServiceImpl implements RegisterService {
     return databaseName;
   }
 
-
-  public HashMap<String, Object> register(String userName,String repositoryName ,
-      MultipartFile file , String projectId) throws IOException, InterruptedException {
-    HashMap<String, Object> map = new HashMap<>();
-
-    String fileName = file.getOriginalFilename();
-
-    if(fileName == ""){ // zip 파일이 첨부되지 않았을 때
-      System.out.println("\nzip 파일이 첨부되지 않았습니다!");
-    }
-
-    while(true) { // 나중에 로딩 페이지로
-      sleep(1);
-      if (fileName != "" && userName != "" && repositoryName != "") { // zip 파일이 입력되면
-        break;
-      }
-    }
-
-
-    String zipFileName = "./unzipTest_" + projectId + ".zip";
-    Path savePath = Paths.get(zipFileName); // unzipTest.zip이름으로 저장
-    file.transferTo(savePath); // 파일 다운로드
-
-    ProcessBuilder builder = new ProcessBuilder();
-    // unzipFiles 폴더 생성 - 압축풀기한 파일들을 저장하는 임시 폴더
-    String unzipFilesName = "unzipFiles_" + projectId;
-    // builder.command("mkdir", unzipFilesName); // mac
-    builder.command("cmd.exe","/c","mkdir", unzipFilesName); // window
-    builder.start();
-
-    // 파일 압축 풀기
-    // builder.command("unzip", zipFileName, "-d", unzipFilesName); // mac
-    builder.command("cmd.exe","/c","unzip", zipFileName, "-d", unzipFilesName); // window
-    var process = builder.start(); // upzip 실행
-
-    // unzip 실행
-    try (var reader = new BufferedReader(
-        new InputStreamReader(process.getInputStream()))) {
-      String commandResult;
-      while ((commandResult = reader.readLine()) != null) {
-        System.out.println(commandResult);
-      }
-    }
-
-    // project architecture
-    // tree 명령어
-    builder.directory(new File(unzipFilesName)); // 현재 위치 이동
-    builder.start();
-    // builder.command("tree"); // mac
-    builder.command("cmd.exe", "/c", "cmd", "/c", "tree"); // window
-    process = builder.start();
-
-    String architecture = "\n<!-- Project Architecture -->\n";
-    architecture += "```bash\n";
-    try (var reader = new BufferedReader(
-        new InputStreamReader(process.getInputStream()))) {
-      String commandResult;
-      while ((commandResult = reader.readLine()) != null) {
-        architecture += commandResult + "   \n";
-      }
-    }
-    architecture += "```\n";
-
-    builder.directory(new File("../backend")); // 원래 위치로 이동
-    builder.start();
-
-    // 압축 푼 파일들 중에서 원하는 정보 찾기(ex. url 찾기)
-    String searchDirPath = unzipFilesName;
-    int retSearchFiles = 0; // 파일 리스트 다 뽑아냈는지 확인할 수 있는 리턴값
-    retSearchFiles = searchFiles(searchDirPath);
-
-    //------------- db insert 관련 -------------//
-    List<String> javaFileName = new ArrayList<>();
-    List<String> javaFilePath = new ArrayList<>();
-    List<String> javaFileContent = new ArrayList<>();
-    List<String> javaFileDetail = new ArrayList<>();
-
-    for(int i = 0 ; i < file_nameList.size() ; i++){
-      if((file_nameList.get(i).contains("pom.xml")) ||
-          (file_nameList.get(i).contains(".java") && file_pathList.get(i).contains("src/main/java/")) ||
-          (file_pathList.get(i).contains("src/main/resources/application.properties"))||
-          (file_nameList.get(i).contains("License"))
-      ){
-
-        javaFileName.add(file_nameList.get(i));
-        javaFilePath.add(file_pathList.get(i));
-        javaFileContent.add(file_contentList.get(i));
-
-        if((file_nameList.get(i).contains("pom.xml")) ||
-            (file_pathList.get(i).contains("src/main/resources/application.properties"))){
-          javaFileDetail.add("etc"); // 기타
-        }else if(file_nameList.get(i).contains("LICENSE")){
-          javaFileDetail.add("license"); // 기타
-        }else{ // java 파일
-          if(file_contentList.get(i).contains("@RestController")
-              || file_contentList.get(i).contains("@Controller")
-          ){
-            javaFileDetail.add("controller");
-          }else if(file_contentList.get(i).contains("@Service")
-          ) {
-            javaFileDetail.add("service");
-          }else if(file_contentList.get(i).contains("@Repository")
-            ||file_contentList.get(i).contains("extends JpaRepository")
-            ||file_nameList.get(i).toLowerCase().contains("repository")
-          ){
-            javaFileDetail.add("repository");
-          }else if(file_contentList.get(i).contains("@Entity")) {
-            javaFileDetail.add("entity");
-          }else if(file_contentList.get(i).contains("@Data")
-              ||file_nameList.get(i).toLowerCase().contains("dto")
-          ){
-            javaFileDetail.add("dto");
-          }else if(file_contentList.get(i).contains("implements")) {
-            javaFileDetail.add("Impl");
-          } else{ // class
-            javaFileDetail.add("noImpl");
-          }
-        }
-      }
-    }
-    if(retSearchFiles == 1){ // 파일 리스트 다 뽑아냈으면 전역변수 초기화
-      file_nameList.clear();
-      file_pathList.clear();
-      file_contentList.clear();
-    }
-    map.put("Architecture", architecture);
-    map.put("javaFileName", javaFileName);
-    map.put("javaFilePath", javaFilePath);
-    map.put("javaFileContent", javaFileContent);
-    map.put("javaFileDetail", javaFileDetail);
-
-    // content data 보냈으므로, 압축풀기한 파일들, 업로드된 zip 파일 모두 삭제
-    deleteCloneFiles(builder, unzipFilesName);
-    return map;
-  }
-
-
   public HashMap<String, Object> registerLink(String repoLink, String projectId) throws IOException {
     HashMap<String,Object> map = new HashMap<>();
         /* 예외처리
@@ -348,28 +188,35 @@ public class RegisterServiceImpl implements RegisterService {
     String unzipFilesName = "unzipFiles_" + projectId;
 
     //clone(file name : unzipFiles_projectId)
-    builder.command("git", "clone", repoLink, unzipFilesName); // mac
+    builder.command("sudo", "git", "clone", repoLink, unzipFilesName); // mac
     // builder.command("cmd.exe","/c","git", "clone", repoLink, unzipFilesName); // window
 
-    try{
-      var cloneProcess = builder.start();
-      try (var reader = new BufferedReader( // clone 완료 후 아래 코드 실행
-          new InputStreamReader(cloneProcess.getInputStream()))) {
-        String commandResult;
-        while ((commandResult = reader.readLine()) != null) {
-          System.out.println(commandResult);
+    try {
+      Process cloneProcess = builder.start();
+      int exitCode = cloneProcess.waitFor();
+      if (exitCode == 0) {
+        System.out.println("Git clone command executed successfully.");
+      } else {
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(cloneProcess.getErrorStream()))) {
+          String errorMessage;
+          while ((errorMessage = reader.readLine()) != null) {
+            System.out.println(errorMessage);
+          }
         }
+        System.out.println("Git clone command execution failed with exit code: " + exitCode);
+        builder.directory(new File(unzipFilesName)); // 현재 위치 이동
+        builder.start();
       }
-      builder.directory(new File(unzipFilesName)); // 현재 위치 이동
-      builder.start();
-    } catch(IOException e){ // (3) 예외처리
-      map.put("error", "cloneError");
-      return map;
+    } catch (IOException e) {
+      System.out.println("IOException occurred: " + e.getMessage());
+    } catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      System.out.println("Thread interrupted: " + e.getMessage());
     }
 
     // project architecture
-    // builder.command("tree"); // mac
-    builder.command("cmd.exe","/c","tree"); // window
+    builder.command("tree"); // mac
+    // builder.command("cmd.exe","/c","tree"); // window
     var process = builder.start();
 
     String architecture = "\n<!-- Project Architecture -->\n";
@@ -382,7 +229,7 @@ public class RegisterServiceImpl implements RegisterService {
       }
     }
     architecture += "```\n";
-    builder.directory(new File("../backend")); // 원래 위치로 이동
+    builder.directory(new File("../")); // 원래 위치로 이동
     builder.start();
 
     String searchDirPath = unzipFilesName;

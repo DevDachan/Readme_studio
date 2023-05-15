@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "http://handongapp.cafe24.com")
 @RestController
 public class UnzipController {
     private ProjectService projectService;
@@ -32,42 +32,6 @@ public class UnzipController {
         this.userService = userService;
         this.frameworkService = frameworkService;
         this.registerService = registerService;
-    }
-
-    @PostMapping(value = "/register")
-    public HashMap<String, Object> getFileData(@RequestParam("jsonParam1") String jsonParam1,
-        @RequestParam("jsonParam2") String jsonParam2, @RequestParam("file") MultipartFile file)
-        throws IOException, InterruptedException {
-        UserDTO userInfo = userService.registerUser(jsonParam1,jsonParam2);
-
-        String userName = userInfo.getUserName();
-        String repositoryName = userInfo.getRepositoryName();
-        String id = userInfo.getProjectId();
-
-        HashMap<String, Object> zipContent = registerService.register(userName,repositoryName , file ,id);
-
-        // project architecture project table에 insert
-        projectService.saveProject(id, "Project Architecture", "", (String) zipContent.get("Architecture"), "tree");
-
-        projectService.saveData(id, (List<String>) zipContent.get("javaFileName"), (List<String>) zipContent.get("javaFilePath"),
-            (List<String>) zipContent.get("javaFileContent"),(List<String>) zipContent.get("javaFileDetail"));
-
-
-        HashMap<String,String> projectScript = projectService.getProjectDetail(id);
-        HashMap<String,Object> proectDetail = registerService.parseData(projectScript.get("noWhiteSpaceXml"), projectScript.get("propertiesContent"));
-        List<String> frameworkNameList = frameworkService.getFrameworkNameList();
-
-        HashMap<String, Object> map = new HashMap<>();
-        map.put("frameworkList",frameworkNameList);
-        map.put("readmeName", "Readme.md"); // Readme.md
-        map.put("springBootVersion", proectDetail.get("springBootVersion")); // springboot 버전
-        map.put("groupId", proectDetail.get("groupId")); // groupId
-        map.put("artifactId", proectDetail.get("artifactId")); // artifactId
-        map.put("javaVersion", proectDetail.get("javaVersion")); // javaVersion
-        map.put("databaseName", proectDetail.get("databaseName")); // db명
-        map.put("projectId", id); // index(project_id)
-
-        return map;
     }
 
     @PostMapping(value = "/register2")
