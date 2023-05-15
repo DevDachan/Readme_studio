@@ -81,10 +81,13 @@ public class RegisterServiceImpl implements RegisterService {
     return 1; // 전역변수 초기화하기 위한 리턴값 반환
   }
 
-  public void deleteCloneFiles(ProcessBuilder builder, String unzipFilesName) throws IOException { // register2
+  public void deleteCloneFiles(ProcessBuilder builder, String unzipFilesName, String savePath) throws IOException { // register2
     try{
+      builder.directory(new File(savePath)); // 현재 위치 이동
+      builder.start();
+
       /* mac */
-      builder.command("rm", "-rf", unzipFilesName);
+      builder.command("sudo", "rm", "-rf", unzipFilesName);
       builder.start();
 
       /* window
@@ -214,10 +217,19 @@ public class RegisterServiceImpl implements RegisterService {
       System.out.println("Thread interrupted: " + e.getMessage());
     }
 
+    builder.command("pwd");
+    builder.start();
+    String savePath;
+    var process = builder.start();
+    try (var reader = new BufferedReader(
+        new InputStreamReader(process.getInputStream()))) {
+      savePath = reader.readLine();
+    }
+
     // project architecture
     builder.command("tree"); // mac
     // builder.command("cmd.exe","/c","tree"); // window
-    var process = builder.start();
+    process = builder.start();
 
     String architecture = "\n<!-- Project Architecture -->\n";
     architecture += "```bash\n";
@@ -229,6 +241,7 @@ public class RegisterServiceImpl implements RegisterService {
       }
     }
     architecture += "```\n";
+
     builder.directory(new File("../")); // 원래 위치로 이동
     builder.start();
 
@@ -298,7 +311,7 @@ public class RegisterServiceImpl implements RegisterService {
     map.put("javaFileDetail", javaFileDetail);
 
     // content data 보냈으므로, 압축풀기한 파일들, 업로드된 zip 파일 모두 삭제
-    deleteCloneFiles(builder, unzipFilesName);
+    deleteCloneFiles(builder, unzipFilesName, savePath);
     return map;
   }
 

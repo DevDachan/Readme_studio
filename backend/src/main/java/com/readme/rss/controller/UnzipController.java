@@ -19,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 
 @CrossOrigin(origins = "http://handongapp.cafe24.com")
+// @CrossOrigin(origins = "http://localhost:3000")
 @RestController
 public class UnzipController {
     private ProjectService projectService;
