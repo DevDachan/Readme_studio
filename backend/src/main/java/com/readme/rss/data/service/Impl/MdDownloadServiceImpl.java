@@ -19,12 +19,12 @@ public class MdDownloadServiceImpl implements MdDownloadService {
     public void makeMdDirectory(String projectId, String mdFilesName, List<Map<String, Object>> readme) throws IOException{
         // mdFiles 폴더 생성 - 생성한 md 파일들을 저장하는 임시 폴더
         ProcessBuilder builder = new ProcessBuilder();
-        // builder.command("mkdir", mdFilesName); // mac
-        builder.command("cmd.exe","/c","mkdir", mdFilesName); // window
+        builder.command("mkdir", mdFilesName); // mac
+        // builder.command("cmd.exe","/c","mkdir", mdFilesName); // window
         builder.start();
 
-        // builder.command("mkdir", "./" + mdFilesName + "/mdFiles"); // mac
-        builder.command("cmd.exe","/c","mkdir", "./" + mdFilesName + "/mdFiles"); // window
+        builder.command("mkdir", "./" + mdFilesName + "/mdFiles"); // mac
+        // builder.command("cmd.exe","/c","mkdir", "./" + mdFilesName + "/mdFiles"); // window
         builder.start();
     }
 
@@ -72,8 +72,8 @@ public class MdDownloadServiceImpl implements MdDownloadService {
         builder.start();*/
 
         String mdZipFilesName = "./mdZipFiles.zip";
-        // builder.command("zip", mdZipFilesName, "-r", "mdFiles"); // mac
-        builder.command("cmd.exe", "/c", "zip", mdZipFilesName, "-r", "mdFiles"); // window
+        builder.command("zip", mdZipFilesName, "-r", "mdFiles"); // mac
+        // builder.command("cmd.exe", "/c", "zip", mdZipFilesName, "-r", "mdFiles"); // window
 
         var process = builder.start(); // zip 실행
         try (var reader = new BufferedReader( // zip 실행 후, 콘솔에 출력해주기
@@ -94,13 +94,13 @@ public class MdDownloadServiceImpl implements MdDownloadService {
         ProcessBuilder builder = new ProcessBuilder();
 
         try{ // md 파일들, md zip한 파일 지우기
-            /* mac
+            /* mac*/
             builder.command("rm", "-rf", mdFilesName);
-            builder.start();*/
-
-            /* window */
-            builder.command("cmd.exe","/c","del", mdFilesName);
             builder.start();
+
+            /* window
+            builder.command("cmd.exe","/c","del", mdFilesName);
+            builder.start();*/
 
             System.out.println("프로젝트별 md file들 삭제 완료!!");
         } catch (IOException e){
