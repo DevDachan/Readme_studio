@@ -40,7 +40,7 @@ function Palette(props) {
 
     axios({
       method: "post",
-      url: 'http://localhost:8090/framework',
+      url: 'http://handongapp.cafe24.com:8090/framework',
       data: formData,
     })
       .then(function (response){
@@ -106,7 +106,7 @@ function Palette(props) {
 
     axios({
       method: "post",
-      url: 'http://localhost:8090/alldata',
+      url: 'http://handongapp.cafe24.com:8090/alldata',
       data: formData,
     })
       .then(function (response){
