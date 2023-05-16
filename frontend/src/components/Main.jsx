@@ -89,7 +89,7 @@ function Main(props) {
     setLoadingCheck(true);
     axios({
       method: "post",
-      url: 'http://localhost:8090/register2',
+      url: 'http://handongapp.cafe24.com:8090/register2',
       data: formData
     })
     .then(function (response){
@@ -103,11 +103,11 @@ function Main(props) {
         "📙 Java Version :"+ response.data.javaVersion+"   \n"+
         "📚 DB : "+ "MariaDB";
 
-        readmeList.push({projectId : 234769, id: "README.md", content : [defaultData] , type : ["Default Data"]});
+        readmeList.push({projectId : response.data.projectId, id: "README.md", content : [defaultData] , type : ["Default Data"]});
 
         navigate('./editor', {
           state: {
-            projectId: 234769,
+            projectId: response.data.projectId,
             frameworkList: response.data.frameworkList,
             readmeObject:readmeList,
             defaultData: defaultData
