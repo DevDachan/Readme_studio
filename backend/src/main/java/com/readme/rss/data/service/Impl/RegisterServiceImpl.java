@@ -248,7 +248,7 @@ public class RegisterServiceImpl implements RegisterService {
     // System.out.println("spring boot path list : " + springBootPath);
     for(int i = 0 ; i < springBootPath.size() ; i++){
       // System.out.println("spring boot path : " + springBootPath.get(i));
-      String goMvnwPath = mvnwPath + springBootPath.get(i).substring(0, springBootPath.get(i).length() - 6) + "/src/main";
+      String goMvnwPath = mvnwPath + springBootPath.get(i).substring(1, springBootPath.get(i).length() - 5) + "/src/main";
       // System.out.println("goMvnwPath : " + goMvnwPath);
       builder.directory(new File(goMvnwPath)); // 원래 위치로 이동
       builder.start();
