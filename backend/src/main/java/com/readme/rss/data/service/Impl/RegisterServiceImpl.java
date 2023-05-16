@@ -1,13 +1,10 @@
 package com.readme.rss.data.service.Impl;
 
-import static java.lang.Thread.sleep;
 import com.readme.rss.data.service.RegisterService;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -15,7 +12,6 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 @Service
 public class RegisterServiceImpl implements RegisterService {
 
@@ -87,7 +83,7 @@ public class RegisterServiceImpl implements RegisterService {
       builder.start();
 
       /* mac */
-      builder.command("sudo", "rm", "-rf", unzipFilesName);
+      builder.command("rm", "-rf", unzipFilesName);
       builder.start();
 
       /* window
@@ -191,7 +187,7 @@ public class RegisterServiceImpl implements RegisterService {
     String unzipFilesName = "unzipFiles_" + projectId;
 
     //clone(file name : unzipFiles_projectId)
-    builder.command("sudo", "git", "clone", repoLink, unzipFilesName); // mac
+    builder.command("git", "clone", repoLink, unzipFilesName); // mac
     // builder.command("cmd.exe","/c","git", "clone", repoLink, unzipFilesName); // window
 
     try {
@@ -207,8 +203,6 @@ public class RegisterServiceImpl implements RegisterService {
           }
         }
         System.out.println("Git clone command execution failed with exit code: " + exitCode);
-        builder.directory(new File(unzipFilesName)); // 현재 위치 이동
-        builder.start();
       }
     } catch (IOException e) {
       System.out.println("IOException occurred: " + e.getMessage());
@@ -225,10 +219,52 @@ public class RegisterServiceImpl implements RegisterService {
         new InputStreamReader(process.getInputStream()))) {
       savePath = reader.readLine();
     }
+    builder.directory(new File(unzipFilesName)); // clone 받은 폴더로 이동
+    builder.start();
+
+    builder.command("pwd");
+    process = builder.start();
+    String mvnwPath = "";
+    try (var reader = new BufferedReader(
+        new InputStreamReader(process.getInputStream()))) {
+      String commandResult;
+      while ((commandResult = reader.readLine()) != null) {
+        mvnwPath = commandResult;
+      }
+    }
 
     // project architecture
+    ArrayList<String> springBootPath = new ArrayList<>();
+    builder.command("find", ".", "-type", "f", "-name", "mvnw", "-print");
+    builder.start();
+    process = builder.start();
+    try (var reader = new BufferedReader(
+        new InputStreamReader(process.getInputStream()))) {
+      String commandResult;
+      while ((commandResult = reader.readLine()) != null) {
+        springBootPath.add(commandResult);
+      }
+    }
+    // System.out.println("spring boot path list : " + springBootPath);
+    for(int i = 0 ; i < springBootPath.size() ; i++){
+      // System.out.println("spring boot path : " + springBootPath.get(i));
+      String goMvnwPath = mvnwPath + springBootPath.get(i).substring(0, springBootPath.get(i).length() - 6) + "/src/main";
+      // System.out.println("goMvnwPath : " + goMvnwPath);
+      builder.directory(new File(goMvnwPath)); // 원래 위치로 이동
+      builder.start();
+
+      builder.command("pwd");
+      process = builder.start();
+      try (var reader = new BufferedReader(
+          new InputStreamReader(process.getInputStream()))) {
+        String commandResult;
+        while ((commandResult = reader.readLine()) != null) {
+          // System.out.println(commandResult);
+        }
+      }
+    }
+
     builder.command("tree"); // mac
-    // builder.command("cmd.exe","/c","tree"); // window
     process = builder.start();
 
     String architecture = "\n<!-- Project Architecture -->\n";
@@ -237,6 +273,7 @@ public class RegisterServiceImpl implements RegisterService {
         new InputStreamReader(process.getInputStream()))) {
       String commandResult;
       while ((commandResult = reader.readLine()) != null) {
+        System.out.println(commandResult);
         architecture += commandResult + "   \n";
       }
     }
@@ -265,6 +302,7 @@ public class RegisterServiceImpl implements RegisterService {
         javaFileName.add(file_nameList.get(i));
         javaFilePath.add(file_pathList.get(i));
         javaFileContent.add(file_contentList.get(i));
+        String annotation = file_contentList.get(i).split("\\{")[0];
 
         if((file_nameList.get(i).contains("pom.xml")) ||
             (file_pathList.get(i).contains("src/main/resources/application.properties"))){
@@ -272,25 +310,25 @@ public class RegisterServiceImpl implements RegisterService {
         }else if(file_nameList.get(i).contains("LICENSE")){
           javaFileDetail.add("license"); // 기타
         }else{ // java 파일
-          if(file_contentList.get(i).contains("@RestController")
-              || file_contentList.get(i).contains("@Controller")
+          if(annotation.contains("@RestController")
+              || annotation.contains("@Controller")
           ){
             javaFileDetail.add("controller");
-          }else if(file_contentList.get(i).contains("@Service")
+          }else if(annotation.contains("@Service")
           ) {
             javaFileDetail.add("service");
-          }else if(file_contentList.get(i).contains("@Repository")
-              ||file_contentList.get(i).contains("extends JpaRepository")
+          }else if(annotation.contains("@Repository")
+              ||annotation.contains("extends JpaRepository")
               ||file_nameList.get(i).toLowerCase().contains("repository")
           ){
             javaFileDetail.add("repository");
-          }else if(file_contentList.get(i).contains("@Entity")) {
+          }else if(annotation.contains("@Entity")) {
             javaFileDetail.add("entity");
-          }else if(file_contentList.get(i).contains("@Data")
+          }else if(annotation.contains("@Data")
               ||file_nameList.get(i).toLowerCase().contains("dto")
           ){
             javaFileDetail.add("dto");
-          }else if(file_contentList.get(i).contains("implements")) {
+          }else if(annotation.contains("implements")) {
             javaFileDetail.add("Impl");
           } else{ // class
             javaFileDetail.add("noImpl");

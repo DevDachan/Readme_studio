@@ -15,11 +15,10 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
 
-// @CrossOrigin(origins = "http://handongapp.cafe24.com")
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "http://handongapp.cafe24.com")
+// @CrossOrigin(origins = "http://localhost:3000")
 @RestController
 public class UnzipController {
     private ProjectService projectService;
