@@ -165,6 +165,7 @@
 ```
 
 ## License
+```
 The MIT License (MIT)
 
 Copyright (c) 2023 DevDachan
@@ -174,7 +175,8 @@ Permission is hereby granted, free of charge, to any person obtaining a copy of 
 The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
+```
+    
 ## Social<br><a href="https://www.instagram.com/da_chan_seo" target="_blank"><img src="https://img.shields.io/badge/instagram-E4405F?style=flat-square&logo=instagram&logoColor=white"/></a><br><a href="https://dachan.notion.site/4c179084d8c5490195db16b304eb050f" target="_blank"><img src="https://img.shields.io/badge/notion-000000?style=flat-square&logo=notion&logoColor=white"/></a><br>
 
 ## Contributor<br><a href="https://github.com/DevDachan/Readme_studio/graphs/contributors" target="_blank"> <img src="https://contrib.rocks/image?repo=DevDachan/Readme_studio" /> </a>
